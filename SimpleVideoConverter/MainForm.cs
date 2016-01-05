@@ -384,7 +384,7 @@ namespace SimpleVideoConverter
             string passArgsTemplate = " -pass {0} -passlogfile \"{1}\"";
 
             arguments[0] = string.Format(template, format, input, "NUL", string.Format(passArgsTemplate, 1, passlogfile), argsVideo, filterArgs, " -an");
-            arguments[1] = string.Format(template, format, input, output, string.Format(passArgsTemplate, 1, passlogfile), argsVideo, filterArgs, argsAudio);
+            arguments[1] = string.Format(template, format, input, output, string.Format(passArgsTemplate, 2, passlogfile), argsVideo, filterArgs, argsAudio);
 
             var form = new ConverterForm(this, arguments);
             form.ShowDialog();
