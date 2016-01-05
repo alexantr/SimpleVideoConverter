@@ -125,7 +125,7 @@ namespace SimpleVideoConverter
         {
             if (converting)
             {
-                if (MessageBox.Show("Отменить конвертирование и выйти?", "Подтвердить выход", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show("Отменить конвертирование и выйти?", "Подтвердить выход", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     bw.CancelAsync();
                     closeApp = true;
@@ -361,7 +361,7 @@ namespace SimpleVideoConverter
         {
             if (converting)
             {
-                if (MessageBox.Show("Отменить конвертирование?", "Подтвердить отмену", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show("Отменить конвертирование?", "Подтвердить отмену", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     bw.CancelAsync();
                     (sender as Button).Enabled = false;
@@ -590,7 +590,7 @@ namespace SimpleVideoConverter
                     buttonGo.Enabled = true;
 
                     showToolTip("Готово");
-                    if (MessageBox.Show("Конвертирование выполнено. Открыть файл?", "Конвертирование выполнено", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    if (MessageBox.Show("Открыть полученный файл?", "Конвертирование выполнено", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                     {
                         try
                         {
