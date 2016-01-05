@@ -561,7 +561,7 @@ namespace SimpleVideoConverter
                 }
                 catch (Exception ex)
                 {
-                    if (!ex.Message.StartsWith("Exiting normally"))
+                    if (!ex.Message.StartsWith("Exiting normally") && !closeApp)
                         MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     e.Cancel = true;
                     return;
