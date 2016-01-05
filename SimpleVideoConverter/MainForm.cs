@@ -71,6 +71,7 @@ namespace SimpleVideoConverter
         private void MainForm_Load(object sender, EventArgs e)
         {
             buttonGoText = buttonGo.Text;
+            buttonGo.Enabled = false;
 
             if (Properties.Settings.Default.KeepOutPath)
                 checkBoxKeepOutPath.Checked = true;
@@ -294,6 +295,7 @@ namespace SimpleVideoConverter
             Properties.Settings.Default.InPath = Path.GetDirectoryName(path);
 
             checkBoxDeinterlace.Checked = false;
+            buttonGo.Enabled = true;
 
             try
             {

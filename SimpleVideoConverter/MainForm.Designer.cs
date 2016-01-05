@@ -409,6 +409,7 @@
             // 
             // buttonGo
             // 
+            this.buttonGo.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonGo.Location = new System.Drawing.Point(257, 258);
             this.buttonGo.Name = "buttonGo";
             this.buttonGo.Size = new System.Drawing.Size(155, 35);
@@ -431,14 +432,14 @@
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(326, 17);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(306, 17);
             this.toolStripStatusLabel.Spring = true;
             this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // toolStripProgressBar
             // 
             this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 16);
+            this.toolStripProgressBar.Size = new System.Drawing.Size(120, 16);
             // 
             // MainForm
             // 
