@@ -48,14 +48,17 @@
             this.checkBoxDeinterlace = new System.Windows.Forms.CheckBox();
             this.checkBoxResizePicture = new System.Windows.Forms.CheckBox();
             this.groupBoxAudioParams = new System.Windows.Forms.GroupBox();
-            this.comboBoxFrequency = new System.Windows.Forms.ComboBox();
-            this.labelFrequency = new System.Windows.Forms.Label();
             this.checkBoxEnableAudio = new System.Windows.Forms.CheckBox();
             this.labelAudioBitrate = new System.Windows.Forms.Label();
             this.numericUpDownAudioBitrate = new System.Windows.Forms.NumericUpDown();
             this.labelChannels = new System.Windows.Forms.Label();
             this.comboBoxChannels = new System.Windows.Forms.ComboBox();
+            this.labelFrequency = new System.Windows.Forms.Label();
+            this.comboBoxFrequency = new System.Windows.Forms.ComboBox();
             this.buttonGo = new System.Windows.Forms.Button();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBitrate)).BeginInit();
@@ -63,6 +66,7 @@
             this.groupBoxVideoParams.SuspendLayout();
             this.groupBoxAudioParams.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAudioBitrate)).BeginInit();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxIn
@@ -226,7 +230,7 @@
             this.groupBoxInOut.Controls.Add(this.textBoxOut);
             this.groupBoxInOut.Controls.Add(this.buttonBrowseOut);
             this.groupBoxInOut.Controls.Add(this.checkBoxKeepOutPath);
-            this.groupBoxInOut.Location = new System.Drawing.Point(12, 12);
+            this.groupBoxInOut.Location = new System.Drawing.Point(6, 6);
             this.groupBoxInOut.Name = "groupBoxInOut";
             this.groupBoxInOut.Size = new System.Drawing.Size(436, 126);
             this.groupBoxInOut.TabIndex = 0;
@@ -255,9 +259,9 @@
             this.groupBoxVideoParams.Controls.Add(this.numericUpDownWidth);
             this.groupBoxVideoParams.Controls.Add(this.labelX);
             this.groupBoxVideoParams.Controls.Add(this.numericUpDownHeight);
-            this.groupBoxVideoParams.Location = new System.Drawing.Point(12, 144);
+            this.groupBoxVideoParams.Location = new System.Drawing.Point(6, 138);
             this.groupBoxVideoParams.Name = "groupBoxVideoParams";
-            this.groupBoxVideoParams.Size = new System.Drawing.Size(215, 157);
+            this.groupBoxVideoParams.Size = new System.Drawing.Size(215, 158);
             this.groupBoxVideoParams.TabIndex = 1;
             this.groupBoxVideoParams.TabStop = false;
             this.groupBoxVideoParams.Text = "Видео";
@@ -314,29 +318,11 @@
             this.groupBoxAudioParams.Controls.Add(this.comboBoxChannels);
             this.groupBoxAudioParams.Controls.Add(this.labelFrequency);
             this.groupBoxAudioParams.Controls.Add(this.comboBoxFrequency);
-            this.groupBoxAudioParams.Location = new System.Drawing.Point(233, 144);
+            this.groupBoxAudioParams.Location = new System.Drawing.Point(227, 138);
             this.groupBoxAudioParams.Name = "groupBoxAudioParams";
             this.groupBoxAudioParams.Size = new System.Drawing.Size(215, 107);
             this.groupBoxAudioParams.TabIndex = 2;
             this.groupBoxAudioParams.TabStop = false;
-            // 
-            // comboBoxFrequency
-            // 
-            this.comboBoxFrequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxFrequency.FormattingEnabled = true;
-            this.comboBoxFrequency.Location = new System.Drawing.Point(127, 49);
-            this.comboBoxFrequency.Name = "comboBoxFrequency";
-            this.comboBoxFrequency.Size = new System.Drawing.Size(80, 21);
-            this.comboBoxFrequency.TabIndex = 6;
-            // 
-            // labelFrequency
-            // 
-            this.labelFrequency.AutoSize = true;
-            this.labelFrequency.Location = new System.Drawing.Point(6, 52);
-            this.labelFrequency.Name = "labelFrequency";
-            this.labelFrequency.Size = new System.Drawing.Size(69, 13);
-            this.labelFrequency.TabIndex = 5;
-            this.labelFrequency.Text = "Частота (Гц)";
             // 
             // checkBoxEnableAudio
             // 
@@ -403,30 +389,73 @@
             this.comboBoxChannels.Size = new System.Drawing.Size(80, 21);
             this.comboBoxChannels.TabIndex = 4;
             // 
+            // labelFrequency
+            // 
+            this.labelFrequency.AutoSize = true;
+            this.labelFrequency.Location = new System.Drawing.Point(6, 52);
+            this.labelFrequency.Name = "labelFrequency";
+            this.labelFrequency.Size = new System.Drawing.Size(69, 13);
+            this.labelFrequency.TabIndex = 5;
+            this.labelFrequency.Text = "Частота (Гц)";
+            // 
+            // comboBoxFrequency
+            // 
+            this.comboBoxFrequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFrequency.FormattingEnabled = true;
+            this.comboBoxFrequency.Location = new System.Drawing.Point(127, 49);
+            this.comboBoxFrequency.Name = "comboBoxFrequency";
+            this.comboBoxFrequency.Size = new System.Drawing.Size(80, 21);
+            this.comboBoxFrequency.TabIndex = 6;
+            // 
             // buttonGo
             // 
-            this.buttonGo.Location = new System.Drawing.Point(348, 269);
+            this.buttonGo.Location = new System.Drawing.Point(257, 258);
             this.buttonGo.Name = "buttonGo";
-            this.buttonGo.Size = new System.Drawing.Size(100, 32);
+            this.buttonGo.Size = new System.Drawing.Size(155, 35);
             this.buttonGo.TabIndex = 3;
-            this.buttonGo.Text = "Запуск";
+            this.buttonGo.Text = "Конвертировать";
             this.buttonGo.UseVisualStyleBackColor = true;
             this.buttonGo.Click += new System.EventHandler(this.buttonGo_Click);
+            // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel,
+            this.toolStripProgressBar});
+            this.statusStrip.Location = new System.Drawing.Point(3, 309);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(443, 22);
+            this.statusStrip.SizingGrip = false;
+            this.statusStrip.TabIndex = 4;
+            // 
+            // toolStripStatusLabel
+            // 
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(326, 17);
+            this.toolStripStatusLabel.Spring = true;
+            this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 16);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(460, 313);
+            this.ClientSize = new System.Drawing.Size(449, 331);
+            this.Controls.Add(this.buttonGo);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.groupBoxInOut);
             this.Controls.Add(this.groupBoxVideoParams);
             this.Controls.Add(this.groupBoxAudioParams);
-            this.Controls.Add(this.buttonGo);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
+            this.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.Text = "Simple Video Converter";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -441,7 +470,10 @@
             this.groupBoxAudioParams.ResumeLayout(false);
             this.groupBoxAudioParams.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAudioBitrate)).EndInit();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -473,6 +505,9 @@
         private System.Windows.Forms.CheckBox checkBoxEnableAudio;
         private System.Windows.Forms.ComboBox comboBoxFrequency;
         private System.Windows.Forms.Label labelFrequency;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
     }
 }
 
