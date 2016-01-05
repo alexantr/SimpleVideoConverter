@@ -301,7 +301,7 @@
             // checkBoxResizePicture
             // 
             this.checkBoxResizePicture.AutoSize = true;
-            this.checkBoxResizePicture.Location = new System.Drawing.Point(9, 104);
+            this.checkBoxResizePicture.Location = new System.Drawing.Point(9, 106);
             this.checkBoxResizePicture.Name = "checkBoxResizePicture";
             this.checkBoxResizePicture.Size = new System.Drawing.Size(147, 17);
             this.checkBoxResizePicture.TabIndex = 5;
@@ -376,9 +376,9 @@
             this.labelChannels.AutoSize = true;
             this.labelChannels.Location = new System.Drawing.Point(6, 79);
             this.labelChannels.Name = "labelChannels";
-            this.labelChannels.Size = new System.Drawing.Size(90, 13);
+            this.labelChannels.Size = new System.Drawing.Size(46, 13);
             this.labelChannels.TabIndex = 3;
-            this.labelChannels.Text = "Кол-во каналов";
+            this.labelChannels.Text = "Каналы";
             // 
             // comboBoxChannels
             // 
@@ -410,9 +410,9 @@
             // buttonGo
             // 
             this.buttonGo.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonGo.Location = new System.Drawing.Point(257, 258);
+            this.buttonGo.Location = new System.Drawing.Point(262, 258);
             this.buttonGo.Name = "buttonGo";
-            this.buttonGo.Size = new System.Drawing.Size(155, 35);
+            this.buttonGo.Size = new System.Drawing.Size(145, 35);
             this.buttonGo.TabIndex = 3;
             this.buttonGo.Text = "Конвертировать";
             this.buttonGo.UseVisualStyleBackColor = true;

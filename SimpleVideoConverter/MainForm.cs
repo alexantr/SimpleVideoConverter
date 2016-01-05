@@ -287,8 +287,11 @@ namespace SimpleVideoConverter
 
         private void SetOutFilePath(string path)
         {
-            clearToolTip();
-            ResetProgressBar();
+            if (!converting)
+            {
+                clearToolTip();
+                ResetProgressBar();
+            }
 
             if (string.IsNullOrWhiteSpace(path)) return;
 
@@ -499,6 +502,14 @@ namespace SimpleVideoConverter
             RunConvertWorker(input, output, format, arguments, 0);
         }
 
+        /// <summary>
+        /// Run Convert Worker
+        /// </summary>
+        /// <param name="inputPath">Input file path</param>
+        /// <param name="outputPath">Output file path</param>
+        /// <param name="format">Video file format</param>
+        /// <param name="arguments">Arguments for ffmpeg</param>
+        /// <param name="passNumber">Pass number</param>
         private void RunConvertWorker(string inputPath, string outputPath, string format, string[] arguments, int passNumber)
         {
             int passCount = arguments.Length;
@@ -506,11 +517,11 @@ namespace SimpleVideoConverter
 
             string currentPassArguments = arguments[passNumber];
             string currentOutputPath = outputPath;
-            string toolTipText = "Выполняется конвертирование...";
+            string toolTipText = "Выполняется конвертирование";
 
             if (passCount > 1)
             {
-                toolTipText = string.Format("Выполняется проход №{0}...", (passNumber + 1));
+                toolTipText = string.Format("Выполняется проход {0} из {1}", (passNumber + 1), passCount);
                 if (passNumber < (passCount - 1))
                     currentOutputPath = "NUL";
             }
