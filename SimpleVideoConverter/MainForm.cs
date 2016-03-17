@@ -21,7 +21,7 @@ namespace SimpleVideoConverter
         private const int MaxHeight = 1080;
 
         private const int MinBitrate = 100;
-        private const int MaxBitrate = 14000;
+        private const int MaxBitrate = 50000;
 
         private const int MinAudioBitrate = 8;
         private const int MaxAudioBitrate = 320;
@@ -110,6 +110,8 @@ namespace SimpleVideoConverter
                 comboBoxChannels.Items.Add(new ComboBoxItem(kvp.Key, kvp.Value));
             }
             comboBoxChannels.SelectedIndex = 0;
+
+            toolStripProgressBar.Visible = false;
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -291,6 +293,7 @@ namespace SimpleVideoConverter
             {
                 clearToolTip();
                 ResetProgressBar();
+                toolStripProgressBar.Visible = false;
             }
 
             if (string.IsNullOrWhiteSpace(path)) return;
@@ -446,8 +449,8 @@ namespace SimpleVideoConverter
             if (format == "mp4")
             {
                 // main profile or high profile
-                string h264Profile = "main";
-                string h264Level = "3.1";
+                string h264Profile = "high";
+                string h264Level = "4.1";
                 argsVideo = string.Format(" -b:v {0}k -codec:v libx264 -preset:v slow -profile:v {1} -level {2} -pix_fmt yuv420p", bitrate, h264Profile, h264Level);
                 audioCodec = "aac -strict -2";
             }
@@ -575,6 +578,7 @@ namespace SimpleVideoConverter
 
                     // reset pbar
                     ResetProgressBar();
+                    toolStripProgressBar.Visible = false;
 
                     buttonGo.Text = buttonGoText;
                     buttonGo.Enabled = true;
@@ -618,6 +622,7 @@ namespace SimpleVideoConverter
             };
 
             ResetProgressBar();
+            toolStripProgressBar.Visible = true;
 
             buttonGo.Text = "Отменить";
             buttonGo.Enabled = true;

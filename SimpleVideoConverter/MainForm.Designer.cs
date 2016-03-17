@@ -203,7 +203,7 @@
             0});
             this.numericUpDownBitrate.Location = new System.Drawing.Point(127, 48);
             this.numericUpDownBitrate.Maximum = new decimal(new int[] {
-            14000,
+            50000,
             0,
             0,
             0});
