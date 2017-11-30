@@ -25,7 +25,7 @@ namespace SimpleVideoConverter
 
         private const int MinAudioBitrate = 8;
         private const int MaxAudioBitrate = 320;
-        
+
         private string format; // mp4 or webm
 
         private List<string> frequencyList;
@@ -53,19 +53,23 @@ namespace SimpleVideoConverter
             DragEnter += HandleDragEnter;
             DragDrop += HandleDragDrop;
 
-            frequencyList = new List<string>();
-            frequencyList.Add("8000");
-            frequencyList.Add("12000");
-            frequencyList.Add("16000");
-            frequencyList.Add("22050");
-            frequencyList.Add("24000");
-            frequencyList.Add("32000");
-            frequencyList.Add("44100");
-            frequencyList.Add("48000");
+            frequencyList = new List<string>
+            {
+                "8000",
+                "12000",
+                "16000",
+                "22050",
+                "24000",
+                "32000",
+                "44100",
+                "48000"
+            };
 
-            channelsList = new Dictionary<string, string>();
-            channelsList.Add("1", "моно");
-            channelsList.Add("2", "стерео");
+            channelsList = new Dictionary<string, string>
+            {
+                { "1", "моно" },
+                { "2", "стерео" }
+            };
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -74,7 +78,9 @@ namespace SimpleVideoConverter
             buttonGo.Enabled = false;
 
             if (Properties.Settings.Default.KeepOutPath)
+            {
                 checkBoxKeepOutPath.Checked = true;
+            }
 
             // 0 - mp4
             // 1 - webm
@@ -99,7 +105,9 @@ namespace SimpleVideoConverter
             comboBoxFrequency.Items.Clear();
             comboBoxFrequency.Items.Add(new ComboBoxItem(string.Empty, "авто"));
             foreach (string frequencyItem in frequencyList)
+            {
                 comboBoxFrequency.Items.Add(new ComboBoxItem(frequencyItem, frequencyItem));
+            }
             comboBoxFrequency.SelectedIndex = 0;
 
             // Channels
@@ -157,10 +165,12 @@ namespace SimpleVideoConverter
         #region ToolTips
 
         [DebuggerStepThrough]
-        void setToolTip(string message)
+        void SetToolTip(string message)
         {
-            if (this.IsDisposed || toolStripStatusLabel.IsDisposed)
+            if (IsDisposed || toolStripStatusLabel.IsDisposed)
+            {
                 return;
+            }
 
             this.InvokeIfRequired(() =>
             {
@@ -169,15 +179,17 @@ namespace SimpleVideoConverter
         }
 
         [DebuggerStepThrough]
-        void showToolTip(string message, int timer = 0)
+        void ShowToolTip(string message, int timer = 0)
         {
             // remember prev message if it's timer = 0
             if (toolTipTimer == null && !string.IsNullOrWhiteSpace(toolStripStatusLabel.Text))
+            {
                 prevToolTipMessage = toolStripStatusLabel.Text;
+            }
 
-            clearToolTip();
+            ClearToolTip();
 
-            setToolTip(message);
+            SetToolTip(message);
 
             if (timer > 0)
             {
@@ -186,8 +198,8 @@ namespace SimpleVideoConverter
                 //toolTipTimer.Elapsed += (sender, e) => clearToolTip();
                 toolTipTimer.Elapsed += delegate (object sender, System.Timers.ElapsedEventArgs e)
                 {
-                    clearToolTip();
-                    restoreToolTip();
+                    ClearToolTip();
+                    RestoreToolTip();
                 };
 
                 toolTipTimer.AutoReset = false;
@@ -196,20 +208,22 @@ namespace SimpleVideoConverter
         }
 
         [DebuggerStepThrough]
-        void clearToolTip(object sender = null, EventArgs e = null)
+        void ClearToolTip(object sender = null, EventArgs e = null)
         {
             if (toolTipTimer != null)
+            {
                 toolTipTimer.Close();
+            }
 
-            setToolTip("");
+            SetToolTip("");
         }
 
         [DebuggerStepThrough]
-        void restoreToolTip()
+        void RestoreToolTip()
         {
             if (!string.IsNullOrWhiteSpace(prevToolTipMessage))
             {
-                setToolTip(prevToolTipMessage);
+                SetToolTip(prevToolTipMessage);
                 prevToolTipMessage = "";
             }
         }
@@ -221,9 +235,13 @@ namespace SimpleVideoConverter
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
                 if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.InPath) && Directory.Exists(Properties.Settings.Default.InPath))
+                {
                     dialog.InitialDirectory = Properties.Settings.Default.InPath;
+                }
                 else
+                {
                     dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
+                }
 
                 dialog.CheckFileExists = true;
                 dialog.CheckPathExists = true;
@@ -257,10 +275,7 @@ namespace SimpleVideoConverter
             {
                 dialog.OverwritePrompt = false; // ask later
                 dialog.ValidateNames = true;
-                if (format == FormatWebM)
-                    dialog.Filter = "WebM файлы|*.webm";
-                else
-                    dialog.Filter = "MP4 файлы|*.mp4";
+                dialog.Filter = format == FormatWebM ? "WebM файлы|*.webm" : "MP4 файлы|*.mp4";
 
                 if (!string.IsNullOrWhiteSpace(textBoxOut.Text))
                 {
@@ -272,7 +287,9 @@ namespace SimpleVideoConverter
                     catch (Exception) { }
                 }
                 else if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.OutPath))
+                {
                     dialog.InitialDirectory = Properties.Settings.Default.OutPath;
+                }
 
                 if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.FileName))
                 {
@@ -291,12 +308,15 @@ namespace SimpleVideoConverter
         {
             if (!converting)
             {
-                clearToolTip();
+                ClearToolTip();
                 ResetProgressBar();
                 toolStripProgressBar.Visible = false;
             }
 
-            if (string.IsNullOrWhiteSpace(path)) return;
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return;
+            }
 
             Properties.Settings.Default.InPath = Path.GetDirectoryName(path);
 
@@ -311,13 +331,19 @@ namespace SimpleVideoConverter
                 if (Properties.Settings.Default.KeepOutPath)
                 {
                     if (!string.IsNullOrWhiteSpace(textBoxOut.Text))
+                    {
                         outDir = Path.GetDirectoryName(textBoxOut.Text);
+                    }
                     else if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.OutPath))
+                    {
                         outDir = Properties.Settings.Default.OutPath;
+                    }
                 }
 
                 if (string.IsNullOrWhiteSpace(outDir) || !Directory.Exists(outDir))
+                {
                     outDir = Path.GetDirectoryName(path);
+                }
 
                 Properties.Settings.Default.OutPath = outDir;
 
@@ -328,10 +354,7 @@ namespace SimpleVideoConverter
 
         private void comboBoxFileType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxFileType.SelectedIndex == 1)
-                format = FormatWebM;
-            else
-                format = FormatMP4;
+            format = comboBoxFileType.SelectedIndex == 1 ? FormatWebM : FormatMP4;
 
             Properties.Settings.Default.Format = format;
 
@@ -404,39 +427,57 @@ namespace SimpleVideoConverter
             string audioFrequency = comboBoxItemFrequency.Value;
 
             if (string.IsNullOrWhiteSpace(input))
+            {
                 throw new Exception("Не выбран исходный файл!");
+            }
             if (string.IsNullOrWhiteSpace(output))
+            {
                 throw new Exception("Не указан путь к итоговому файлу!");
+            }
 
             input = Path.GetFullPath(input);
             output = Path.GetFullPath(output);
 
             if (!File.Exists(input))
+            {
                 throw new Exception("Не найден исходный файл!");
+            }
 
             if (input.Equals(output, StringComparison.OrdinalIgnoreCase))
+            {
                 throw new Exception("Пути не должны совпадать!");
+            }
 
             if (width < MinWidth || width > MaxWidth || height < MinHeight || height > MaxHeight)
+            {
                 throw new Exception("Неверно задано разрешение видео!");
+            }
 
             if (bitrate < MinBitrate || bitrate > MaxBitrate)
+            {
                 throw new Exception("Неверно задано значение битрейта для видео!");
+            }
 
             if (audioBitrate < MinAudioBitrate || audioBitrate > MaxAudioBitrate)
+            {
                 throw new Exception("Неверно задано значение битрейта для аудио!");
+            }
 
             string outputDir = Path.GetDirectoryName(output);
 
             // try to create out folder
             if (!string.IsNullOrWhiteSpace(outputDir) && !Directory.Exists(outputDir))
+            {
                 Directory.CreateDirectory(outputDir);
+            }
 
             if (File.Exists(output))
             {
                 string question = Path.GetFileName(output) + " уже существует.\nХотите заменить его?";
                 if (MessageBox.Show(question, "Подтвердить перезапись", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                {
                     return;
+                }
             }
 
             string[] arguments = new string[2];
@@ -451,37 +492,47 @@ namespace SimpleVideoConverter
                 // main profile or high profile
                 string h264Profile = "high";
                 string h264Level = "4.1";
-                argsVideo = string.Format(" -b:v {0}k -codec:v libx264 -preset:v slow -profile:v {1} -level {2} -pix_fmt yuv420p", bitrate, h264Profile, h264Level);
+                argsVideo = string.Format(" -b:v {0}k -c:v libx264 -preset:v slow -profile:v {1} -level {2} -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p -f mp4 -movflags +faststart", bitrate, h264Profile, h264Level);
                 audioCodec = "aac -strict -2";
             }
             else
             {
                 // vp8
                 string webmVideoCodec = "libvpx";
-                argsVideo = string.Format(" -b:v {0}k -codec:v {1}", bitrate, webmVideoCodec);
+                argsVideo = string.Format(" -b:v {0}k -c:v {1}", bitrate, webmVideoCodec);
                 audioCodec = "libvorbis";
             }
 
             List<string> filters = new List<string>();
 
             if (checkBoxDeinterlace.Checked)
+            {
                 filters.Add("yadif");
-            
+            }
+
             if (checkBoxResizePicture.Checked)
+            {
                 filters.Add(string.Format("scale={0}x{1},setsar=1:1", width, height));
+            }
 
             // set audio args
             if (!checkBoxEnableAudio.Checked)
+            {
                 argsAudio = " -an";
+            }
             else
             {
-                argsAudio = string.Format(" -codec:a {0} -b:a {1}k", audioCodec, audioBitrate);
+                argsAudio = string.Format(" -c:a {0} -b:a {1}k", audioCodec, audioBitrate);
                 // resampling
                 if (!string.IsNullOrWhiteSpace(audioFrequency))
+                {
                     argsAudio += string.Format(" -ar {0}", audioFrequency);
+                }
                 // channels
                 if (!string.IsNullOrWhiteSpace(audioChannels))
+                {
                     argsAudio += string.Format(" -ac {0}", audioChannels);
+                }
             }
 
             string moreArgs = (filters.Count > 0 ? " -vf " + string.Join(",", filters) : "");
@@ -516,7 +567,10 @@ namespace SimpleVideoConverter
         private void RunConvertWorker(string inputPath, string outputPath, string format, string[] arguments, int passNumber)
         {
             int passCount = arguments.Length;
-            if (passNumber > passCount - 1) return;
+            if (passNumber > passCount - 1)
+            {
+                return;
+            }
 
             string currentPassArguments = arguments[passNumber];
             string currentOutputPath = outputPath;
@@ -526,12 +580,16 @@ namespace SimpleVideoConverter
             {
                 toolTipText = string.Format("Выполняется проход {0} из {1}", (passNumber + 1), passCount);
                 if (passNumber < (passCount - 1))
+                {
                     currentOutputPath = "NUL";
+                }
             }
-            
-            bw = new BackgroundWorker();
-            bw.WorkerSupportsCancellation = true;
-            bw.WorkerReportsProgress = true;
+
+            bw = new BackgroundWorker
+            {
+                WorkerSupportsCancellation = true,
+                WorkerReportsProgress = true
+            };
             bw.ProgressChanged += new ProgressChangedEventHandler(delegate (object sender, ProgressChangedEventArgs e)
             {
                 int progressPercentage = Math.Min(100, e.ProgressPercentage);
@@ -539,33 +597,43 @@ namespace SimpleVideoConverter
                 {
                     ProgressBarPercentage(progressPercentage);
                 }
-                showToolTip(toolTipText);
+                ShowToolTip(toolTipText);
             });
             bw.DoWork += delegate (object sender, DoWorkEventArgs e)
             {
                 try
                 {
-                    FFMpegConverter ffMpeg = new FFMpegConverter();
-                    ffMpeg.FFMpegProcessPriority = ProcessPriorityClass.Idle;
-                    ffMpeg.FFMpegToolPath = Path.Combine(Environment.CurrentDirectory, "Binaries");
+                    FFMpegConverter ffMpeg = new FFMpegConverter
+                    {
+                        FFMpegProcessPriority = ProcessPriorityClass.Idle
+                    };
 
-                    ConvertSettings settings = new ConvertSettings();
-                    settings.CustomOutputArgs = currentPassArguments;
+                    ConvertSettings settings = new ConvertSettings
+                    {
+                        CustomOutputArgs = currentPassArguments
+                    };
 
                     ffMpeg.ConvertProgress += delegate (object sendertwo, ConvertProgressEventArgs etwo)
                     {
+                        if (bw.CancellationPending)
+                        {
+                            if (!ffMpeg.Stop())
+                            {
+                                ffMpeg.Abort();
+                            }
+                            e.Cancel = true;
+                            return;
+                        }
+
                         int perc = (int)((etwo.Processed.TotalMilliseconds / etwo.TotalDuration.TotalMilliseconds) * 100);
                         bw.ReportProgress(perc);
-                        if (bw.CancellationPending)
-                            ffMpeg.Stop();
                     };
 
                     ffMpeg.ConvertMedia(inputPath, null, currentOutputPath, format, settings);
                 }
                 catch (Exception ex)
                 {
-                    if (!ex.Message.StartsWith("Exiting normally") && !closeApp)
-                        MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     e.Cancel = true;
                     return;
                 }
@@ -583,14 +651,16 @@ namespace SimpleVideoConverter
                     buttonGo.Text = buttonGoText;
                     buttonGo.Enabled = true;
 
-                    showToolTip("Конвертирование отменено");
+                    ShowToolTip("Конвертирование отменено");
 
                     if (closeApp)
+                    {
                         Application.Exit();
+                    }
 
                     return;
                 }
-                
+
                 // run next pass
                 if (passCount > 1 && passNumber < (passCount - 1))
                 {
@@ -606,7 +676,7 @@ namespace SimpleVideoConverter
                     buttonGo.Text = buttonGoText;
                     buttonGo.Enabled = true;
 
-                    showToolTip("Готово");
+                    ShowToolTip("Готово");
                     if (MessageBox.Show("Открыть полученный файл?", "Конвертирование выполнено", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                     {
                         try
@@ -628,7 +698,7 @@ namespace SimpleVideoConverter
             buttonGo.Enabled = true;
 
             converting = true;
-            showToolTip(toolTipText);
+            ShowToolTip(toolTipText);
             bw.RunWorkerAsync();
         }
 
