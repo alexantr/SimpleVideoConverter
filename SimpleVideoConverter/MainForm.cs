@@ -7,7 +7,7 @@ using System.IO;
 using System.Windows.Forms;
 using SysTimer = System.Timers.Timer;
 
-namespace SimpleVideoConverter
+namespace Alexantr.SimpleVideoConverter
 {
     public partial class MainForm : Form
     {

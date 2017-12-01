@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace SimpleVideoConverter
+namespace Alexantr.SimpleVideoConverter
 {
     static class Program
     {

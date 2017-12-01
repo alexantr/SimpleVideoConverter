@@ -1,4 +1,4 @@
-﻿namespace SimpleVideoConverter
+﻿namespace Alexantr.SimpleVideoConverter
 {
     partial class MainForm
     {
