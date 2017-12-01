@@ -43,6 +43,8 @@ namespace Alexantr.SimpleVideoConverter
 
         private bool closeApp = false;
 
+        #region Main Form
+
         public MainForm()
         {
             InitializeComponent();
@@ -162,6 +164,8 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
+        #endregion
+
         #region ToolTips
 
         [DebuggerStepThrough]
@@ -229,6 +233,8 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         #endregion
+
+        #region In, Out
 
         private void buttonBrowseIn_Click(object sender, EventArgs e)
         {
@@ -304,6 +310,84 @@ namespace Alexantr.SimpleVideoConverter
             Properties.Settings.Default.KeepOutPath = checkBoxKeepOutPath.Checked;
         }
 
+        #endregion
+
+        #region Format
+
+        private void comboBoxFileType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            format = comboBoxFileType.SelectedIndex == 1 ? FormatWebM : FormatMP4;
+
+            Properties.Settings.Default.Format = format;
+
+            // change extension in textbox
+            if (!string.IsNullOrWhiteSpace(textBoxOut.Text))
+            {
+                try
+                {
+                    string outDir = Path.GetDirectoryName(textBoxOut.Text);
+                    string outName = Path.GetFileNameWithoutExtension(textBoxOut.Text);
+                    textBoxOut.Text = Path.Combine(outDir, outName + "." + format);
+                }
+                catch (Exception) { }
+            }
+        }
+
+        #endregion
+
+        #region Resize Picture
+
+        private void checkBoxResizePicture_CheckedChanged(object sender, EventArgs e)
+        {
+            numericUpDownWidth.Enabled = checkBoxResizePicture.Checked;
+            numericUpDownHeight.Enabled = checkBoxResizePicture.Checked;
+            labelX.Enabled = checkBoxResizePicture.Checked;
+        }
+
+        #endregion
+
+        #region Audio
+
+        private void checkBoxEnableAudio_CheckedChanged(object sender, EventArgs e)
+        {
+            labelAudioBitrate.Enabled = checkBoxEnableAudio.Checked;
+            numericUpDownAudioBitrate.Enabled = checkBoxEnableAudio.Checked;
+            labelChannels.Enabled = checkBoxEnableAudio.Checked;
+            comboBoxChannels.Enabled = checkBoxEnableAudio.Checked;
+            labelFrequency.Enabled = checkBoxEnableAudio.Checked;
+            comboBoxFrequency.Enabled = checkBoxEnableAudio.Checked;
+        }
+
+        #endregion
+
+        #region Buttons
+
+        private void buttonGo_Click(object sender, EventArgs e)
+        {
+            if (converting)
+            {
+                if (MessageBox.Show("Отменить конвертирование?", "Подтвердить отмену", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    bw.CancelAsync();
+                    (sender as Button).Enabled = false;
+                }
+                return;
+            }
+
+            try
+            {
+                ConvertVideo();
+            }
+            catch (Exception ee)
+            {
+                MessageBox.Show(ee.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        #endregion
+
+        #region Functions
+
         private void SetOutFilePath(string path)
         {
             if (!converting)
@@ -350,64 +434,6 @@ namespace Alexantr.SimpleVideoConverter
                 textBoxOut.Text = Path.Combine(outDir, outName + "-new." + format);
             }
             catch (Exception) { }
-        }
-
-        private void comboBoxFileType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            format = comboBoxFileType.SelectedIndex == 1 ? FormatWebM : FormatMP4;
-
-            Properties.Settings.Default.Format = format;
-
-            // change extension in textbox
-            if (!string.IsNullOrWhiteSpace(textBoxOut.Text))
-            {
-                try
-                {
-                    string outDir = Path.GetDirectoryName(textBoxOut.Text);
-                    string outName = Path.GetFileNameWithoutExtension(textBoxOut.Text);
-                    textBoxOut.Text = Path.Combine(outDir, outName + "." + format);
-                }
-                catch (Exception) { }
-            }
-        }
-
-        private void checkBoxResizePicture_CheckedChanged(object sender, EventArgs e)
-        {
-            numericUpDownWidth.Enabled = checkBoxResizePicture.Checked;
-            numericUpDownHeight.Enabled = checkBoxResizePicture.Checked;
-            labelX.Enabled = checkBoxResizePicture.Checked;
-        }
-
-        private void checkBoxEnableAudio_CheckedChanged(object sender, EventArgs e)
-        {
-            labelAudioBitrate.Enabled = checkBoxEnableAudio.Checked;
-            numericUpDownAudioBitrate.Enabled = checkBoxEnableAudio.Checked;
-            labelChannels.Enabled = checkBoxEnableAudio.Checked;
-            comboBoxChannels.Enabled = checkBoxEnableAudio.Checked;
-            labelFrequency.Enabled = checkBoxEnableAudio.Checked;
-            comboBoxFrequency.Enabled = checkBoxEnableAudio.Checked;
-        }
-
-        private void buttonGo_Click(object sender, EventArgs e)
-        {
-            if (converting)
-            {
-                if (MessageBox.Show("Отменить конвертирование?", "Подтвердить отмену", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                {
-                    bw.CancelAsync();
-                    (sender as Button).Enabled = false;
-                }
-                return;
-            }
-
-            try
-            {
-                ConvertVideo();
-            }
-            catch (Exception ee)
-            {
-                MessageBox.Show(ee.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void ConvertVideo()
@@ -723,5 +749,7 @@ namespace Alexantr.SimpleVideoConverter
             tempFilesList.Add(tempLogMbtreeFileRealName);
             return tempLogFile;
         }
+
+        #endregion
     }
 }
