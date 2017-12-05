@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using SysTimer = System.Timers.Timer;
@@ -11,8 +12,10 @@ namespace Alexantr.SimpleVideoConverter
 {
     public partial class MainForm : Form
     {
-        private const string FormatMP4 = "mp4";
-        private const string FormatWebM = "webm";
+        private char[] invalidChars = Path.GetInvalidPathChars();
+
+        private const string FileTypeMP4 = "mp4";
+        private const string FileTypeWebM = "webm";
 
         private const int MinWidth = 128;
         private const int MaxWidth = 1920;
@@ -26,7 +29,7 @@ namespace Alexantr.SimpleVideoConverter
         private const int MinAudioBitrate = 8;
         private const int MaxAudioBitrate = 320;
 
-        private string format; // mp4 or webm
+        private string fileType; // mp4 or webm
 
         private List<string> frequencyList;
         private Dictionary<string, string> channelsList;
@@ -79,24 +82,24 @@ namespace Alexantr.SimpleVideoConverter
             buttonGoText = buttonGo.Text;
             buttonGo.Enabled = false;
 
-            if (Properties.Settings.Default.KeepOutPath)
+            if (Properties.Settings.Default.RememberOutPath)
             {
                 checkBoxKeepOutPath.Checked = true;
             }
 
-            // 0 - mp4
-            // 1 - webm
-            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.Format) && Properties.Settings.Default.Format == FormatWebM)
+            // Format: 0 - mp4, 1 - webm
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.OutFileType) && Properties.Settings.Default.OutFileType == FileTypeWebM)
             {
                 comboBoxFileType.SelectedIndex = 1;
-                format = FormatWebM;
+                fileType = FileTypeWebM;
             }
             else
             {
                 comboBoxFileType.SelectedIndex = 0;
-                format = FormatMP4;
+                fileType = FileTypeMP4;
             }
 
+            // Size
             numericUpDownWidth.Enabled = false;
             numericUpDownHeight.Enabled = false;
             labelX.Enabled = false;
@@ -126,11 +129,11 @@ namespace Alexantr.SimpleVideoConverter
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            var args = Environment.GetCommandLineArgs();
-            if (args.Length > 1)
+            string[] commandLineArgs = Environment.GetCommandLineArgs();
+            if (commandLineArgs.Length > 1)
             {
-                textBoxIn.Text = args[1];
-                SetOutFilePath(args[1]);
+                textBoxIn.Text = commandLineArgs[1];
+                SetOutFilePath(commandLineArgs[1]);
             }
         }
 
@@ -158,7 +161,7 @@ namespace Alexantr.SimpleVideoConverter
 
             Properties.Settings.Default.Save();
 
-            foreach (var tempFile in tempFilesList)
+            foreach (string tempFile in tempFilesList)
             {
                 File.Delete(tempFile);
             }
@@ -270,7 +273,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void HandleDragDrop(object sender, DragEventArgs e)
         {
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             textBoxIn.Text = files[0];
             SetOutFilePath(files[0]);
         }
@@ -281,7 +284,7 @@ namespace Alexantr.SimpleVideoConverter
             {
                 dialog.OverwritePrompt = false; // ask later
                 dialog.ValidateNames = true;
-                dialog.Filter = format == FormatWebM ? "WebM файлы|*.webm" : "MP4 файлы|*.mp4";
+                dialog.Filter = fileType == FileTypeWebM ? "WebM файлы|*.webm" : "MP4 файлы|*.mp4";
 
                 if (!string.IsNullOrWhiteSpace(textBoxOut.Text))
                 {
@@ -307,7 +310,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void checkBoxKeepOutPath_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.KeepOutPath = checkBoxKeepOutPath.Checked;
+            Properties.Settings.Default.RememberOutPath = checkBoxKeepOutPath.Checked;
         }
 
         #endregion
@@ -316,21 +319,9 @@ namespace Alexantr.SimpleVideoConverter
 
         private void comboBoxFileType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            format = comboBoxFileType.SelectedIndex == 1 ? FormatWebM : FormatMP4;
-
-            Properties.Settings.Default.Format = format;
-
-            // change extension in textbox
-            if (!string.IsNullOrWhiteSpace(textBoxOut.Text))
-            {
-                try
-                {
-                    string outDir = Path.GetDirectoryName(textBoxOut.Text);
-                    string outName = Path.GetFileNameWithoutExtension(textBoxOut.Text);
-                    textBoxOut.Text = Path.Combine(outDir, outName + "." + format);
-                }
-                catch (Exception) { }
-            }
+            fileType = comboBoxFileType.SelectedIndex == 1 ? FileTypeWebM : FileTypeMP4;
+            Properties.Settings.Default.OutFileType = fileType;
+            ChangeOutExtension();
         }
 
         #endregion
@@ -350,12 +341,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void checkBoxEnableAudio_CheckedChanged(object sender, EventArgs e)
         {
-            labelAudioBitrate.Enabled = checkBoxEnableAudio.Checked;
-            numericUpDownAudioBitrate.Enabled = checkBoxEnableAudio.Checked;
-            labelChannels.Enabled = checkBoxEnableAudio.Checked;
-            comboBoxChannels.Enabled = checkBoxEnableAudio.Checked;
-            labelFrequency.Enabled = checkBoxEnableAudio.Checked;
-            comboBoxFrequency.Enabled = checkBoxEnableAudio.Checked;
+            ManageCheckGroupBox(checkBoxEnableAudio, groupBoxAudioParams);
         }
 
         #endregion
@@ -388,6 +374,18 @@ namespace Alexantr.SimpleVideoConverter
 
         #region Functions
 
+        private void ChangeOutExtension()
+        {
+            if (!string.IsNullOrWhiteSpace(textBoxOut.Text))
+            {
+                try
+                {
+                    textBoxOut.Text = Path.Combine(Path.GetDirectoryName(textBoxOut.Text), Path.GetFileNameWithoutExtension(textBoxOut.Text) + "." + fileType);
+                }
+                catch (Exception) { }
+            }
+        }
+
         private void SetOutFilePath(string path)
         {
             if (!converting)
@@ -397,8 +395,15 @@ namespace Alexantr.SimpleVideoConverter
                 toolStripProgressBar.Visible = false;
             }
 
-            if (string.IsNullOrWhiteSpace(path))
+            try
             {
+                ValidateInputFile(path);
+            }
+            catch (Exception ex)
+            {
+                textBoxIn.Text = "";
+                textBoxOut.Text = "";
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 return;
             }
 
@@ -410,9 +415,9 @@ namespace Alexantr.SimpleVideoConverter
             try
             {
                 string outDir = "";
-                string outName = Path.GetFileNameWithoutExtension(path);
+                string withoutExtension = Path.GetFileNameWithoutExtension(path);
 
-                if (Properties.Settings.Default.KeepOutPath)
+                if (Properties.Settings.Default.RememberOutPath)
                 {
                     if (!string.IsNullOrWhiteSpace(textBoxOut.Text))
                     {
@@ -431,9 +436,44 @@ namespace Alexantr.SimpleVideoConverter
 
                 Properties.Settings.Default.OutPath = outDir;
 
-                textBoxOut.Text = Path.Combine(outDir, outName + "-new." + format);
+                string outPath = Path.Combine(outDir, withoutExtension + "." + fileType);
+                int num = 2;
+                while (File.Exists(outPath))
+                {
+                    outPath = Path.Combine(outDir, withoutExtension + " (" + num.ToString() + ")." + fileType);
+                    num++;
+                }
+                textBoxOut.Text = outPath;
             }
             catch (Exception) { }
+        }
+
+        private void ValidateInputFile(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                throw new Exception("Не выбран исходный файл!");
+            }
+            if (input.IndexOfAny(invalidChars) >= 0)
+            {
+                throw new Exception("Путь к исходному файлу содержит невалидные символы!");
+            }
+            if (!File.Exists(input))
+            {
+                throw new Exception("Не найден исходный файл!");
+            }
+        }
+
+        private void ValidateOutputFile(string output)
+        {
+            if (string.IsNullOrWhiteSpace(output))
+            {
+                throw new Exception("Не указан путь к итоговому файлу!");
+            }
+            if (output.IndexOfAny(invalidChars) >= 0)
+            {
+                throw new Exception("Путь к итоговому файлу содержит невалидные символы!");
+            }
         }
 
         private void ConvertVideo()
@@ -446,28 +486,17 @@ namespace Alexantr.SimpleVideoConverter
 
             int width = Convert.ToInt32(Math.Round(numericUpDownWidth.Value, 0));
             int height = Convert.ToInt32(Math.Round(numericUpDownHeight.Value, 0));
-            int bitrate = Convert.ToInt32(Math.Round(numericUpDownBitrate.Value, 0));
+            int videoBitrate = Convert.ToInt32(Math.Round(numericUpDownBitrate.Value, 0));
             int audioBitrate = Convert.ToInt32(Math.Round(numericUpDownAudioBitrate.Value, 0));
 
             string audioChannels = comboBoxItemChannels.Value;
             string audioFrequency = comboBoxItemFrequency.Value;
 
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                throw new Exception("Не выбран исходный файл!");
-            }
-            if (string.IsNullOrWhiteSpace(output))
-            {
-                throw new Exception("Не указан путь к итоговому файлу!");
-            }
+            ValidateInputFile(input);
+            ValidateOutputFile(output);
 
             input = Path.GetFullPath(input);
             output = Path.GetFullPath(output);
-
-            if (!File.Exists(input))
-            {
-                throw new Exception("Не найден исходный файл!");
-            }
 
             if (input.Equals(output, StringComparison.OrdinalIgnoreCase))
             {
@@ -479,7 +508,7 @@ namespace Alexantr.SimpleVideoConverter
                 throw new Exception("Неверно задано разрешение видео!");
             }
 
-            if (bitrate < MinBitrate || bitrate > MaxBitrate)
+            if (videoBitrate < MinBitrate || videoBitrate > MaxBitrate)
             {
                 throw new Exception("Неверно задано значение битрейта для видео!");
             }
@@ -494,7 +523,14 @@ namespace Alexantr.SimpleVideoConverter
             // try to create out folder
             if (!string.IsNullOrWhiteSpace(outputDir) && !Directory.Exists(outputDir))
             {
-                Directory.CreateDirectory(outputDir);
+                try
+                {
+                    Directory.CreateDirectory(outputDir);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Ошибка создания выходной папки!\n" + ex.Message);
+                }
             }
 
             if (File.Exists(output))
@@ -506,34 +542,51 @@ namespace Alexantr.SimpleVideoConverter
                 }
             }
 
-            string[] arguments = new string[2];
+            bool twoPass = true; // for future releases
 
-            string argsVideo;
-            string argsAudio;
-            string audioCodec;
+            string videoArgs;
+            string audioArgs;
 
-            // set video args
-            if (format == "mp4")
+            // Video and audio args
+
+            if (fileType == FileTypeMP4)
             {
-                // main profile or high profile
-                string h264Profile = "high";
-                string h264Level = "4.1";
-                argsVideo = string.Format(" -b:v {0}k -c:v libx264 -preset:v slow -profile:v {1} -level {2} -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p -f mp4 -movflags +faststart", bitrate, h264Profile, h264Level);
-                audioCodec = "aac -strict -2";
+                string videoCodec = "libx264";
+                string audioCodec = "aac";
+
+                // must be configurable
+                string videoPreset = "slow";
+                string videoProfile = "high"; // or "main" and more
+                string videoLevel = "4.1"; // or "3.1" and more
+                string videoParams = "-fast-pskip 0 -mbtree 0 -pix_fmt yuv420p -movflags +faststart";
+
+                string moreVideoArgs = string.Format("-preset:v {0} -profile:v {1} -level {2} {3}", videoPreset, videoProfile, videoLevel, videoParams);
+                string moreAudioArgs = "-strict -2"; // for "aac" codec
+
+                videoArgs = string.Format("-c:v {0} -b:v {1}k {2}", videoCodec, videoBitrate, moreVideoArgs);
+                audioArgs = string.Format("-c:a {0} -b:a {1}k {2}", audioCodec, audioBitrate, moreAudioArgs);
+            }
+            else if (fileType == FileTypeWebM)
+            {
+                string videoCodec = "libvpx"; // or "libvpx-vp9"
+                string audioCodec = "libvorbis"; // or "libopus"
+
+                videoArgs = string.Format("-c:v {0} -b:v {1}k", videoCodec, videoBitrate);
+                audioArgs = string.Format("-c:a {0} -b:a {1}k", audioCodec, audioBitrate);
             }
             else
             {
-                // vp8
-                string webmVideoCodec = "libvpx";
-                argsVideo = string.Format(" -b:v {0}k -c:v {1}", bitrate, webmVideoCodec);
-                audioCodec = "libvorbis";
+                throw new Exception("Неверный выходной тип файла!"); // Possible?
             }
+
+            // Video filters
 
             List<string> filters = new List<string>();
 
             if (checkBoxDeinterlace.Checked)
             {
                 filters.Add("yadif");
+                // add field order
             }
 
             if (checkBoxResizePicture.Checked)
@@ -541,45 +594,71 @@ namespace Alexantr.SimpleVideoConverter
                 filters.Add(string.Format("scale={0}x{1},setsar=1:1", width, height));
             }
 
-            // set audio args
+            // More video args
+
+            if (filters.Count > 0)
+            {
+                videoArgs += " -vf " + string.Join(",", filters);
+            }
+
+            // More audio args
+
             if (!checkBoxEnableAudio.Checked)
             {
-                argsAudio = " -an";
+                audioArgs = "-an";
             }
             else
             {
-                argsAudio = string.Format(" -c:a {0} -b:a {1}k", audioCodec, audioBitrate);
                 // resampling
                 if (!string.IsNullOrWhiteSpace(audioFrequency))
                 {
-                    argsAudio += string.Format(" -ar {0}", audioFrequency);
+                    audioArgs += string.Format(" -ar {0}", audioFrequency);
                 }
                 // channels
                 if (!string.IsNullOrWhiteSpace(audioChannels))
                 {
-                    argsAudio += string.Format(" -ac {0}", audioChannels);
+                    audioArgs += string.Format(" -ac {0}", audioChannels);
                 }
             }
 
-            string moreArgs = (filters.Count > 0 ? " -vf " + string.Join(",", filters) : "");
-            moreArgs += " -map_metadata -1";
+            // More args
 
-            // {0} is pass args
-            // {1} is video codec
-            // {2} is filters
-            // {3} is audio params
-            string template = "{0}{1}{2}{3}";
+            string moreArgs = "-map_metadata -1";
 
-            var passlogfile = GetTemporaryLogFile();
+            // Convert
 
-            // {0} is pass number (1 or 2)
-            // {1} is the prefix for the pass .log file
-            string passArgsTemplate = " -pass {0} -passlogfile \"{1}\"";
+            if (twoPass)
+            {
+                // {0} is video args
+                // {1} is audio args
+                // {2} is more args
+                // {4} is pass args
+                string template = "{3} {0} {1} {2}";
 
-            arguments[0] = string.Format(template, string.Format(passArgsTemplate, 1, passlogfile), argsVideo, " -an", moreArgs);
-            arguments[1] = string.Format(template, string.Format(passArgsTemplate, 2, passlogfile), argsVideo, argsAudio, moreArgs);
+                var passlogfile = GetTempLogFile();
 
-            RunConvertWorker(input, output, format, arguments, 0);
+                // {0} is pass number (1 or 2)
+                // {1} is the prefix for the pass .log file
+                string passArgsTemplate = " -pass {0} -passlogfile \"{1}\"";
+
+                string[] arguments = new string[2];
+                arguments[0] = string.Format(template, videoArgs, "-an", moreArgs, string.Format(passArgsTemplate, 1, passlogfile));
+                arguments[1] = string.Format(template, videoArgs, audioArgs, moreArgs, string.Format(passArgsTemplate, 2, passlogfile));
+
+                RunConvertWorker(input, output, fileType, arguments, 0);
+            }
+            else
+            {
+                // {0} is video args
+                // {1} is audio args
+                // {2} is more args
+                string argsTemplate = "{0} {1} {2}";
+
+                string[] arguments = new string[1];
+                arguments[0] = string.Format(argsTemplate, videoArgs, audioArgs, moreArgs);
+
+                RunConvertWorker(input, output, fileType, arguments, 0);
+            }
         }
 
         /// <summary>
@@ -602,6 +681,10 @@ namespace Alexantr.SimpleVideoConverter
             string currentOutputPath = outputPath;
             string toolTipText = "Выполняется конвертирование";
 
+#if DEBUG
+            Console.WriteLine(currentPassArguments);
+#endif
+
             if (passCount > 1)
             {
                 toolTipText = string.Format("Выполняется проход {0} из {1}", (passNumber + 1), passCount);
@@ -616,7 +699,7 @@ namespace Alexantr.SimpleVideoConverter
                 WorkerSupportsCancellation = true,
                 WorkerReportsProgress = true
             };
-            bw.ProgressChanged += new ProgressChangedEventHandler(delegate (object sender, ProgressChangedEventArgs e)
+            bw.ProgressChanged += (sender, e) =>
             {
                 int progressPercentage = Math.Min(100, e.ProgressPercentage);
                 if (progressPercentage > 0)
@@ -624,14 +707,15 @@ namespace Alexantr.SimpleVideoConverter
                     ProgressBarPercentage(progressPercentage);
                 }
                 ShowToolTip(toolTipText);
-            });
-            bw.DoWork += delegate (object sender, DoWorkEventArgs e)
+            };
+            bw.DoWork += (sender, e) =>
             {
                 try
                 {
                     FFMpegConverter ffMpeg = new FFMpegConverter
                     {
                         FFMpegProcessPriority = ProcessPriorityClass.Idle
+                        //FFMpegToolPath = Path.Combine(Environment.CurrentDirectory, "binaries")
                     };
 
                     ConvertSettings settings = new ConvertSettings
@@ -639,7 +723,7 @@ namespace Alexantr.SimpleVideoConverter
                         CustomOutputArgs = currentPassArguments
                     };
 
-                    ffMpeg.ConvertProgress += delegate (object sendertwo, ConvertProgressEventArgs etwo)
+                    ffMpeg.ConvertProgress += (sendertwo, etwo) =>
                     {
                         if (bw.CancellationPending)
                         {
@@ -651,7 +735,7 @@ namespace Alexantr.SimpleVideoConverter
                             return;
                         }
 
-                        int perc = (int)((etwo.Processed.TotalMilliseconds / etwo.TotalDuration.TotalMilliseconds) * 100);
+                        int perc = (int)((etwo.Processed.TotalMilliseconds / etwo.TotalDuration.TotalMilliseconds) * 100.0);
                         bw.ReportProgress(perc);
                     };
 
@@ -664,7 +748,7 @@ namespace Alexantr.SimpleVideoConverter
                     return;
                 }
             };
-            bw.RunWorkerCompleted += delegate (object sender, RunWorkerCompletedEventArgs e)
+            bw.RunWorkerCompleted += (sender, e) =>
             {
                 if (e.Cancelled)
                 {
@@ -740,7 +824,25 @@ namespace Alexantr.SimpleVideoConverter
             toolStripProgressBar.Style = ProgressBarStyle.Continuous;
         }
 
-        private string GetTemporaryLogFile(int streamIndex = 0)
+        private void ManageCheckGroupBox(CheckBox chk, GroupBox grp)
+        {
+            if (chk.Parent == grp)
+            {
+                grp.Parent.Controls.Add(chk);
+                chk.Location = new Point(chk.Left + grp.Left, chk.Top + grp.Top);
+                chk.BringToFront();
+            }
+            grp.Enabled = chk.Checked;
+        }
+
+        private string GetTempFile()
+        {
+            string tempFileName = Path.GetTempFileName();
+            tempFilesList.Add(tempFileName);
+            return tempFileName;
+        }
+
+        private string GetTempLogFile(int streamIndex = 0)
         {
             var tempLogFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             var tempLogFileRealName = string.Format("{0}-{1}.log", tempLogFile, streamIndex);
