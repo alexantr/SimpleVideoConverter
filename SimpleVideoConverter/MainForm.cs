@@ -1,5 +1,4 @@
-﻿using NReco.VideoConverter;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -623,7 +622,7 @@ namespace Alexantr.SimpleVideoConverter
 
             // More args
 
-            string moreArgs = "-map_metadata -1";
+            string moreArgs = string.Format("-map_metadata -1 -f {0}", fileType);
 
             // Convert
 
@@ -681,16 +680,12 @@ namespace Alexantr.SimpleVideoConverter
             string currentOutputPath = outputPath;
             string toolTipText = "Выполняется конвертирование";
 
-#if DEBUG
-            Console.WriteLine(currentPassArguments);
-#endif
-
             if (passCount > 1)
             {
                 toolTipText = string.Format("Выполняется проход {0} из {1}", (passNumber + 1), passCount);
                 if (passNumber < (passCount - 1))
                 {
-                    currentOutputPath = "NUL";
+                    currentOutputPath = null;
                 }
             }
 
@@ -712,24 +707,15 @@ namespace Alexantr.SimpleVideoConverter
             {
                 try
                 {
-                    FFMpegConverter ffMpeg = new FFMpegConverter
-                    {
-                        FFMpegProcessPriority = ProcessPriorityClass.Idle,
-                        FFMpegToolPath = Path.Combine(Environment.CurrentDirectory, "ffmpeg")
-                    };
+                    FFmpegConverter ffmpeg = new FFmpegConverter();
 
-                    ConvertSettings settings = new ConvertSettings
-                    {
-                        CustomOutputArgs = currentPassArguments
-                    };
-
-                    ffMpeg.ConvertProgress += (sendertwo, etwo) =>
+                    ffmpeg.ConvertProgress += (sendertwo, etwo) =>
                     {
                         if (bw.CancellationPending)
                         {
-                            if (!ffMpeg.Stop())
+                            if (!ffmpeg.Stop())
                             {
-                                ffMpeg.Abort();
+                                ffmpeg.Abort();
                             }
                             e.Cancel = true;
                             return;
@@ -739,7 +725,12 @@ namespace Alexantr.SimpleVideoConverter
                         bw.ReportProgress(perc);
                     };
 
-                    ffMpeg.ConvertMedia(inputPath, null, currentOutputPath, format, settings);
+                    //ffmpeg.LogReceived += (sender3, e3) =>
+                    //{
+                    //    Console.WriteLine(e3.Data);
+                    //};
+
+                    ffmpeg.Convert(inputPath, currentOutputPath, currentPassArguments);
                 }
                 catch (Exception ex)
                 {
