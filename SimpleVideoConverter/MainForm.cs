@@ -714,8 +714,8 @@ namespace Alexantr.SimpleVideoConverter
                 {
                     FFMpegConverter ffMpeg = new FFMpegConverter
                     {
-                        FFMpegProcessPriority = ProcessPriorityClass.Idle
-                        //FFMpegToolPath = Path.Combine(Environment.CurrentDirectory, "binaries")
+                        FFMpegProcessPriority = ProcessPriorityClass.Idle,
+                        FFMpegToolPath = Path.Combine(Environment.CurrentDirectory, "ffmpeg")
                     };
 
                     ConvertSettings settings = new ConvertSettings
