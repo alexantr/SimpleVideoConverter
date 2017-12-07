@@ -33,7 +33,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>svc_icon.ico</ApplicationIcon>
+    <ApplicationIcon>SimpleVideoConverter.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>BB20AB55B90DDBF1592FB6E8CD5A2299C2FA0FFE</ManifestCertificateThumbprint>
@@ -169,7 +169,7 @@
     <Content Include="ffmpeg\swscale-4.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="svc_icon.ico" />
+    <Content Include="SimpleVideoConverter.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
