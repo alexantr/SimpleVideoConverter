@@ -59,6 +59,8 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.groupBoxInfo = new System.Windows.Forms.GroupBox();
+            this.richTextBoxInfo = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBitrate)).BeginInit();
@@ -67,6 +69,7 @@
             this.groupBoxAudioParams.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAudioBitrate)).BeginInit();
             this.statusStrip.SuspendLayout();
+            this.groupBoxInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxIn
@@ -425,14 +428,14 @@
             this.toolStripProgressBar});
             this.statusStrip.Location = new System.Drawing.Point(3, 309);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(443, 22);
+            this.statusStrip.Size = new System.Drawing.Size(729, 22);
             this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 4;
             // 
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(306, 17);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(592, 17);
             this.toolStripStatusLabel.Spring = true;
             this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -441,11 +444,33 @@
             this.toolStripProgressBar.Name = "toolStripProgressBar";
             this.toolStripProgressBar.Size = new System.Drawing.Size(120, 16);
             // 
+            // groupBoxInfo
+            // 
+            this.groupBoxInfo.Controls.Add(this.richTextBoxInfo);
+            this.groupBoxInfo.Location = new System.Drawing.Point(448, 6);
+            this.groupBoxInfo.Name = "groupBoxInfo";
+            this.groupBoxInfo.Size = new System.Drawing.Size(281, 239);
+            this.groupBoxInfo.TabIndex = 5;
+            this.groupBoxInfo.TabStop = false;
+            this.groupBoxInfo.Text = "Info";
+            // 
+            // richTextBoxInfo
+            // 
+            this.richTextBoxInfo.BackColor = System.Drawing.SystemColors.Control;
+            this.richTextBoxInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBoxInfo.Location = new System.Drawing.Point(7, 16);
+            this.richTextBoxInfo.Name = "richTextBoxInfo";
+            this.richTextBoxInfo.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.richTextBoxInfo.Size = new System.Drawing.Size(268, 217);
+            this.richTextBoxInfo.TabIndex = 0;
+            this.richTextBoxInfo.Text = "";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(449, 331);
+            this.ClientSize = new System.Drawing.Size(735, 331);
+            this.Controls.Add(this.groupBoxInfo);
             this.Controls.Add(this.buttonGo);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.groupBoxInOut);
@@ -473,6 +498,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAudioBitrate)).EndInit();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            this.groupBoxInfo.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -509,6 +535,8 @@
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
+        private System.Windows.Forms.GroupBox groupBoxInfo;
+        private System.Windows.Forms.RichTextBox richTextBoxInfo;
     }
 }
 

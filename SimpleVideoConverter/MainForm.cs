@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Xml.XPath;
 using SysTimer = System.Timers.Timer;
 
 namespace Alexantr.SimpleVideoConverter
 {
     public partial class MainForm : Form
     {
+        private double duration;
+
         private char[] invalidChars = Path.GetInvalidPathChars();
 
         private const string FileTypeMP4 = "mp4";
@@ -429,6 +433,9 @@ namespace Alexantr.SimpleVideoConverter
             checkBoxDeinterlace.Checked = false;
             buttonGo.Enabled = true;
 
+            duration = ProbeDuration(path);
+            richTextBoxInfo.Text = "Duration: " + duration.ToString() + Environment.NewLine;
+
             try
             {
                 string outDir = "";
@@ -490,6 +497,27 @@ namespace Alexantr.SimpleVideoConverter
             if (output.IndexOfAny(invalidChars) >= 0)
             {
                 throw new Exception("Путь к итоговому файлу содержит невалидные символы!");
+            }
+        }
+
+        public static double ProbeDuration(string filename)
+        {
+            string args = string.Format("\"{0}\" -of xml -show_streams -show_format", filename);
+
+            using (var prober = new FFprobeProcess(args))
+            {
+                string streamInfo = prober.Probe();
+
+                using (var s = new StringReader(streamInfo))
+                {
+                    var doc = new XPathDocument(s);
+                    var format = doc.CreateNavigator().SelectSingleNode("//ffprobe/format");
+
+                    if (format == null)
+                        return -1;
+
+                    return Convert.ToDouble(format.GetAttribute("duration", ""), CultureInfo.InvariantCulture);
+                }
             }
         }
 
@@ -739,8 +767,8 @@ namespace Alexantr.SimpleVideoConverter
                             return;
                         }
 
-                        int perc = (int)((etwo.Processed.TotalMilliseconds / etwo.TotalDuration.TotalMilliseconds) * 100.0);
-                        bw.ReportProgress(perc);
+                        int progress = (int)((etwo.Processed.TotalSeconds / duration) * 100.0);
+                        bw.ReportProgress(progress);
                     };
 
                     //ffmpeg.LogReceived += (sender3, e3) =>

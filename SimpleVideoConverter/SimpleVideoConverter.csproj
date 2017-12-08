@@ -112,11 +112,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComboBoxItem.cs" />
+    <Compile Include="FFmpegProcess.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FFmpegProgressEventArgs.cs" />
     <Compile Include="FFmpegConverter.cs" />
     <Compile Include="FFmpegException.cs" />
     <Compile Include="FFmpegLogEventArgs.cs" />
-    <Compile Include="FFmpegProgress.cs" />
+    <Compile Include="FFprobeProcess.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

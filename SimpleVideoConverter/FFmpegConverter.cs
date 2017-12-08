@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Alexantr.SimpleVideoConverter
 {
     class FFmpegConverter
     {
-        public string DirectoryPath { get; set; }
-
         public ProcessPriorityClass ProcessPriority { get; set; }
 
         public string LogLevel { get; set; }
@@ -18,14 +16,10 @@ namespace Alexantr.SimpleVideoConverter
 
         public event EventHandler<FFmpegLogEventArgs> LogReceived;
 
-        private Process ffmpegProcess;
+        private FFmpegProcess ffmpegProcess;
 
         public FFmpegConverter()
         {
-            if (string.IsNullOrEmpty(DirectoryPath))
-            {
-                DirectoryPath = Path.Combine(Environment.CurrentDirectory, "ffmpeg");
-            }
             ProcessPriority = ProcessPriorityClass.Normal;
             LogLevel = "info";
         }
@@ -34,12 +28,6 @@ namespace Alexantr.SimpleVideoConverter
         {
             try
             {
-                string ffmpegExePath = Path.Combine(DirectoryPath, "ffmpeg.exe");
-                if (!File.Exists(ffmpegExePath))
-                {
-                    throw new FileNotFoundException("Cannot find FFmpeg: " + ffmpegExePath);
-                }
-
                 string outputFileArgs = outputFile != null ? string.Format("\"{0}\"", outputFile) : "NUL";
                 string fullArgs = string.Format("-hide_banner -y -loglevel {3} -i \"{0}\" {2} {1}", inputFile, outputFileArgs, arguments, LogLevel);
 
@@ -47,23 +35,12 @@ namespace Alexantr.SimpleVideoConverter
                 Console.WriteLine(fullArgs);
 #endif
 
-                ProcessStartInfo startInfo = new ProcessStartInfo(ffmpegExePath, fullArgs)
-                {
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                    WorkingDirectory = Path.GetDirectoryName(DirectoryPath),
-                    RedirectStandardInput = true,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true
-                };
-
                 if (ffmpegProcess != null)
                 {
                     throw new InvalidOperationException("FFmpeg process is already started");
                 }
 
-                ffmpegProcess = Process.Start(startInfo);
+                ffmpegProcess = new FFmpegProcess(fullArgs);
                 if (ProcessPriority != ProcessPriorityClass.Normal)
                 {
                     ffmpegProcess.PriorityClass = ProcessPriority;
@@ -71,22 +48,19 @@ namespace Alexantr.SimpleVideoConverter
 
                 string lastErrorLine = string.Empty;
 
-                FFmpegProgress ffmpegProgress = new FFmpegProgress(new Action<FFmpegProgressEventArgs>(OnConvertProgress), ConvertProgress != null);
-                //ffmpegProgress.Seek = seek;
-                //ffmpegProgress.MaxDuration = maxDuration;
-
                 ffmpegProcess.ErrorDataReceived += (o, args) =>
                 {
-                    if (args.Data == null)
-                        return;
-                    lastErrorLine = args.Data;
-                    ffmpegProgress.ParseLine(args.Data);
-                    FFmpegLogHandler(args.Data);
+                    if (args.Data != null)
+                    {
+                        lastErrorLine = args.Data;
+                        FFmpegConvertProgressHandler(args.Data);
+                        FFmpegLogHandler(args.Data);
+                    }
                 };
 
                 ffmpegProcess.OutputDataReceived += (o, args) => { };
-                ffmpegProcess.BeginOutputReadLine();
-                ffmpegProcess.BeginErrorReadLine();
+
+                ffmpegProcess.Start();
 
                 WaitFFmpegProcessForExit();
                 if (ffmpegProcess.ExitCode != 0)
@@ -95,7 +69,6 @@ namespace Alexantr.SimpleVideoConverter
                 }
                 ffmpegProcess.Close();
                 ffmpegProcess = null;
-                ffmpegProgress.Complete();
             }
             catch (Exception)
             {
@@ -146,11 +119,33 @@ namespace Alexantr.SimpleVideoConverter
             catch (Exception) { }
         }
 
-        private void OnConvertProgress(FFmpegProgressEventArgs args)
+        /// <summary>
+        /// ConvertProgress Handler
+        /// </summary>
+        /// <param name="line">Line from ffmpeg</param>
+        private void FFmpegConvertProgressHandler(string line)
         {
-            ConvertProgress?.Invoke(this, args);
+            TimeSpan processed = TimeSpan.Zero;
+            if (line.StartsWith("frame="))
+            {
+                Regex progressRegex = new Regex("time=(?<progress>[0-9:.]+)\\s", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Singleline);
+                Match progressMatch = progressRegex.Match(line);
+                if (progressMatch.Success)
+                {
+                    try
+                    {
+                        processed = TimeSpan.Parse(progressMatch.Groups["progress"].Value);
+                    }
+                    catch { }
+                }
+            }
+            ConvertProgress?.Invoke(this, new FFmpegProgressEventArgs(processed));
         }
 
+        /// <summary>
+        /// LogReceived Handler
+        /// </summary>
+        /// <param name="line">Line from ffmpeg</param>
         private void FFmpegLogHandler(string line)
         {
             LogReceived?.Invoke(this, new FFmpegLogEventArgs(line));
