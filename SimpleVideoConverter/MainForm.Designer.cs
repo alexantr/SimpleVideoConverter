@@ -432,7 +432,7 @@
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(275, 17);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(306, 17);
             this.toolStripStatusLabel.Spring = true;
             this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
