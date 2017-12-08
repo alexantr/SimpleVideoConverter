@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using SysTimer = System.Timers.Timer;
 
@@ -124,6 +125,23 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxChannels.SelectedIndex = 0;
 
             toolStripProgressBar.Visible = false;
+
+            // append version
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+            string niceVersion = version.Major.ToString();
+            if (version.Minor != 0 || version.Build != 0 || version.Revision != 0)
+            {
+                niceVersion += "." + version.Minor.ToString();
+            }
+            if (version.Build != 0 || version.Revision != 0)
+            {
+                niceVersion += "." + version.Build.ToString();
+            }
+            if (version.Revision != 0)
+            {
+                niceVersion += "." + version.Revision.ToString();
+            }
+            Text = Text + " v" + niceVersion;
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -171,7 +189,7 @@ namespace Alexantr.SimpleVideoConverter
         #region ToolTips
 
         [DebuggerStepThrough]
-        void SetToolTip(string message)
+        private void SetToolTip(string message)
         {
             if (IsDisposed || toolStripStatusLabel.IsDisposed)
             {
@@ -185,7 +203,7 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         [DebuggerStepThrough]
-        void ShowToolTip(string message, int timer = 0)
+        private void ShowToolTip(string message, int timer = 0)
         {
             // remember prev message if it's timer = 0
             if (toolTipTimer == null && !string.IsNullOrWhiteSpace(toolStripStatusLabel.Text))
@@ -214,7 +232,7 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         [DebuggerStepThrough]
-        void ClearToolTip(object sender = null, EventArgs e = null)
+        private void ClearToolTip(object sender = null, EventArgs e = null)
         {
             if (toolTipTimer != null)
             {
@@ -225,7 +243,7 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         [DebuggerStepThrough]
-        void RestoreToolTip()
+        private void RestoreToolTip()
         {
             if (!string.IsNullOrWhiteSpace(prevToolTipMessage))
             {
