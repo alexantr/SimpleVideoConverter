@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Alexantr.SimpleVideoConverter
@@ -12,6 +14,8 @@ namespace Alexantr.SimpleVideoConverter
         [STAThread]
         static void Main()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
+
             // keep user.config settings from prev version
             if (Properties.Settings.Default.UpgradeRequired)
             {

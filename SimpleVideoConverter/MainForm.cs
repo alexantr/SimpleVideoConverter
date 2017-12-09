@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Xml.XPath;
 using SysTimer = System.Timers.Timer;
 
 namespace Alexantr.SimpleVideoConverter
 {
     public partial class MainForm : Form
     {
-        private double duration;
+        private VideoFile videoFile;
 
         private char[] invalidChars = Path.GetInvalidPathChars();
 
@@ -35,10 +34,19 @@ namespace Alexantr.SimpleVideoConverter
 
         private string fileType; // mp4 or webm
 
-        private List<string> frequencyList;
+        private Dictionary<string, string> frameRateList;
+
+        private Dictionary<string, string> fieldOrderList;
+
+        private List<string> aspectRatioList;
+
+        private List<string> audioBitRateList;
+        private Dictionary<string, string> frequencyList;
         private Dictionary<string, string> channelsList;
 
         private List<string> tempFilesList;
+
+        private bool doNotCheckKeepARAgain;
 
         private BackgroundWorker bw;
         private bool converting = false;
@@ -62,16 +70,66 @@ namespace Alexantr.SimpleVideoConverter
             DragEnter += HandleDragEnter;
             DragDrop += HandleDragDrop;
 
-            frequencyList = new List<string>
+            frameRateList = new Dictionary<string, string>
             {
-                "8000",
-                "12000",
-                "16000",
-                "22050",
-                "24000",
-                "32000",
-                "44100",
-                "48000"
+                { "10", "10" },
+                { "12", "12" },
+                { "15", "15" },
+                { "18", "18" },
+                { "20", "20" },
+                { "24000/1001", "23.976" },
+                { "24", "24" },
+                { "25", "25" },
+                { "30000/1001", "29.97" },
+                { "30", "30" },
+                { "48", "48" },
+                { "50", "50" },
+                { "60000/1001", "59.94" },
+                { "60", "60" }
+            };
+
+            fieldOrderList = new Dictionary<string, string>
+            {
+                { "tff", "Top Field First" },
+                { "bff", "Bottom Field First" }
+            };
+
+            aspectRatioList = new List<string>
+            {
+                "16:9",
+                "4:3",
+                "1:1",
+                "1.85",
+                "2.35",
+                "2.39"
+            };
+
+            audioBitRateList = new List<string>
+            {
+                "32",
+                "48",
+                "64",
+                "96",
+                "112",
+                "128",
+                "160",
+                "192",
+                "224",
+                "256",
+                "320"
+            };
+
+            frequencyList = new Dictionary<string, string>
+            {
+                { "8000", "8 кГц" },
+                { "12000", "12 кГц" },
+                { "16000", "16 кГц" },
+                { "22050", "22.05 кГц" },
+                { "24000", "24 кГц" },
+                { "32000", "32 кГц" },
+                { "44100", "44.1 кГц" },
+                { "48000", "48 кГц" },
+                { "96000", "96 кГц"}
             };
 
             channelsList = new Dictionary<string, string>
@@ -103,19 +161,45 @@ namespace Alexantr.SimpleVideoConverter
                 fileType = FileTypeMP4;
             }
 
-            // Size
-            numericUpDownWidth.Enabled = false;
-            numericUpDownHeight.Enabled = false;
-            labelX.Enabled = false;
+            // Frame rate
+            FillComboBoxFrameRate();
 
-            checkBoxEnableAudio.Checked = true;
+            // Field order
+            comboBoxFieldOrder.Items.Clear();
+            comboBoxFieldOrder.Items.Add(new ComboBoxItem(string.Empty, "авто"));
+            foreach (KeyValuePair<string, string> fieldOrder in fieldOrderList)
+            {
+                comboBoxFieldOrder.Items.Add(new ComboBoxItem(fieldOrder.Key, fieldOrder.Value));
+            }
+            comboBoxFieldOrder.SelectedIndex = 0;
+
+            ManageCheckGroupBox(checkBoxDeinterlace, groupBoxDeinterlace);
+
+            // Aspect ratio
+            FillComboBoxAspectRatio("");
+
+            ManageCheckGroupBox(checkBoxResizePicture, groupBoxResolution);
+
+            comboBoxAspectRatio.Enabled = checkBoxKeepAspectRatio.Checked;
+
+            // Audio bitrate
+            int selectedIndexBitrate = 0, indexBitrate = 0;
+            comboBoxAudioBitrate.Items.Clear();
+            foreach (string ab in audioBitRateList)
+            {
+                comboBoxAudioBitrate.Items.Add(new ComboBoxItem(ab, ab));
+                if (ab == "128")
+                    selectedIndexBitrate = indexBitrate;
+                indexBitrate++;
+            }
+            comboBoxAudioBitrate.SelectedIndex = selectedIndexBitrate;
 
             // Frequency
             comboBoxFrequency.Items.Clear();
             comboBoxFrequency.Items.Add(new ComboBoxItem(string.Empty, "авто"));
-            foreach (string frequencyItem in frequencyList)
+            foreach (KeyValuePair<string, string> frq in frequencyList)
             {
-                comboBoxFrequency.Items.Add(new ComboBoxItem(frequencyItem, frequencyItem));
+                comboBoxFrequency.Items.Add(new ComboBoxItem(frq.Key, frq.Value));
             }
             comboBoxFrequency.SelectedIndex = 0;
 
@@ -128,15 +212,12 @@ namespace Alexantr.SimpleVideoConverter
             }
             comboBoxChannels.SelectedIndex = 0;
 
+            // Progress bar
             toolStripProgressBar.Visible = false;
 
             // append version
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string niceVersion = version.Major.ToString();
-            if (version.Minor != 0 || version.Build != 0 || version.Revision != 0)
-            {
-                niceVersion += "." + version.Minor.ToString();
-            }
+            string niceVersion = version.Major.ToString() + "." + version.Minor.ToString();
             if (version.Build != 0 || version.Revision != 0)
             {
                 niceVersion += "." + version.Build.ToString();
@@ -154,7 +235,7 @@ namespace Alexantr.SimpleVideoConverter
             if (commandLineArgs.Length > 1)
             {
                 textBoxIn.Text = commandLineArgs[1];
-                SetOutFilePath(commandLineArgs[1]);
+                SetFile(commandLineArgs[1]);
             }
         }
 
@@ -262,6 +343,10 @@ namespace Alexantr.SimpleVideoConverter
 
         private void buttonBrowseIn_Click(object sender, EventArgs e)
         {
+            if (converting)
+            {
+                return;
+            }
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
                 if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.InPath) && Directory.Exists(Properties.Settings.Default.InPath))
@@ -280,7 +365,7 @@ namespace Alexantr.SimpleVideoConverter
                 if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.FileName))
                 {
                     textBoxIn.Text = dialog.FileName;
-                    SetOutFilePath(dialog.FileName);
+                    SetFile(dialog.FileName);
                 }
             }
         }
@@ -294,9 +379,13 @@ namespace Alexantr.SimpleVideoConverter
 
         private void HandleDragDrop(object sender, DragEventArgs e)
         {
+            if (converting)
+            {
+                return;
+            }
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             textBoxIn.Text = files[0];
-            SetOutFilePath(files[0]);
+            SetFile(files[0]);
         }
 
         private void buttonBrowseOut_Click(object sender, EventArgs e)
@@ -347,22 +436,72 @@ namespace Alexantr.SimpleVideoConverter
 
         #endregion
 
+        #region Deinterlace
+
+        private void checkBoxDeinterlace_CheckedChanged(object sender, EventArgs e)
+        {
+            ManageCheckGroupBox(checkBoxDeinterlace, groupBoxDeinterlace);
+        }
+
+        #endregion
+
         #region Resize Picture
 
         private void checkBoxResizePicture_CheckedChanged(object sender, EventArgs e)
         {
-            numericUpDownWidth.Enabled = checkBoxResizePicture.Checked;
-            numericUpDownHeight.Enabled = checkBoxResizePicture.Checked;
-            labelX.Enabled = checkBoxResizePicture.Checked;
+            ManageCheckGroupBox(checkBoxResizePicture, groupBoxResolution);
+            UpdateHeigth();
+        }
+
+        private void numericUpDownWidth_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateHeigth();
+        }
+
+        private void numericUpDownWidth_Leave(object sender, EventArgs e)
+        {
+            int value = Convert.ToInt32(Math.Round(numericUpDownWidth.Value, 0));
+            if (value % 2 == 1)
+            {
+                value -= 1;
+                if (value < 128)
+                    value = 128;
+                numericUpDownWidth.Value = value;
+            }
+            UpdateHeigth();
+        }
+
+        private void checkBoxKeepAspectRatio_CheckedChanged(object sender, EventArgs e)
+        {
+            doNotCheckKeepARAgain = !checkBoxKeepAspectRatio.Checked;
+            comboBoxAspectRatio.Enabled = checkBoxKeepAspectRatio.Checked;
+            numericUpDownHeight.Enabled = !checkBoxKeepAspectRatio.Checked;
+            UpdateHeigth();
+        }
+
+        private void comboBoxAspectRatio_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateHeigth();
+        }
+
+        private void comboBoxAspectRatio_TextUpdate(object sender, EventArgs e)
+        {
+            UpdateHeigth();
         }
 
         #endregion
 
         #region Audio
 
-        private void checkBoxEnableAudio_CheckedChanged(object sender, EventArgs e)
+        private void comboBoxAudioBitrate_Leave(object sender, EventArgs e)
         {
-            ManageCheckGroupBox(checkBoxEnableAudio, groupBoxAudioParams);
+            string input = comboBoxAudioBitrate.SelectedIndex < 0 ? comboBoxAudioBitrate.Text : ((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value;
+            int.TryParse(input, out int audioBitrate);
+            if (audioBitrate < MinAudioBitrate)
+                audioBitrate = MinAudioBitrate;
+            if (audioBitrate > MaxAudioBitrate)
+                audioBitrate = MaxAudioBitrate;
+            comboBoxAudioBitrate.Text = audioBitrate.ToString();
         }
 
         #endregion
@@ -407,34 +546,49 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
-        private void SetOutFilePath(string path)
+        private void SetFile(string path)
         {
-            if (!converting)
-            {
-                ClearToolTip();
-                ResetProgressBar();
-                toolStripProgressBar.Visible = false;
-            }
+            ClearToolTip();
+            ResetProgressBar();
+            toolStripProgressBar.Visible = false;
+            richTextBoxInfo.Clear();
+            ShowToolTip("Загрузка файла", 0);
 
             try
             {
                 ValidateInputFile(path);
+                videoFile = new VideoFile(path);
+                videoFile.Probe();
             }
             catch (Exception ex)
             {
+                videoFile = null;
                 textBoxIn.Text = "";
                 textBoxOut.Text = "";
+                ClearToolTip();
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 return;
             }
 
             Properties.Settings.Default.InPath = Path.GetDirectoryName(path);
 
-            checkBoxDeinterlace.Checked = false;
-            buttonGo.Enabled = true;
+            ClearToolTip();
 
-            duration = ProbeDuration(path);
-            richTextBoxInfo.Text = "Duration: " + duration.ToString() + Environment.NewLine;
+            string original = "";
+            if (videoFile.VideoStreams[0].PictureSize.Width > 0 && videoFile.VideoStreams[0].PictureSize.Height > 0)
+            {
+                original = string.Format("{0}:{1}", videoFile.VideoStreams[0].PictureSize.Width, videoFile.VideoStreams[0].PictureSize.Height);
+            }
+            FillComboBoxAspectRatio(original);
+            checkBoxKeepAspectRatio.Checked = !doNotCheckKeepARAgain && !string.IsNullOrWhiteSpace(original);
+
+            ShowInfo();
+
+            checkBoxDeinterlace.Checked = videoFile.VideoStreams[0].FieldOrder != "progressive";
+            comboBoxFieldOrder.SelectedIndex = 0;
+            comboBoxFrameRate.SelectedIndex = 0;
+
+            buttonGo.Enabled = true;
 
             try
             {
@@ -500,48 +654,33 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
-        public static double ProbeDuration(string filename)
-        {
-            string args = string.Format("\"{0}\" -of xml -show_streams -show_format", filename);
-
-            using (var prober = new FFprobeProcess(args))
-            {
-                string streamInfo = prober.Probe();
-
-                using (var s = new StringReader(streamInfo))
-                {
-                    var doc = new XPathDocument(s);
-                    var format = doc.CreateNavigator().SelectSingleNode("//ffprobe/format");
-
-                    if (format == null)
-                        return -1;
-
-                    return Convert.ToDouble(format.GetAttribute("duration", ""), CultureInfo.InvariantCulture);
-                }
-            }
-        }
-
         private void ConvertVideo()
         {
-            string input = textBoxIn.Text;
-            string output = textBoxOut.Text;
+            if (videoFile == null)
+            {
+                throw new Exception("Видео-файл не определен!");
+            }
 
-            var comboBoxItemChannels = (ComboBoxItem)comboBoxChannels.SelectedItem;
-            var comboBoxItemFrequency = (ComboBoxItem)comboBoxFrequency.SelectedItem;
+            string input = videoFile.FullPath;
+            string output = Path.GetFullPath(textBoxOut.Text);
+
+            ValidateOutputFile(output);
+
+            ComboBoxItem comboBoxItemFrameRate = (ComboBoxItem)comboBoxFrameRate.SelectedItem;
+            ComboBoxItem comboBoxItemChannels = (ComboBoxItem)comboBoxChannels.SelectedItem;
+            ComboBoxItem selectedItemAudioBitrate = (ComboBoxItem)comboBoxAudioBitrate.SelectedItem;
+            ComboBoxItem comboBoxItemFrequency = (ComboBoxItem)comboBoxFrequency.SelectedItem;
+            ComboBoxItem selectedItemFieldOrder = (ComboBoxItem)comboBoxFieldOrder.SelectedItem;
 
             int width = Convert.ToInt32(Math.Round(numericUpDownWidth.Value, 0));
             int height = Convert.ToInt32(Math.Round(numericUpDownHeight.Value, 0));
             int videoBitrate = Convert.ToInt32(Math.Round(numericUpDownBitrate.Value, 0));
-            int audioBitrate = Convert.ToInt32(Math.Round(numericUpDownAudioBitrate.Value, 0));
+            int audioBitrate = Convert.ToInt32(selectedItemAudioBitrate.Value);
 
+            string frameRate = comboBoxItemFrameRate.Value;
+            string fieldOrder = selectedItemFieldOrder.Value;
             string audioChannels = comboBoxItemChannels.Value;
             string audioFrequency = comboBoxItemFrequency.Value;
-
-            ValidateInputFile(input);
-            ValidateOutputFile(output);
-
-            input = Path.GetFullPath(input);
-            output = Path.GetFullPath(output);
 
             if (input.Equals(output, StringComparison.OrdinalIgnoreCase))
             {
@@ -574,13 +713,13 @@ namespace Alexantr.SimpleVideoConverter
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Ошибка создания выходной папки!\n" + ex.Message);
+                    throw new Exception("Ошибка создания выходной папки!" + Environment.NewLine + ex.Message);
                 }
             }
 
             if (File.Exists(output))
             {
-                string question = Path.GetFileName(output) + " уже существует.\nХотите заменить его?";
+                string question = Path.GetFileName(output) + " уже существует." + Environment.NewLine + "Хотите заменить его?";
                 if (MessageBox.Show(question, "Подтвердить перезапись", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                 {
                     return;
@@ -608,16 +747,16 @@ namespace Alexantr.SimpleVideoConverter
                 string moreVideoArgs = string.Format("-preset:v {0} -profile:v {1} -level {2} {3}", videoPreset, videoProfile, videoLevel, videoParams);
                 string moreAudioArgs = "-strict -2"; // for "aac" codec
 
-                videoArgs = string.Format("-c:v {0} -b:v {1}k {2}", videoCodec, videoBitrate, moreVideoArgs);
-                audioArgs = string.Format("-c:a {0} -b:a {1}k {2}", audioCodec, audioBitrate, moreAudioArgs);
+                videoArgs = $"-c:v {videoCodec} -b:v {videoBitrate}k {moreVideoArgs}";
+                audioArgs = $"-c:a {audioCodec} -b:a {audioBitrate}k {moreAudioArgs}";
             }
             else if (fileType == FileTypeWebM)
             {
                 string videoCodec = "libvpx"; // or "libvpx-vp9"
                 string audioCodec = "libvorbis"; // or "libopus"
 
-                videoArgs = string.Format("-c:v {0} -b:v {1}k", videoCodec, videoBitrate);
-                audioArgs = string.Format("-c:a {0} -b:a {1}k", audioCodec, audioBitrate);
+                videoArgs = $"-c:v {videoCodec} -b:v {videoBitrate}k";
+                audioArgs = $"-c:a {audioCodec} -b:a {audioBitrate}k";
             }
             else
             {
@@ -630,45 +769,70 @@ namespace Alexantr.SimpleVideoConverter
 
             if (checkBoxDeinterlace.Checked)
             {
-                filters.Add("yadif");
-                // add field order
+                string deinterlaceFilter = "yadif";
+                if (!string.IsNullOrWhiteSpace(fieldOrder))
+                    deinterlaceFilter += $"=parity={fieldOrder}";
+                filters.Add(deinterlaceFilter);
             }
 
             if (checkBoxResizePicture.Checked)
             {
-                filters.Add(string.Format("scale={0}x{1},setsar=1:1", width, height));
+                // https://www.ffmpeg.org/ffmpeg-scaler.html#sws_005fflags
+                filters.Add($"scale={width}x{height}:flags=lanczos,setsar=1:1");
             }
 
             // More video args
 
+            videoArgs += string.Format(" -map 0:{0}", videoFile.VideoStreams[0].Index);
+
+            if (!string.IsNullOrWhiteSpace(frameRate))
+            {
+                videoArgs += $" -r {frameRate}";
+            }
+
             if (filters.Count > 0)
             {
-                videoArgs += " -vf " + string.Join(",", filters);
+                videoArgs += " -vf \"" + string.Join(",", filters) + "\"";
             }
 
             // More audio args
 
-            if (!checkBoxEnableAudio.Checked)
+            List<int> selectedAudioList = new List<int>();
+            foreach (int checkedIndex in checkedListBoxAudioStreams.CheckedIndices)
+            {
+                selectedAudioList.Add(checkedIndex);
+            }
+
+            if (selectedAudioList.Count == 0)
             {
                 audioArgs = "-an";
             }
             else
             {
+                int audioIndex = 0;
+                foreach (AudioStream audioStream in videoFile.AudioStreams)
+                {
+                    if (selectedAudioList.Contains(audioIndex))
+                    {
+                        audioArgs += $" -map 0:{audioStream.Index}";
+                    }
+                    audioIndex++;
+                }
                 // resampling
                 if (!string.IsNullOrWhiteSpace(audioFrequency))
                 {
-                    audioArgs += string.Format(" -ar {0}", audioFrequency);
+                    audioArgs += $" -ar {audioFrequency}";
                 }
                 // channels
                 if (!string.IsNullOrWhiteSpace(audioChannels))
                 {
-                    audioArgs += string.Format(" -ac {0}", audioChannels);
+                    audioArgs += $" -ac {audioChannels}";
                 }
             }
 
             // More args
 
-            string moreArgs = string.Format("-map_metadata -1 -f {0}", fileType);
+            string moreArgs = $"-map_metadata -1 -f {fileType}";
 
             // Convert
 
@@ -706,6 +870,10 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
+        #endregion
+
+        #region Worker
+
         /// <summary>
         /// Run Convert Worker
         /// </summary>
@@ -728,7 +896,7 @@ namespace Alexantr.SimpleVideoConverter
 
             if (passCount > 1)
             {
-                toolTipText = string.Format("Выполняется проход {0} из {1}", (passNumber + 1), passCount);
+                toolTipText = string.Format("Выполняется конвертирование (проход {0} из {1})", (passNumber + 1), passCount);
                 if (passNumber < (passCount - 1))
                 {
                     currentOutputPath = null;
@@ -767,7 +935,7 @@ namespace Alexantr.SimpleVideoConverter
                             return;
                         }
 
-                        int progress = (int)((etwo.Processed.TotalSeconds / duration) * 100.0);
+                        int progress = (int)((etwo.Processed.TotalSeconds / videoFile.Duration.TotalSeconds) * 100.0);
                         bw.ReportProgress(progress);
                     };
 
@@ -790,6 +958,8 @@ namespace Alexantr.SimpleVideoConverter
                 if (e.Cancelled)
                 {
                     converting = false;
+
+                    InOutControlsEnabled(true);
 
                     // reset pbar
                     ResetProgressBar();
@@ -816,6 +986,8 @@ namespace Alexantr.SimpleVideoConverter
                 else
                 {
                     converting = false;
+
+                    InOutControlsEnabled(true);
 
                     // 100% done!
                     ProgressBarPercentage(100);
@@ -845,8 +1017,176 @@ namespace Alexantr.SimpleVideoConverter
             buttonGo.Enabled = true;
 
             converting = true;
+
+            InOutControlsEnabled(false);
             ShowToolTip(toolTipText);
             bw.RunWorkerAsync();
+        }
+
+        #endregion
+
+        #region Form helpers
+
+        private void FillComboBoxFrameRate()
+        {
+            comboBoxFrameRate.Items.Clear();
+            comboBoxFrameRate.Items.Add(new ComboBoxItem(string.Empty, "авто"));
+            foreach (KeyValuePair<string, string> frameRate in frameRateList)
+            {
+                comboBoxFrameRate.Items.Add(new ComboBoxItem(frameRate.Key, frameRate.Value));
+            }
+            comboBoxFrameRate.SelectedIndex = 0;
+        }
+
+        private void FillComboBoxAspectRatio(string original = "")
+        {
+            comboBoxAspectRatio.Text = string.Empty;
+            comboBoxAspectRatio.Items.Clear();
+            if (!string.IsNullOrWhiteSpace(original))
+            {
+                comboBoxAspectRatio.Items.Add(new ComboBoxItem(original, "оригинал"));
+            }
+            foreach (string aspectRatio in aspectRatioList)
+            {
+                comboBoxAspectRatio.Items.Add(new ComboBoxItem(aspectRatio, aspectRatio));
+            }
+            if (string.IsNullOrWhiteSpace(original))
+            {
+                return;
+            }
+            comboBoxAspectRatio.SelectedIndex = 0;
+        }
+
+        private void UpdateHeigth()
+        {
+            pictureBoxRatioError.BackgroundImage = null;
+            if (!checkBoxResizePicture.Checked || !checkBoxKeepAspectRatio.Checked)
+                return;
+            int width = Convert.ToInt32(Math.Round(numericUpDownWidth.Value, 0));
+            int height = Convert.ToInt32(Math.Round(numericUpDownHeight.Value, 0));
+            double aspectRatio = ParseAspectRatio();
+            if (aspectRatio > 0.0)
+            {
+                int newHeight = Convert.ToInt32(Math.Round(width / aspectRatio, 0));
+                if (newHeight % 2 == 1)
+                    newHeight -= 1;
+                bool overHeight = false;
+                if (newHeight < 96)
+                {
+                    newHeight = 96;
+                    overHeight = true;
+                }
+                else if (newHeight > 1080)
+                {
+                    newHeight = 1080;
+                    overHeight = true;
+                }
+                numericUpDownHeight.Value = newHeight;
+                if (!overHeight)
+                    return;
+                int newWidth = Convert.ToInt32(Math.Round(newHeight * aspectRatio, 0));
+                if (newWidth > 1920)
+                    newWidth = 1920;
+                else if (newWidth < 128)
+                    newWidth = 128;
+                if (newWidth % 2 == 1)
+                    newWidth -= 1;
+                numericUpDownWidth.Value = newWidth;
+            }
+            else
+            {
+                pictureBoxRatioError.BackgroundImage = Properties.Resources.critical;
+            }
+        }
+
+        private double ParseAspectRatio()
+        {
+            string input = comboBoxAspectRatio.SelectedIndex < 0 ? comboBoxAspectRatio.Text : ((ComboBoxItem)comboBoxAspectRatio.SelectedItem).Value;
+            //Console.WriteLine("SelectedIndex: " + comboBoxAspectRatio.SelectedIndex);
+            //Console.WriteLine("Text: " + input);
+            Match match = new Regex("^([0-9]+(?:\\.[0-9]+)?)(?::([0-9]+(?:\\.[0-9]+)?))?$", RegexOptions.Singleline).Match(input);
+            double ar = 0.0;
+            if (match.Success)
+            {
+                try
+                {
+                    double arX = Convert.ToDouble(match.Groups[1].Value);
+                    double arY = 0.0;
+                    if (!string.IsNullOrWhiteSpace(match.Groups[2].Value))
+                        arY = Convert.ToDouble(match.Groups[2].Value);
+                    if (arY == 0.0)
+                        arY = 1.0;
+                    double arNew = 0.0;
+                    if (arY > 0.0)
+                        arNew = arX / arY;
+                    ar = arNew;
+                }
+                catch { }
+            }
+            return ar;
+        }
+
+        private void ShowInfo()
+        {
+            // {0} - codec name
+            // {1} - bit rate (can be empty)
+            // {2} - channels
+            // {3} - sample rate (can be empty)
+            // {4} - language (can be empty)
+            string audioChkListTpl = "{0} {1}{2}{3}{4}";
+
+            richTextBoxInfo.Clear();
+
+            List<VideoStream> videoStreams = videoFile.VideoStreams;
+            List<AudioStream> audioStreams = videoFile.AudioStreams;
+
+            VideoStream videoStream = videoStreams[0];
+
+            string pictureSize = videoStream.PictureSize.ToString() + (videoStream.UsingDAR ? " (" + videoStream.OriginalSize.ToString("x") + ")" : "");
+
+            List<string> infoList = new List<string>
+            {
+                "Формат: " + videoFile.Format,
+                "Размер файла: " + videoFile.FileSize.ToFileSize(),
+                "Длительность: " + (new TimeSpan((long)videoFile.Duration.TotalMilliseconds * 10000L).ToString("hh\\:mm\\:ss")),
+                $"Битрейт: {videoFile.BitRate} kbps",
+                "Разрешение: " + pictureSize,
+                $"Частота кадров: {videoStream.FrameRate} fps",
+                "Развертка: " + (videoStream.FieldOrder == "progressive" ? "прогрессивная" : "чересстрочная"),
+                "Видеокодек: " + videoStream.CodecName.ToUpper()
+            };
+
+            richTextBoxInfo.AppendText(string.Join(Environment.NewLine, infoList));
+
+            // fill audio streams list
+
+            checkedListBoxAudioStreams.Items.Clear();
+
+            string audioBitrate, audioChannels, audioLanguage, audioSampleRate;
+
+            bool isChecked = true;
+
+            foreach (AudioStream audioStream in audioStreams)
+            {
+                audioBitrate = audioStream.BitRate > 0 ? $"{audioStream.BitRate}kbps " : "";
+                audioChannels = $"{audioStream.Channels}ch";
+                audioLanguage = string.IsNullOrWhiteSpace(audioStream.Language) || audioStream.Language == "und" ? "" : $" ({audioStream.Language})";
+                double.TryParse(audioStream.SampleRate, out double sr);
+                audioSampleRate = sr > 0 ? " " + Math.Round(sr / 1000, 1).ToString() + "kHz" : "";
+
+                checkedListBoxAudioStreams.Items.Add(string.Format(
+                    audioChkListTpl,
+                    //audioStream.Index,
+                    audioStream.CodecName.ToUpper(),
+                    audioBitrate,
+                    audioChannels,
+                    audioSampleRate,
+                    audioLanguage
+                ), isChecked);
+
+                if (isChecked)
+                    isChecked = false;
+            }
         }
 
         private void ResetProgressBar()
@@ -861,15 +1201,12 @@ namespace Alexantr.SimpleVideoConverter
             toolStripProgressBar.Style = ProgressBarStyle.Continuous;
         }
 
-        private void ManageCheckGroupBox(CheckBox chk, GroupBox grp)
+        private void InOutControlsEnabled(bool enabled = true)
         {
-            if (chk.Parent == grp)
-            {
-                grp.Parent.Controls.Add(chk);
-                chk.Location = new Point(chk.Left + grp.Left, chk.Top + grp.Top);
-                chk.BringToFront();
-            }
-            grp.Enabled = chk.Checked;
+            textBoxIn.Enabled = enabled;
+            textBoxOut.Enabled = enabled;
+            buttonBrowseIn.Enabled = enabled;
+            buttonBrowseOut.Enabled = enabled;
         }
 
         private string GetTempFile()
@@ -887,6 +1224,17 @@ namespace Alexantr.SimpleVideoConverter
             tempFilesList.Add(tempLogFileRealName);
             tempFilesList.Add(tempLogMbtreeFileRealName);
             return tempLogFile;
+        }
+
+        private void ManageCheckGroupBox(CheckBox chk, GroupBox grp)
+        {
+            if (chk.Parent == grp)
+            {
+                grp.Parent.Controls.Add(chk);
+                chk.Location = new Point(chk.Left + grp.Left, chk.Top + grp.Top);
+                chk.BringToFront();
+            }
+            grp.Enabled = chk.Checked;
         }
 
         #endregion
