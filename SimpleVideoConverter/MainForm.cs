@@ -504,6 +504,16 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxAudioBitrate.Text = audioBitrate.ToString();
         }
 
+        private void checkedListBoxAudioStreams_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            List<int> selectedAudioList = new List<int>();
+            foreach (int checkedIndex in checkedListBoxAudioStreams.CheckedIndices)
+            {
+                selectedAudioList.Add(checkedIndex);
+            }
+            groupBoxAudioParams.Enabled = selectedAudioList.Count > 0;
+        }
+
         #endregion
 
         #region Buttons
@@ -574,6 +584,7 @@ namespace Alexantr.SimpleVideoConverter
 
             ClearToolTip();
 
+            // set original aspect ratio
             string original = "";
             if (videoFile.VideoStreams[0].PictureSize.Width > 0 && videoFile.VideoStreams[0].PictureSize.Height > 0)
             {
@@ -582,11 +593,34 @@ namespace Alexantr.SimpleVideoConverter
             FillComboBoxAspectRatio(original);
             checkBoxKeepAspectRatio.Checked = !doNotCheckKeepARAgain && !string.IsNullOrWhiteSpace(original);
 
-            ShowInfo();
+            // if need resize
+            bool needResize = false;
+            int w = videoFile.VideoStreams[0].PictureSize.Width;
+            if (w > MaxWidth)
+            {
+                w = MaxWidth;
+                needResize = true;
+            }
+            if (w < MinWidth)
+            {
+                w = MinWidth;
+                needResize = true;
+            }
+            numericUpDownWidth.Value = w;
+            checkBoxResizePicture.Checked = needResize;
+            checkBoxKeepAspectRatio.Checked = true;
+            UpdateHeigth();
 
+            // if need deinterlace
             checkBoxDeinterlace.Checked = videoFile.VideoStreams[0].FieldOrder != "progressive";
             comboBoxFieldOrder.SelectedIndex = 0;
             comboBoxFrameRate.SelectedIndex = 0;
+
+            // has audio
+            groupBoxAudioParams.Enabled = videoFile.AudioStreams.Count > 0;
+
+            // show info
+            ShowInfo();
 
             buttonGo.Enabled = true;
 
@@ -1060,8 +1094,6 @@ namespace Alexantr.SimpleVideoConverter
         private void UpdateHeigth()
         {
             pictureBoxRatioError.BackgroundImage = null;
-            if (!checkBoxResizePicture.Checked || !checkBoxKeepAspectRatio.Checked)
-                return;
             int width = Convert.ToInt32(Math.Round(numericUpDownWidth.Value, 0));
             int height = Convert.ToInt32(Math.Round(numericUpDownHeight.Value, 0));
             double aspectRatio = ParseAspectRatio();
@@ -1093,7 +1125,7 @@ namespace Alexantr.SimpleVideoConverter
                     newWidth -= 1;
                 numericUpDownWidth.Value = newWidth;
             }
-            else
+            else if (checkBoxResizePicture.Checked)
             {
                 pictureBoxRatioError.BackgroundImage = Properties.Resources.critical;
             }

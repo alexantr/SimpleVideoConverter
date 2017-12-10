@@ -423,6 +423,7 @@
             this.checkedListBoxAudioStreams.Name = "checkedListBoxAudioStreams";
             this.checkedListBoxAudioStreams.Size = new System.Drawing.Size(203, 80);
             this.checkedListBoxAudioStreams.TabIndex = 0;
+            this.checkedListBoxAudioStreams.SelectedIndexChanged += new System.EventHandler(this.checkedListBoxAudioStreams_SelectedIndexChanged);
             // 
             // buttonGo
             // 
