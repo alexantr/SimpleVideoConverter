@@ -1,6 +1,6 @@
 ﻿namespace Alexantr.SimpleVideoConverter
 {
-    class PictureSize
+    public class PictureSize
     {
         public int Width { get; set; }
 

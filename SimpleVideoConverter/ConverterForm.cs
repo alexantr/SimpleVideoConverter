@@ -1,0 +1,294 @@
+﻿using Microsoft.WindowsAPICodePack.Taskbar;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
+
+namespace Alexantr.SimpleVideoConverter
+{
+    public partial class ConverterForm : Form
+    {
+        private readonly string inputFile;
+        private readonly string outputFile;
+        private readonly string[] arguments;
+        private readonly double duration;
+
+        private FFmpegProcess ffmpegProcess;
+
+        private Timer timer;
+        private bool processEnded;
+        private bool processPanic;
+
+        private int currentPass;
+        private bool isTwoPass;
+        private bool cancelTwoPass;
+
+        private TaskbarManager taskbarManager;
+
+        private int fullWinHeight;
+        private int collapsedWinHeight = 114;
+        private bool enlarged = false;
+
+        public ConverterForm(string inFile, string outFile, string[] args, double inDuration)
+        {
+            InitializeComponent();
+
+            inputFile = inFile;
+            outputFile = outFile;
+            arguments = args;
+            duration = inDuration;
+
+            Console.WriteLine(duration.ToString());
+
+            taskbarManager = TaskbarManager.Instance;
+        }
+
+        private void ConverterForm_Load(object sender, EventArgs e)
+        {
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
+
+            isTwoPass = !(arguments.Length == 1);
+
+            for (var i = 0; i < arguments.Length; i++)
+            {
+                arguments[i] = string.Format("-i \"{0}\" {2} {1}", inputFile, (isTwoPass && i == 0 ? "NUL" : $"\"{outputFile}\""), arguments[i]);
+            }
+
+            if (isTwoPass)
+            {
+                richTextBoxOutput.AppendText($"Arguments for pass 1: {arguments[0]}{Environment.NewLine}");
+                richTextBoxOutput.AppendText($"Arguments for pass 2: {arguments[1]}{Environment.NewLine}");
+            }
+            else
+            {
+                richTextBoxOutput.AppendText($"Arguments: {arguments[0]}{Environment.NewLine}");
+            }
+
+            richTextBoxOutput.Visible = false;
+            fullWinHeight = Height;
+            Height = collapsedWinHeight;
+
+            progressBarEncoding.Value = 0;
+            buttonPlay.Enabled = false;
+
+            if (isTwoPass)
+            {
+                MultiPass(arguments);
+            }
+            else
+            {
+                SinglePass(arguments[0]);
+            }
+        }
+
+        private void ConverterForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            processPanic = true; //Shut down while avoiding exceptions
+            buttonCancel_Click(sender, e);
+            taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
+        }
+
+        private void ConverterForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            ffmpegProcess.Dispose();
+        }
+
+        private void SinglePass(string argument)
+        {
+            ffmpegProcess = new FFmpegProcess(argument);
+
+            ffmpegProcess.ErrorDataReceived += ProcessOnErrorDataReceived;
+            ffmpegProcess.OutputDataReceived += ProcessOnOutputDataReceived;
+            ffmpegProcess.Exited += (o, args) => richTextBoxOutput.Invoke((Action)(() =>
+            {
+                if (processPanic) return; //This should stop that one exception when closing the converter
+
+                buttonCancel.Enabled = false;
+
+                timer = new Timer();
+                timer.Interval = 500;
+                timer.Tick += Exited;
+                timer.Start();
+            }));
+
+            progressBarEncoding.Value = 0;
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
+            labelStatus.Text = "Выполняется конвертирование";
+
+            ffmpegProcess.Start();
+        }
+
+        private void MultiPass(string[] arguments)
+        {
+            int passes = arguments.Length;
+
+            ffmpegProcess = new FFmpegProcess(arguments[currentPass]);
+
+            ffmpegProcess.ErrorDataReceived += ProcessOnErrorDataReceived;
+            ffmpegProcess.OutputDataReceived += ProcessOnOutputDataReceived;
+            ffmpegProcess.Exited += (o, args) => richTextBoxOutput.Invoke((Action)(() =>
+            {
+                if (processPanic) return; //This should stop that one exception when closing the converter
+
+                currentPass++;
+                if (currentPass < passes && !cancelTwoPass)
+                {
+                    richTextBoxOutput.AppendText(Environment.NewLine);
+
+                    MultiPass(arguments);
+                    return;
+                }
+
+                buttonCancel.Enabled = false;
+
+                timer = new Timer();
+                timer.Interval = 500;
+                timer.Tick += Exited;
+                timer.Start();
+            }));
+
+            progressBarEncoding.Value = 0;
+            taskbarManager.SetProgressState(TaskbarProgressBarState.Normal);
+            labelStatus.Text = $"Выполняется конвертирование (проход {currentPass + 1})";
+
+            ffmpegProcess.Start();
+        }
+
+        private void Exited(object sender, EventArgs eventArgs)
+        {
+            timer.Stop();
+
+            var process = ffmpegProcess;
+
+            if (process.ExitCode != 0)
+            {
+                if (cancelTwoPass)
+                {
+                    richTextBoxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}Converting cancelled.");
+
+                    taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
+                    labelStatus.Text = "Конвертирование отменено";
+                }
+                else
+                {
+                    richTextBoxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}ffmpeg.exe exited with exit code {process.ExitCode}.");
+
+                    taskbarManager.SetProgressValue(1000, 1000);
+                    taskbarManager.SetProgressState(TaskbarProgressBarState.Error);
+                    labelStatus.Text = "Ошибка конвертирования";
+                }
+                progressBarEncoding.Value = 0;
+            }
+            else
+            {
+                richTextBoxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}Video converted succesfully!");
+                progressBarEncoding.Value = 1000;
+                labelStatus.Text = "Конвертирование выполнено!";
+
+                buttonPlay.Enabled = true;
+            }
+
+            buttonCancel.Text = "Закрыть";
+            buttonCancel.Enabled = true;
+            processEnded = true;
+        }
+
+        private void ProcessOnErrorDataReceived(object sender, DataReceivedEventArgs args)
+        {
+            if (args.Data != null)
+            {
+                richTextBoxOutput.Invoke((Action)(() => richTextBoxOutput.AppendText(Environment.NewLine + args.Data.TrimEnd())));
+                ParseAndUpdateProgress(args.Data);
+            }
+        }
+
+        private void ProcessOnOutputDataReceived(object sender, DataReceivedEventArgs args)
+        {
+            if (args.Data != null)
+            {
+                richTextBoxOutput.Invoke((Action)(() => richTextBoxOutput.AppendText(Environment.NewLine + args.Data.TrimEnd())));
+            }
+        }
+
+        private void ParseAndUpdateProgress(string input)
+        {
+            TimeSpan processed = TimeSpan.Zero;
+            if (input.StartsWith("frame="))
+            {
+                Console.WriteLine("StartsWith frame=");
+                Regex progressRegex = new Regex("time=(?<progress>[0-9:.]+)\\s", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Singleline);
+                Match progressMatch = progressRegex.Match(input);
+                if (progressMatch.Success)
+                {
+                    Console.WriteLine($@"Found time={progressMatch.Groups["progress"].Value}");
+                    try
+                    {
+                        processed = TimeSpan.Parse(progressMatch.Groups["progress"].Value);
+                    }
+                    catch { }
+                }
+            }
+            int progressPercentage = (int)Math.Round((processed.TotalSeconds / duration) * 1000.0);
+            progressPercentage = Math.Min(1000, progressPercentage);
+            Console.WriteLine(progressPercentage);
+            if (progressPercentage > 0)
+            {
+                progressBarEncoding.InvokeIfRequired(() =>
+                {
+                    progressBarEncoding.Value = progressPercentage;
+                });
+                taskbarManager.SetProgressValue(progressPercentage, 1000);
+            }
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            cancelTwoPass = true;
+
+            if (!processEnded || processPanic)
+            {
+                if (!ffmpegProcess.HasExited)
+                {
+                    ffmpegProcess.Kill();
+                }
+            }
+            else
+            {
+                Close();
+            }
+        }
+
+        private void buttonPlay_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists(((MainForm)Owner).textBoxOut.Text))
+            {
+                MessageBox.Show("Выходной файл не найден!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                Process.Start(((MainForm)Owner).textBoxOut.Text);
+            }
+        }
+
+        // manually scroll to bottom cause AppendText doesn't do it if it doesn't have focus
+        private void richTextBoxOutput_TextChanged(object sender, EventArgs e) => NativeMethods.SendMessage(richTextBoxOutput.Handle, 0x115, 7, 0); // 0x115: WM_VSCROLL, 7: SB_BOTTOM
+
+        private void buttonToggleLog_Click(object sender, EventArgs e)
+        {
+            if (enlarged)
+            {
+                richTextBoxOutput.Visible = false;
+                Height = collapsedWinHeight;
+            }
+            else
+            {
+                Height = fullWinHeight;
+                richTextBoxOutput.Visible = true;
+            }
+            enlarged = !enlarged;
+        }
+    }
+}

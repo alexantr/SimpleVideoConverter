@@ -16,9 +16,7 @@ namespace Alexantr.SimpleVideoConverter
             }
 
             StartInfo.FileName = exePath;
-            StartInfo.Arguments = arguments;
-            StartInfo.WorkingDirectory = Path.GetDirectoryName(directoryPath);
-            StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            StartInfo.Arguments = "-hide_banner -y " + arguments;
             StartInfo.CreateNoWindow = true;
             StartInfo.UseShellExecute = false;
             StartInfo.RedirectStandardInput = true;

@@ -58,9 +58,6 @@
             this.comboBoxFrequency = new System.Windows.Forms.ComboBox();
             this.checkedListBoxAudioStreams = new System.Windows.Forms.CheckedListBox();
             this.buttonGo = new System.Windows.Forms.Button();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.groupBoxInfo = new System.Windows.Forms.GroupBox();
             this.richTextBoxInfo = new System.Windows.Forms.RichTextBox();
             this.groupBoxDeinterlace = new System.Windows.Forms.GroupBox();
@@ -77,7 +74,6 @@
             this.groupBoxInOut.SuspendLayout();
             this.groupBoxVideoParams.SuspendLayout();
             this.groupBoxAudioParams.SuspendLayout();
-            this.statusStrip.SuspendLayout();
             this.groupBoxInfo.SuspendLayout();
             this.groupBoxDeinterlace.SuspendLayout();
             this.groupBoxResolution.SuspendLayout();
@@ -435,29 +431,6 @@
             this.buttonGo.UseVisualStyleBackColor = true;
             this.buttonGo.Click += new System.EventHandler(this.buttonGo_Click);
             // 
-            // statusStrip
-            // 
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel,
-            this.toolStripProgressBar});
-            this.statusStrip.Location = new System.Drawing.Point(3, 374);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(664, 22);
-            this.statusStrip.SizingGrip = false;
-            this.statusStrip.TabIndex = 7;
-            // 
-            // toolStripStatusLabel
-            // 
-            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(527, 17);
-            this.toolStripStatusLabel.Spring = true;
-            this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // toolStripProgressBar
-            // 
-            this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(120, 16);
-            // 
             // groupBoxInfo
             // 
             this.groupBoxInfo.Controls.Add(this.richTextBoxInfo);
@@ -566,13 +539,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(670, 396);
+            this.ClientSize = new System.Drawing.Size(670, 369);
             this.Controls.Add(this.groupBoxAudioStreams);
             this.Controls.Add(this.groupBoxResolution);
             this.Controls.Add(this.groupBoxDeinterlace);
             this.Controls.Add(this.groupBoxInfo);
             this.Controls.Add(this.buttonGo);
-            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.groupBoxInOut);
             this.Controls.Add(this.groupBoxVideoParams);
             this.Controls.Add(this.groupBoxAudioParams);
@@ -581,7 +553,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.Padding = new System.Windows.Forms.Padding(3);
             this.Text = "Simple Video Converter";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -595,8 +567,6 @@
             this.groupBoxVideoParams.PerformLayout();
             this.groupBoxAudioParams.ResumeLayout(false);
             this.groupBoxAudioParams.PerformLayout();
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
             this.groupBoxInfo.ResumeLayout(false);
             this.groupBoxDeinterlace.ResumeLayout(false);
             this.groupBoxDeinterlace.PerformLayout();
@@ -605,7 +575,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRatioError)).EndInit();
             this.groupBoxAudioStreams.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -635,9 +604,6 @@
         private System.Windows.Forms.CheckBox checkBoxKeepOutPath;
         private System.Windows.Forms.ComboBox comboBoxFrequency;
         private System.Windows.Forms.Label labelFrequency;
-        private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.GroupBox groupBoxInfo;
         private System.Windows.Forms.RichTextBox richTextBoxInfo;
         private System.Windows.Forms.CheckedListBox checkedListBoxAudioStreams;

@@ -1,22 +1,19 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Text;
+using System.Windows.Forms;
 
 namespace Alexantr.SimpleVideoConverter
 {
-    public static class FileSizes
+    internal static class NativeMethods
     {
-        [DllImport("Shlwapi.dll", CharSet = CharSet.Auto)]
-        public static extern int StrFormatByteSize(long fileSize, [MarshalAs(UnmanagedType.LPTStr)] StringBuilder buffer, int bufferSize);
+        [DllImport("user32.dll")]
+        internal static extern IntPtr SendMessage(IntPtr window, int message, int wparam, int lparam);
+    }
 
-        public static string ToFileSizeApi(this long size)
-        {
-            StringBuilder buffer = new StringBuilder(20);
-            StrFormatByteSize(size, buffer, 20);
-            return buffer.ToString();
-        }
-
-        public static string ToFileSize(this double value)
+    public static class Utility
+    {
+        public static string FormatFileSize(this double value)
         {
             string[] strArray = new string[9]
             {
@@ -45,6 +42,23 @@ namespace Alexantr.SimpleVideoConverter
             if (value >= 10.0)
                 return value.ToString("0.0");
             return value.ToString("0.00");
+        }
+    }
+
+    public static class Extensions
+    {
+        // http://stackoverflow.com/a/12179408/174466
+        public static void InvokeIfRequired(this ISynchronizeInvoke obj, MethodInvoker action)
+        {
+            if (obj.InvokeRequired)
+            {
+                var args = new object[0];
+                obj.Invoke(action, args);
+            }
+            else
+            {
+                action();
+            }
         }
     }
 }

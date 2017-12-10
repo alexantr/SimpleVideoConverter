@@ -1,6 +1,6 @@
 ﻿namespace Alexantr.SimpleVideoConverter
 {
-    class ComboBoxItem
+    public class ComboBoxItem
     {
         public string Value { get; set; }
         public string Text { get; set; }

@@ -5,9 +5,10 @@ using System.Xml.XPath;
 
 namespace Alexantr.SimpleVideoConverter
 {
-    class VideoFile
+    public class VideoFile
     {
         public List<VideoStream> VideoStreams = new List<VideoStream>();
+
         public List<AudioStream> AudioStreams = new List<AudioStream>();
 
         public string FullPath { get; private set; }

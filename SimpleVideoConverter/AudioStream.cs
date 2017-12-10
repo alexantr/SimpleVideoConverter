@@ -1,6 +1,6 @@
 ﻿namespace Alexantr.SimpleVideoConverter
 {
-    class AudioStream
+    public class AudioStream
     {
         public int Index { get; set; }
 
