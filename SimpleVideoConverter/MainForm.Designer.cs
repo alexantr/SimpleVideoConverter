@@ -68,6 +68,9 @@
             this.comboBoxAspectRatio = new System.Windows.Forms.ComboBox();
             this.checkBoxKeepAspectRatio = new System.Windows.Forms.CheckBox();
             this.groupBoxAudioStreams = new System.Windows.Forms.GroupBox();
+            this.groupBoxFrameRate = new System.Windows.Forms.GroupBox();
+            this.labelEncodeMode = new System.Windows.Forms.Label();
+            this.comboBoxEncodeMode = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBitrate)).BeginInit();
@@ -79,6 +82,7 @@
             this.groupBoxResolution.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRatioError)).BeginInit();
             this.groupBoxAudioStreams.SuspendLayout();
+            this.groupBoxFrameRate.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxIn
@@ -202,7 +206,7 @@
             // labelBitrate
             // 
             this.labelBitrate.AutoSize = true;
-            this.labelBitrate.Location = new System.Drawing.Point(6, 52);
+            this.labelBitrate.Location = new System.Drawing.Point(6, 83);
             this.labelBitrate.Name = "labelBitrate";
             this.labelBitrate.Size = new System.Drawing.Size(93, 13);
             this.labelBitrate.TabIndex = 2;
@@ -215,7 +219,7 @@
             0,
             0,
             0});
-            this.numericUpDownBitrate.Location = new System.Drawing.Point(127, 48);
+            this.numericUpDownBitrate.Location = new System.Drawing.Point(127, 80);
             this.numericUpDownBitrate.Maximum = new decimal(new int[] {
             50000,
             0,
@@ -264,8 +268,8 @@
             // 
             // groupBoxVideoParams
             // 
-            this.groupBoxVideoParams.Controls.Add(this.labelFrameRate);
-            this.groupBoxVideoParams.Controls.Add(this.comboBoxFrameRate);
+            this.groupBoxVideoParams.Controls.Add(this.comboBoxEncodeMode);
+            this.groupBoxVideoParams.Controls.Add(this.labelEncodeMode);
             this.groupBoxVideoParams.Controls.Add(this.labelFileType);
             this.groupBoxVideoParams.Controls.Add(this.comboBoxFileType);
             this.groupBoxVideoParams.Controls.Add(this.labelBitrate);
@@ -280,7 +284,7 @@
             // labelFrameRate
             // 
             this.labelFrameRate.AutoSize = true;
-            this.labelFrameRate.Location = new System.Drawing.Point(6, 81);
+            this.labelFrameRate.Location = new System.Drawing.Point(6, 22);
             this.labelFrameRate.Name = "labelFrameRate";
             this.labelFrameRate.Size = new System.Drawing.Size(89, 13);
             this.labelFrameRate.TabIndex = 4;
@@ -290,9 +294,9 @@
             // 
             this.comboBoxFrameRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFrameRate.FormattingEnabled = true;
-            this.comboBoxFrameRate.Location = new System.Drawing.Point(127, 78);
+            this.comboBoxFrameRate.Location = new System.Drawing.Point(114, 19);
             this.comboBoxFrameRate.Name = "comboBoxFrameRate";
-            this.comboBoxFrameRate.Size = new System.Drawing.Size(80, 21);
+            this.comboBoxFrameRate.Size = new System.Drawing.Size(95, 21);
             this.comboBoxFrameRate.TabIndex = 5;
             // 
             // labelFileType
@@ -459,14 +463,14 @@
             this.groupBoxDeinterlace.Controls.Add(this.checkBoxDeinterlace);
             this.groupBoxDeinterlace.Location = new System.Drawing.Point(227, 138);
             this.groupBoxDeinterlace.Name = "groupBoxDeinterlace";
-            this.groupBoxDeinterlace.Size = new System.Drawing.Size(215, 112);
+            this.groupBoxDeinterlace.Size = new System.Drawing.Size(215, 53);
             this.groupBoxDeinterlace.TabIndex = 3;
             this.groupBoxDeinterlace.TabStop = false;
             // 
             // labelFieldOrder
             // 
             this.labelFieldOrder.AutoSize = true;
-            this.labelFieldOrder.Location = new System.Drawing.Point(6, 22);
+            this.labelFieldOrder.Location = new System.Drawing.Point(6, 24);
             this.labelFieldOrder.Name = "labelFieldOrder";
             this.labelFieldOrder.Size = new System.Drawing.Size(84, 13);
             this.labelFieldOrder.TabIndex = 1;
@@ -476,9 +480,9 @@
             // 
             this.comboBoxFieldOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFieldOrder.FormattingEnabled = true;
-            this.comboBoxFieldOrder.Location = new System.Drawing.Point(9, 38);
+            this.comboBoxFieldOrder.Location = new System.Drawing.Point(114, 21);
             this.comboBoxFieldOrder.Name = "comboBoxFieldOrder";
-            this.comboBoxFieldOrder.Size = new System.Drawing.Size(110, 21);
+            this.comboBoxFieldOrder.Size = new System.Drawing.Size(95, 21);
             this.comboBoxFieldOrder.TabIndex = 2;
             // 
             // groupBoxResolution
@@ -535,11 +539,44 @@
             this.groupBoxAudioStreams.TabStop = false;
             this.groupBoxAudioStreams.Text = "Дорожки";
             // 
+            // groupBoxFrameRate
+            // 
+            this.groupBoxFrameRate.Controls.Add(this.labelFrameRate);
+            this.groupBoxFrameRate.Controls.Add(this.comboBoxFrameRate);
+            this.groupBoxFrameRate.Location = new System.Drawing.Point(227, 197);
+            this.groupBoxFrameRate.Name = "groupBoxFrameRate";
+            this.groupBoxFrameRate.Size = new System.Drawing.Size(215, 53);
+            this.groupBoxFrameRate.TabIndex = 9;
+            this.groupBoxFrameRate.TabStop = false;
+            // 
+            // labelEncodeMode
+            // 
+            this.labelEncodeMode.AutoSize = true;
+            this.labelEncodeMode.Location = new System.Drawing.Point(6, 53);
+            this.labelEncodeMode.Name = "labelEncodeMode";
+            this.labelEncodeMode.Size = new System.Drawing.Size(109, 13);
+            this.labelEncodeMode.TabIndex = 4;
+            this.labelEncodeMode.Text = "Режим кодирования";
+            // 
+            // comboBoxEncodeMode
+            // 
+            this.comboBoxEncodeMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxEncodeMode.FormattingEnabled = true;
+            this.comboBoxEncodeMode.Items.AddRange(new object[] {
+            "Битрейт",
+            "CRF"});
+            this.comboBoxEncodeMode.Location = new System.Drawing.Point(127, 50);
+            this.comboBoxEncodeMode.Name = "comboBoxEncodeMode";
+            this.comboBoxEncodeMode.Size = new System.Drawing.Size(80, 21);
+            this.comboBoxEncodeMode.TabIndex = 5;
+            this.comboBoxEncodeMode.SelectedIndexChanged += new System.EventHandler(this.comboBoxEncodeMode_SelectedIndexChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(670, 369);
+            this.Controls.Add(this.groupBoxFrameRate);
             this.Controls.Add(this.groupBoxAudioStreams);
             this.Controls.Add(this.groupBoxResolution);
             this.Controls.Add(this.groupBoxDeinterlace);
@@ -574,6 +611,8 @@
             this.groupBoxResolution.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRatioError)).EndInit();
             this.groupBoxAudioStreams.ResumeLayout(false);
+            this.groupBoxFrameRate.ResumeLayout(false);
+            this.groupBoxFrameRate.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -618,6 +657,9 @@
         private System.Windows.Forms.Label labelFrameRate;
         private System.Windows.Forms.GroupBox groupBoxAudioStreams;
         private System.Windows.Forms.ComboBox comboBoxAudioBitrate;
+        private System.Windows.Forms.GroupBox groupBoxFrameRate;
+        private System.Windows.Forms.ComboBox comboBoxEncodeMode;
+        private System.Windows.Forms.Label labelEncodeMode;
     }
 }
 

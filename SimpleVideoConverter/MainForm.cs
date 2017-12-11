@@ -18,6 +18,9 @@ namespace Alexantr.SimpleVideoConverter
         private const string FileTypeMP4 = "mp4";
         private const string FileTypeWebM = "webm";
 
+        private const string EncodeModeBitrate = "bitrate";
+        private const string EncodeModeCRF = "crf";
+
         private const int MinWidth = 128;
         private const int MaxWidth = 1920;
 
@@ -31,6 +34,7 @@ namespace Alexantr.SimpleVideoConverter
         private const int MaxAudioBitrate = 320;
 
         private string fileType; // mp4 or webm
+        private string encodeMode; // bitrate or crf
 
         private Dictionary<string, string> frameRateList;
 
@@ -150,6 +154,18 @@ namespace Alexantr.SimpleVideoConverter
             {
                 comboBoxFileType.SelectedIndex = 0;
                 fileType = FileTypeMP4;
+            }
+
+            // Encode mode: 0 - bitrate, 1 - crf
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.EncodeMode) && Properties.Settings.Default.EncodeMode == EncodeModeCRF)
+            {
+                comboBoxEncodeMode.SelectedIndex = 1;
+                encodeMode = EncodeModeCRF;
+            }
+            else
+            {
+                comboBoxEncodeMode.SelectedIndex = 0;
+                encodeMode = EncodeModeBitrate;
             }
 
             // Frame rate
@@ -317,13 +333,51 @@ namespace Alexantr.SimpleVideoConverter
 
         #endregion
 
-        #region Format
+        #region Format, Mode
 
         private void comboBoxFileType_SelectedIndexChanged(object sender, EventArgs e)
         {
             fileType = comboBoxFileType.SelectedIndex == 1 ? FileTypeWebM : FileTypeMP4;
             Properties.Settings.Default.OutFileType = fileType;
             ChangeOutExtension();
+            if (encodeMode == EncodeModeCRF)
+            {
+                int maxValue = (fileType == FileTypeMP4) ? 51 : 63;
+                if (numericUpDownBitrate.Value > maxValue)
+                    numericUpDownBitrate.Value = maxValue;
+                numericUpDownBitrate.Maximum = maxValue;
+                numericUpDownBitrate.Value = (fileType == FileTypeMP4) ? 20 : 30;
+            }
+        }
+
+        private void comboBoxEncodeMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxEncodeMode.SelectedIndex == 1)
+            {
+                encodeMode = EncodeModeCRF;
+                labelBitrate.Text = "CRF";
+                // set min to 0 - prevent exception
+                numericUpDownBitrate.Minimum = 0;
+                numericUpDownBitrate.Value = 0;
+                // set values
+                numericUpDownBitrate.Maximum = (fileType == FileTypeMP4) ? 51 : 63;
+                numericUpDownBitrate.Value = (fileType == FileTypeMP4) ? 20 : 30;
+                numericUpDownBitrate.Increment = 1;
+            }
+            else
+            {
+                encodeMode = EncodeModeBitrate;
+                labelBitrate.Text = "Битрейт (кбит/с)";
+                // set min to 0 - prevent exception
+                numericUpDownBitrate.Minimum = 0;
+                numericUpDownBitrate.Value = 0;
+                // set values
+                numericUpDownBitrate.Maximum = 50000;
+                numericUpDownBitrate.Value = 1000;
+                numericUpDownBitrate.Minimum = 100;
+                numericUpDownBitrate.Increment = 10;
+            }
+            Properties.Settings.Default.EncodeMode = encodeMode;
         }
 
         #endregion
@@ -604,9 +658,12 @@ namespace Alexantr.SimpleVideoConverter
                 throw new Exception("Неверно задано разрешение видео!");
             }
 
-            if (videoBitrate < MinBitrate || videoBitrate > MaxBitrate)
+            if (encodeMode == EncodeModeBitrate)
             {
-                throw new Exception("Неверно задано значение битрейта для видео!");
+                if (videoBitrate < MinBitrate || videoBitrate > MaxBitrate)
+                {
+                    throw new Exception("Неверно задано значение битрейта для видео!");
+                }
             }
 
             if (audioBitrate < MinAudioBitrate || audioBitrate > MaxAudioBitrate)
@@ -638,7 +695,7 @@ namespace Alexantr.SimpleVideoConverter
                 }
             }
 
-            bool twoPass = true; // for future releases
+            bool twoPass = (encodeMode == EncodeModeBitrate);
 
             string videoArgs;
             string audioArgs;
@@ -647,6 +704,8 @@ namespace Alexantr.SimpleVideoConverter
 
             if (fileType == FileTypeMP4)
             {
+                // https://trac.ffmpeg.org/wiki/Encode/H.264
+
                 string videoCodec = "libx264";
                 string audioCodec = "aac";
 
@@ -659,15 +718,32 @@ namespace Alexantr.SimpleVideoConverter
                 string moreVideoArgs = string.Format("-preset:v {0} -profile:v {1} -level {2} {3}", videoPreset, videoProfile, videoLevel, videoParams);
                 string moreAudioArgs = "-strict -2"; // for "aac" codec
 
-                videoArgs = $"-c:v {videoCodec} -b:v {videoBitrate}k {moreVideoArgs}";
+                if (encodeMode == EncodeModeCRF)
+                {
+                    videoArgs = $"-c:v {videoCodec} -crf {videoBitrate} {moreVideoArgs}";
+                }
+                else
+                {
+                    videoArgs = $"-c:v {videoCodec} -b:v {videoBitrate}k {moreVideoArgs}";
+                }
                 audioArgs = $"-c:a {audioCodec} -b:a {audioBitrate}k {moreAudioArgs}";
             }
             else if (fileType == FileTypeWebM)
             {
-                string videoCodec = "libvpx"; // or "libvpx-vp9"
-                string audioCodec = "libvorbis"; // or "libopus"
+                // https://trac.ffmpeg.org/wiki/Encode/VP9
+                // https://trac.ffmpeg.org/wiki/Encode/VP8
 
-                videoArgs = $"-c:v {videoCodec} -b:v {videoBitrate}k";
+                string videoCodec = "libvpx-vp9"; // "libvpx" or "libvpx-vp9"
+                string audioCodec = "libopus"; // "libvorbis" or "libopus"
+
+                if (encodeMode == EncodeModeCRF)
+                {
+                    videoArgs = $"-c:v {videoCodec} -crf {videoBitrate} -b:v 0";
+                }
+                else
+                {
+                    videoArgs = $"-c:v {videoCodec} -b:v {videoBitrate}k";
+                }
                 audioArgs = $"-c:a {audioCodec} -b:a {audioBitrate}k";
             }
             else
