@@ -145,6 +145,9 @@ namespace Alexantr.SimpleVideoConverter
             }
 
             // Format: 0 - mp4, 1 - webm
+            comboBoxFileType.Items.Clear();
+            comboBoxFileType.Items.Add(new ComboBoxItem(FileTypeMP4, "MP4"));
+            comboBoxFileType.Items.Add(new ComboBoxItem(FileTypeWebM, "WebM"));
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.OutFileType) && Properties.Settings.Default.OutFileType == FileTypeWebM)
             {
                 comboBoxFileType.SelectedIndex = 1;
@@ -156,16 +159,19 @@ namespace Alexantr.SimpleVideoConverter
                 fileType = FileTypeMP4;
             }
 
-            // Encode mode: 0 - bitrate, 1 - crf
-            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.EncodeMode) && Properties.Settings.Default.EncodeMode == EncodeModeCRF)
+            // Encode mode: 0 - crf, 1 - bitrate
+            comboBoxEncodeMode.Items.Clear();
+            comboBoxEncodeMode.Items.Add(new ComboBoxItem(EncodeModeCRF, "CRF"));
+            comboBoxEncodeMode.Items.Add(new ComboBoxItem(EncodeModeBitrate, "Битрейт"));
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.EncodeMode) && Properties.Settings.Default.EncodeMode == EncodeModeBitrate)
             {
                 comboBoxEncodeMode.SelectedIndex = 1;
-                encodeMode = EncodeModeCRF;
+                encodeMode = EncodeModeBitrate;
             }
             else
             {
                 comboBoxEncodeMode.SelectedIndex = 0;
-                encodeMode = EncodeModeBitrate;
+                encodeMode = EncodeModeCRF;
             }
 
             // Frame rate
@@ -337,7 +343,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void comboBoxFileType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            fileType = comboBoxFileType.SelectedIndex == 1 ? FileTypeWebM : FileTypeMP4;
+            fileType = ((ComboBoxItem)comboBoxFileType.SelectedItem).Value;
             Properties.Settings.Default.OutFileType = fileType;
             ChangeOutExtension();
             if (encodeMode == EncodeModeCRF)
@@ -352,32 +358,33 @@ namespace Alexantr.SimpleVideoConverter
 
         private void comboBoxEncodeMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxEncodeMode.SelectedIndex == 1)
+            encodeMode = ((ComboBoxItem)comboBoxEncodeMode.SelectedItem).Value;
+            Properties.Settings.Default.EncodeMode = encodeMode;
+            if (encodeMode == EncodeModeBitrate)
             {
-                encodeMode = EncodeModeCRF;
-                labelBitrate.Text = "CRF";
-                // set min to 0 - prevent exception
-                numericUpDownBitrate.Minimum = 0;
-                numericUpDownBitrate.Value = 0;
-                // set values
-                numericUpDownBitrate.Maximum = (fileType == FileTypeMP4) ? 51 : 63;
-                numericUpDownBitrate.Value = (fileType == FileTypeMP4) ? 20 : 30;
-                numericUpDownBitrate.Increment = 1;
-            }
-            else
-            {
-                encodeMode = EncodeModeBitrate;
                 labelBitrate.Text = "Битрейт (кбит/с)";
                 // set min to 0 - prevent exception
                 numericUpDownBitrate.Minimum = 0;
                 numericUpDownBitrate.Value = 0;
+                numericUpDownBitrate.DecimalPlaces = 0;
                 // set values
                 numericUpDownBitrate.Maximum = 50000;
                 numericUpDownBitrate.Value = 1000;
                 numericUpDownBitrate.Minimum = 100;
                 numericUpDownBitrate.Increment = 10;
             }
-            Properties.Settings.Default.EncodeMode = encodeMode;
+            else
+            {
+                labelBitrate.Text = "CRF";
+                // set min to 0 - prevent exception
+                numericUpDownBitrate.Minimum = 0;
+                numericUpDownBitrate.Value = 0;
+                numericUpDownBitrate.DecimalPlaces = 1;
+                // set values
+                numericUpDownBitrate.Maximum = (fileType == FileTypeMP4) ? 51 : 63;
+                numericUpDownBitrate.Value = (fileType == FileTypeMP4) ? 20 : 30;
+                numericUpDownBitrate.Increment = 1;
+            }
         }
 
         #endregion
@@ -406,7 +413,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void numericUpDownWidth_Leave(object sender, EventArgs e)
         {
-            int value = Convert.ToInt32(Math.Round(numericUpDownWidth.Value, 0));
+            int value = (int)Math.Round(numericUpDownWidth.Value, 0);
             if (value % 2 == 1)
             {
                 value -= 1;
@@ -638,15 +645,17 @@ namespace Alexantr.SimpleVideoConverter
             ComboBoxItem comboBoxItemFrequency = (ComboBoxItem)comboBoxFrequency.SelectedItem;
             ComboBoxItem selectedItemFieldOrder = (ComboBoxItem)comboBoxFieldOrder.SelectedItem;
 
-            int width = Convert.ToInt32(Math.Round(numericUpDownWidth.Value, 0));
-            int height = Convert.ToInt32(Math.Round(numericUpDownHeight.Value, 0));
-            int videoBitrate = Convert.ToInt32(Math.Round(numericUpDownBitrate.Value, 0));
-            int audioBitrate = Convert.ToInt32(selectedItemAudioBitrate.Value);
+            int width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            int height = (int)Math.Round(numericUpDownHeight.Value, 0);
+            decimal videoBitrateOrCrf = Math.Round(numericUpDownBitrate.Value, 1);
+            int.TryParse(selectedItemAudioBitrate.Value, out int audioBitrate);
 
             string frameRate = comboBoxItemFrameRate.Value;
             string fieldOrder = selectedItemFieldOrder.Value;
             string audioChannels = comboBoxItemChannels.Value;
             string audioFrequency = comboBoxItemFrequency.Value;
+
+            int videoBitrate = 1000;
 
             if (input.Equals(output, StringComparison.OrdinalIgnoreCase))
             {
@@ -660,6 +669,7 @@ namespace Alexantr.SimpleVideoConverter
 
             if (encodeMode == EncodeModeBitrate)
             {
+                videoBitrate = (int)Math.Round(videoBitrateOrCrf, 0);
                 if (videoBitrate < MinBitrate || videoBitrate > MaxBitrate)
                 {
                     throw new Exception("Неверно задано значение битрейта для видео!");
@@ -718,13 +728,13 @@ namespace Alexantr.SimpleVideoConverter
                 string moreVideoArgs = string.Format("-preset:v {0} -profile:v {1} -level {2} {3}", videoPreset, videoProfile, videoLevel, videoParams);
                 string moreAudioArgs = "-strict -2"; // for "aac" codec
 
-                if (encodeMode == EncodeModeCRF)
+                if (encodeMode == EncodeModeBitrate)
                 {
-                    videoArgs = $"-c:v {videoCodec} -crf {videoBitrate} {moreVideoArgs}";
+                    videoArgs = $"-c:v {videoCodec} -b:v {videoBitrate}k {moreVideoArgs}";
                 }
                 else
                 {
-                    videoArgs = $"-c:v {videoCodec} -b:v {videoBitrate}k {moreVideoArgs}";
+                    videoArgs = $"-c:v {videoCodec} -crf {videoBitrateOrCrf} {moreVideoArgs}";
                 }
                 audioArgs = $"-c:a {audioCodec} -b:a {audioBitrate}k {moreAudioArgs}";
             }
@@ -736,13 +746,13 @@ namespace Alexantr.SimpleVideoConverter
                 string videoCodec = "libvpx-vp9"; // "libvpx" or "libvpx-vp9"
                 string audioCodec = "libopus"; // "libvorbis" or "libopus"
 
-                if (encodeMode == EncodeModeCRF)
+                if (encodeMode == EncodeModeBitrate)
                 {
-                    videoArgs = $"-c:v {videoCodec} -crf {videoBitrate} -b:v 0";
+                    videoArgs = $"-c:v {videoCodec} -b:v {videoBitrate}k";
                 }
                 else
                 {
-                    videoArgs = $"-c:v {videoCodec} -b:v {videoBitrate}k";
+                    videoArgs = $"-c:v {videoCodec} -crf {videoBitrateOrCrf} -b:v 0";
                 }
                 audioArgs = $"-c:a {audioCodec} -b:a {audioBitrate}k";
             }
@@ -891,12 +901,12 @@ namespace Alexantr.SimpleVideoConverter
         private void UpdateHeigth()
         {
             pictureBoxRatioError.BackgroundImage = null;
-            int width = Convert.ToInt32(Math.Round(numericUpDownWidth.Value, 0));
-            int height = Convert.ToInt32(Math.Round(numericUpDownHeight.Value, 0));
+            int width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            int height = (int)Math.Round(numericUpDownHeight.Value, 0);
             double aspectRatio = ParseAspectRatio();
             if (aspectRatio > 0.0)
             {
-                int newHeight = Convert.ToInt32(Math.Round(width / aspectRatio, 0));
+                int newHeight = (int)Math.Round(width / aspectRatio, 0);
                 if (newHeight % 2 == 1)
                     newHeight -= 1;
                 bool overHeight = false;
@@ -913,7 +923,7 @@ namespace Alexantr.SimpleVideoConverter
                 numericUpDownHeight.Value = newHeight;
                 if (!overHeight)
                     return;
-                int newWidth = Convert.ToInt32(Math.Round(newHeight * aspectRatio, 0));
+                int newWidth = (int)Math.Round(newHeight * aspectRatio, 0);
                 if (newWidth > 1920)
                     newWidth = 1920;
                 else if (newWidth < 128)

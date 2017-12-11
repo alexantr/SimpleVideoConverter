@@ -43,10 +43,12 @@
             this.groupBoxInOut = new System.Windows.Forms.GroupBox();
             this.checkBoxKeepOutPath = new System.Windows.Forms.CheckBox();
             this.groupBoxVideoParams = new System.Windows.Forms.GroupBox();
-            this.labelFrameRate = new System.Windows.Forms.Label();
-            this.comboBoxFrameRate = new System.Windows.Forms.ComboBox();
+            this.comboBoxEncodeMode = new System.Windows.Forms.ComboBox();
+            this.labelEncodeMode = new System.Windows.Forms.Label();
             this.labelFileType = new System.Windows.Forms.Label();
             this.comboBoxFileType = new System.Windows.Forms.ComboBox();
+            this.labelFrameRate = new System.Windows.Forms.Label();
+            this.comboBoxFrameRate = new System.Windows.Forms.ComboBox();
             this.checkBoxDeinterlace = new System.Windows.Forms.CheckBox();
             this.checkBoxResizePicture = new System.Windows.Forms.CheckBox();
             this.groupBoxAudioParams = new System.Windows.Forms.GroupBox();
@@ -69,8 +71,6 @@
             this.checkBoxKeepAspectRatio = new System.Windows.Forms.CheckBox();
             this.groupBoxAudioStreams = new System.Windows.Forms.GroupBox();
             this.groupBoxFrameRate = new System.Windows.Forms.GroupBox();
-            this.labelEncodeMode = new System.Windows.Forms.Label();
-            this.comboBoxEncodeMode = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBitrate)).BeginInit();
@@ -208,25 +208,15 @@
             this.labelBitrate.AutoSize = true;
             this.labelBitrate.Location = new System.Drawing.Point(6, 83);
             this.labelBitrate.Name = "labelBitrate";
-            this.labelBitrate.Size = new System.Drawing.Size(93, 13);
+            this.labelBitrate.Size = new System.Drawing.Size(27, 13);
             this.labelBitrate.TabIndex = 2;
-            this.labelBitrate.Text = "Битрейт (кбит/с)";
+            this.labelBitrate.Text = "CRF";
             // 
             // numericUpDownBitrate
             // 
-            this.numericUpDownBitrate.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
             this.numericUpDownBitrate.Location = new System.Drawing.Point(127, 80);
             this.numericUpDownBitrate.Maximum = new decimal(new int[] {
-            50000,
-            0,
-            0,
-            0});
-            this.numericUpDownBitrate.Minimum = new decimal(new int[] {
-            100,
+            50,
             0,
             0,
             0});
@@ -234,7 +224,7 @@
             this.numericUpDownBitrate.Size = new System.Drawing.Size(80, 21);
             this.numericUpDownBitrate.TabIndex = 3;
             this.numericUpDownBitrate.Value = new decimal(new int[] {
-            1000,
+            20,
             0,
             0,
             0});
@@ -281,6 +271,44 @@
             this.groupBoxVideoParams.TabStop = false;
             this.groupBoxVideoParams.Text = "Видео";
             // 
+            // comboBoxEncodeMode
+            // 
+            this.comboBoxEncodeMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxEncodeMode.FormattingEnabled = true;
+            this.comboBoxEncodeMode.Location = new System.Drawing.Point(127, 50);
+            this.comboBoxEncodeMode.Name = "comboBoxEncodeMode";
+            this.comboBoxEncodeMode.Size = new System.Drawing.Size(80, 21);
+            this.comboBoxEncodeMode.TabIndex = 5;
+            this.comboBoxEncodeMode.SelectedIndexChanged += new System.EventHandler(this.comboBoxEncodeMode_SelectedIndexChanged);
+            // 
+            // labelEncodeMode
+            // 
+            this.labelEncodeMode.AutoSize = true;
+            this.labelEncodeMode.Location = new System.Drawing.Point(6, 53);
+            this.labelEncodeMode.Name = "labelEncodeMode";
+            this.labelEncodeMode.Size = new System.Drawing.Size(109, 13);
+            this.labelEncodeMode.TabIndex = 4;
+            this.labelEncodeMode.Text = "Режим кодирования";
+            // 
+            // labelFileType
+            // 
+            this.labelFileType.AutoSize = true;
+            this.labelFileType.Location = new System.Drawing.Point(6, 24);
+            this.labelFileType.Name = "labelFileType";
+            this.labelFileType.Size = new System.Drawing.Size(80, 13);
+            this.labelFileType.TabIndex = 0;
+            this.labelFileType.Text = "Формат файла";
+            // 
+            // comboBoxFileType
+            // 
+            this.comboBoxFileType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFileType.FormattingEnabled = true;
+            this.comboBoxFileType.Location = new System.Drawing.Point(127, 21);
+            this.comboBoxFileType.Name = "comboBoxFileType";
+            this.comboBoxFileType.Size = new System.Drawing.Size(80, 21);
+            this.comboBoxFileType.TabIndex = 1;
+            this.comboBoxFileType.SelectedIndexChanged += new System.EventHandler(this.comboBoxFileType_SelectedIndexChanged);
+            // 
             // labelFrameRate
             // 
             this.labelFrameRate.AutoSize = true;
@@ -298,28 +326,6 @@
             this.comboBoxFrameRate.Name = "comboBoxFrameRate";
             this.comboBoxFrameRate.Size = new System.Drawing.Size(95, 21);
             this.comboBoxFrameRate.TabIndex = 5;
-            // 
-            // labelFileType
-            // 
-            this.labelFileType.AutoSize = true;
-            this.labelFileType.Location = new System.Drawing.Point(6, 24);
-            this.labelFileType.Name = "labelFileType";
-            this.labelFileType.Size = new System.Drawing.Size(80, 13);
-            this.labelFileType.TabIndex = 0;
-            this.labelFileType.Text = "Формат файла";
-            // 
-            // comboBoxFileType
-            // 
-            this.comboBoxFileType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxFileType.FormattingEnabled = true;
-            this.comboBoxFileType.Items.AddRange(new object[] {
-            "MP4",
-            "WebM"});
-            this.comboBoxFileType.Location = new System.Drawing.Point(127, 21);
-            this.comboBoxFileType.Name = "comboBoxFileType";
-            this.comboBoxFileType.Size = new System.Drawing.Size(80, 21);
-            this.comboBoxFileType.TabIndex = 1;
-            this.comboBoxFileType.SelectedIndexChanged += new System.EventHandler(this.comboBoxFileType_SelectedIndexChanged);
             // 
             // checkBoxDeinterlace
             // 
@@ -548,28 +554,6 @@
             this.groupBoxFrameRate.Size = new System.Drawing.Size(215, 53);
             this.groupBoxFrameRate.TabIndex = 9;
             this.groupBoxFrameRate.TabStop = false;
-            // 
-            // labelEncodeMode
-            // 
-            this.labelEncodeMode.AutoSize = true;
-            this.labelEncodeMode.Location = new System.Drawing.Point(6, 53);
-            this.labelEncodeMode.Name = "labelEncodeMode";
-            this.labelEncodeMode.Size = new System.Drawing.Size(109, 13);
-            this.labelEncodeMode.TabIndex = 4;
-            this.labelEncodeMode.Text = "Режим кодирования";
-            // 
-            // comboBoxEncodeMode
-            // 
-            this.comboBoxEncodeMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxEncodeMode.FormattingEnabled = true;
-            this.comboBoxEncodeMode.Items.AddRange(new object[] {
-            "Битрейт",
-            "CRF"});
-            this.comboBoxEncodeMode.Location = new System.Drawing.Point(127, 50);
-            this.comboBoxEncodeMode.Name = "comboBoxEncodeMode";
-            this.comboBoxEncodeMode.Size = new System.Drawing.Size(80, 21);
-            this.comboBoxEncodeMode.TabIndex = 5;
-            this.comboBoxEncodeMode.SelectedIndexChanged += new System.EventHandler(this.comboBoxEncodeMode_SelectedIndexChanged);
             // 
             // MainForm
             // 

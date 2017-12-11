@@ -32,6 +32,13 @@ namespace Alexantr.SimpleVideoConverter
         private int collapsedWinHeight = 114;
         private bool enlarged = false;
 
+        /// <summary>
+        /// Converter Form. Based on code from nixx's WebMConverter.
+        /// </summary>
+        /// <param name="inFile">Path to input file</param>
+        /// <param name="outFile">Path to output file</param>
+        /// <param name="args">ffmpeg arguments without input and output files</param>
+        /// <param name="inDuration">Video duration for progress</param>
         public ConverterForm(string inFile, string outFile, string[] args, double inDuration)
         {
             InitializeComponent();
@@ -40,8 +47,6 @@ namespace Alexantr.SimpleVideoConverter
             outputFile = outFile;
             arguments = args;
             duration = inDuration;
-
-            Console.WriteLine(duration.ToString());
 
             taskbarManager = TaskbarManager.Instance;
         }
@@ -184,9 +189,9 @@ namespace Alexantr.SimpleVideoConverter
             }
             else
             {
-                richTextBoxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}Video converted succesfully!");
+                richTextBoxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}Video converted succesfully.");
                 progressBarEncoding.Value = 1000;
-                labelStatus.Text = "Конвертирование выполнено!";
+                labelStatus.Text = "Конвертирование выполнено";
 
                 buttonPlay.Enabled = true;
             }
@@ -218,12 +223,10 @@ namespace Alexantr.SimpleVideoConverter
             TimeSpan processed = TimeSpan.Zero;
             if (input.StartsWith("frame="))
             {
-                Console.WriteLine("StartsWith frame=");
                 Regex progressRegex = new Regex("time=(?<progress>[0-9:.]+)\\s", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Singleline);
                 Match progressMatch = progressRegex.Match(input);
                 if (progressMatch.Success)
                 {
-                    Console.WriteLine($@"Found time={progressMatch.Groups["progress"].Value}");
                     try
                     {
                         processed = TimeSpan.Parse(progressMatch.Groups["progress"].Value);
@@ -233,7 +236,6 @@ namespace Alexantr.SimpleVideoConverter
             }
             int progressPercentage = (int)Math.Round((processed.TotalSeconds / duration) * 1000.0);
             progressPercentage = Math.Min(1000, progressPercentage);
-            Console.WriteLine(progressPercentage);
             if (progressPercentage > 0)
             {
                 progressBarEncoding.InvokeIfRequired(() =>
