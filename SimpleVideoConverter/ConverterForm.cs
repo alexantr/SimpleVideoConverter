@@ -2,7 +2,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
@@ -80,13 +79,9 @@ namespace Alexantr.SimpleVideoConverter
             buttonPlay.Enabled = false;
 
             if (isTwoPass)
-            {
                 MultiPass(arguments);
-            }
             else
-            {
                 SinglePass(arguments[0]);
-            }
         }
 
         private void ConverterForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -265,13 +260,13 @@ namespace Alexantr.SimpleVideoConverter
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            if (!File.Exists(((MainForm)Owner).textBoxOut.Text))
+            if (!File.Exists(outputFile))
             {
                 MessageBox.Show("Выходной файл не найден!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                Process.Start(((MainForm)Owner).textBoxOut.Text);
+                Process.Start(outputFile);
             }
         }
 

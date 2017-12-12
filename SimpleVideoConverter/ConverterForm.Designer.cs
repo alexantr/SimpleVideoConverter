@@ -43,14 +43,14 @@
             this.progressBarEncoding.Maximum = 1000;
             this.progressBarEncoding.Name = "progressBarEncoding";
             this.progressBarEncoding.Size = new System.Drawing.Size(602, 30);
-            this.progressBarEncoding.TabIndex = 0;
+            this.progressBarEncoding.TabIndex = 4;
             // 
             // buttonCancel
             // 
             this.buttonCancel.Location = new System.Drawing.Point(498, 42);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(110, 27);
-            this.buttonCancel.TabIndex = 1;
+            this.buttonCancel.TabIndex = 0;
             this.buttonCancel.Text = "Отменить";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -60,7 +60,7 @@
             this.buttonPlay.Location = new System.Drawing.Point(382, 42);
             this.buttonPlay.Name = "buttonPlay";
             this.buttonPlay.Size = new System.Drawing.Size(110, 27);
-            this.buttonPlay.TabIndex = 2;
+            this.buttonPlay.TabIndex = 1;
             this.buttonPlay.Text = "Открыть файл";
             this.buttonPlay.UseVisualStyleBackColor = true;
             this.buttonPlay.Click += new System.EventHandler(this.buttonPlay_Click);
@@ -83,7 +83,7 @@
             this.labelStatus.Location = new System.Drawing.Point(6, 49);
             this.labelStatus.Name = "labelStatus";
             this.labelStatus.Size = new System.Drawing.Size(19, 13);
-            this.labelStatus.TabIndex = 4;
+            this.labelStatus.TabIndex = 5;
             this.labelStatus.Text = "...";
             // 
             // buttonToggleLog
@@ -91,7 +91,7 @@
             this.buttonToggleLog.Location = new System.Drawing.Point(321, 42);
             this.buttonToggleLog.Name = "buttonToggleLog";
             this.buttonToggleLog.Size = new System.Drawing.Size(55, 27);
-            this.buttonToggleLog.TabIndex = 5;
+            this.buttonToggleLog.TabIndex = 2;
             this.buttonToggleLog.Text = "Лог";
             this.buttonToggleLog.UseVisualStyleBackColor = true;
             this.buttonToggleLog.Click += new System.EventHandler(this.buttonToggleLog_Click);

@@ -209,7 +209,7 @@
             this.labelBitrate.Location = new System.Drawing.Point(6, 83);
             this.labelBitrate.Name = "labelBitrate";
             this.labelBitrate.Size = new System.Drawing.Size(27, 13);
-            this.labelBitrate.TabIndex = 2;
+            this.labelBitrate.TabIndex = 4;
             this.labelBitrate.Text = "CRF";
             // 
             // numericUpDownBitrate
@@ -222,7 +222,7 @@
             0});
             this.numericUpDownBitrate.Name = "numericUpDownBitrate";
             this.numericUpDownBitrate.Size = new System.Drawing.Size(80, 21);
-            this.numericUpDownBitrate.TabIndex = 3;
+            this.numericUpDownBitrate.TabIndex = 5;
             this.numericUpDownBitrate.Value = new decimal(new int[] {
             20,
             0,
@@ -267,7 +267,7 @@
             this.groupBoxVideoParams.Location = new System.Drawing.Point(6, 138);
             this.groupBoxVideoParams.Name = "groupBoxVideoParams";
             this.groupBoxVideoParams.Size = new System.Drawing.Size(215, 112);
-            this.groupBoxVideoParams.TabIndex = 1;
+            this.groupBoxVideoParams.TabIndex = 2;
             this.groupBoxVideoParams.TabStop = false;
             this.groupBoxVideoParams.Text = "Видео";
             // 
@@ -278,7 +278,7 @@
             this.comboBoxEncodeMode.Location = new System.Drawing.Point(127, 50);
             this.comboBoxEncodeMode.Name = "comboBoxEncodeMode";
             this.comboBoxEncodeMode.Size = new System.Drawing.Size(80, 21);
-            this.comboBoxEncodeMode.TabIndex = 5;
+            this.comboBoxEncodeMode.TabIndex = 3;
             this.comboBoxEncodeMode.SelectedIndexChanged += new System.EventHandler(this.comboBoxEncodeMode_SelectedIndexChanged);
             // 
             // labelEncodeMode
@@ -287,7 +287,7 @@
             this.labelEncodeMode.Location = new System.Drawing.Point(6, 53);
             this.labelEncodeMode.Name = "labelEncodeMode";
             this.labelEncodeMode.Size = new System.Drawing.Size(109, 13);
-            this.labelEncodeMode.TabIndex = 4;
+            this.labelEncodeMode.TabIndex = 2;
             this.labelEncodeMode.Text = "Режим кодирования";
             // 
             // labelFileType
@@ -315,7 +315,7 @@
             this.labelFrameRate.Location = new System.Drawing.Point(6, 22);
             this.labelFrameRate.Name = "labelFrameRate";
             this.labelFrameRate.Size = new System.Drawing.Size(89, 13);
-            this.labelFrameRate.TabIndex = 4;
+            this.labelFrameRate.TabIndex = 0;
             this.labelFrameRate.Text = "Частота кадров";
             // 
             // comboBoxFrameRate
@@ -325,7 +325,7 @@
             this.comboBoxFrameRate.Location = new System.Drawing.Point(114, 19);
             this.comboBoxFrameRate.Name = "comboBoxFrameRate";
             this.comboBoxFrameRate.Size = new System.Drawing.Size(95, 21);
-            this.comboBoxFrameRate.TabIndex = 5;
+            this.comboBoxFrameRate.TabIndex = 1;
             // 
             // checkBoxDeinterlace
             // 
@@ -360,7 +360,7 @@
             this.groupBoxAudioParams.Location = new System.Drawing.Point(6, 256);
             this.groupBoxAudioParams.Name = "groupBoxAudioParams";
             this.groupBoxAudioParams.Size = new System.Drawing.Size(215, 107);
-            this.groupBoxAudioParams.TabIndex = 2;
+            this.groupBoxAudioParams.TabIndex = 3;
             this.groupBoxAudioParams.TabStop = false;
             this.groupBoxAudioParams.Text = "Аудио";
             // 
@@ -436,7 +436,7 @@
             this.buttonGo.Location = new System.Drawing.Point(484, 296);
             this.buttonGo.Name = "buttonGo";
             this.buttonGo.Size = new System.Drawing.Size(145, 35);
-            this.buttonGo.TabIndex = 6;
+            this.buttonGo.TabIndex = 8;
             this.buttonGo.Text = "Конвертировать";
             this.buttonGo.UseVisualStyleBackColor = true;
             this.buttonGo.Click += new System.EventHandler(this.buttonGo_Click);
@@ -447,7 +447,7 @@
             this.groupBoxInfo.Location = new System.Drawing.Point(448, 6);
             this.groupBoxInfo.Name = "groupBoxInfo";
             this.groupBoxInfo.Size = new System.Drawing.Size(215, 126);
-            this.groupBoxInfo.TabIndex = 8;
+            this.groupBoxInfo.TabIndex = 1;
             this.groupBoxInfo.TabStop = false;
             this.groupBoxInfo.Text = "Информация о файле";
             // 
@@ -470,7 +470,7 @@
             this.groupBoxDeinterlace.Location = new System.Drawing.Point(227, 138);
             this.groupBoxDeinterlace.Name = "groupBoxDeinterlace";
             this.groupBoxDeinterlace.Size = new System.Drawing.Size(215, 53);
-            this.groupBoxDeinterlace.TabIndex = 3;
+            this.groupBoxDeinterlace.TabIndex = 4;
             this.groupBoxDeinterlace.TabStop = false;
             // 
             // labelFieldOrder
@@ -503,7 +503,7 @@
             this.groupBoxResolution.Location = new System.Drawing.Point(448, 138);
             this.groupBoxResolution.Name = "groupBoxResolution";
             this.groupBoxResolution.Size = new System.Drawing.Size(215, 112);
-            this.groupBoxResolution.TabIndex = 4;
+            this.groupBoxResolution.TabIndex = 7;
             this.groupBoxResolution.TabStop = false;
             // 
             // pictureBoxRatioError
@@ -541,7 +541,7 @@
             this.groupBoxAudioStreams.Location = new System.Drawing.Point(227, 256);
             this.groupBoxAudioStreams.Name = "groupBoxAudioStreams";
             this.groupBoxAudioStreams.Size = new System.Drawing.Size(215, 107);
-            this.groupBoxAudioStreams.TabIndex = 5;
+            this.groupBoxAudioStreams.TabIndex = 6;
             this.groupBoxAudioStreams.TabStop = false;
             this.groupBoxAudioStreams.Text = "Дорожки";
             // 
@@ -552,7 +552,7 @@
             this.groupBoxFrameRate.Location = new System.Drawing.Point(227, 197);
             this.groupBoxFrameRate.Name = "groupBoxFrameRate";
             this.groupBoxFrameRate.Size = new System.Drawing.Size(215, 53);
-            this.groupBoxFrameRate.TabIndex = 9;
+            this.groupBoxFrameRate.TabIndex = 5;
             this.groupBoxFrameRate.TabStop = false;
             // 
             // MainForm
@@ -575,6 +575,7 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Padding = new System.Windows.Forms.Padding(3);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Simple Video Converter";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);

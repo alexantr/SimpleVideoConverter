@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -43,7 +44,7 @@ namespace Alexantr.SimpleVideoConverter
         private List<string> aspectRatioList;
 
         private List<string> audioBitRateList;
-        private Dictionary<string, string> frequencyList;
+        private List<string> frequencyList;
         private Dictionary<string, string> channelsList;
 
         private List<string> tempFilesList;
@@ -115,23 +116,22 @@ namespace Alexantr.SimpleVideoConverter
                 "320"
             };
 
-            frequencyList = new Dictionary<string, string>
+            frequencyList = new List<string>
             {
-                { "8000", "8 кГц" },
-                { "12000", "12 кГц" },
-                { "16000", "16 кГц" },
-                { "22050", "22.05 кГц" },
-                { "24000", "24 кГц" },
-                { "32000", "32 кГц" },
-                { "44100", "44.1 кГц" },
-                { "48000", "48 кГц" },
-                { "96000", "96 кГц"}
+                "8000",
+                "12000",
+                "16000",
+                "22050",
+                "24000",
+                "32000",
+                "44100",
+                "48000"
             };
 
             channelsList = new Dictionary<string, string>
             {
-                { "1", "моно" },
-                { "2", "стерео" }
+                { "1", "Моно" },
+                { "2", "Стерео" }
             };
         }
 
@@ -179,7 +179,7 @@ namespace Alexantr.SimpleVideoConverter
 
             // Field order
             comboBoxFieldOrder.Items.Clear();
-            comboBoxFieldOrder.Items.Add(new ComboBoxItem(string.Empty, "авто"));
+            comboBoxFieldOrder.Items.Add(new ComboBoxItem(string.Empty, "Авто"));
             foreach (KeyValuePair<string, string> fieldOrder in fieldOrderList)
             {
                 comboBoxFieldOrder.Items.Add(new ComboBoxItem(fieldOrder.Key, fieldOrder.Value));
@@ -209,16 +209,16 @@ namespace Alexantr.SimpleVideoConverter
 
             // Frequency
             comboBoxFrequency.Items.Clear();
-            comboBoxFrequency.Items.Add(new ComboBoxItem(string.Empty, "авто"));
-            foreach (KeyValuePair<string, string> frq in frequencyList)
+            comboBoxFrequency.Items.Add(new ComboBoxItem(string.Empty, "Исходная"));
+            foreach (string frq in frequencyList)
             {
-                comboBoxFrequency.Items.Add(new ComboBoxItem(frq.Key, frq.Value));
+                comboBoxFrequency.Items.Add(new ComboBoxItem(frq, frq));
             }
             comboBoxFrequency.SelectedIndex = 0;
 
             // Channels
             comboBoxChannels.Items.Clear();
-            comboBoxChannels.Items.Add(new ComboBoxItem(string.Empty, "авто"));
+            comboBoxChannels.Items.Add(new ComboBoxItem(string.Empty, "Исходные"));
             foreach (KeyValuePair<string, string> kvp in channelsList)
             {
                 comboBoxChannels.Items.Add(new ComboBoxItem(kvp.Key, kvp.Value));
@@ -634,35 +634,30 @@ namespace Alexantr.SimpleVideoConverter
                 throw new Exception("Видео-файл не определен!");
             }
 
-            string input = videoFile.FullPath;
-            string output = Path.GetFullPath(textBoxOut.Text);
+            string input = Path.GetFullPath(videoFile.FullPath);
+            string output = !string.IsNullOrWhiteSpace(textBoxOut.Text) ? Path.GetFullPath(textBoxOut.Text) : "";
 
             ValidateOutputFile(output);
-
-            ComboBoxItem comboBoxItemFrameRate = (ComboBoxItem)comboBoxFrameRate.SelectedItem;
-            ComboBoxItem comboBoxItemChannels = (ComboBoxItem)comboBoxChannels.SelectedItem;
-            ComboBoxItem selectedItemAudioBitrate = (ComboBoxItem)comboBoxAudioBitrate.SelectedItem;
-            ComboBoxItem comboBoxItemFrequency = (ComboBoxItem)comboBoxFrequency.SelectedItem;
-            ComboBoxItem selectedItemFieldOrder = (ComboBoxItem)comboBoxFieldOrder.SelectedItem;
-
-            int width = (int)Math.Round(numericUpDownWidth.Value, 0);
-            int height = (int)Math.Round(numericUpDownHeight.Value, 0);
-            decimal videoBitrateOrCrf = Math.Round(numericUpDownBitrate.Value, 1);
-            int.TryParse(selectedItemAudioBitrate.Value, out int audioBitrate);
-
-            string frameRate = comboBoxItemFrameRate.Value;
-            string fieldOrder = selectedItemFieldOrder.Value;
-            string audioChannels = comboBoxItemChannels.Value;
-            string audioFrequency = comboBoxItemFrequency.Value;
-
-            int videoBitrate = 1000;
 
             if (input.Equals(output, StringComparison.OrdinalIgnoreCase))
             {
                 throw new Exception("Пути не должны совпадать!");
             }
 
-            if (width < MinWidth || width > MaxWidth || height < MinHeight || height > MaxHeight)
+            int width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            int height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+            decimal videoBitrateOrCrf = Math.Round(numericUpDownBitrate.Value, 1);
+            string frameRate = ((ComboBoxItem)comboBoxFrameRate.SelectedItem).Value;
+            string fieldOrder = ((ComboBoxItem)comboBoxFieldOrder.SelectedItem).Value;
+
+            int.TryParse(((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value, out int audioBitrate);
+            string audioChannels = ((ComboBoxItem)comboBoxChannels.SelectedItem).Value;
+            string audioFrequency = ((ComboBoxItem)comboBoxFrequency.SelectedItem).Value;
+
+            int videoBitrate = 1000;
+
+            if (width < MinWidth || width > MaxWidth || height < MinHeight || height > MaxHeight || width % 2 == 1 || height % 2 == 1)
             {
                 throw new Exception("Неверно задано разрешение видео!");
             }
@@ -871,7 +866,7 @@ namespace Alexantr.SimpleVideoConverter
         private void FillComboBoxFrameRate()
         {
             comboBoxFrameRate.Items.Clear();
-            comboBoxFrameRate.Items.Add(new ComboBoxItem(string.Empty, "авто"));
+            comboBoxFrameRate.Items.Add(new ComboBoxItem(string.Empty, "Исходная"));
             foreach (KeyValuePair<string, string> frameRate in frameRateList)
             {
                 comboBoxFrameRate.Items.Add(new ComboBoxItem(frameRate.Key, frameRate.Value));
@@ -885,7 +880,7 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxAspectRatio.Items.Clear();
             if (!string.IsNullOrWhiteSpace(original))
             {
-                comboBoxAspectRatio.Items.Add(new ComboBoxItem(original, "оригинал"));
+                comboBoxAspectRatio.Items.Add(new ComboBoxItem(original, "Исходное"));
             }
             foreach (string aspectRatio in aspectRatioList)
             {
@@ -921,18 +916,19 @@ namespace Alexantr.SimpleVideoConverter
                     overHeight = true;
                 }
                 numericUpDownHeight.Value = newHeight;
-                if (!overHeight)
-                    return;
-                int newWidth = (int)Math.Round(newHeight * aspectRatio, 0);
-                if (newWidth > 1920)
-                    newWidth = 1920;
-                else if (newWidth < 128)
-                    newWidth = 128;
-                if (newWidth % 2 == 1)
-                    newWidth -= 1;
-                numericUpDownWidth.Value = newWidth;
+                if (overHeight)
+                {
+                    int newWidth = (int)Math.Round(newHeight * aspectRatio, 0);
+                    if (newWidth > 1920)
+                        newWidth = 1920;
+                    else if (newWidth < 128)
+                        newWidth = 128;
+                    if (newWidth % 2 == 1)
+                        newWidth -= 1;
+                    numericUpDownWidth.Value = newWidth;
+                }
             }
-            else if (checkBoxResizePicture.Checked)
+            else if (checkBoxResizePicture.Checked && checkBoxKeepAspectRatio.Checked)
             {
                 pictureBoxRatioError.BackgroundImage = Properties.Resources.critical;
             }
@@ -965,58 +961,45 @@ namespace Alexantr.SimpleVideoConverter
 
         private void ShowInfo()
         {
-            richTextBoxInfo.Clear();
-
             VideoStream stream = videoFile.VideoStreams[0];
 
-            string pictureSize = stream.PictureSize.ToString() + (stream.UsingDAR ? " (" + stream.OriginalSize.ToString("x") + ")" : "");
+            StringBuilder info = new StringBuilder();
 
-            List<string> infoList = new List<string>
-            {
-                "Формат: " + videoFile.Format,
-                "Размер файла: " + Utility.FormatFileSize(videoFile.FileSize),
-                "Длительность: " + (new TimeSpan((long)videoFile.Duration.TotalMilliseconds * 10000L).ToString("hh\\:mm\\:ss")),
-                $"Битрейт: {videoFile.BitRate} kbps",
-                "Разрешение: " + pictureSize,
-                $"Частота кадров: {stream.FrameRate} fps",
-                "Развертка: " + (stream.FieldOrder == "progressive" ? "прогрессивная" : "чересстрочная"),
-                "Видеокодек: " + stream.CodecName.ToUpper()
-            };
+            info.AppendLine("Формат: " + videoFile.Format);
+            info.AppendLine("Размер файла: " + Utility.FormatFileSize(videoFile.FileSize));
+            info.AppendLine("Длительность: " + (new TimeSpan((long)videoFile.Duration.TotalMilliseconds * 10000L).ToString("hh\\:mm\\:ss")));
+            info.AppendLine("Битрейт: " + videoFile.BitRate + " kbps");
+            info.AppendLine("Разрешение: " + (stream.PictureSize.ToString() + (stream.UsingDAR ? " (" + stream.OriginalSize.ToString() + ")" : "")));
+            info.AppendLine("Частота кадров: " + stream.FrameRate + " fps");
+            info.AppendLine("Развертка: " + (stream.FieldOrder == "progressive" ? "прогрессивная" : "чересстрочная"));
+            info.AppendLine("Видеокодек: " + stream.CodecName.ToUpper());
 
-            richTextBoxInfo.AppendText(string.Join(Environment.NewLine, infoList));
+            richTextBoxInfo.Clear();
+            richTextBoxInfo.AppendText(info.ToString().TrimEnd());
         }
 
         private void FillAudioStreams()
         {
-            // {0} - codec name
-            // {1} - bit rate (can be empty)
-            // {2} - channels
-            // {3} - sample rate (can be empty)
-            // {4} - language (can be empty)
-            string audioChkListTpl = "{0} {1}{2}{3}{4}";
-
             checkedListBoxAudioStreams.Items.Clear();
-
-            string audioBitrate, audioChannels, audioLanguage, audioSampleRate;
 
             bool isChecked = true;
 
             foreach (AudioStream stream in videoFile.AudioStreams)
             {
-                audioBitrate = stream.BitRate > 0 ? $"{stream.BitRate}kbps " : "";
-                audioChannels = $"{stream.Channels}ch";
-                audioLanguage = string.IsNullOrWhiteSpace(stream.Language) || stream.Language == "und" ? "" : $" ({stream.Language})";
                 double.TryParse(stream.SampleRate, out double sr);
-                audioSampleRate = sr > 0 ? " " + Math.Round(sr / 1000, 1).ToString() + "kHz" : "";
 
-                checkedListBoxAudioStreams.Items.Add(string.Format(
-                    audioChkListTpl,
-                    stream.CodecName.ToUpper(),
-                    audioBitrate,
-                    audioChannels,
-                    audioSampleRate,
-                    audioLanguage
-                ), isChecked);
+                StringBuilder audio = new StringBuilder();
+
+                audio.Append(stream.CodecName.ToUpper());
+                if (stream.BitRate > 0)
+                    audio.Append($" {stream.BitRate}kbps");
+                audio.Append($" {stream.Channels}ch");
+                if (sr > 0)
+                    audio.Append(" " + Math.Round(sr / 1000, 1).ToString() + "kHz");
+                if (!string.IsNullOrWhiteSpace(stream.Language) && stream.Language != "und")
+                    audio.Append($" ({stream.Language})");
+
+                checkedListBoxAudioStreams.Items.Add(audio.ToString(), isChecked);
 
                 if (isChecked)
                     isChecked = false;
@@ -1041,8 +1024,8 @@ namespace Alexantr.SimpleVideoConverter
         private string GetTempLogFile(int streamIndex = 0)
         {
             string tempLogFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            string tempLogFileRealName = string.Format("{0}-{1}.log", tempLogFile, streamIndex);
-            string tempLogMbtreeFileRealName = string.Format("{0}-{1}.log.mbtree", tempLogFile, streamIndex);
+            string tempLogFileRealName = $"{tempLogFile}-{streamIndex}.log";
+            string tempLogMbtreeFileRealName = $"{tempLogFile}-{streamIndex}.log.mbtree";
             tempFilesList.Add(tempLogFileRealName);
             tempFilesList.Add(tempLogMbtreeFileRealName);
             return tempLogFile;
