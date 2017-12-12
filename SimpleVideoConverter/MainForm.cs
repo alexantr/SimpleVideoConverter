@@ -218,7 +218,7 @@ namespace Alexantr.SimpleVideoConverter
 
             // Channels
             comboBoxChannels.Items.Clear();
-            comboBoxChannels.Items.Add(new ComboBoxItem(string.Empty, "Исходные"));
+            comboBoxChannels.Items.Add(new ComboBoxItem(string.Empty, "Исходное"));
             foreach (KeyValuePair<string, string> kvp in channelsList)
             {
                 comboBoxChannels.Items.Add(new ComboBoxItem(kvp.Key, kvp.Value));
