@@ -29,23 +29,16 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.textBoxIn = new System.Windows.Forms.TextBox();
             this.buttonBrowseIn = new System.Windows.Forms.Button();
             this.textBoxOut = new System.Windows.Forms.TextBox();
             this.buttonBrowseOut = new System.Windows.Forms.Button();
-            this.labelIn = new System.Windows.Forms.Label();
-            this.labelOut = new System.Windows.Forms.Label();
             this.numericUpDownWidth = new System.Windows.Forms.NumericUpDown();
             this.labelX = new System.Windows.Forms.Label();
             this.numericUpDownHeight = new System.Windows.Forms.NumericUpDown();
             this.labelBitrate = new System.Windows.Forms.Label();
             this.numericUpDownBitrate = new System.Windows.Forms.NumericUpDown();
-            this.groupBoxInOut = new System.Windows.Forms.GroupBox();
-            this.checkBoxKeepOutPath = new System.Windows.Forms.CheckBox();
-            this.groupBoxVideoParams = new System.Windows.Forms.GroupBox();
             this.comboBoxEncodeMode = new System.Windows.Forms.ComboBox();
             this.labelEncodeMode = new System.Windows.Forms.Label();
-            this.labelFileType = new System.Windows.Forms.Label();
             this.comboBoxFileType = new System.Windows.Forms.ComboBox();
             this.labelFrameRate = new System.Windows.Forms.Label();
             this.comboBoxFrameRate = new System.Windows.Forms.ComboBox();
@@ -60,8 +53,6 @@
             this.comboBoxFrequency = new System.Windows.Forms.ComboBox();
             this.checkedListBoxAudioStreams = new System.Windows.Forms.CheckedListBox();
             this.buttonGo = new System.Windows.Forms.Button();
-            this.groupBoxInfo = new System.Windows.Forms.GroupBox();
-            this.richTextBoxInfo = new System.Windows.Forms.RichTextBox();
             this.groupBoxDeinterlace = new System.Windows.Forms.GroupBox();
             this.labelFieldOrder = new System.Windows.Forms.Label();
             this.comboBoxFieldOrder = new System.Windows.Forms.ComboBox();
@@ -70,73 +61,63 @@
             this.comboBoxAspectRatio = new System.Windows.Forms.ComboBox();
             this.checkBoxKeepAspectRatio = new System.Windows.Forms.CheckBox();
             this.groupBoxAudioStreams = new System.Windows.Forms.GroupBox();
-            this.groupBoxFrameRate = new System.Windows.Forms.GroupBox();
+            this.tabControlMain = new System.Windows.Forms.TabControl();
+            this.tabPageFile = new System.Windows.Forms.TabPage();
+            this.checkBoxKeepOutPath = new System.Windows.Forms.CheckBox();
+            this.buttonShowInfo = new System.Windows.Forms.Button();
+            this.tabPagePicture = new System.Windows.Forms.TabPage();
+            this.tabPageFilters = new System.Windows.Forms.TabPage();
+            this.tabPageVideo = new System.Windows.Forms.TabPage();
+            this.buttonVideoAdvanced = new System.Windows.Forms.Button();
+            this.tabPageAudio = new System.Windows.Forms.TabPage();
+            this.buttonAbout = new System.Windows.Forms.Button();
+            this.labelInFileName = new System.Windows.Forms.Label();
+            this.buttonOpenInputFile = new System.Windows.Forms.Button();
+            this.labelFileType = new System.Windows.Forms.Label();
+            this.labelOut = new System.Windows.Forms.Label();
+            this.labelInputFile = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBitrate)).BeginInit();
-            this.groupBoxInOut.SuspendLayout();
-            this.groupBoxVideoParams.SuspendLayout();
             this.groupBoxAudioParams.SuspendLayout();
-            this.groupBoxInfo.SuspendLayout();
             this.groupBoxDeinterlace.SuspendLayout();
             this.groupBoxResolution.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRatioError)).BeginInit();
             this.groupBoxAudioStreams.SuspendLayout();
-            this.groupBoxFrameRate.SuspendLayout();
+            this.tabControlMain.SuspendLayout();
+            this.tabPageFile.SuspendLayout();
+            this.tabPagePicture.SuspendLayout();
+            this.tabPageFilters.SuspendLayout();
+            this.tabPageVideo.SuspendLayout();
+            this.tabPageAudio.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // textBoxIn
-            // 
-            this.textBoxIn.Location = new System.Drawing.Point(9, 32);
-            this.textBoxIn.Name = "textBoxIn";
-            this.textBoxIn.ReadOnly = true;
-            this.textBoxIn.Size = new System.Drawing.Size(381, 21);
-            this.textBoxIn.TabIndex = 1;
             // 
             // buttonBrowseIn
             // 
-            this.buttonBrowseIn.Location = new System.Drawing.Point(396, 31);
+            this.buttonBrowseIn.Location = new System.Drawing.Point(6, 25);
             this.buttonBrowseIn.Name = "buttonBrowseIn";
-            this.buttonBrowseIn.Size = new System.Drawing.Size(32, 23);
+            this.buttonBrowseIn.Size = new System.Drawing.Size(110, 25);
             this.buttonBrowseIn.TabIndex = 2;
-            this.buttonBrowseIn.Text = "...";
+            this.buttonBrowseIn.Text = "Выбрать файл";
             this.buttonBrowseIn.UseVisualStyleBackColor = true;
             this.buttonBrowseIn.Click += new System.EventHandler(this.buttonBrowseIn_Click);
             // 
             // textBoxOut
             // 
-            this.textBoxOut.Location = new System.Drawing.Point(9, 75);
+            this.textBoxOut.Location = new System.Drawing.Point(6, 105);
             this.textBoxOut.Name = "textBoxOut";
-            this.textBoxOut.Size = new System.Drawing.Size(381, 21);
+            this.textBoxOut.Size = new System.Drawing.Size(390, 21);
             this.textBoxOut.TabIndex = 4;
             // 
             // buttonBrowseOut
             // 
-            this.buttonBrowseOut.Location = new System.Drawing.Point(396, 74);
+            this.buttonBrowseOut.Location = new System.Drawing.Point(402, 104);
             this.buttonBrowseOut.Name = "buttonBrowseOut";
-            this.buttonBrowseOut.Size = new System.Drawing.Size(32, 23);
+            this.buttonBrowseOut.Size = new System.Drawing.Size(70, 23);
             this.buttonBrowseOut.TabIndex = 5;
-            this.buttonBrowseOut.Text = "...";
+            this.buttonBrowseOut.Text = "Обзор...";
             this.buttonBrowseOut.UseVisualStyleBackColor = true;
             this.buttonBrowseOut.Click += new System.EventHandler(this.buttonBrowseOut_Click);
-            // 
-            // labelIn
-            // 
-            this.labelIn.AutoSize = true;
-            this.labelIn.Location = new System.Drawing.Point(6, 16);
-            this.labelIn.Name = "labelIn";
-            this.labelIn.Size = new System.Drawing.Size(87, 13);
-            this.labelIn.TabIndex = 0;
-            this.labelIn.Text = "Исходный файл";
-            // 
-            // labelOut
-            // 
-            this.labelOut.AutoSize = true;
-            this.labelOut.Location = new System.Drawing.Point(6, 59);
-            this.labelOut.Name = "labelOut";
-            this.labelOut.Size = new System.Drawing.Size(83, 13);
-            this.labelOut.TabIndex = 3;
-            this.labelOut.Text = "Сохранить как";
             // 
             // numericUpDownWidth
             // 
@@ -206,7 +187,7 @@
             // labelBitrate
             // 
             this.labelBitrate.AutoSize = true;
-            this.labelBitrate.Location = new System.Drawing.Point(6, 78);
+            this.labelBitrate.Location = new System.Drawing.Point(6, 35);
             this.labelBitrate.Name = "labelBitrate";
             this.labelBitrate.Size = new System.Drawing.Size(27, 13);
             this.labelBitrate.TabIndex = 4;
@@ -214,7 +195,7 @@
             // 
             // numericUpDownBitrate
             // 
-            this.numericUpDownBitrate.Location = new System.Drawing.Point(129, 74);
+            this.numericUpDownBitrate.Location = new System.Drawing.Point(131, 33);
             this.numericUpDownBitrate.Maximum = new decimal(new int[] {
             50,
             0,
@@ -229,53 +210,11 @@
             0,
             0});
             // 
-            // groupBoxInOut
-            // 
-            this.groupBoxInOut.Controls.Add(this.labelIn);
-            this.groupBoxInOut.Controls.Add(this.textBoxIn);
-            this.groupBoxInOut.Controls.Add(this.buttonBrowseIn);
-            this.groupBoxInOut.Controls.Add(this.labelOut);
-            this.groupBoxInOut.Controls.Add(this.textBoxOut);
-            this.groupBoxInOut.Controls.Add(this.buttonBrowseOut);
-            this.groupBoxInOut.Controls.Add(this.checkBoxKeepOutPath);
-            this.groupBoxInOut.Location = new System.Drawing.Point(6, 6);
-            this.groupBoxInOut.Name = "groupBoxInOut";
-            this.groupBoxInOut.Size = new System.Drawing.Size(436, 126);
-            this.groupBoxInOut.TabIndex = 0;
-            this.groupBoxInOut.TabStop = false;
-            this.groupBoxInOut.Text = "Файл";
-            // 
-            // checkBoxKeepOutPath
-            // 
-            this.checkBoxKeepOutPath.AutoSize = true;
-            this.checkBoxKeepOutPath.Location = new System.Drawing.Point(9, 103);
-            this.checkBoxKeepOutPath.Name = "checkBoxKeepOutPath";
-            this.checkBoxKeepOutPath.Size = new System.Drawing.Size(149, 17);
-            this.checkBoxKeepOutPath.TabIndex = 6;
-            this.checkBoxKeepOutPath.Text = "Запомнить путь к папке";
-            this.checkBoxKeepOutPath.UseVisualStyleBackColor = true;
-            this.checkBoxKeepOutPath.CheckedChanged += new System.EventHandler(this.checkBoxKeepOutPath_CheckedChanged);
-            // 
-            // groupBoxVideoParams
-            // 
-            this.groupBoxVideoParams.Controls.Add(this.comboBoxEncodeMode);
-            this.groupBoxVideoParams.Controls.Add(this.labelEncodeMode);
-            this.groupBoxVideoParams.Controls.Add(this.labelFileType);
-            this.groupBoxVideoParams.Controls.Add(this.comboBoxFileType);
-            this.groupBoxVideoParams.Controls.Add(this.labelBitrate);
-            this.groupBoxVideoParams.Controls.Add(this.numericUpDownBitrate);
-            this.groupBoxVideoParams.Location = new System.Drawing.Point(6, 138);
-            this.groupBoxVideoParams.Name = "groupBoxVideoParams";
-            this.groupBoxVideoParams.Size = new System.Drawing.Size(215, 105);
-            this.groupBoxVideoParams.TabIndex = 2;
-            this.groupBoxVideoParams.TabStop = false;
-            this.groupBoxVideoParams.Text = "Видео";
-            // 
             // comboBoxEncodeMode
             // 
             this.comboBoxEncodeMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxEncodeMode.FormattingEnabled = true;
-            this.comboBoxEncodeMode.Location = new System.Drawing.Point(129, 47);
+            this.comboBoxEncodeMode.Location = new System.Drawing.Point(131, 6);
             this.comboBoxEncodeMode.Name = "comboBoxEncodeMode";
             this.comboBoxEncodeMode.Size = new System.Drawing.Size(80, 21);
             this.comboBoxEncodeMode.TabIndex = 3;
@@ -284,26 +223,17 @@
             // labelEncodeMode
             // 
             this.labelEncodeMode.AutoSize = true;
-            this.labelEncodeMode.Location = new System.Drawing.Point(6, 51);
+            this.labelEncodeMode.Location = new System.Drawing.Point(6, 9);
             this.labelEncodeMode.Name = "labelEncodeMode";
             this.labelEncodeMode.Size = new System.Drawing.Size(109, 13);
             this.labelEncodeMode.TabIndex = 2;
             this.labelEncodeMode.Text = "Режим кодирования";
             // 
-            // labelFileType
-            // 
-            this.labelFileType.AutoSize = true;
-            this.labelFileType.Location = new System.Drawing.Point(6, 24);
-            this.labelFileType.Name = "labelFileType";
-            this.labelFileType.Size = new System.Drawing.Size(80, 13);
-            this.labelFileType.TabIndex = 0;
-            this.labelFileType.Text = "Формат файла";
-            // 
             // comboBoxFileType
             // 
             this.comboBoxFileType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFileType.FormattingEnabled = true;
-            this.comboBoxFileType.Location = new System.Drawing.Point(129, 20);
+            this.comboBoxFileType.Location = new System.Drawing.Point(497, 105);
             this.comboBoxFileType.Name = "comboBoxFileType";
             this.comboBoxFileType.Size = new System.Drawing.Size(80, 21);
             this.comboBoxFileType.TabIndex = 1;
@@ -312,7 +242,7 @@
             // labelFrameRate
             // 
             this.labelFrameRate.AutoSize = true;
-            this.labelFrameRate.Location = new System.Drawing.Point(6, 20);
+            this.labelFrameRate.Location = new System.Drawing.Point(6, 79);
             this.labelFrameRate.Name = "labelFrameRate";
             this.labelFrameRate.Size = new System.Drawing.Size(89, 13);
             this.labelFrameRate.TabIndex = 0;
@@ -322,9 +252,9 @@
             // 
             this.comboBoxFrameRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFrameRate.FormattingEnabled = true;
-            this.comboBoxFrameRate.Location = new System.Drawing.Point(114, 17);
+            this.comboBoxFrameRate.Location = new System.Drawing.Point(131, 76);
             this.comboBoxFrameRate.Name = "comboBoxFrameRate";
-            this.comboBoxFrameRate.Size = new System.Drawing.Size(95, 21);
+            this.comboBoxFrameRate.Size = new System.Drawing.Size(80, 21);
             this.comboBoxFrameRate.TabIndex = 1;
             // 
             // checkBoxDeinterlace
@@ -357,9 +287,9 @@
             this.groupBoxAudioParams.Controls.Add(this.comboBoxChannels);
             this.groupBoxAudioParams.Controls.Add(this.labelFrequency);
             this.groupBoxAudioParams.Controls.Add(this.comboBoxFrequency);
-            this.groupBoxAudioParams.Location = new System.Drawing.Point(6, 247);
+            this.groupBoxAudioParams.Location = new System.Drawing.Point(6, 6);
             this.groupBoxAudioParams.Name = "groupBoxAudioParams";
-            this.groupBoxAudioParams.Size = new System.Drawing.Size(215, 105);
+            this.groupBoxAudioParams.Size = new System.Drawing.Size(336, 143);
             this.groupBoxAudioParams.TabIndex = 3;
             this.groupBoxAudioParams.TabStop = false;
             this.groupBoxAudioParams.Text = "Аудио";
@@ -367,7 +297,7 @@
             // comboBoxAudioBitrate
             // 
             this.comboBoxAudioBitrate.FormattingEnabled = true;
-            this.comboBoxAudioBitrate.Location = new System.Drawing.Point(129, 20);
+            this.comboBoxAudioBitrate.Location = new System.Drawing.Point(175, 20);
             this.comboBoxAudioBitrate.Name = "comboBoxAudioBitrate";
             this.comboBoxAudioBitrate.Size = new System.Drawing.Size(80, 21);
             this.comboBoxAudioBitrate.TabIndex = 1;
@@ -395,7 +325,7 @@
             // 
             this.comboBoxChannels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxChannels.FormattingEnabled = true;
-            this.comboBoxChannels.Location = new System.Drawing.Point(129, 74);
+            this.comboBoxChannels.Location = new System.Drawing.Point(175, 74);
             this.comboBoxChannels.Name = "comboBoxChannels";
             this.comboBoxChannels.Size = new System.Drawing.Size(80, 21);
             this.comboBoxChannels.TabIndex = 5;
@@ -403,72 +333,49 @@
             // labelFrequency
             // 
             this.labelFrequency.AutoSize = true;
-            this.labelFrequency.Location = new System.Drawing.Point(6, 45);
+            this.labelFrequency.Location = new System.Drawing.Point(6, 50);
             this.labelFrequency.Name = "labelFrequency";
-            this.labelFrequency.Size = new System.Drawing.Size(107, 26);
+            this.labelFrequency.Size = new System.Drawing.Size(152, 13);
             this.labelFrequency.TabIndex = 2;
-            this.labelFrequency.Text = "Частота\r\nдискретизации (Гц)";
+            this.labelFrequency.Text = "Частота дискретизации (Гц)";
             // 
             // comboBoxFrequency
             // 
             this.comboBoxFrequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFrequency.FormattingEnabled = true;
-            this.comboBoxFrequency.Location = new System.Drawing.Point(129, 47);
+            this.comboBoxFrequency.Location = new System.Drawing.Point(175, 47);
             this.comboBoxFrequency.Name = "comboBoxFrequency";
             this.comboBoxFrequency.Size = new System.Drawing.Size(80, 21);
             this.comboBoxFrequency.TabIndex = 3;
             // 
             // checkedListBoxAudioStreams
             // 
-            this.checkedListBoxAudioStreams.BackColor = System.Drawing.SystemColors.Control;
             this.checkedListBoxAudioStreams.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.checkedListBoxAudioStreams.CheckOnClick = true;
             this.checkedListBoxAudioStreams.FormattingEnabled = true;
             this.checkedListBoxAudioStreams.HorizontalScrollbar = true;
-            this.checkedListBoxAudioStreams.Location = new System.Drawing.Point(6, 16);
+            this.checkedListBoxAudioStreams.Location = new System.Drawing.Point(6, 19);
             this.checkedListBoxAudioStreams.Name = "checkedListBoxAudioStreams";
-            this.checkedListBoxAudioStreams.Size = new System.Drawing.Size(203, 80);
+            this.checkedListBoxAudioStreams.Size = new System.Drawing.Size(228, 112);
             this.checkedListBoxAudioStreams.TabIndex = 0;
             this.checkedListBoxAudioStreams.SelectedIndexChanged += new System.EventHandler(this.checkedListBoxAudioStreams_SelectedIndexChanged);
             // 
             // buttonGo
             // 
-            this.buttonGo.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonGo.Location = new System.Drawing.Point(485, 286);
+            this.buttonGo.Location = new System.Drawing.Point(478, 193);
             this.buttonGo.Name = "buttonGo";
-            this.buttonGo.Size = new System.Drawing.Size(145, 35);
+            this.buttonGo.Size = new System.Drawing.Size(130, 32);
             this.buttonGo.TabIndex = 8;
             this.buttonGo.Text = "Конвертировать";
             this.buttonGo.UseVisualStyleBackColor = true;
             this.buttonGo.Click += new System.EventHandler(this.buttonGo_Click);
-            // 
-            // groupBoxInfo
-            // 
-            this.groupBoxInfo.Controls.Add(this.richTextBoxInfo);
-            this.groupBoxInfo.Location = new System.Drawing.Point(448, 6);
-            this.groupBoxInfo.Name = "groupBoxInfo";
-            this.groupBoxInfo.Size = new System.Drawing.Size(215, 126);
-            this.groupBoxInfo.TabIndex = 1;
-            this.groupBoxInfo.TabStop = false;
-            this.groupBoxInfo.Text = "Информация о файле";
-            // 
-            // richTextBoxInfo
-            // 
-            this.richTextBoxInfo.BackColor = System.Drawing.SystemColors.Control;
-            this.richTextBoxInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.richTextBoxInfo.Location = new System.Drawing.Point(7, 16);
-            this.richTextBoxInfo.Name = "richTextBoxInfo";
-            this.richTextBoxInfo.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.richTextBoxInfo.Size = new System.Drawing.Size(202, 104);
-            this.richTextBoxInfo.TabIndex = 0;
-            this.richTextBoxInfo.Text = "";
             // 
             // groupBoxDeinterlace
             // 
             this.groupBoxDeinterlace.Controls.Add(this.labelFieldOrder);
             this.groupBoxDeinterlace.Controls.Add(this.comboBoxFieldOrder);
             this.groupBoxDeinterlace.Controls.Add(this.checkBoxDeinterlace);
-            this.groupBoxDeinterlace.Location = new System.Drawing.Point(227, 138);
+            this.groupBoxDeinterlace.Location = new System.Drawing.Point(6, 6);
             this.groupBoxDeinterlace.Name = "groupBoxDeinterlace";
             this.groupBoxDeinterlace.Size = new System.Drawing.Size(215, 51);
             this.groupBoxDeinterlace.TabIndex = 4;
@@ -501,7 +408,7 @@
             this.groupBoxResolution.Controls.Add(this.numericUpDownWidth);
             this.groupBoxResolution.Controls.Add(this.numericUpDownHeight);
             this.groupBoxResolution.Controls.Add(this.labelX);
-            this.groupBoxResolution.Location = new System.Drawing.Point(448, 138);
+            this.groupBoxResolution.Location = new System.Drawing.Point(6, 6);
             this.groupBoxResolution.Name = "groupBoxResolution";
             this.groupBoxResolution.Size = new System.Drawing.Size(215, 105);
             this.groupBoxResolution.TabIndex = 7;
@@ -539,37 +446,194 @@
             // groupBoxAudioStreams
             // 
             this.groupBoxAudioStreams.Controls.Add(this.checkedListBoxAudioStreams);
-            this.groupBoxAudioStreams.Location = new System.Drawing.Point(227, 247);
+            this.groupBoxAudioStreams.Location = new System.Drawing.Point(348, 6);
             this.groupBoxAudioStreams.Name = "groupBoxAudioStreams";
-            this.groupBoxAudioStreams.Size = new System.Drawing.Size(215, 105);
+            this.groupBoxAudioStreams.Size = new System.Drawing.Size(240, 143);
             this.groupBoxAudioStreams.TabIndex = 6;
             this.groupBoxAudioStreams.TabStop = false;
             this.groupBoxAudioStreams.Text = "Звуковые дорожки";
             // 
-            // groupBoxFrameRate
+            // tabControlMain
             // 
-            this.groupBoxFrameRate.Controls.Add(this.labelFrameRate);
-            this.groupBoxFrameRate.Controls.Add(this.comboBoxFrameRate);
-            this.groupBoxFrameRate.Location = new System.Drawing.Point(227, 195);
-            this.groupBoxFrameRate.Name = "groupBoxFrameRate";
-            this.groupBoxFrameRate.Size = new System.Drawing.Size(215, 48);
-            this.groupBoxFrameRate.TabIndex = 5;
-            this.groupBoxFrameRate.TabStop = false;
+            this.tabControlMain.Controls.Add(this.tabPageFile);
+            this.tabControlMain.Controls.Add(this.tabPagePicture);
+            this.tabControlMain.Controls.Add(this.tabPageFilters);
+            this.tabControlMain.Controls.Add(this.tabPageVideo);
+            this.tabControlMain.Controls.Add(this.tabPageAudio);
+            this.tabControlMain.Location = new System.Drawing.Point(6, 6);
+            this.tabControlMain.Name = "tabControlMain";
+            this.tabControlMain.SelectedIndex = 0;
+            this.tabControlMain.Size = new System.Drawing.Size(602, 181);
+            this.tabControlMain.TabIndex = 9;
+            // 
+            // tabPageFile
+            // 
+            this.tabPageFile.Controls.Add(this.labelInputFile);
+            this.tabPageFile.Controls.Add(this.buttonOpenInputFile);
+            this.tabPageFile.Controls.Add(this.labelInFileName);
+            this.tabPageFile.Controls.Add(this.checkBoxKeepOutPath);
+            this.tabPageFile.Controls.Add(this.buttonShowInfo);
+            this.tabPageFile.Controls.Add(this.comboBoxFileType);
+            this.tabPageFile.Controls.Add(this.labelFileType);
+            this.tabPageFile.Controls.Add(this.buttonBrowseOut);
+            this.tabPageFile.Controls.Add(this.buttonBrowseIn);
+            this.tabPageFile.Controls.Add(this.textBoxOut);
+            this.tabPageFile.Controls.Add(this.labelOut);
+            this.tabPageFile.Location = new System.Drawing.Point(4, 22);
+            this.tabPageFile.Name = "tabPageFile";
+            this.tabPageFile.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageFile.Size = new System.Drawing.Size(594, 155);
+            this.tabPageFile.TabIndex = 4;
+            this.tabPageFile.Text = "Файл";
+            this.tabPageFile.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxKeepOutPath
+            // 
+            this.checkBoxKeepOutPath.AutoSize = true;
+            this.checkBoxKeepOutPath.Location = new System.Drawing.Point(6, 132);
+            this.checkBoxKeepOutPath.Name = "checkBoxKeepOutPath";
+            this.checkBoxKeepOutPath.Size = new System.Drawing.Size(175, 17);
+            this.checkBoxKeepOutPath.TabIndex = 12;
+            this.checkBoxKeepOutPath.Text = "Запомнить выбранную папку";
+            this.checkBoxKeepOutPath.UseVisualStyleBackColor = true;
+            // 
+            // buttonShowInfo
+            // 
+            this.buttonShowInfo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.buttonShowInfo.Location = new System.Drawing.Point(122, 25);
+            this.buttonShowInfo.Name = "buttonShowInfo";
+            this.buttonShowInfo.Size = new System.Drawing.Size(50, 25);
+            this.buttonShowInfo.TabIndex = 7;
+            this.buttonShowInfo.Text = "Инфо";
+            this.buttonShowInfo.UseVisualStyleBackColor = true;
+            this.buttonShowInfo.Click += new System.EventHandler(this.buttonShowInfo_Click);
+            // 
+            // tabPagePicture
+            // 
+            this.tabPagePicture.Controls.Add(this.groupBoxResolution);
+            this.tabPagePicture.Location = new System.Drawing.Point(4, 22);
+            this.tabPagePicture.Name = "tabPagePicture";
+            this.tabPagePicture.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPagePicture.Size = new System.Drawing.Size(594, 155);
+            this.tabPagePicture.TabIndex = 1;
+            this.tabPagePicture.Text = "Картинка";
+            this.tabPagePicture.UseVisualStyleBackColor = true;
+            // 
+            // tabPageFilters
+            // 
+            this.tabPageFilters.Controls.Add(this.groupBoxDeinterlace);
+            this.tabPageFilters.Location = new System.Drawing.Point(4, 22);
+            this.tabPageFilters.Name = "tabPageFilters";
+            this.tabPageFilters.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageFilters.Size = new System.Drawing.Size(594, 155);
+            this.tabPageFilters.TabIndex = 3;
+            this.tabPageFilters.Text = "Фильтры";
+            this.tabPageFilters.UseVisualStyleBackColor = true;
+            // 
+            // tabPageVideo
+            // 
+            this.tabPageVideo.Controls.Add(this.buttonVideoAdvanced);
+            this.tabPageVideo.Controls.Add(this.labelFrameRate);
+            this.tabPageVideo.Controls.Add(this.comboBoxFrameRate);
+            this.tabPageVideo.Controls.Add(this.comboBoxEncodeMode);
+            this.tabPageVideo.Controls.Add(this.labelEncodeMode);
+            this.tabPageVideo.Controls.Add(this.numericUpDownBitrate);
+            this.tabPageVideo.Controls.Add(this.labelBitrate);
+            this.tabPageVideo.Location = new System.Drawing.Point(4, 22);
+            this.tabPageVideo.Name = "tabPageVideo";
+            this.tabPageVideo.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageVideo.Size = new System.Drawing.Size(594, 155);
+            this.tabPageVideo.TabIndex = 0;
+            this.tabPageVideo.Text = "Видео";
+            this.tabPageVideo.UseVisualStyleBackColor = true;
+            // 
+            // buttonVideoAdvanced
+            // 
+            this.buttonVideoAdvanced.Enabled = false;
+            this.buttonVideoAdvanced.Location = new System.Drawing.Point(6, 126);
+            this.buttonVideoAdvanced.Name = "buttonVideoAdvanced";
+            this.buttonVideoAdvanced.Size = new System.Drawing.Size(105, 23);
+            this.buttonVideoAdvanced.TabIndex = 6;
+            this.buttonVideoAdvanced.Text = "Доп. настройки";
+            this.buttonVideoAdvanced.UseVisualStyleBackColor = true;
+            // 
+            // tabPageAudio
+            // 
+            this.tabPageAudio.Controls.Add(this.groupBoxAudioStreams);
+            this.tabPageAudio.Controls.Add(this.groupBoxAudioParams);
+            this.tabPageAudio.Location = new System.Drawing.Point(4, 22);
+            this.tabPageAudio.Name = "tabPageAudio";
+            this.tabPageAudio.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageAudio.Size = new System.Drawing.Size(594, 155);
+            this.tabPageAudio.TabIndex = 2;
+            this.tabPageAudio.Text = "Аудио";
+            this.tabPageAudio.UseVisualStyleBackColor = true;
+            // 
+            // buttonAbout
+            // 
+            this.buttonAbout.BackgroundImage = global::Alexantr.SimpleVideoConverter.Properties.Resources.information;
+            this.buttonAbout.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.buttonAbout.Location = new System.Drawing.Point(6, 193);
+            this.buttonAbout.Name = "buttonAbout";
+            this.buttonAbout.Size = new System.Drawing.Size(32, 32);
+            this.buttonAbout.TabIndex = 10;
+            this.buttonAbout.UseVisualStyleBackColor = true;
+            this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
+            // 
+            // labelInFileName
+            // 
+            this.labelInFileName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelInFileName.Location = new System.Drawing.Point(4, 53);
+            this.labelInFileName.Name = "labelInFileName";
+            this.labelInFileName.Size = new System.Drawing.Size(573, 36);
+            this.labelInFileName.TabIndex = 13;
+            this.labelInFileName.Text = "Файл не выбран";
+            // 
+            // buttonOpenInputFile
+            // 
+            this.buttonOpenInputFile.Location = new System.Drawing.Point(178, 25);
+            this.buttonOpenInputFile.Name = "buttonOpenInputFile";
+            this.buttonOpenInputFile.Size = new System.Drawing.Size(70, 25);
+            this.buttonOpenInputFile.TabIndex = 14;
+            this.buttonOpenInputFile.Text = "Открыть";
+            this.buttonOpenInputFile.UseVisualStyleBackColor = true;
+            this.buttonOpenInputFile.Click += new System.EventHandler(this.buttonOpenInputFile_Click);
+            // 
+            // labelFileType
+            // 
+            this.labelFileType.AutoSize = true;
+            this.labelFileType.Location = new System.Drawing.Point(496, 89);
+            this.labelFileType.Name = "labelFileType";
+            this.labelFileType.Size = new System.Drawing.Size(60, 13);
+            this.labelFileType.TabIndex = 0;
+            this.labelFileType.Text = "Тип файла";
+            // 
+            // labelOut
+            // 
+            this.labelOut.AutoSize = true;
+            this.labelOut.Location = new System.Drawing.Point(5, 89);
+            this.labelOut.Name = "labelOut";
+            this.labelOut.Size = new System.Drawing.Size(83, 13);
+            this.labelOut.TabIndex = 3;
+            this.labelOut.Text = "Сохранить как";
+            // 
+            // labelInputFile
+            // 
+            this.labelInputFile.AutoSize = true;
+            this.labelInputFile.Location = new System.Drawing.Point(5, 9);
+            this.labelInputFile.Name = "labelInputFile";
+            this.labelInputFile.Size = new System.Drawing.Size(87, 13);
+            this.labelInputFile.TabIndex = 15;
+            this.labelInputFile.Text = "Исходный файл";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(670, 363);
-            this.Controls.Add(this.groupBoxFrameRate);
-            this.Controls.Add(this.groupBoxAudioStreams);
-            this.Controls.Add(this.groupBoxResolution);
-            this.Controls.Add(this.groupBoxDeinterlace);
-            this.Controls.Add(this.groupBoxInfo);
+            this.ClientSize = new System.Drawing.Size(614, 231);
+            this.Controls.Add(this.buttonAbout);
+            this.Controls.Add(this.tabControlMain);
             this.Controls.Add(this.buttonGo);
-            this.Controls.Add(this.groupBoxInOut);
-            this.Controls.Add(this.groupBoxVideoParams);
-            this.Controls.Add(this.groupBoxAudioParams);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -583,21 +647,22 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBitrate)).EndInit();
-            this.groupBoxInOut.ResumeLayout(false);
-            this.groupBoxInOut.PerformLayout();
-            this.groupBoxVideoParams.ResumeLayout(false);
-            this.groupBoxVideoParams.PerformLayout();
             this.groupBoxAudioParams.ResumeLayout(false);
             this.groupBoxAudioParams.PerformLayout();
-            this.groupBoxInfo.ResumeLayout(false);
             this.groupBoxDeinterlace.ResumeLayout(false);
             this.groupBoxDeinterlace.PerformLayout();
             this.groupBoxResolution.ResumeLayout(false);
             this.groupBoxResolution.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRatioError)).EndInit();
             this.groupBoxAudioStreams.ResumeLayout(false);
-            this.groupBoxFrameRate.ResumeLayout(false);
-            this.groupBoxFrameRate.PerformLayout();
+            this.tabControlMain.ResumeLayout(false);
+            this.tabPageFile.ResumeLayout(false);
+            this.tabPageFile.PerformLayout();
+            this.tabPagePicture.ResumeLayout(false);
+            this.tabPageFilters.ResumeLayout(false);
+            this.tabPageVideo.ResumeLayout(false);
+            this.tabPageVideo.PerformLayout();
+            this.tabPageAudio.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -605,31 +670,22 @@
         #endregion
         private System.Windows.Forms.Button buttonBrowseIn;
         private System.Windows.Forms.Button buttonBrowseOut;
-        private System.Windows.Forms.Label labelIn;
-        private System.Windows.Forms.Label labelOut;
         private System.Windows.Forms.NumericUpDown numericUpDownWidth;
         private System.Windows.Forms.Label labelX;
         private System.Windows.Forms.NumericUpDown numericUpDownHeight;
         private System.Windows.Forms.Label labelBitrate;
         private System.Windows.Forms.NumericUpDown numericUpDownBitrate;
-        private System.Windows.Forms.GroupBox groupBoxInOut;
-        private System.Windows.Forms.GroupBox groupBoxVideoParams;
         private System.Windows.Forms.GroupBox groupBoxAudioParams;
         private System.Windows.Forms.Label labelAudioBitrate;
         private System.Windows.Forms.Label labelChannels;
         private System.Windows.Forms.ComboBox comboBoxChannels;
         private System.Windows.Forms.ComboBox comboBoxFileType;
-        private System.Windows.Forms.Label labelFileType;
         private System.Windows.Forms.CheckBox checkBoxResizePicture;
         private System.Windows.Forms.Button buttonGo;
-        public System.Windows.Forms.TextBox textBoxIn;
         public System.Windows.Forms.TextBox textBoxOut;
         private System.Windows.Forms.CheckBox checkBoxDeinterlace;
-        private System.Windows.Forms.CheckBox checkBoxKeepOutPath;
         private System.Windows.Forms.ComboBox comboBoxFrequency;
         private System.Windows.Forms.Label labelFrequency;
-        private System.Windows.Forms.GroupBox groupBoxInfo;
-        private System.Windows.Forms.RichTextBox richTextBoxInfo;
         private System.Windows.Forms.CheckedListBox checkedListBoxAudioStreams;
         private System.Windows.Forms.GroupBox groupBoxDeinterlace;
         private System.Windows.Forms.GroupBox groupBoxResolution;
@@ -642,9 +698,23 @@
         private System.Windows.Forms.Label labelFrameRate;
         private System.Windows.Forms.GroupBox groupBoxAudioStreams;
         private System.Windows.Forms.ComboBox comboBoxAudioBitrate;
-        private System.Windows.Forms.GroupBox groupBoxFrameRate;
         private System.Windows.Forms.ComboBox comboBoxEncodeMode;
         private System.Windows.Forms.Label labelEncodeMode;
+        private System.Windows.Forms.TabControl tabControlMain;
+        private System.Windows.Forms.TabPage tabPagePicture;
+        private System.Windows.Forms.TabPage tabPageFilters;
+        private System.Windows.Forms.TabPage tabPageVideo;
+        private System.Windows.Forms.TabPage tabPageAudio;
+        private System.Windows.Forms.TabPage tabPageFile;
+        private System.Windows.Forms.Button buttonShowInfo;
+        private System.Windows.Forms.Button buttonVideoAdvanced;
+        private System.Windows.Forms.Button buttonAbout;
+        private System.Windows.Forms.CheckBox checkBoxKeepOutPath;
+        private System.Windows.Forms.Label labelInFileName;
+        private System.Windows.Forms.Button buttonOpenInputFile;
+        private System.Windows.Forms.Label labelFileType;
+        private System.Windows.Forms.Label labelInputFile;
+        private System.Windows.Forms.Label labelOut;
     }
 }
 

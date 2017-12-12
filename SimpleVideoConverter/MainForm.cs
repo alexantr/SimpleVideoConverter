@@ -1,6 +1,7 @@
 ﻿using Microsoft.WindowsAPICodePack.Taskbar;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -36,6 +37,8 @@ namespace Alexantr.SimpleVideoConverter
 
         private string fileType; // mp4 or webm
         private string encodeMode; // bitrate or crf
+
+        private string fileInfo;
 
         private Dictionary<string, string> frameRateList;
 
@@ -138,11 +141,8 @@ namespace Alexantr.SimpleVideoConverter
         private void MainForm_Load(object sender, EventArgs e)
         {
             buttonGo.Enabled = false;
-
-            if (Properties.Settings.Default.RememberOutPath)
-            {
-                checkBoxKeepOutPath.Checked = true;
-            }
+            buttonShowInfo.Enabled = false;
+            buttonOpenInputFile.Enabled = false;
 
             // Format: 0 - mp4, 1 - webm
             comboBoxFileType.Items.Clear();
@@ -225,18 +225,7 @@ namespace Alexantr.SimpleVideoConverter
             }
             comboBoxChannels.SelectedIndex = 0;
 
-            // append version
-            Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            string niceVersion = version.Major.ToString() + "." + version.Minor.ToString();
-            if (version.Build != 0 || version.Revision != 0)
-            {
-                niceVersion += "." + version.Build.ToString();
-            }
-            if (version.Revision != 0)
-            {
-                niceVersion += "." + version.Revision.ToString();
-            }
-            Text = Text + " v" + niceVersion;
+            checkBoxKeepOutPath.Checked = Properties.Settings.Default.RememberOutPath;
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -244,13 +233,14 @@ namespace Alexantr.SimpleVideoConverter
             string[] commandLineArgs = Environment.GetCommandLineArgs();
             if (commandLineArgs.Length > 1)
             {
-                textBoxIn.Text = commandLineArgs[1];
                 SetFile(commandLineArgs[1]);
             }
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Properties.Settings.Default.RememberOutPath = checkBoxKeepOutPath.Checked;
+
             Properties.Settings.Default.Save();
 
             foreach (string tempFile in tempFilesList)
@@ -282,7 +272,6 @@ namespace Alexantr.SimpleVideoConverter
 
                 if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.FileName))
                 {
-                    textBoxIn.Text = dialog.FileName;
                     SetFile(dialog.FileName);
                 }
             }
@@ -298,7 +287,6 @@ namespace Alexantr.SimpleVideoConverter
         private void HandleDragDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            textBoxIn.Text = files[0];
             SetFile(files[0]);
         }
 
@@ -332,9 +320,22 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
-        private void checkBoxKeepOutPath_CheckedChanged(object sender, EventArgs e)
+        private void buttonShowInfo_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.RememberOutPath = checkBoxKeepOutPath.Checked;
+            MessageBox.Show(this, fileInfo, "Информация о файле", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void buttonOpenInputFile_Click(object sender, EventArgs e)
+        {
+            string inputFile = videoFile.FullPath;
+            if (!File.Exists(inputFile))
+            {
+                MessageBox.Show("Исходный файл не найден!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                Process.Start(inputFile);
+            }
         }
 
         #endregion
@@ -501,8 +502,6 @@ namespace Alexantr.SimpleVideoConverter
 
         private void SetFile(string path)
         {
-            richTextBoxInfo.Clear();
-
             try
             {
                 ValidateInputFile(path);
@@ -512,11 +511,16 @@ namespace Alexantr.SimpleVideoConverter
             catch (Exception ex)
             {
                 videoFile = null;
-                textBoxIn.Text = "";
+                labelInFileName.Text = "Файл не выбран";
                 textBoxOut.Text = "";
+                buttonGo.Enabled = false;
+                buttonShowInfo.Enabled = false;
+                buttonOpenInputFile.Enabled = false;
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 return;
             }
+
+            labelInFileName.Text = Path.GetFileName(path);
 
             Properties.Settings.Default.InPath = Path.GetDirectoryName(path);
 
@@ -559,9 +563,11 @@ namespace Alexantr.SimpleVideoConverter
             FillAudioStreams();
 
             // show info
-            ShowInfo();
+            SetInfo();
 
             buttonGo.Enabled = true;
+            buttonShowInfo.Enabled = true;
+            buttonOpenInputFile.Enabled = true;
 
             try
             {
@@ -959,7 +965,7 @@ namespace Alexantr.SimpleVideoConverter
             return ar;
         }
 
-        private void ShowInfo()
+        private void SetInfo()
         {
             VideoStream stream = videoFile.VideoStreams[0];
 
@@ -974,8 +980,7 @@ namespace Alexantr.SimpleVideoConverter
             info.AppendLine("Развертка: " + (stream.FieldOrder == "progressive" ? "прогрессивная" : "чересстрочная"));
             info.AppendLine("Видеокодек: " + stream.CodecName.ToUpper());
 
-            richTextBoxInfo.Clear();
-            richTextBoxInfo.AppendText(info.ToString().TrimEnd());
+            fileInfo = info.ToString().TrimEnd();
         }
 
         private void FillAudioStreams()
@@ -1004,14 +1009,6 @@ namespace Alexantr.SimpleVideoConverter
                 if (isChecked)
                     isChecked = false;
             }
-        }
-        
-        private void InOutControlsEnabled(bool enabled = true)
-        {
-            textBoxIn.Enabled = enabled;
-            textBoxOut.Enabled = enabled;
-            buttonBrowseIn.Enabled = enabled;
-            buttonBrowseOut.Enabled = enabled;
         }
 
         private string GetTempFile()
@@ -1043,5 +1040,29 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         #endregion
+
+        private void buttonAbout_Click(object sender, EventArgs e)
+        {
+            Assembly ass = Assembly.GetExecutingAssembly();
+
+            string appName = ((AssemblyTitleAttribute)ass.GetCustomAttribute(typeof(AssemblyTitleAttribute))).Title;
+
+            Version version = ass.GetName().Version;
+            string niceVersion = version.Major.ToString() + "." + version.Minor.ToString();
+            if (version.Build != 0 || version.Revision != 0)
+            {
+                niceVersion += "." + version.Build.ToString();
+            }
+            if (version.Revision != 0)
+            {
+                niceVersion += "." + version.Revision.ToString();
+            }
+
+            string whatBits = Environment.Is64BitProcess ? "64" : "32";
+
+            string copyright = ((AssemblyCopyrightAttribute)ass.GetCustomAttribute(typeof(AssemblyCopyrightAttribute))).Copyright;
+
+            MessageBox.Show(this, $"{appName} v{niceVersion} ({whatBits} bit){Environment.NewLine}{copyright}", "О программе", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }
