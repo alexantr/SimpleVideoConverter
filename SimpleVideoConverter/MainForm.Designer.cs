@@ -266,7 +266,7 @@
             this.groupBoxVideoParams.Controls.Add(this.numericUpDownBitrate);
             this.groupBoxVideoParams.Location = new System.Drawing.Point(6, 138);
             this.groupBoxVideoParams.Name = "groupBoxVideoParams";
-            this.groupBoxVideoParams.Size = new System.Drawing.Size(215, 103);
+            this.groupBoxVideoParams.Size = new System.Drawing.Size(215, 105);
             this.groupBoxVideoParams.TabIndex = 2;
             this.groupBoxVideoParams.TabStop = false;
             this.groupBoxVideoParams.Text = "Видео";
@@ -312,7 +312,7 @@
             // labelFrameRate
             // 
             this.labelFrameRate.AutoSize = true;
-            this.labelFrameRate.Location = new System.Drawing.Point(6, 17);
+            this.labelFrameRate.Location = new System.Drawing.Point(6, 20);
             this.labelFrameRate.Name = "labelFrameRate";
             this.labelFrameRate.Size = new System.Drawing.Size(89, 13);
             this.labelFrameRate.TabIndex = 0;
@@ -322,7 +322,7 @@
             // 
             this.comboBoxFrameRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFrameRate.FormattingEnabled = true;
-            this.comboBoxFrameRate.Location = new System.Drawing.Point(114, 14);
+            this.comboBoxFrameRate.Location = new System.Drawing.Point(114, 17);
             this.comboBoxFrameRate.Name = "comboBoxFrameRate";
             this.comboBoxFrameRate.Size = new System.Drawing.Size(95, 21);
             this.comboBoxFrameRate.TabIndex = 1;
@@ -359,7 +359,7 @@
             this.groupBoxAudioParams.Controls.Add(this.comboBoxFrequency);
             this.groupBoxAudioParams.Location = new System.Drawing.Point(6, 247);
             this.groupBoxAudioParams.Name = "groupBoxAudioParams";
-            this.groupBoxAudioParams.Size = new System.Drawing.Size(215, 103);
+            this.groupBoxAudioParams.Size = new System.Drawing.Size(215, 105);
             this.groupBoxAudioParams.TabIndex = 3;
             this.groupBoxAudioParams.TabStop = false;
             this.groupBoxAudioParams.Text = "Аудио";
@@ -403,7 +403,7 @@
             // labelFrequency
             // 
             this.labelFrequency.AutoSize = true;
-            this.labelFrequency.Location = new System.Drawing.Point(6, 46);
+            this.labelFrequency.Location = new System.Drawing.Point(6, 45);
             this.labelFrequency.Name = "labelFrequency";
             this.labelFrequency.Size = new System.Drawing.Size(84, 26);
             this.labelFrequency.TabIndex = 2;
@@ -434,7 +434,7 @@
             // buttonGo
             // 
             this.buttonGo.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonGo.Location = new System.Drawing.Point(484, 282);
+            this.buttonGo.Location = new System.Drawing.Point(485, 286);
             this.buttonGo.Name = "buttonGo";
             this.buttonGo.Size = new System.Drawing.Size(145, 35);
             this.buttonGo.TabIndex = 8;
@@ -470,14 +470,14 @@
             this.groupBoxDeinterlace.Controls.Add(this.checkBoxDeinterlace);
             this.groupBoxDeinterlace.Location = new System.Drawing.Point(227, 138);
             this.groupBoxDeinterlace.Name = "groupBoxDeinterlace";
-            this.groupBoxDeinterlace.Size = new System.Drawing.Size(215, 55);
+            this.groupBoxDeinterlace.Size = new System.Drawing.Size(215, 51);
             this.groupBoxDeinterlace.TabIndex = 4;
             this.groupBoxDeinterlace.TabStop = false;
             // 
             // labelFieldOrder
             // 
             this.labelFieldOrder.AutoSize = true;
-            this.labelFieldOrder.Location = new System.Drawing.Point(6, 24);
+            this.labelFieldOrder.Location = new System.Drawing.Point(6, 23);
             this.labelFieldOrder.Name = "labelFieldOrder";
             this.labelFieldOrder.Size = new System.Drawing.Size(84, 13);
             this.labelFieldOrder.TabIndex = 1;
@@ -487,7 +487,7 @@
             // 
             this.comboBoxFieldOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFieldOrder.FormattingEnabled = true;
-            this.comboBoxFieldOrder.Location = new System.Drawing.Point(114, 26);
+            this.comboBoxFieldOrder.Location = new System.Drawing.Point(114, 20);
             this.comboBoxFieldOrder.Name = "comboBoxFieldOrder";
             this.comboBoxFieldOrder.Size = new System.Drawing.Size(95, 21);
             this.comboBoxFieldOrder.TabIndex = 2;
@@ -503,7 +503,7 @@
             this.groupBoxResolution.Controls.Add(this.labelX);
             this.groupBoxResolution.Location = new System.Drawing.Point(448, 138);
             this.groupBoxResolution.Name = "groupBoxResolution";
-            this.groupBoxResolution.Size = new System.Drawing.Size(215, 103);
+            this.groupBoxResolution.Size = new System.Drawing.Size(215, 105);
             this.groupBoxResolution.TabIndex = 7;
             this.groupBoxResolution.TabStop = false;
             // 
@@ -541,18 +541,18 @@
             this.groupBoxAudioStreams.Controls.Add(this.checkedListBoxAudioStreams);
             this.groupBoxAudioStreams.Location = new System.Drawing.Point(227, 247);
             this.groupBoxAudioStreams.Name = "groupBoxAudioStreams";
-            this.groupBoxAudioStreams.Size = new System.Drawing.Size(215, 103);
+            this.groupBoxAudioStreams.Size = new System.Drawing.Size(215, 105);
             this.groupBoxAudioStreams.TabIndex = 6;
             this.groupBoxAudioStreams.TabStop = false;
-            this.groupBoxAudioStreams.Text = "Дорожки";
+            this.groupBoxAudioStreams.Text = "Звуковые дорожки";
             // 
             // groupBoxFrameRate
             // 
             this.groupBoxFrameRate.Controls.Add(this.labelFrameRate);
             this.groupBoxFrameRate.Controls.Add(this.comboBoxFrameRate);
-            this.groupBoxFrameRate.Location = new System.Drawing.Point(227, 197);
+            this.groupBoxFrameRate.Location = new System.Drawing.Point(227, 195);
             this.groupBoxFrameRate.Name = "groupBoxFrameRate";
-            this.groupBoxFrameRate.Size = new System.Drawing.Size(215, 44);
+            this.groupBoxFrameRate.Size = new System.Drawing.Size(215, 48);
             this.groupBoxFrameRate.TabIndex = 5;
             this.groupBoxFrameRate.TabStop = false;
             // 
@@ -560,7 +560,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(670, 355);
+            this.ClientSize = new System.Drawing.Size(670, 363);
             this.Controls.Add(this.groupBoxFrameRate);
             this.Controls.Add(this.groupBoxAudioStreams);
             this.Controls.Add(this.groupBoxResolution);
