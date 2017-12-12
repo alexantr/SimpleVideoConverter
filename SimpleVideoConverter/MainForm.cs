@@ -880,7 +880,7 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxAspectRatio.Items.Clear();
             if (!string.IsNullOrWhiteSpace(original))
             {
-                comboBoxAspectRatio.Items.Add(new ComboBoxItem(original, "Исходное"));
+                comboBoxAspectRatio.Items.Add(new ComboBoxItem(original, "Исходные"));
             }
             foreach (string aspectRatio in aspectRatioList)
             {
