@@ -130,8 +130,8 @@ namespace Alexantr.SimpleVideoConverter
 
             channelsList = new Dictionary<string, string>
             {
-                { "1", "Моно" },
-                { "2", "Стерео" }
+                { "1", "1 (моно)" },
+                { "2", "2 (стерео)" }
             };
         }
 

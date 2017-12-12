@@ -405,9 +405,9 @@
             this.labelFrequency.AutoSize = true;
             this.labelFrequency.Location = new System.Drawing.Point(6, 45);
             this.labelFrequency.Name = "labelFrequency";
-            this.labelFrequency.Size = new System.Drawing.Size(84, 26);
+            this.labelFrequency.Size = new System.Drawing.Size(107, 26);
             this.labelFrequency.TabIndex = 2;
-            this.labelFrequency.Text = "Частота\r\nдискретизации";
+            this.labelFrequency.Text = "Частота\r\nдискретизации (Гц)";
             // 
             // comboBoxFrequency
             // 
@@ -576,7 +576,6 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Padding = new System.Windows.Forms.Padding(3);
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Simple Video Converter";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
