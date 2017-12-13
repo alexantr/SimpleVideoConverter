@@ -88,6 +88,10 @@
             this.labelOut = new System.Windows.Forms.Label();
             this.buttonAbout = new System.Windows.Forms.Button();
             this.textBoxIn = new System.Windows.Forms.TextBox();
+            this.labelCropSize = new System.Windows.Forms.Label();
+            this.buttonResizeOriginal = new System.Windows.Forms.Button();
+            this.buttonResize1080p = new System.Windows.Forms.Button();
+            this.buttonResize720p = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBitrate)).BeginInit();
@@ -110,7 +114,7 @@
             // 
             // buttonBrowseIn
             // 
-            this.buttonBrowseIn.Location = new System.Drawing.Point(441, 25);
+            this.buttonBrowseIn.Location = new System.Drawing.Point(511, 25);
             this.buttonBrowseIn.Name = "buttonBrowseIn";
             this.buttonBrowseIn.Size = new System.Drawing.Size(75, 23);
             this.buttonBrowseIn.TabIndex = 2;
@@ -122,12 +126,12 @@
             // 
             this.textBoxOut.Location = new System.Drawing.Point(10, 71);
             this.textBoxOut.Name = "textBoxOut";
-            this.textBoxOut.Size = new System.Drawing.Size(425, 21);
+            this.textBoxOut.Size = new System.Drawing.Size(495, 21);
             this.textBoxOut.TabIndex = 4;
             // 
             // buttonBrowseOut
             // 
-            this.buttonBrowseOut.Location = new System.Drawing.Point(441, 70);
+            this.buttonBrowseOut.Location = new System.Drawing.Point(511, 70);
             this.buttonBrowseOut.Name = "buttonBrowseOut";
             this.buttonBrowseOut.Size = new System.Drawing.Size(75, 23);
             this.buttonBrowseOut.TabIndex = 5;
@@ -142,7 +146,7 @@
             0,
             0,
             0});
-            this.numericUpDownWidth.Location = new System.Drawing.Point(3, 26);
+            this.numericUpDownWidth.Location = new System.Drawing.Point(3, 27);
             this.numericUpDownWidth.Maximum = new decimal(new int[] {
             1920,
             0,
@@ -167,7 +171,7 @@
             // labelX
             // 
             this.labelX.AutoSize = true;
-            this.labelX.Location = new System.Drawing.Point(67, 29);
+            this.labelX.Location = new System.Drawing.Point(67, 30);
             this.labelX.Name = "labelX";
             this.labelX.Size = new System.Drawing.Size(13, 13);
             this.labelX.TabIndex = 2;
@@ -180,7 +184,7 @@
             0,
             0,
             0});
-            this.numericUpDownHeight.Location = new System.Drawing.Point(83, 26);
+            this.numericUpDownHeight.Location = new System.Drawing.Point(83, 27);
             this.numericUpDownHeight.Maximum = new decimal(new int[] {
             1080,
             0,
@@ -250,7 +254,7 @@
             // 
             this.comboBoxFileType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFileType.FormattingEnabled = true;
-            this.comboBoxFileType.Location = new System.Drawing.Point(530, 71);
+            this.comboBoxFileType.Location = new System.Drawing.Point(600, 71);
             this.comboBoxFileType.Name = "comboBoxFileType";
             this.comboBoxFileType.Size = new System.Drawing.Size(73, 21);
             this.comboBoxFileType.TabIndex = 1;
@@ -352,7 +356,7 @@
             // 
             // buttonGo
             // 
-            this.buttonGo.Location = new System.Drawing.Point(478, 324);
+            this.buttonGo.Location = new System.Drawing.Point(548, 358);
             this.buttonGo.Name = "buttonGo";
             this.buttonGo.Size = new System.Drawing.Size(130, 32);
             this.buttonGo.TabIndex = 8;
@@ -362,7 +366,7 @@
             // 
             // pictureBoxRatioError
             // 
-            this.pictureBoxRatioError.Location = new System.Drawing.Point(104, 77);
+            this.pictureBoxRatioError.Location = new System.Drawing.Point(99, 108);
             this.pictureBoxRatioError.Name = "pictureBoxRatioError";
             this.pictureBoxRatioError.Size = new System.Drawing.Size(16, 16);
             this.pictureBoxRatioError.TabIndex = 11;
@@ -371,9 +375,9 @@
             // comboBoxAspectRatio
             // 
             this.comboBoxAspectRatio.FormattingEnabled = true;
-            this.comboBoxAspectRatio.Location = new System.Drawing.Point(3, 76);
+            this.comboBoxAspectRatio.Location = new System.Drawing.Point(3, 105);
             this.comboBoxAspectRatio.Name = "comboBoxAspectRatio";
-            this.comboBoxAspectRatio.Size = new System.Drawing.Size(95, 21);
+            this.comboBoxAspectRatio.Size = new System.Drawing.Size(90, 21);
             this.comboBoxAspectRatio.TabIndex = 5;
             this.comboBoxAspectRatio.SelectedIndexChanged += new System.EventHandler(this.comboBoxAspectRatio_SelectedIndexChanged);
             this.comboBoxAspectRatio.TextUpdate += new System.EventHandler(this.comboBoxAspectRatio_TextUpdate);
@@ -381,7 +385,7 @@
             // checkBoxKeepAspectRatio
             // 
             this.checkBoxKeepAspectRatio.AutoSize = true;
-            this.checkBoxKeepAspectRatio.Location = new System.Drawing.Point(3, 53);
+            this.checkBoxKeepAspectRatio.Location = new System.Drawing.Point(3, 85);
             this.checkBoxKeepAspectRatio.Name = "checkBoxKeepAspectRatio";
             this.checkBoxKeepAspectRatio.Size = new System.Drawing.Size(138, 17);
             this.checkBoxKeepAspectRatio.TabIndex = 4;
@@ -397,7 +401,7 @@
             this.tabControlMain.Location = new System.Drawing.Point(6, 124);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(602, 194);
+            this.tabControlMain.Size = new System.Drawing.Size(672, 228);
             this.tabControlMain.TabIndex = 9;
             // 
             // tabPagePicture
@@ -409,13 +413,14 @@
             this.tabPagePicture.Location = new System.Drawing.Point(4, 22);
             this.tabPagePicture.Name = "tabPagePicture";
             this.tabPagePicture.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePicture.Size = new System.Drawing.Size(594, 168);
+            this.tabPagePicture.Size = new System.Drawing.Size(664, 202);
             this.tabPagePicture.TabIndex = 1;
             this.tabPagePicture.Text = "Картинка";
             this.tabPagePicture.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.labelCropSize);
             this.panel1.Controls.Add(this.labelCropBottom);
             this.panel1.Controls.Add(this.labelCropRight);
             this.panel1.Controls.Add(this.labelCropLeft);
@@ -425,15 +430,15 @@
             this.panel1.Controls.Add(this.numericCropLeft);
             this.panel1.Controls.Add(this.numericCropTop);
             this.panel1.Controls.Add(this.labelCrop);
-            this.panel1.Location = new System.Drawing.Point(402, 7);
+            this.panel1.Location = new System.Drawing.Point(429, 6);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(186, 155);
+            this.panel1.Size = new System.Drawing.Size(229, 190);
             this.panel1.TabIndex = 11;
             // 
             // labelCropBottom
             // 
             this.labelCropBottom.AutoSize = true;
-            this.labelCropBottom.Location = new System.Drawing.Point(76, 122);
+            this.labelCropBottom.Location = new System.Drawing.Point(96, 134);
             this.labelCropBottom.Name = "labelCropBottom";
             this.labelCropBottom.Size = new System.Drawing.Size(37, 13);
             this.labelCropBottom.TabIndex = 8;
@@ -442,7 +447,7 @@
             // labelCropRight
             // 
             this.labelCropRight.AutoSize = true;
-            this.labelCropRight.Location = new System.Drawing.Point(127, 55);
+            this.labelCropRight.Location = new System.Drawing.Point(182, 87);
             this.labelCropRight.Name = "labelCropRight";
             this.labelCropRight.Size = new System.Drawing.Size(44, 13);
             this.labelCropRight.TabIndex = 7;
@@ -451,7 +456,7 @@
             // labelCropLeft
             // 
             this.labelCropLeft.AutoSize = true;
-            this.labelCropLeft.Location = new System.Drawing.Point(22, 55);
+            this.labelCropLeft.Location = new System.Drawing.Point(6, 87);
             this.labelCropLeft.Name = "labelCropLeft";
             this.labelCropLeft.Size = new System.Drawing.Size(38, 13);
             this.labelCropLeft.TabIndex = 6;
@@ -460,7 +465,7 @@
             // labelCropTop
             // 
             this.labelCropTop.AutoSize = true;
-            this.labelCropTop.Location = new System.Drawing.Point(69, 28);
+            this.labelCropTop.Location = new System.Drawing.Point(87, 40);
             this.labelCropTop.Name = "labelCropTop";
             this.labelCropTop.Size = new System.Drawing.Size(44, 13);
             this.labelCropTop.TabIndex = 5;
@@ -473,7 +478,7 @@
             0,
             0,
             0});
-            this.numericCropBottom.Location = new System.Drawing.Point(66, 98);
+            this.numericCropBottom.Location = new System.Drawing.Point(86, 110);
             this.numericCropBottom.Name = "numericCropBottom";
             this.numericCropBottom.Size = new System.Drawing.Size(55, 21);
             this.numericCropBottom.TabIndex = 4;
@@ -486,7 +491,7 @@
             0,
             0,
             0});
-            this.numericCropRight.Location = new System.Drawing.Point(121, 71);
+            this.numericCropRight.Location = new System.Drawing.Point(121, 83);
             this.numericCropRight.Name = "numericCropRight";
             this.numericCropRight.Size = new System.Drawing.Size(55, 21);
             this.numericCropRight.TabIndex = 3;
@@ -499,7 +504,7 @@
             0,
             0,
             0});
-            this.numericCropLeft.Location = new System.Drawing.Point(12, 71);
+            this.numericCropLeft.Location = new System.Drawing.Point(50, 83);
             this.numericCropLeft.Name = "numericCropLeft";
             this.numericCropLeft.Size = new System.Drawing.Size(55, 21);
             this.numericCropLeft.TabIndex = 2;
@@ -512,7 +517,7 @@
             0,
             0,
             0});
-            this.numericCropTop.Location = new System.Drawing.Point(66, 44);
+            this.numericCropTop.Location = new System.Drawing.Point(86, 56);
             this.numericCropTop.Name = "numericCropTop";
             this.numericCropTop.Size = new System.Drawing.Size(55, 21);
             this.numericCropTop.TabIndex = 1;
@@ -521,7 +526,7 @@
             // labelCrop
             // 
             this.labelCrop.AutoSize = true;
-            this.labelCrop.Location = new System.Drawing.Point(4, 4);
+            this.labelCrop.Location = new System.Drawing.Point(3, 3);
             this.labelCrop.Name = "labelCrop";
             this.labelCrop.Size = new System.Drawing.Size(152, 13);
             this.labelCrop.TabIndex = 0;
@@ -531,27 +536,27 @@
             // 
             this.panelFilters.Controls.Add(this.labelColorFilter);
             this.panelFilters.Controls.Add(this.comboBoxColorFilter);
-            this.panelFilters.Location = new System.Drawing.Point(194, 73);
+            this.panelFilters.Location = new System.Drawing.Point(216, 106);
             this.panelFilters.Name = "panelFilters";
-            this.panelFilters.Size = new System.Drawing.Size(191, 89);
+            this.panelFilters.Size = new System.Drawing.Size(207, 90);
             this.panelFilters.TabIndex = 10;
             // 
             // labelColorFilter
             // 
             this.labelColorFilter.AutoSize = true;
-            this.labelColorFilter.Location = new System.Drawing.Point(3, 13);
+            this.labelColorFilter.Location = new System.Drawing.Point(3, 42);
             this.labelColorFilter.Name = "labelColorFilter";
-            this.labelColorFilter.Size = new System.Drawing.Size(45, 13);
+            this.labelColorFilter.Size = new System.Drawing.Size(98, 13);
             this.labelColorFilter.TabIndex = 2;
-            this.labelColorFilter.Text = "Фильтр";
+            this.labelColorFilter.Text = "Цветовой фильтр";
             // 
             // comboBoxColorFilter
             // 
             this.comboBoxColorFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxColorFilter.FormattingEnabled = true;
-            this.comboBoxColorFilter.Location = new System.Drawing.Point(93, 9);
+            this.comboBoxColorFilter.Location = new System.Drawing.Point(3, 58);
             this.comboBoxColorFilter.Name = "comboBoxColorFilter";
-            this.comboBoxColorFilter.Size = new System.Drawing.Size(95, 21);
+            this.comboBoxColorFilter.Size = new System.Drawing.Size(115, 21);
             this.comboBoxColorFilter.TabIndex = 1;
             // 
             // panelDeinterlace
@@ -559,15 +564,15 @@
             this.panelDeinterlace.Controls.Add(this.labelFieldOrder);
             this.panelDeinterlace.Controls.Add(this.checkBoxDeinterlace);
             this.panelDeinterlace.Controls.Add(this.comboBoxFieldOrder);
-            this.panelDeinterlace.Location = new System.Drawing.Point(193, 6);
+            this.panelDeinterlace.Location = new System.Drawing.Point(216, 6);
             this.panelDeinterlace.Name = "panelDeinterlace";
-            this.panelDeinterlace.Size = new System.Drawing.Size(192, 60);
+            this.panelDeinterlace.Size = new System.Drawing.Size(207, 94);
             this.panelDeinterlace.TabIndex = 9;
             // 
             // labelFieldOrder
             // 
             this.labelFieldOrder.AutoSize = true;
-            this.labelFieldOrder.Location = new System.Drawing.Point(4, 29);
+            this.labelFieldOrder.Location = new System.Drawing.Point(3, 27);
             this.labelFieldOrder.Name = "labelFieldOrder";
             this.labelFieldOrder.Size = new System.Drawing.Size(84, 13);
             this.labelFieldOrder.TabIndex = 1;
@@ -582,18 +587,22 @@
             this.checkBoxDeinterlace.TabIndex = 0;
             this.checkBoxDeinterlace.Text = "Убрать чересстрочность";
             this.checkBoxDeinterlace.UseVisualStyleBackColor = true;
+            this.checkBoxDeinterlace.CheckedChanged += new System.EventHandler(this.checkBoxDeinterlace_CheckedChanged);
             // 
             // comboBoxFieldOrder
             // 
             this.comboBoxFieldOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFieldOrder.FormattingEnabled = true;
-            this.comboBoxFieldOrder.Location = new System.Drawing.Point(94, 25);
+            this.comboBoxFieldOrder.Location = new System.Drawing.Point(3, 43);
             this.comboBoxFieldOrder.Name = "comboBoxFieldOrder";
-            this.comboBoxFieldOrder.Size = new System.Drawing.Size(95, 21);
+            this.comboBoxFieldOrder.Size = new System.Drawing.Size(115, 21);
             this.comboBoxFieldOrder.TabIndex = 2;
             // 
             // panelResolution
             // 
+            this.panelResolution.Controls.Add(this.buttonResize720p);
+            this.panelResolution.Controls.Add(this.buttonResize1080p);
+            this.panelResolution.Controls.Add(this.buttonResizeOriginal);
             this.panelResolution.Controls.Add(this.comboBoxScalingMethod);
             this.panelResolution.Controls.Add(this.labelScalingMethod);
             this.panelResolution.Controls.Add(this.pictureBoxRatioError);
@@ -605,22 +614,22 @@
             this.panelResolution.Controls.Add(this.numericUpDownHeight);
             this.panelResolution.Location = new System.Drawing.Point(6, 6);
             this.panelResolution.Name = "panelResolution";
-            this.panelResolution.Size = new System.Drawing.Size(169, 156);
+            this.panelResolution.Size = new System.Drawing.Size(204, 190);
             this.panelResolution.TabIndex = 8;
             // 
             // comboBoxScalingMethod
             // 
             this.comboBoxScalingMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxScalingMethod.FormattingEnabled = true;
-            this.comboBoxScalingMethod.Location = new System.Drawing.Point(3, 121);
+            this.comboBoxScalingMethod.Location = new System.Drawing.Point(3, 158);
             this.comboBoxScalingMethod.Name = "comboBoxScalingMethod";
-            this.comboBoxScalingMethod.Size = new System.Drawing.Size(117, 21);
+            this.comboBoxScalingMethod.Size = new System.Drawing.Size(115, 21);
             this.comboBoxScalingMethod.TabIndex = 13;
             // 
             // labelScalingMethod
             // 
             this.labelScalingMethod.AutoSize = true;
-            this.labelScalingMethod.Location = new System.Drawing.Point(3, 105);
+            this.labelScalingMethod.Location = new System.Drawing.Point(3, 142);
             this.labelScalingMethod.Name = "labelScalingMethod";
             this.labelScalingMethod.Size = new System.Drawing.Size(134, 13);
             this.labelScalingMethod.TabIndex = 12;
@@ -708,7 +717,7 @@
             // buttonShowInfo
             // 
             this.buttonShowInfo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.buttonShowInfo.Location = new System.Drawing.Point(529, 25);
+            this.buttonShowInfo.Location = new System.Drawing.Point(599, 25);
             this.buttonShowInfo.Name = "buttonShowInfo";
             this.buttonShowInfo.Size = new System.Drawing.Size(75, 23);
             this.buttonShowInfo.TabIndex = 7;
@@ -719,7 +728,7 @@
             // labelFileType
             // 
             this.labelFileType.AutoSize = true;
-            this.labelFileType.Location = new System.Drawing.Point(527, 55);
+            this.labelFileType.Location = new System.Drawing.Point(597, 55);
             this.labelFileType.Name = "labelFileType";
             this.labelFileType.Size = new System.Drawing.Size(60, 13);
             this.labelFileType.TabIndex = 0;
@@ -738,7 +747,7 @@
             // 
             this.buttonAbout.BackgroundImage = global::Alexantr.SimpleVideoConverter.Properties.Resources.information;
             this.buttonAbout.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.buttonAbout.Location = new System.Drawing.Point(6, 324);
+            this.buttonAbout.Location = new System.Drawing.Point(6, 358);
             this.buttonAbout.Name = "buttonAbout";
             this.buttonAbout.Size = new System.Drawing.Size(32, 32);
             this.buttonAbout.TabIndex = 10;
@@ -750,14 +759,56 @@
             this.textBoxIn.Location = new System.Drawing.Point(10, 26);
             this.textBoxIn.Name = "textBoxIn";
             this.textBoxIn.ReadOnly = true;
-            this.textBoxIn.Size = new System.Drawing.Size(425, 21);
+            this.textBoxIn.Size = new System.Drawing.Size(495, 21);
             this.textBoxIn.TabIndex = 16;
+            // 
+            // labelCropSize
+            // 
+            this.labelCropSize.Location = new System.Drawing.Point(3, 161);
+            this.labelCropSize.Name = "labelCropSize";
+            this.labelCropSize.Size = new System.Drawing.Size(223, 18);
+            this.labelCropSize.TabIndex = 15;
+            this.labelCropSize.Text = "WxH → WxH";
+            this.labelCropSize.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // buttonResizeOriginal
+            // 
+            this.buttonResizeOriginal.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonResizeOriginal.Location = new System.Drawing.Point(3, 53);
+            this.buttonResizeOriginal.Name = "buttonResizeOriginal";
+            this.buttonResizeOriginal.Size = new System.Drawing.Size(40, 19);
+            this.buttonResizeOriginal.TabIndex = 14;
+            this.buttonResizeOriginal.Text = "Исх.";
+            this.buttonResizeOriginal.UseVisualStyleBackColor = true;
+            this.buttonResizeOriginal.Click += new System.EventHandler(this.buttonResizeOriginal_Click);
+            // 
+            // buttonResize1080p
+            // 
+            this.buttonResize1080p.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonResize1080p.Location = new System.Drawing.Point(47, 53);
+            this.buttonResize1080p.Name = "buttonResize1080p";
+            this.buttonResize1080p.Size = new System.Drawing.Size(40, 19);
+            this.buttonResize1080p.TabIndex = 15;
+            this.buttonResize1080p.Text = "1080p";
+            this.buttonResize1080p.UseVisualStyleBackColor = true;
+            this.buttonResize1080p.Click += new System.EventHandler(this.buttonResize1080p_Click);
+            // 
+            // buttonResize720p
+            // 
+            this.buttonResize720p.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonResize720p.Location = new System.Drawing.Point(91, 53);
+            this.buttonResize720p.Name = "buttonResize720p";
+            this.buttonResize720p.Size = new System.Drawing.Size(40, 19);
+            this.buttonResize720p.TabIndex = 16;
+            this.buttonResize720p.Text = "720p";
+            this.buttonResize720p.UseVisualStyleBackColor = true;
+            this.buttonResize720p.Click += new System.EventHandler(this.buttonResize720p_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(614, 362);
+            this.ClientSize = new System.Drawing.Size(684, 396);
             this.Controls.Add(this.comboBoxFileType);
             this.Controls.Add(this.buttonShowInfo);
             this.Controls.Add(this.labelFileType);
@@ -870,6 +921,10 @@
         private System.Windows.Forms.NumericUpDown numericCropLeft;
         private System.Windows.Forms.NumericUpDown numericCropTop;
         private System.Windows.Forms.Label labelCrop;
+        private System.Windows.Forms.Label labelCropSize;
+        private System.Windows.Forms.Button buttonResize720p;
+        private System.Windows.Forms.Button buttonResize1080p;
+        private System.Windows.Forms.Button buttonResizeOriginal;
     }
 }
 
