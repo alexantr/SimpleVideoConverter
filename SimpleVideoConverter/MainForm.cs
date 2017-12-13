@@ -45,7 +45,7 @@ namespace Alexantr.SimpleVideoConverter
         private Dictionary<string, string> fieldOrderList;
 
         private List<string> aspectRatioList;
-        private Dictionary<string, string> scalingMethodList;
+        private Dictionary<string, string> scalingAlgorithmList;
         private Dictionary<string, string> colorFilterList;
 
         private PictureSize cropSize;
@@ -108,7 +108,7 @@ namespace Alexantr.SimpleVideoConverter
                 "2.39"
             };
 
-            scalingMethodList = new Dictionary<string, string>
+            scalingAlgorithmList = new Dictionary<string, string>
             {
                 { "neighbor", "Nearest Neighbor" },
                 { "bilinear", "Bilinear" },
@@ -163,6 +163,7 @@ namespace Alexantr.SimpleVideoConverter
         {
             buttonGo.Enabled = false;
             buttonShowInfo.Enabled = false;
+            buttonOpenInputFile.Enabled = false;
 
             // Format: 0 - mp4, 1 - webm
             comboBoxFileType.Items.Clear();
@@ -220,17 +221,17 @@ namespace Alexantr.SimpleVideoConverter
             // Aspect ratio
             FillComboBoxAspectRatio("");
 
-            // Scaling method
-            int selectedScalingMethod = 0, indexScalingMethod = 0;
-            comboBoxScalingMethod.Items.Clear();
-            foreach (KeyValuePair<string, string> scm in scalingMethodList)
+            // Scaling algorithm
+            int selectedScalingAlgorithm = 0, indexScalingAlgorithm = 0;
+            comboBoxScalingAlgorithm.Items.Clear();
+            foreach (KeyValuePair<string, string> scm in scalingAlgorithmList)
             {
-                comboBoxScalingMethod.Items.Add(new ComboBoxItem(scm.Key, scm.Value));
+                comboBoxScalingAlgorithm.Items.Add(new ComboBoxItem(scm.Key, scm.Value));
                 if (scm.Key == "lanczos")
-                    selectedScalingMethod = indexScalingMethod;
-                indexScalingMethod++;
+                    selectedScalingAlgorithm = indexScalingAlgorithm;
+                indexScalingAlgorithm++;
             }
-            comboBoxScalingMethod.SelectedIndex = selectedScalingMethod;
+            comboBoxScalingAlgorithm.SelectedIndex = selectedScalingAlgorithm;
 
             // Color filter
             comboBoxColorFilter.Items.Clear();
@@ -377,6 +378,18 @@ namespace Alexantr.SimpleVideoConverter
             MessageBox.Show(this, fileInfo, "Информация о файле", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void buttonOpenInputFile_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists(videoFile.FullPath))
+            {
+                MessageBox.Show("Исходный файл не найден!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                Process.Start(videoFile.FullPath);
+            }
+        }
+
         #endregion
 
         #region Format, Mode
@@ -484,17 +497,23 @@ namespace Alexantr.SimpleVideoConverter
 
         private void buttonResizeOriginal_Click(object sender, EventArgs e)
         {
+            if (videoFile == null)
+                return;
             int w = cropSize.Width;
             ResizeFromPreset(w, 0);
         }
 
         private void buttonResize1080p_Click(object sender, EventArgs e)
         {
+            if (videoFile == null)
+                return;
             ResizeFromPreset(1920, 1080);
         }
 
         private void buttonResize720p_Click(object sender, EventArgs e)
         {
+            if (videoFile == null)
+                return;
             ResizeFromPreset(1280, 720);
         }
 
@@ -644,6 +663,7 @@ namespace Alexantr.SimpleVideoConverter
                 textBoxOut.Text = "";
                 buttonGo.Enabled = false;
                 buttonShowInfo.Enabled = false;
+                buttonOpenInputFile.Enabled = false;
                 labelCropSize.Text = "";
                 cropSize.Width = 0;
                 cropSize.Height = 0;
@@ -721,6 +741,7 @@ namespace Alexantr.SimpleVideoConverter
 
             buttonGo.Enabled = true;
             buttonShowInfo.Enabled = true;
+            buttonOpenInputFile.Enabled = true;
 
             try
             {
@@ -813,7 +834,7 @@ namespace Alexantr.SimpleVideoConverter
             int.TryParse(((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value, out int audioBitrate);
             string audioChannels = ((ComboBoxItem)comboBoxChannels.SelectedItem).Value;
             string audioFrequency = ((ComboBoxItem)comboBoxFrequency.SelectedItem).Value;
-            string scalingMethod = ((ComboBoxItem)comboBoxScalingMethod.SelectedItem).Value;
+            string scalingAlgorithm = ((ComboBoxItem)comboBoxScalingAlgorithm.SelectedItem).Value;
             string colorFilter = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Value;
 
             int videoBitrate = 1000;
@@ -943,7 +964,7 @@ namespace Alexantr.SimpleVideoConverter
             if (checkBoxResizePicture.Checked)
             {
                 // https://www.ffmpeg.org/ffmpeg-scaler.html#sws_005fflags
-                filters.Add($"scale={width}x{height}:flags={scalingMethod},setsar=1:1");
+                filters.Add($"scale={width}x{height}:flags={scalingAlgorithm},setsar=1:1");
             }
 
             if (colorFilter == "gray")
