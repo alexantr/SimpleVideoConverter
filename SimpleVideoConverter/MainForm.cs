@@ -31,6 +31,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private const int MinBitrate = 100;
         private const int MaxBitrate = 50000;
+        private const int DefaultBitrate = 2000;
 
         private const int MinAudioBitrate = 8;
         private const int MaxAudioBitrate = 320;
@@ -45,7 +46,6 @@ namespace Alexantr.SimpleVideoConverter
         private Dictionary<string, string> fieldOrderList;
 
         private List<string> aspectRatioList;
-        private Dictionary<string, string> scalingAlgorithmList;
         private Dictionary<string, string> colorFilterList;
 
         private PictureSize cropSize;
@@ -106,17 +106,6 @@ namespace Alexantr.SimpleVideoConverter
                 "1.85",
                 "2.35",
                 "2.39"
-            };
-
-            scalingAlgorithmList = new Dictionary<string, string>
-            {
-                { "neighbor", "Nearest Neighbor" },
-                { "bilinear", "Bilinear" },
-                { "bicubic", "Bicubic" },
-                { "gauss", "Gaussian" },
-                { "lanczos", "Lanczos" },
-                { "sinc", "Sinc" },
-                { "spline", "Spline" }
             };
 
             colorFilterList = new Dictionary<string, string>
@@ -180,20 +169,26 @@ namespace Alexantr.SimpleVideoConverter
                 fileType = FileTypeMP4;
             }
 
-            // Encode mode: 0 - crf, 1 - bitrate
-            comboBoxEncodeMode.Items.Clear();
-            comboBoxEncodeMode.Items.Add(new ComboBoxItem(EncodeModeCRF, "CRF"));
-            comboBoxEncodeMode.Items.Add(new ComboBoxItem(EncodeModeBitrate, "Битрейт"));
+            // Encode mode
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.EncodeMode) && Properties.Settings.Default.EncodeMode == EncodeModeBitrate)
             {
-                comboBoxEncodeMode.SelectedIndex = 1;
-                encodeMode = EncodeModeBitrate;
+                radioButtonBitrate.Checked = true;
+                radioButtonCRF.Checked = false;
             }
             else
             {
-                comboBoxEncodeMode.SelectedIndex = 0;
-                encodeMode = EncodeModeCRF;
+                radioButtonCRF.Checked = true;
+                radioButtonBitrate.Checked = false;
             }
+            CheckVideoModeRadioButtons();
+
+            // Bitrate
+            numericUpDownBitrate.Maximum = MaxBitrate;
+            numericUpDownBitrate.Value = DefaultBitrate;
+            numericUpDownBitrate.Minimum = MinBitrate;
+            numericUpDownBitrate.Increment = 10;
+
+            CalcFileSize(); // just hide labels
 
             // Frame rate
             comboBoxFrameRate.Items.Clear();
@@ -220,18 +215,6 @@ namespace Alexantr.SimpleVideoConverter
 
             // Aspect ratio
             FillComboBoxAspectRatio("");
-
-            // Scaling algorithm
-            int selectedScalingAlgorithm = 0, indexScalingAlgorithm = 0;
-            comboBoxScalingAlgorithm.Items.Clear();
-            foreach (KeyValuePair<string, string> scm in scalingAlgorithmList)
-            {
-                comboBoxScalingAlgorithm.Items.Add(new ComboBoxItem(scm.Key, scm.Value));
-                if (scm.Key == "lanczos")
-                    selectedScalingAlgorithm = indexScalingAlgorithm;
-                indexScalingAlgorithm++;
-            }
-            comboBoxScalingAlgorithm.SelectedIndex = selectedScalingAlgorithm;
 
             // Color filter
             comboBoxColorFilter.Items.Clear();
@@ -392,52 +375,41 @@ namespace Alexantr.SimpleVideoConverter
 
         #endregion
 
-        #region Format, Mode
+        #region Format, Mode, CRF, Bitrate
 
         private void comboBoxFileType_SelectedIndexChanged(object sender, EventArgs e)
         {
             fileType = ((ComboBoxItem)comboBoxFileType.SelectedItem).Value;
             Properties.Settings.Default.OutFileType = fileType;
             ChangeOutExtension();
-            if (encodeMode == EncodeModeCRF)
-            {
-                int maxValue = (fileType == FileTypeMP4) ? 51 : 63;
-                if (numericUpDownBitrate.Value > maxValue)
-                    numericUpDownBitrate.Value = maxValue;
-                numericUpDownBitrate.Maximum = maxValue;
-                numericUpDownBitrate.Value = (fileType == FileTypeMP4) ? 20 : 30;
-            }
+            int maxValue = (fileType == FileTypeMP4) ? 51 : 63;
+            if (trackBarCRF.Value > maxValue)
+                trackBarCRF.Value = maxValue;
+            trackBarCRF.Maximum = maxValue;
+            trackBarCRF.Value = (fileType == FileTypeMP4) ? 23 : 35;
         }
 
-        private void comboBoxEncodeMode_SelectedIndexChanged(object sender, EventArgs e)
+        private void radioButtonCRF_CheckedChanged(object sender, EventArgs e)
         {
-            encodeMode = ((ComboBoxItem)comboBoxEncodeMode.SelectedItem).Value;
-            Properties.Settings.Default.EncodeMode = encodeMode;
-            if (encodeMode == EncodeModeBitrate)
-            {
-                labelBitrate.Text = "Битрейт (кбит/с)";
-                // set min to 0 - prevent exception
-                numericUpDownBitrate.Minimum = 0;
-                numericUpDownBitrate.Value = 0;
-                numericUpDownBitrate.DecimalPlaces = 0;
-                // set values
-                numericUpDownBitrate.Maximum = 50000;
-                numericUpDownBitrate.Value = 1000;
-                numericUpDownBitrate.Minimum = 100;
-                numericUpDownBitrate.Increment = 10;
-            }
-            else
-            {
-                labelBitrate.Text = "CRF";
-                // set min to 0 - prevent exception
-                numericUpDownBitrate.Minimum = 0;
-                numericUpDownBitrate.Value = 0;
-                numericUpDownBitrate.DecimalPlaces = 1;
-                // set values
-                numericUpDownBitrate.Maximum = (fileType == FileTypeMP4) ? 51 : 63;
-                numericUpDownBitrate.Value = (fileType == FileTypeMP4) ? 20 : 30;
-                numericUpDownBitrate.Increment = 1;
-            }
+            CheckVideoModeRadioButtons();
+            CalcFileSize();
+        }
+
+        private void radioButtonBitrate_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckVideoModeRadioButtons();
+            CalcFileSize();
+        }
+
+        private void trackBarCRF_ValueChanged(object sender, EventArgs e)
+        {
+            var crf = trackBarCRF.Value;
+            labelCRF.Text = $"{crf}";
+        }
+
+        private void numericUpDownBitrate_ValueChanged(object sender, EventArgs e)
+        {
+            CalcFileSize();
         }
 
         #endregion
@@ -517,6 +489,20 @@ namespace Alexantr.SimpleVideoConverter
             ResizeFromPreset(1280, 720);
         }
 
+        private void buttonResize480p_Click(object sender, EventArgs e)
+        {
+            if (videoFile == null)
+                return;
+            ResizeFromPreset(854, 480);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (videoFile == null)
+                return;
+            ResizeFromPreset(640, 360);
+        }
+
         private void ResizeFromPreset(int w, int h = 0)
         {
             if (w > MaxWidth)
@@ -580,6 +566,7 @@ namespace Alexantr.SimpleVideoConverter
             if (audioBitrate > MaxAudioBitrate)
                 audioBitrate = MaxAudioBitrate;
             comboBoxAudioBitrate.Text = audioBitrate.ToString();
+            CalcFileSize();
         }
 
         private void checkedListBoxAudioStreams_SelectedIndexChanged(object sender, EventArgs e)
@@ -590,6 +577,7 @@ namespace Alexantr.SimpleVideoConverter
                 selectedAudioList.Add(checkedIndex);
             }
             panelAudioParams.Enabled = selectedAudioList.Count > 0;
+            CalcFileSize();
         }
 
         #endregion
@@ -667,6 +655,7 @@ namespace Alexantr.SimpleVideoConverter
                 labelCropSize.Text = "";
                 cropSize.Width = 0;
                 cropSize.Height = 0;
+                CalcFileSize();
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 return;
             }
@@ -738,6 +727,8 @@ namespace Alexantr.SimpleVideoConverter
 
             // show info
             SetInfo();
+
+            CalcFileSize();
 
             buttonGo.Enabled = true;
             buttonShowInfo.Enabled = true;
@@ -827,17 +818,16 @@ namespace Alexantr.SimpleVideoConverter
             int width = (int)Math.Round(numericUpDownWidth.Value, 0);
             int height = (int)Math.Round(numericUpDownHeight.Value, 0);
 
-            decimal videoBitrateOrCrf = Math.Round(numericUpDownBitrate.Value, 1);
             string frameRate = ((ComboBoxItem)comboBoxFrameRate.SelectedItem).Value;
             string fieldOrder = ((ComboBoxItem)comboBoxFieldOrder.SelectedItem).Value;
 
             int.TryParse(((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value, out int audioBitrate);
             string audioChannels = ((ComboBoxItem)comboBoxChannels.SelectedItem).Value;
             string audioFrequency = ((ComboBoxItem)comboBoxFrequency.SelectedItem).Value;
-            string scalingAlgorithm = ((ComboBoxItem)comboBoxScalingAlgorithm.SelectedItem).Value;
             string colorFilter = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Value;
 
-            int videoBitrate = 1000;
+            int videoBitrate = (int)Math.Round(numericUpDownBitrate.Value, 0);
+            int crf = trackBarCRF.Value;
 
             if (width < MinWidth || width > MaxWidth || height < MinHeight || height > MaxHeight || width % 2 == 1 || height % 2 == 1)
             {
@@ -846,10 +836,17 @@ namespace Alexantr.SimpleVideoConverter
 
             if (encodeMode == EncodeModeBitrate)
             {
-                videoBitrate = (int)Math.Round(videoBitrateOrCrf, 0);
                 if (videoBitrate < MinBitrate || videoBitrate > MaxBitrate)
                 {
                     throw new Exception("Неверно задано значение битрейта для видео!");
+                }
+            }
+            if (encodeMode == EncodeModeCRF)
+            {
+                int maxCrfValue = (fileType == FileTypeMP4) ? 51 : 63;
+                if (crf < 0 || crf > maxCrfValue)
+                {
+                    throw new Exception("Неверно задано значение CRF!");
                 }
             }
 
@@ -911,7 +908,7 @@ namespace Alexantr.SimpleVideoConverter
                 }
                 else
                 {
-                    videoArgs = $"-c:v {videoCodec} -crf {videoBitrateOrCrf} {moreVideoArgs}";
+                    videoArgs = $"-c:v {videoCodec} -crf {crf} {moreVideoArgs}";
                 }
                 audioArgs = $"-c:a {audioCodec} -b:a {audioBitrate}k {moreAudioArgs}";
             }
@@ -929,7 +926,7 @@ namespace Alexantr.SimpleVideoConverter
                 }
                 else
                 {
-                    videoArgs = $"-c:v {videoCodec} -crf {videoBitrateOrCrf} -b:v 0";
+                    videoArgs = $"-c:v {videoCodec} -crf {crf} -b:v 0";
                 }
                 audioArgs = $"-c:a {audioCodec} -b:a {audioBitrate}k";
             }
@@ -964,7 +961,7 @@ namespace Alexantr.SimpleVideoConverter
             if (checkBoxResizePicture.Checked)
             {
                 // https://www.ffmpeg.org/ffmpeg-scaler.html#sws_005fflags
-                filters.Add($"scale={width}x{height}:flags={scalingAlgorithm},setsar=1:1");
+                filters.Add($"scale={width}x{height}:flags=lanczos,setsar=1:1");
             }
 
             if (colorFilter == "gray")
@@ -1081,6 +1078,34 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxAspectRatio.SelectedIndex = prevIndex > 0 ? prevIndex : 0;
         }
 
+        private void FillAudioStreams()
+        {
+            checkedListBoxAudioStreams.Items.Clear();
+
+            bool isChecked = true;
+
+            foreach (AudioStream stream in videoFile.AudioStreams)
+            {
+                double.TryParse(stream.SampleRate, out double sr);
+
+                StringBuilder audio = new StringBuilder();
+
+                audio.Append(stream.CodecName.ToUpper());
+                if (stream.BitRate > 0)
+                    audio.Append($" {stream.BitRate}kbps");
+                audio.Append($" {stream.Channels}ch");
+                if (sr > 0)
+                    audio.Append(" " + Math.Round(sr / 1000, 1).ToString() + "kHz");
+                if (!string.IsNullOrWhiteSpace(stream.Language) && stream.Language != "und")
+                    audio.Append($" ({stream.Language})");
+
+                checkedListBoxAudioStreams.Items.Add(audio.ToString(), isChecked);
+
+                if (isChecked)
+                    isChecked = false;
+            }
+        }
+
         private void UpdateHeigth(bool forceUpdateHeight = false, int maxHeight = MaxHeight)
         {
             pictureBoxRatioError.BackgroundImage = null;
@@ -1178,6 +1203,63 @@ namespace Alexantr.SimpleVideoConverter
             FillComboBoxAspectRatio(original);
         }
 
+        private void CheckVideoModeRadioButtons()
+        {
+            trackBarCRF.Enabled = radioButtonCRF.Checked;
+            labelMaxQ.Enabled = radioButtonCRF.Checked;
+            labelMinQ.Enabled = radioButtonCRF.Checked;
+
+            numericUpDownBitrate.Enabled = radioButtonBitrate.Checked;
+            labelVideoKbps.Enabled = radioButtonBitrate.Checked;
+
+            if (radioButtonCRF.Checked)
+            {
+                Properties.Settings.Default.EncodeMode = encodeMode = EncodeModeCRF;
+            }
+
+            if (radioButtonBitrate.Checked)
+            {
+                Properties.Settings.Default.EncodeMode = encodeMode = EncodeModeBitrate;
+            }
+        }
+
+        private void CalcFileSize()
+        {
+            if (videoFile == null || !radioButtonBitrate.Checked)
+            {
+                labelCalcSize.Text = "-";
+                labelCalcSize.Visible = false;
+                labelCalcSizeText.Visible = false;
+                return;
+            }
+
+            labelCalcSize.Visible = true;
+            labelCalcSizeText.Visible = true;
+
+            double duration = videoFile.Duration.TotalMilliseconds / 1000;
+
+            List<int> selectedAudioList = new List<int>();
+            foreach (int checkedIndex in checkedListBoxAudioStreams.CheckedIndices)
+            {
+                selectedAudioList.Add(checkedIndex);
+            }
+
+            int.TryParse(((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value, out int audioBitrate);
+            int videoBitrate = (int)Math.Round(numericUpDownBitrate.Value, 0);
+
+            double fileSize = ((double)videoBitrate * duration / 8.0 + (double)audioBitrate * duration * (double)selectedAudioList.Count / 8.0) / 1024.0; // MiB
+
+            string sizeString;
+            if (fileSize >= 1)
+                sizeString = $"~{Math.Round(fileSize, 0)} МБ";
+            else
+                sizeString = "меньше 1 МБ";
+
+            Console.WriteLine(sizeString);
+
+            labelCalcSize.Text = sizeString;
+        }
+
         private void SetInfo()
         {
             VideoStream stream = videoFile.VideoStreams[0];
@@ -1194,34 +1276,6 @@ namespace Alexantr.SimpleVideoConverter
             info.AppendLine("Видеокодек: " + stream.CodecName.ToUpper());
 
             fileInfo = info.ToString().TrimEnd();
-        }
-
-        private void FillAudioStreams()
-        {
-            checkedListBoxAudioStreams.Items.Clear();
-
-            bool isChecked = true;
-
-            foreach (AudioStream stream in videoFile.AudioStreams)
-            {
-                double.TryParse(stream.SampleRate, out double sr);
-
-                StringBuilder audio = new StringBuilder();
-
-                audio.Append(stream.CodecName.ToUpper());
-                if (stream.BitRate > 0)
-                    audio.Append($" {stream.BitRate}kbps");
-                audio.Append($" {stream.Channels}ch");
-                if (sr > 0)
-                    audio.Append(" " + Math.Round(sr / 1000, 1).ToString() + "kHz");
-                if (!string.IsNullOrWhiteSpace(stream.Language) && stream.Language != "und")
-                    audio.Append($" ({stream.Language})");
-
-                checkedListBoxAudioStreams.Items.Add(audio.ToString(), isChecked);
-
-                if (isChecked)
-                    isChecked = false;
-            }
         }
 
         private string GetTempFile()
