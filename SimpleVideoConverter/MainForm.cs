@@ -64,6 +64,8 @@ namespace Alexantr.SimpleVideoConverter
 
         private TaskbarManager taskbarManager;
 
+        private string formTitle;
+
         #region Main Form
 
         public MainForm()
@@ -113,16 +115,17 @@ namespace Alexantr.SimpleVideoConverter
             };
 
             // see https://superuser.com/questions/375718/which-resize-algorithm-to-choose-for-videos
+            // see http://www.thnsolutions.com/technology/sunfire/graphic/image.html
             // need to create window with image
             scalingAlgorithmList = new Dictionary<string, string>
             {
                 { "neighbor", "Nearest Neighbor" },
                 { "bilinear", "Bilinear" },
                 { "bicubic", "Bicubic" },
-                { "gauss", "Gaussian" },
+                //{ "spline", "Spline" },
                 { "lanczos", "Lanczos" },
                 { "sinc", "Sinc" },
-                { "spline", "Spline" }
+                { "gauss", "Gaussian" },
             };
 
             resizePresetList = new Dictionary<string, string>
@@ -176,6 +179,8 @@ namespace Alexantr.SimpleVideoConverter
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            formTitle = Text;
+
             buttonGo.Enabled = false;
             buttonShowInfo.Enabled = false;
             buttonOpenInputFile.Enabled = false;
@@ -247,15 +252,15 @@ namespace Alexantr.SimpleVideoConverter
 
             // Scaling algorithm
             int selectedScalingAlgorithm = 0, indexScalingAlgorithm = 0;
-            comboBoxScalingAlgorithm.Items.Clear();
+            comboBoxResizeMethod.Items.Clear();
             foreach (KeyValuePair<string, string> scm in scalingAlgorithmList)
             {
-                comboBoxScalingAlgorithm.Items.Add(new ComboBoxItem(scm.Key, scm.Value));
+                comboBoxResizeMethod.Items.Add(new ComboBoxItem(scm.Key, scm.Value));
                 if (scm.Key == "lanczos")
                     selectedScalingAlgorithm = indexScalingAlgorithm;
                 indexScalingAlgorithm++;
             }
-            comboBoxScalingAlgorithm.SelectedIndex = selectedScalingAlgorithm;
+            comboBoxResizeMethod.SelectedIndex = selectedScalingAlgorithm;
 
             // Color filter
             comboBoxColorFilter.Items.Clear();
@@ -535,6 +540,11 @@ namespace Alexantr.SimpleVideoConverter
             FillComboBoxResizePreset();
         }
 
+        private void buttonResizeMethodHelp_Click(object sender, EventArgs e)
+        {
+
+        }
+
         #endregion
 
         #region Crop
@@ -693,11 +703,14 @@ namespace Alexantr.SimpleVideoConverter
                 cropSize.Height = 0;
                 CalcFileSize();
                 ShowHideTabs();
+                Text = formTitle;
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 return;
             }
 
             ShowHideTabs();
+
+            Text = Path.GetFileName(path) + " - " + formTitle;
 
             textBoxIn.Text = path;
 
@@ -857,7 +870,7 @@ namespace Alexantr.SimpleVideoConverter
             int width = (int)Math.Round(numericUpDownWidth.Value, 0);
             int height = (int)Math.Round(numericUpDownHeight.Value, 0);
 
-            string scalingAlgorithm = ((ComboBoxItem)comboBoxScalingAlgorithm.SelectedItem).Value;
+            string resizeMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
             string colorFilter = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Value;
             string fieldOrder = ((ComboBoxItem)comboBoxFieldOrder.SelectedItem).Value;
             string frameRate = ((ComboBoxItem)comboBoxFrameRate.SelectedItem).Value;
@@ -1001,7 +1014,7 @@ namespace Alexantr.SimpleVideoConverter
             if (checkBoxResizePicture.Checked)
             {
                 // https://www.ffmpeg.org/ffmpeg-scaler.html#sws_005fflags
-                filters.Add($"scale={width}x{height}:flags={scalingAlgorithm},setsar=1:1");
+                filters.Add($"scale={width}x{height}:flags={resizeMethod},setsar=1:1");
             }
 
             if (colorFilter == "gray")
@@ -1324,7 +1337,7 @@ namespace Alexantr.SimpleVideoConverter
             int.TryParse(((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value, out int audioBitrate);
             int videoBitrate = (int)Math.Round(numericUpDownBitrate.Value, 0);
 
-            double fileSize = ((double)videoBitrate * duration / 8.0 + (double)audioBitrate * duration * (double)selectedAudioList.Count / 8.0) / 1024.0; // MiB
+            double fileSize = (videoBitrate * duration / 8.0 + audioBitrate * duration * selectedAudioList.Count / 8.0) / 1024.0; // MiB
 
             string sizeString;
             if (fileSize >= 1)

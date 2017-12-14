@@ -75,8 +75,8 @@
             this.numericCropTop = new System.Windows.Forms.NumericUpDown();
             this.labelCrop = new System.Windows.Forms.Label();
             this.panelResolution = new System.Windows.Forms.Panel();
-            this.labelScalingAlgorithm = new System.Windows.Forms.Label();
-            this.comboBoxScalingAlgorithm = new System.Windows.Forms.ComboBox();
+            this.labelResizeMethod = new System.Windows.Forms.Label();
+            this.comboBoxResizeMethod = new System.Windows.Forms.ComboBox();
             this.comboBoxResizePreset = new System.Windows.Forms.ComboBox();
             this.tabPageFilters = new System.Windows.Forms.TabPage();
             this.panelFilters = new System.Windows.Forms.Panel();
@@ -107,6 +107,7 @@
             this.labelAudioKbps = new System.Windows.Forms.Label();
             this.buttonAbout = new System.Windows.Forms.Button();
             this.toolTipHint = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonResizeMethodHelp = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBitrate)).BeginInit();
@@ -624,8 +625,9 @@
             // 
             // panelResolution
             // 
-            this.panelResolution.Controls.Add(this.labelScalingAlgorithm);
-            this.panelResolution.Controls.Add(this.comboBoxScalingAlgorithm);
+            this.panelResolution.Controls.Add(this.buttonResizeMethodHelp);
+            this.panelResolution.Controls.Add(this.labelResizeMethod);
+            this.panelResolution.Controls.Add(this.comboBoxResizeMethod);
             this.panelResolution.Controls.Add(this.comboBoxResizePreset);
             this.panelResolution.Controls.Add(this.pictureBoxRatioError);
             this.panelResolution.Controls.Add(this.checkBoxResizePicture);
@@ -639,23 +641,23 @@
             this.panelResolution.Size = new System.Drawing.Size(271, 157);
             this.panelResolution.TabIndex = 8;
             // 
-            // labelScalingAlgorithm
+            // labelResizeMethod
             // 
-            this.labelScalingAlgorithm.AutoSize = true;
-            this.labelScalingAlgorithm.Location = new System.Drawing.Point(3, 136);
-            this.labelScalingAlgorithm.Name = "labelScalingAlgorithm";
-            this.labelScalingAlgorithm.Size = new System.Drawing.Size(83, 13);
-            this.labelScalingAlgorithm.TabIndex = 21;
-            this.labelScalingAlgorithm.Text = "Метод ресайза";
+            this.labelResizeMethod.AutoSize = true;
+            this.labelResizeMethod.Location = new System.Drawing.Point(3, 136);
+            this.labelResizeMethod.Name = "labelResizeMethod";
+            this.labelResizeMethod.Size = new System.Drawing.Size(83, 13);
+            this.labelResizeMethod.TabIndex = 21;
+            this.labelResizeMethod.Text = "Метод ресайза";
             // 
-            // comboBoxScalingAlgorithm
+            // comboBoxResizeMethod
             // 
-            this.comboBoxScalingAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxScalingAlgorithm.FormattingEnabled = true;
-            this.comboBoxScalingAlgorithm.Location = new System.Drawing.Point(92, 133);
-            this.comboBoxScalingAlgorithm.Name = "comboBoxScalingAlgorithm";
-            this.comboBoxScalingAlgorithm.Size = new System.Drawing.Size(110, 21);
-            this.comboBoxScalingAlgorithm.TabIndex = 20;
+            this.comboBoxResizeMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxResizeMethod.FormattingEnabled = true;
+            this.comboBoxResizeMethod.Location = new System.Drawing.Point(92, 133);
+            this.comboBoxResizeMethod.Name = "comboBoxResizeMethod";
+            this.comboBoxResizeMethod.Size = new System.Drawing.Size(110, 21);
+            this.comboBoxResizeMethod.TabIndex = 20;
             // 
             // comboBoxResizePreset
             // 
@@ -959,6 +961,17 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
+            // buttonResizeMethodHelp
+            // 
+            this.buttonResizeMethodHelp.Location = new System.Drawing.Point(208, 132);
+            this.buttonResizeMethodHelp.Name = "buttonResizeMethodHelp";
+            this.buttonResizeMethodHelp.Size = new System.Drawing.Size(23, 23);
+            this.buttonResizeMethodHelp.TabIndex = 22;
+            this.buttonResizeMethodHelp.Text = "?";
+            this.toolTipHint.SetToolTip(this.buttonResizeMethodHelp, "Подробнее о методах ресайза");
+            this.buttonResizeMethodHelp.UseVisualStyleBackColor = true;
+            this.buttonResizeMethodHelp.Click += new System.EventHandler(this.buttonResizeMethodHelp_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1090,8 +1103,9 @@
         private System.Windows.Forms.Label labelAudioHz;
         private System.Windows.Forms.Label labelAudioKbps;
         private System.Windows.Forms.ComboBox comboBoxResizePreset;
-        private System.Windows.Forms.Label labelScalingAlgorithm;
-        private System.Windows.Forms.ComboBox comboBoxScalingAlgorithm;
+        private System.Windows.Forms.Label labelResizeMethod;
+        private System.Windows.Forms.ComboBox comboBoxResizeMethod;
+        private System.Windows.Forms.Button buttonResizeMethodHelp;
     }
 }
 
