@@ -245,7 +245,9 @@ namespace Alexantr.SimpleVideoConverter
             ManageCheckPanel(checkBoxDeinterlace, panelDeinterlace);
 
             // Resize picture
-            ManageCheckPanel(checkBoxResizePicture, panelResolution);
+            //ManageCheckPanel(checkBoxResizePicture, panelResolution);
+            numericUpDownWidth.Enabled = checkBoxResizePicture.Checked;
+            numericUpDownHeight.Enabled = checkBoxResizePicture.Checked;
 
             // Resize presets
             FillComboBoxResizePreset(true);
@@ -478,7 +480,9 @@ namespace Alexantr.SimpleVideoConverter
 
         private void checkBoxResizePicture_CheckedChanged(object sender, EventArgs e)
         {
-            ManageCheckPanel(checkBoxResizePicture, panelResolution);
+            //ManageCheckPanel(checkBoxResizePicture, panelResolution);
+            numericUpDownWidth.Enabled = checkBoxResizePicture.Checked;
+            numericUpDownHeight.Enabled = checkBoxResizePicture.Checked && !checkBoxKeepAspectRatio.Checked;
             UpdateHeigth();
         }
 
@@ -504,7 +508,7 @@ namespace Alexantr.SimpleVideoConverter
         {
             doNotCheckKeepARAgain = !checkBoxKeepAspectRatio.Checked;
             comboBoxAspectRatio.Enabled = checkBoxKeepAspectRatio.Checked;
-            numericUpDownHeight.Enabled = !checkBoxKeepAspectRatio.Checked;
+            numericUpDownHeight.Enabled = !checkBoxKeepAspectRatio.Checked && checkBoxResizePicture.Checked;
             UpdateHeigth();
         }
 
@@ -655,14 +659,12 @@ namespace Alexantr.SimpleVideoConverter
             if (videoFile == null)
             {
                 tabPagePicture.Parent = null;
-                tabPageFilters.Parent = null;
                 tabPageVideo.Parent = null;
                 tabPageAudio.Parent = null;
             }
             else
             {
                 tabPagePicture.Parent = tabControlMain;
-                tabPageFilters.Parent = tabControlMain;
                 tabPageVideo.Parent = tabControlMain;
                 tabPageAudio.Parent = tabControlMain;
             }
