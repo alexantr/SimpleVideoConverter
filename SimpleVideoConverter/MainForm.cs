@@ -540,11 +540,6 @@ namespace Alexantr.SimpleVideoConverter
             FillComboBoxResizePreset();
         }
 
-        private void buttonResizeMethodHelp_Click(object sender, EventArgs e)
-        {
-
-        }
-
         #endregion
 
         #region Crop
@@ -1409,5 +1404,10 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         #endregion
+
+        private void buttonResizeMethodHelp_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

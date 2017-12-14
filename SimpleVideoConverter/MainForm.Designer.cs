@@ -107,7 +107,6 @@
             this.labelAudioKbps = new System.Windows.Forms.Label();
             this.buttonAbout = new System.Windows.Forms.Button();
             this.toolTipHint = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonResizeMethodHelp = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBitrate)).BeginInit();
@@ -625,7 +624,6 @@
             // 
             // panelResolution
             // 
-            this.panelResolution.Controls.Add(this.buttonResizeMethodHelp);
             this.panelResolution.Controls.Add(this.labelResizeMethod);
             this.panelResolution.Controls.Add(this.comboBoxResizeMethod);
             this.panelResolution.Controls.Add(this.comboBoxResizePreset);
@@ -961,17 +959,6 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
-            // buttonResizeMethodHelp
-            // 
-            this.buttonResizeMethodHelp.Location = new System.Drawing.Point(208, 132);
-            this.buttonResizeMethodHelp.Name = "buttonResizeMethodHelp";
-            this.buttonResizeMethodHelp.Size = new System.Drawing.Size(23, 23);
-            this.buttonResizeMethodHelp.TabIndex = 22;
-            this.buttonResizeMethodHelp.Text = "?";
-            this.toolTipHint.SetToolTip(this.buttonResizeMethodHelp, "Подробнее о методах ресайза");
-            this.buttonResizeMethodHelp.UseVisualStyleBackColor = true;
-            this.buttonResizeMethodHelp.Click += new System.EventHandler(this.buttonResizeMethodHelp_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1105,7 +1092,6 @@
         private System.Windows.Forms.ComboBox comboBoxResizePreset;
         private System.Windows.Forms.Label labelResizeMethod;
         private System.Windows.Forms.ComboBox comboBoxResizeMethod;
-        private System.Windows.Forms.Button buttonResizeMethodHelp;
     }
 }
 
