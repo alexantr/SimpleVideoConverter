@@ -31,7 +31,10 @@ namespace Alexantr.SimpleVideoConverter
 
         private const int MinBitrate = 100;
         private const int MaxBitrate = 50000;
-        private const int DefaultBitrate = 2000;
+        private const int DefaultBitrate = 3000;
+
+        private const int DefaultMp4CRF = 20;
+        private const int DefaultWebmCRF = 35;
 
         private const int MinAudioBitrate = 8;
         private const int MaxAudioBitrate = 320;
@@ -434,7 +437,7 @@ namespace Alexantr.SimpleVideoConverter
             if (trackBarCRF.Value > maxValue)
                 trackBarCRF.Value = maxValue;
             trackBarCRF.Maximum = maxValue;
-            trackBarCRF.Value = (fileType == FileTypeMP4) ? 23 : 35;
+            trackBarCRF.Value = (fileType == FileTypeMP4) ? DefaultMp4CRF : DefaultWebmCRF;
         }
 
         private void radioButtonCRF_CheckedChanged(object sender, EventArgs e)
