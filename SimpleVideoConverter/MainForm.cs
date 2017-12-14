@@ -43,9 +43,13 @@ namespace Alexantr.SimpleVideoConverter
 
         private Dictionary<string, string> frameRateList;
 
-        private Dictionary<string, string> fieldOrderList;
+        private Dictionary<string, string> resizePresetList;
 
         private List<string> aspectRatioList;
+        private Dictionary<string, string> scalingAlgorithmList;
+
+        private Dictionary<string, string> fieldOrderList;
+
         private Dictionary<string, string> colorFilterList;
 
         private PictureSize cropSize;
@@ -106,6 +110,28 @@ namespace Alexantr.SimpleVideoConverter
                 "1.85",
                 "2.35",
                 "2.39"
+            };
+
+            // see https://superuser.com/questions/375718/which-resize-algorithm-to-choose-for-videos
+            // need to create window with image
+            scalingAlgorithmList = new Dictionary<string, string>
+            {
+                { "neighbor", "Nearest Neighbor" },
+                { "bilinear", "Bilinear" },
+                { "bicubic", "Bicubic" },
+                { "gauss", "Gaussian" },
+                { "lanczos", "Lanczos" },
+                { "sinc", "Sinc" },
+                { "spline", "Spline" }
+            };
+
+            resizePresetList = new Dictionary<string, string>
+            {
+                { "1920x1080", "1080p" },
+                { "1280x720", "720p" },
+                { "1024x576", "576p" },
+                { "854x480", "480p" },
+                { "640x360", "360p" }
             };
 
             colorFilterList = new Dictionary<string, string>
@@ -213,8 +239,23 @@ namespace Alexantr.SimpleVideoConverter
             // Resize picture
             ManageCheckPanel(checkBoxResizePicture, panelResolution);
 
+            // Resize presets
+            FillComboBoxResizePreset(true);
+
             // Aspect ratio
             FillComboBoxAspectRatio("");
+
+            // Scaling algorithm
+            int selectedScalingAlgorithm = 0, indexScalingAlgorithm = 0;
+            comboBoxScalingAlgorithm.Items.Clear();
+            foreach (KeyValuePair<string, string> scm in scalingAlgorithmList)
+            {
+                comboBoxScalingAlgorithm.Items.Add(new ComboBoxItem(scm.Key, scm.Value));
+                if (scm.Key == "lanczos")
+                    selectedScalingAlgorithm = indexScalingAlgorithm;
+                indexScalingAlgorithm++;
+            }
+            comboBoxScalingAlgorithm.SelectedIndex = selectedScalingAlgorithm;
 
             // Color filter
             comboBoxColorFilter.Items.Clear();
@@ -262,6 +303,8 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxChannels.SelectedIndex = 0;
 
             checkBoxKeepOutPath.Checked = Properties.Settings.Default.RememberOutPath;
+
+            ShowHideTabs();
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -467,54 +510,29 @@ namespace Alexantr.SimpleVideoConverter
             UpdateHeigth();
         }
 
-        private void buttonResizeOriginal_Click(object sender, EventArgs e)
+        private void comboBoxResizePreset_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (videoFile == null)
                 return;
-            int w = cropSize.Width;
-            ResizeFromPreset(w, 0);
-        }
-
-        private void buttonResize1080p_Click(object sender, EventArgs e)
-        {
-            if (videoFile == null)
-                return;
-            ResizeFromPreset(1920, 1080);
-        }
-
-        private void buttonResize720p_Click(object sender, EventArgs e)
-        {
-            if (videoFile == null)
-                return;
-            ResizeFromPreset(1280, 720);
-        }
-
-        private void buttonResize480p_Click(object sender, EventArgs e)
-        {
-            if (videoFile == null)
-                return;
-            ResizeFromPreset(854, 480);
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (videoFile == null)
-                return;
-            ResizeFromPreset(640, 360);
-        }
-
-        private void ResizeFromPreset(int w, int h = 0)
-        {
-            if (w > MaxWidth)
-                w = MaxWidth;
-            if (w < MinWidth)
-                w = MinWidth;
-            numericUpDownWidth.Value = w;
-
-            if (h > 0)
-                UpdateHeigth(true, h);
+            string size = ((ComboBoxItem)comboBoxResizePreset.SelectedItem).Value;
+            if (string.IsNullOrWhiteSpace(size))
+            {
+                int w = cropSize.Width;
+                ResizeFromPreset(w, 0);
+            }
             else
-                UpdateHeigth(true);
+            {
+                string[] wh = size.Split('x');
+                if (wh.Length == 2)
+                {
+                    int.TryParse(wh[0], out int w);
+                    int.TryParse(wh[1], out int h);
+                    if (w > 0 && h > 0)
+                        ResizeFromPreset(w, h);
+                }
+            }
+            // force reset
+            FillComboBoxResizePreset();
         }
 
         #endregion
@@ -624,6 +642,24 @@ namespace Alexantr.SimpleVideoConverter
 
         #region Functions
 
+        private void ShowHideTabs()
+        {
+            if (videoFile == null)
+            {
+                tabPagePicture.Parent = null;
+                tabPageFilters.Parent = null;
+                tabPageVideo.Parent = null;
+                tabPageAudio.Parent = null;
+            }
+            else
+            {
+                tabPagePicture.Parent = tabControlMain;
+                tabPageFilters.Parent = tabControlMain;
+                tabPageVideo.Parent = tabControlMain;
+                tabPageAudio.Parent = tabControlMain;
+            }
+        }
+
         private void ChangeOutExtension()
         {
             if (!string.IsNullOrWhiteSpace(textBoxOut.Text))
@@ -656,9 +692,12 @@ namespace Alexantr.SimpleVideoConverter
                 cropSize.Width = 0;
                 cropSize.Height = 0;
                 CalcFileSize();
+                ShowHideTabs();
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 return;
             }
+
+            ShowHideTabs();
 
             textBoxIn.Text = path;
 
@@ -818,14 +857,15 @@ namespace Alexantr.SimpleVideoConverter
             int width = (int)Math.Round(numericUpDownWidth.Value, 0);
             int height = (int)Math.Round(numericUpDownHeight.Value, 0);
 
-            string frameRate = ((ComboBoxItem)comboBoxFrameRate.SelectedItem).Value;
+            string scalingAlgorithm = ((ComboBoxItem)comboBoxScalingAlgorithm.SelectedItem).Value;
+            string colorFilter = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Value;
             string fieldOrder = ((ComboBoxItem)comboBoxFieldOrder.SelectedItem).Value;
+            string frameRate = ((ComboBoxItem)comboBoxFrameRate.SelectedItem).Value;
 
             int.TryParse(((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value, out int audioBitrate);
             string audioChannels = ((ComboBoxItem)comboBoxChannels.SelectedItem).Value;
             string audioFrequency = ((ComboBoxItem)comboBoxFrequency.SelectedItem).Value;
-            string colorFilter = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Value;
-
+            
             int videoBitrate = (int)Math.Round(numericUpDownBitrate.Value, 0);
             int crf = trackBarCRF.Value;
 
@@ -961,7 +1001,7 @@ namespace Alexantr.SimpleVideoConverter
             if (checkBoxResizePicture.Checked)
             {
                 // https://www.ffmpeg.org/ffmpeg-scaler.html#sws_005fflags
-                filters.Add($"scale={width}x{height}:flags=lanczos,setsar=1:1");
+                filters.Add($"scale={width}x{height}:flags={scalingAlgorithm},setsar=1:1");
             }
 
             if (colorFilter == "gray")
@@ -1078,24 +1118,47 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxAspectRatio.SelectedIndex = prevIndex > 0 ? prevIndex : 0;
         }
 
+        private void FillComboBoxResizePreset(bool initial = false)
+        {
+            if (comboBoxResizePreset.SelectedIndex == -1 && !initial)
+                return;
+            comboBoxResizePreset.Items.Clear();
+            comboBoxResizePreset.Items.Add(new ComboBoxItem(string.Empty, "Оригинал"));
+            foreach (KeyValuePair<string, string> resPres in resizePresetList)
+            {
+                comboBoxResizePreset.Items.Add(new ComboBoxItem(resPres.Key, resPres.Value));
+            }
+        }
+
         private void FillAudioStreams()
         {
             checkedListBoxAudioStreams.Items.Clear();
+
+            if (videoFile.AudioStreams.Count == 0)
+            {
+                tabPageAudio.Parent = null;
+                return;
+            }
+            else
+            {
+                tabPageAudio.Parent = tabControlMain;
+            }
 
             bool isChecked = true;
 
             foreach (AudioStream stream in videoFile.AudioStreams)
             {
-                double.TryParse(stream.SampleRate, out double sr);
-
                 StringBuilder audio = new StringBuilder();
 
                 audio.Append(stream.CodecName.ToUpper());
                 if (stream.BitRate > 0)
                     audio.Append($" {stream.BitRate}kbps");
-                audio.Append($" {stream.Channels}ch");
-                if (sr > 0)
-                    audio.Append(" " + Math.Round(sr / 1000, 1).ToString() + "kHz");
+                if (!string.IsNullOrWhiteSpace(stream.ChannelLayout))
+                    audio.Append($" {stream.ChannelLayout}");
+                else
+                    audio.Append($" {stream.Channels}ch");
+                if (!string.IsNullOrWhiteSpace(stream.SampleRate))
+                    audio.Append($" {stream.SampleRate}Hz");
                 if (!string.IsNullOrWhiteSpace(stream.Language) && stream.Language != "und")
                     audio.Append($" ({stream.Language})");
 
@@ -1104,6 +1167,20 @@ namespace Alexantr.SimpleVideoConverter
                 if (isChecked)
                     isChecked = false;
             }
+        }
+
+        private void ResizeFromPreset(int w, int h = 0)
+        {
+            if (w > MaxWidth)
+                w = MaxWidth;
+            if (w < MinWidth)
+                w = MinWidth;
+            numericUpDownWidth.Value = w;
+
+            if (h > 0)
+                UpdateHeigth(true, h);
+            else
+                UpdateHeigth(true);
         }
 
         private void UpdateHeigth(bool forceUpdateHeight = false, int maxHeight = MaxHeight)
@@ -1255,8 +1332,6 @@ namespace Alexantr.SimpleVideoConverter
             else
                 sizeString = "меньше 1 МБ";
 
-            Console.WriteLine(sizeString);
-
             labelCalcSize.Text = sizeString;
         }
 
@@ -1266,14 +1341,17 @@ namespace Alexantr.SimpleVideoConverter
 
             StringBuilder info = new StringBuilder();
 
-            info.AppendLine("Формат: " + videoFile.Format);
-            info.AppendLine("Размер файла: " + Utility.FormatFileSize(videoFile.FileSize));
-            info.AppendLine("Длительность: " + (new TimeSpan((long)videoFile.Duration.TotalMilliseconds * 10000L).ToString("hh\\:mm\\:ss")));
-            info.AppendLine("Битрейт: " + videoFile.BitRate + " kbps");
-            info.AppendLine("Разрешение: " + (stream.PictureSize.ToString() + (stream.UsingDAR ? " (" + stream.OriginalSize.ToString() + ")" : "")));
-            info.AppendLine("Частота кадров: " + stream.FrameRate + " fps");
-            info.AppendLine("Развертка: " + (stream.FieldOrder == "progressive" ? "прогрессивная" : "чересстрочная"));
-            info.AppendLine("Видеокодек: " + stream.CodecName.ToUpper());
+            string dur = new TimeSpan((long)videoFile.Duration.TotalMilliseconds * 10000L).ToString("hh\\:mm\\:ss\\.fff");
+
+            info.AppendLine($"Формат: {videoFile.Format}");
+            info.AppendLine($"Размер файла: {Utility.FormatFileSize(videoFile.FileSize)}");
+            info.AppendLine($"Длительность: {dur}");
+            info.AppendLine($"Битрейт: {videoFile.BitRate} kbps");
+            info.AppendLine($"Разрешение: {stream.PictureSize.ToString()}{(stream.UsingDAR ? " (исх.: " + stream.OriginalSize.ToString() + ")" : "")}");
+            info.AppendLine($"Частота кадров: {stream.FrameRate} fps");
+            info.AppendLine($"Развертка: {(stream.FieldOrder == "progressive" ? "прогрессивная" : "чересстрочная")}");
+            info.AppendLine($"Видеокодек: {stream.CodecName.ToUpper()}");
+            info.AppendLine($"Дорожки аудио: {(videoFile.AudioStreams.Count > 0 ? videoFile.AudioStreams.Count.ToString() : "нет")}");
 
             fileInfo = info.ToString().TrimEnd();
         }

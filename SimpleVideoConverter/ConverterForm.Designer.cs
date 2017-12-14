@@ -42,12 +42,12 @@
             this.progressBarEncoding.Location = new System.Drawing.Point(6, 6);
             this.progressBarEncoding.Maximum = 1000;
             this.progressBarEncoding.Name = "progressBarEncoding";
-            this.progressBarEncoding.Size = new System.Drawing.Size(602, 30);
+            this.progressBarEncoding.Size = new System.Drawing.Size(592, 30);
             this.progressBarEncoding.TabIndex = 4;
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(498, 42);
+            this.buttonCancel.Location = new System.Drawing.Point(488, 42);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(110, 27);
             this.buttonCancel.TabIndex = 0;
@@ -57,7 +57,7 @@
             // 
             // buttonPlay
             // 
-            this.buttonPlay.Location = new System.Drawing.Point(382, 42);
+            this.buttonPlay.Location = new System.Drawing.Point(372, 42);
             this.buttonPlay.Name = "buttonPlay";
             this.buttonPlay.Size = new System.Drawing.Size(110, 27);
             this.buttonPlay.TabIndex = 1;
@@ -72,7 +72,7 @@
             this.richTextBoxOutput.Location = new System.Drawing.Point(6, 76);
             this.richTextBoxOutput.Name = "richTextBoxOutput";
             this.richTextBoxOutput.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.richTextBoxOutput.Size = new System.Drawing.Size(602, 279);
+            this.richTextBoxOutput.Size = new System.Drawing.Size(592, 279);
             this.richTextBoxOutput.TabIndex = 3;
             this.richTextBoxOutput.Text = "";
             this.richTextBoxOutput.TextChanged += new System.EventHandler(this.richTextBoxOutput_TextChanged);
@@ -88,7 +88,7 @@
             // 
             // buttonToggleLog
             // 
-            this.buttonToggleLog.Location = new System.Drawing.Point(321, 42);
+            this.buttonToggleLog.Location = new System.Drawing.Point(311, 42);
             this.buttonToggleLog.Name = "buttonToggleLog";
             this.buttonToggleLog.Size = new System.Drawing.Size(55, 27);
             this.buttonToggleLog.TabIndex = 2;
@@ -100,7 +100,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(614, 361);
+            this.ClientSize = new System.Drawing.Size(604, 361);
             this.Controls.Add(this.buttonToggleLog);
             this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.richTextBoxOutput);

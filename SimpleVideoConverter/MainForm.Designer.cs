@@ -75,10 +75,9 @@
             this.numericCropTop = new System.Windows.Forms.NumericUpDown();
             this.labelCrop = new System.Windows.Forms.Label();
             this.panelResolution = new System.Windows.Forms.Panel();
-            this.buttonResize480p = new System.Windows.Forms.Button();
-            this.buttonResize720p = new System.Windows.Forms.Button();
-            this.buttonResize1080p = new System.Windows.Forms.Button();
-            this.buttonResizeOriginal = new System.Windows.Forms.Button();
+            this.labelScalingAlgorithm = new System.Windows.Forms.Label();
+            this.comboBoxScalingAlgorithm = new System.Windows.Forms.ComboBox();
+            this.comboBoxResizePreset = new System.Windows.Forms.ComboBox();
             this.tabPageFilters = new System.Windows.Forms.TabPage();
             this.panelFilters = new System.Windows.Forms.Panel();
             this.labelColorFilter = new System.Windows.Forms.Label();
@@ -89,23 +88,25 @@
             this.comboBoxFieldOrder = new System.Windows.Forms.ComboBox();
             this.tabPageVideo = new System.Windows.Forms.TabPage();
             this.panelVideo = new System.Windows.Forms.Panel();
+            this.labelCalcSize = new System.Windows.Forms.Label();
+            this.labelCalcSizeText = new System.Windows.Forms.Label();
+            this.labelVideoKbps = new System.Windows.Forms.Label();
+            this.labelMinQ = new System.Windows.Forms.Label();
+            this.labelMaxQ = new System.Windows.Forms.Label();
+            this.labelCRF = new System.Windows.Forms.Label();
+            this.radioButtonBitrate = new System.Windows.Forms.RadioButton();
+            this.radioButtonCRF = new System.Windows.Forms.RadioButton();
+            this.trackBarCRF = new System.Windows.Forms.TrackBar();
             this.panelVideoParams = new System.Windows.Forms.Panel();
             this.buttonVideoAdvanced = new System.Windows.Forms.Button();
             this.tabPageAudio = new System.Windows.Forms.TabPage();
             this.panelAudioStreams = new System.Windows.Forms.Panel();
+            this.labelSelectStreams = new System.Windows.Forms.Label();
             this.panelAudioParams = new System.Windows.Forms.Panel();
+            this.labelAudioHz = new System.Windows.Forms.Label();
+            this.labelAudioKbps = new System.Windows.Forms.Label();
             this.buttonAbout = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.toolTipHint = new System.Windows.Forms.ToolTip(this.components);
-            this.trackBarCRF = new System.Windows.Forms.TrackBar();
-            this.radioButtonCRF = new System.Windows.Forms.RadioButton();
-            this.radioButtonBitrate = new System.Windows.Forms.RadioButton();
-            this.labelCRF = new System.Windows.Forms.Label();
-            this.labelMaxQ = new System.Windows.Forms.Label();
-            this.labelMinQ = new System.Windows.Forms.Label();
-            this.labelVideoKbps = new System.Windows.Forms.Label();
-            this.labelCalcSizeText = new System.Windows.Forms.Label();
-            this.labelCalcSize = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBitrate)).BeginInit();
@@ -125,11 +126,11 @@
             this.panelDeinterlace.SuspendLayout();
             this.tabPageVideo.SuspendLayout();
             this.panelVideo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarCRF)).BeginInit();
             this.panelVideoParams.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioStreams.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarCRF)).BeginInit();
             this.SuspendLayout();
             // 
             // textBoxOut
@@ -217,7 +218,7 @@
             // 
             // numericUpDownBitrate
             // 
-            this.numericUpDownBitrate.Location = new System.Drawing.Point(77, 92);
+            this.numericUpDownBitrate.Location = new System.Drawing.Point(77, 95);
             this.numericUpDownBitrate.Name = "numericUpDownBitrate";
             this.numericUpDownBitrate.Size = new System.Drawing.Size(80, 21);
             this.numericUpDownBitrate.TabIndex = 5;
@@ -265,7 +266,7 @@
             // comboBoxAudioBitrate
             // 
             this.comboBoxAudioBitrate.FormattingEnabled = true;
-            this.comboBoxAudioBitrate.Location = new System.Drawing.Point(161, 6);
+            this.comboBoxAudioBitrate.Location = new System.Drawing.Point(138, 22);
             this.comboBoxAudioBitrate.Name = "comboBoxAudioBitrate";
             this.comboBoxAudioBitrate.Size = new System.Drawing.Size(80, 21);
             this.comboBoxAudioBitrate.TabIndex = 1;
@@ -274,16 +275,16 @@
             // labelAudioBitrate
             // 
             this.labelAudioBitrate.AutoSize = true;
-            this.labelAudioBitrate.Location = new System.Drawing.Point(3, 9);
+            this.labelAudioBitrate.Location = new System.Drawing.Point(3, 25);
             this.labelAudioBitrate.Name = "labelAudioBitrate";
-            this.labelAudioBitrate.Size = new System.Drawing.Size(93, 13);
+            this.labelAudioBitrate.Size = new System.Drawing.Size(49, 13);
             this.labelAudioBitrate.TabIndex = 0;
-            this.labelAudioBitrate.Text = "Битрейт (кбит/с)";
+            this.labelAudioBitrate.Text = "Битрейт";
             // 
             // labelChannels
             // 
             this.labelChannels.AutoSize = true;
-            this.labelChannels.Location = new System.Drawing.Point(3, 68);
+            this.labelChannels.Location = new System.Drawing.Point(3, 89);
             this.labelChannels.Name = "labelChannels";
             this.labelChannels.Size = new System.Drawing.Size(112, 13);
             this.labelChannels.TabIndex = 4;
@@ -293,7 +294,7 @@
             // 
             this.comboBoxChannels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxChannels.FormattingEnabled = true;
-            this.comboBoxChannels.Location = new System.Drawing.Point(161, 65);
+            this.comboBoxChannels.Location = new System.Drawing.Point(138, 86);
             this.comboBoxChannels.Name = "comboBoxChannels";
             this.comboBoxChannels.Size = new System.Drawing.Size(80, 21);
             this.comboBoxChannels.TabIndex = 5;
@@ -301,17 +302,17 @@
             // labelFrequency
             // 
             this.labelFrequency.AutoSize = true;
-            this.labelFrequency.Location = new System.Drawing.Point(3, 41);
+            this.labelFrequency.Location = new System.Drawing.Point(3, 57);
             this.labelFrequency.Name = "labelFrequency";
-            this.labelFrequency.Size = new System.Drawing.Size(152, 13);
+            this.labelFrequency.Size = new System.Drawing.Size(129, 13);
             this.labelFrequency.TabIndex = 2;
-            this.labelFrequency.Text = "Частота дискретизации (Гц)";
+            this.labelFrequency.Text = "Частота дискретизации";
             // 
             // comboBoxFrequency
             // 
             this.comboBoxFrequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFrequency.FormattingEnabled = true;
-            this.comboBoxFrequency.Location = new System.Drawing.Point(161, 38);
+            this.comboBoxFrequency.Location = new System.Drawing.Point(138, 54);
             this.comboBoxFrequency.Name = "comboBoxFrequency";
             this.comboBoxFrequency.Size = new System.Drawing.Size(80, 21);
             this.comboBoxFrequency.TabIndex = 3;
@@ -321,9 +322,9 @@
             this.checkedListBoxAudioStreams.CheckOnClick = true;
             this.checkedListBoxAudioStreams.FormattingEnabled = true;
             this.checkedListBoxAudioStreams.HorizontalScrollbar = true;
-            this.checkedListBoxAudioStreams.Location = new System.Drawing.Point(3, 6);
+            this.checkedListBoxAudioStreams.Location = new System.Drawing.Point(3, 22);
             this.checkedListBoxAudioStreams.Name = "checkedListBoxAudioStreams";
-            this.checkedListBoxAudioStreams.Size = new System.Drawing.Size(245, 148);
+            this.checkedListBoxAudioStreams.Size = new System.Drawing.Size(235, 132);
             this.checkedListBoxAudioStreams.TabIndex = 0;
             this.checkedListBoxAudioStreams.SelectedIndexChanged += new System.EventHandler(this.checkedListBoxAudioStreams_SelectedIndexChanged);
             // 
@@ -339,7 +340,7 @@
             // 
             // pictureBoxRatioError
             // 
-            this.pictureBoxRatioError.Location = new System.Drawing.Point(99, 112);
+            this.pictureBoxRatioError.Location = new System.Drawing.Point(99, 89);
             this.pictureBoxRatioError.Name = "pictureBoxRatioError";
             this.pictureBoxRatioError.Size = new System.Drawing.Size(16, 16);
             this.pictureBoxRatioError.TabIndex = 11;
@@ -348,7 +349,7 @@
             // comboBoxAspectRatio
             // 
             this.comboBoxAspectRatio.FormattingEnabled = true;
-            this.comboBoxAspectRatio.Location = new System.Drawing.Point(3, 110);
+            this.comboBoxAspectRatio.Location = new System.Drawing.Point(3, 87);
             this.comboBoxAspectRatio.Name = "comboBoxAspectRatio";
             this.comboBoxAspectRatio.Size = new System.Drawing.Size(90, 21);
             this.comboBoxAspectRatio.TabIndex = 5;
@@ -358,7 +359,7 @@
             // checkBoxKeepAspectRatio
             // 
             this.checkBoxKeepAspectRatio.AutoSize = true;
-            this.checkBoxKeepAspectRatio.Location = new System.Drawing.Point(3, 90);
+            this.checkBoxKeepAspectRatio.Location = new System.Drawing.Point(3, 67);
             this.checkBoxKeepAspectRatio.Name = "checkBoxKeepAspectRatio";
             this.checkBoxKeepAspectRatio.Size = new System.Drawing.Size(138, 17);
             this.checkBoxKeepAspectRatio.TabIndex = 4;
@@ -510,16 +511,16 @@
             this.panelCrop.Controls.Add(this.numericCropLeft);
             this.panelCrop.Controls.Add(this.numericCropTop);
             this.panelCrop.Controls.Add(this.labelCrop);
-            this.panelCrop.Location = new System.Drawing.Point(269, 6);
+            this.panelCrop.Location = new System.Drawing.Point(283, 6);
             this.panelCrop.Name = "panelCrop";
-            this.panelCrop.Size = new System.Drawing.Size(259, 157);
+            this.panelCrop.Size = new System.Drawing.Size(245, 157);
             this.panelCrop.TabIndex = 11;
             // 
             // labelCropSize
             // 
             this.labelCropSize.Location = new System.Drawing.Point(3, 138);
             this.labelCropSize.Name = "labelCropSize";
-            this.labelCropSize.Size = new System.Drawing.Size(253, 16);
+            this.labelCropSize.Size = new System.Drawing.Size(239, 16);
             this.labelCropSize.TabIndex = 15;
             this.labelCropSize.Text = "WxH → WxH";
             this.labelCropSize.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -527,7 +528,7 @@
             // labelCropBottom
             // 
             this.labelCropBottom.AutoSize = true;
-            this.labelCropBottom.Location = new System.Drawing.Point(110, 118);
+            this.labelCropBottom.Location = new System.Drawing.Point(102, 118);
             this.labelCropBottom.Name = "labelCropBottom";
             this.labelCropBottom.Size = new System.Drawing.Size(37, 13);
             this.labelCropBottom.TabIndex = 8;
@@ -536,7 +537,7 @@
             // labelCropRight
             // 
             this.labelCropRight.AutoSize = true;
-            this.labelCropRight.Location = new System.Drawing.Point(204, 71);
+            this.labelCropRight.Location = new System.Drawing.Point(196, 71);
             this.labelCropRight.Name = "labelCropRight";
             this.labelCropRight.Size = new System.Drawing.Size(44, 13);
             this.labelCropRight.TabIndex = 7;
@@ -545,7 +546,7 @@
             // labelCropLeft
             // 
             this.labelCropLeft.AutoSize = true;
-            this.labelCropLeft.Location = new System.Drawing.Point(16, 71);
+            this.labelCropLeft.Location = new System.Drawing.Point(8, 71);
             this.labelCropLeft.Name = "labelCropLeft";
             this.labelCropLeft.Size = new System.Drawing.Size(38, 13);
             this.labelCropLeft.TabIndex = 6;
@@ -554,7 +555,7 @@
             // labelCropTop
             // 
             this.labelCropTop.AutoSize = true;
-            this.labelCropTop.Location = new System.Drawing.Point(103, 24);
+            this.labelCropTop.Location = new System.Drawing.Point(95, 24);
             this.labelCropTop.Name = "labelCropTop";
             this.labelCropTop.Size = new System.Drawing.Size(44, 13);
             this.labelCropTop.TabIndex = 5;
@@ -567,7 +568,7 @@
             0,
             0,
             0});
-            this.numericCropBottom.Location = new System.Drawing.Point(102, 94);
+            this.numericCropBottom.Location = new System.Drawing.Point(94, 94);
             this.numericCropBottom.Name = "numericCropBottom";
             this.numericCropBottom.Size = new System.Drawing.Size(55, 21);
             this.numericCropBottom.TabIndex = 4;
@@ -580,7 +581,7 @@
             0,
             0,
             0});
-            this.numericCropRight.Location = new System.Drawing.Point(143, 67);
+            this.numericCropRight.Location = new System.Drawing.Point(135, 67);
             this.numericCropRight.Name = "numericCropRight";
             this.numericCropRight.Size = new System.Drawing.Size(55, 21);
             this.numericCropRight.TabIndex = 3;
@@ -593,7 +594,7 @@
             0,
             0,
             0});
-            this.numericCropLeft.Location = new System.Drawing.Point(60, 67);
+            this.numericCropLeft.Location = new System.Drawing.Point(52, 67);
             this.numericCropLeft.Name = "numericCropLeft";
             this.numericCropLeft.Size = new System.Drawing.Size(55, 21);
             this.numericCropLeft.TabIndex = 2;
@@ -606,7 +607,7 @@
             0,
             0,
             0});
-            this.numericCropTop.Location = new System.Drawing.Point(102, 40);
+            this.numericCropTop.Location = new System.Drawing.Point(94, 40);
             this.numericCropTop.Name = "numericCropTop";
             this.numericCropTop.Size = new System.Drawing.Size(55, 21);
             this.numericCropTop.TabIndex = 1;
@@ -623,11 +624,9 @@
             // 
             // panelResolution
             // 
-            this.panelResolution.Controls.Add(this.button1);
-            this.panelResolution.Controls.Add(this.buttonResize480p);
-            this.panelResolution.Controls.Add(this.buttonResize720p);
-            this.panelResolution.Controls.Add(this.buttonResize1080p);
-            this.panelResolution.Controls.Add(this.buttonResizeOriginal);
+            this.panelResolution.Controls.Add(this.labelScalingAlgorithm);
+            this.panelResolution.Controls.Add(this.comboBoxScalingAlgorithm);
+            this.panelResolution.Controls.Add(this.comboBoxResizePreset);
             this.panelResolution.Controls.Add(this.pictureBoxRatioError);
             this.panelResolution.Controls.Add(this.checkBoxResizePicture);
             this.panelResolution.Controls.Add(this.comboBoxAspectRatio);
@@ -637,55 +636,37 @@
             this.panelResolution.Controls.Add(this.numericUpDownHeight);
             this.panelResolution.Location = new System.Drawing.Point(6, 6);
             this.panelResolution.Name = "panelResolution";
-            this.panelResolution.Size = new System.Drawing.Size(257, 157);
+            this.panelResolution.Size = new System.Drawing.Size(271, 157);
             this.panelResolution.TabIndex = 8;
             // 
-            // buttonResize480p
+            // labelScalingAlgorithm
             // 
-            this.buttonResize480p.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonResize480p.Location = new System.Drawing.Point(122, 53);
-            this.buttonResize480p.Name = "buttonResize480p";
-            this.buttonResize480p.Size = new System.Drawing.Size(38, 19);
-            this.buttonResize480p.TabIndex = 17;
-            this.buttonResize480p.Text = "480p";
-            this.toolTipHint.SetToolTip(this.buttonResize480p, "Вписать в 854x480");
-            this.buttonResize480p.UseVisualStyleBackColor = true;
-            this.buttonResize480p.Click += new System.EventHandler(this.buttonResize480p_Click);
+            this.labelScalingAlgorithm.AutoSize = true;
+            this.labelScalingAlgorithm.Location = new System.Drawing.Point(3, 136);
+            this.labelScalingAlgorithm.Name = "labelScalingAlgorithm";
+            this.labelScalingAlgorithm.Size = new System.Drawing.Size(83, 13);
+            this.labelScalingAlgorithm.TabIndex = 21;
+            this.labelScalingAlgorithm.Text = "Метод ресайза";
             // 
-            // buttonResize720p
+            // comboBoxScalingAlgorithm
             // 
-            this.buttonResize720p.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonResize720p.Location = new System.Drawing.Point(82, 53);
-            this.buttonResize720p.Name = "buttonResize720p";
-            this.buttonResize720p.Size = new System.Drawing.Size(38, 19);
-            this.buttonResize720p.TabIndex = 16;
-            this.buttonResize720p.Text = "720p";
-            this.toolTipHint.SetToolTip(this.buttonResize720p, "Вписать в 1280x720");
-            this.buttonResize720p.UseVisualStyleBackColor = true;
-            this.buttonResize720p.Click += new System.EventHandler(this.buttonResize720p_Click);
+            this.comboBoxScalingAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxScalingAlgorithm.FormattingEnabled = true;
+            this.comboBoxScalingAlgorithm.Location = new System.Drawing.Point(92, 133);
+            this.comboBoxScalingAlgorithm.Name = "comboBoxScalingAlgorithm";
+            this.comboBoxScalingAlgorithm.Size = new System.Drawing.Size(110, 21);
+            this.comboBoxScalingAlgorithm.TabIndex = 20;
             // 
-            // buttonResize1080p
+            // comboBoxResizePreset
             // 
-            this.buttonResize1080p.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonResize1080p.Location = new System.Drawing.Point(42, 53);
-            this.buttonResize1080p.Name = "buttonResize1080p";
-            this.buttonResize1080p.Size = new System.Drawing.Size(38, 19);
-            this.buttonResize1080p.TabIndex = 15;
-            this.buttonResize1080p.Text = "1080p";
-            this.toolTipHint.SetToolTip(this.buttonResize1080p, "Вписать в 1920x1080");
-            this.buttonResize1080p.UseVisualStyleBackColor = true;
-            this.buttonResize1080p.Click += new System.EventHandler(this.buttonResize1080p_Click);
-            // 
-            // buttonResizeOriginal
-            // 
-            this.buttonResizeOriginal.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonResizeOriginal.Location = new System.Drawing.Point(2, 53);
-            this.buttonResizeOriginal.Name = "buttonResizeOriginal";
-            this.buttonResizeOriginal.Size = new System.Drawing.Size(38, 19);
-            this.buttonResizeOriginal.TabIndex = 14;
-            this.buttonResizeOriginal.Text = "Исх.";
-            this.buttonResizeOriginal.UseVisualStyleBackColor = true;
-            this.buttonResizeOriginal.Click += new System.EventHandler(this.buttonResizeOriginal_Click);
+            this.comboBoxResizePreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxResizePreset.FormattingEnabled = true;
+            this.comboBoxResizePreset.Location = new System.Drawing.Point(162, 26);
+            this.comboBoxResizePreset.Name = "comboBoxResizePreset";
+            this.comboBoxResizePreset.Size = new System.Drawing.Size(65, 21);
+            this.comboBoxResizePreset.TabIndex = 19;
+            this.toolTipHint.SetToolTip(this.comboBoxResizePreset, resources.GetString("comboBoxResizePreset.ToolTip"));
+            this.comboBoxResizePreset.SelectedIndexChanged += new System.EventHandler(this.comboBoxResizePreset_SelectedIndexChanged);
             // 
             // tabPageFilters
             // 
@@ -794,6 +775,96 @@
             this.panelVideo.Size = new System.Drawing.Size(288, 157);
             this.panelVideo.TabIndex = 8;
             // 
+            // labelCalcSize
+            // 
+            this.labelCalcSize.AutoSize = true;
+            this.labelCalcSize.Location = new System.Drawing.Point(84, 141);
+            this.labelCalcSize.Name = "labelCalcSize";
+            this.labelCalcSize.Size = new System.Drawing.Size(11, 13);
+            this.labelCalcSize.TabIndex = 11;
+            this.labelCalcSize.Text = "-";
+            // 
+            // labelCalcSizeText
+            // 
+            this.labelCalcSizeText.AutoSize = true;
+            this.labelCalcSizeText.Location = new System.Drawing.Point(3, 141);
+            this.labelCalcSizeText.Name = "labelCalcSizeText";
+            this.labelCalcSizeText.Size = new System.Drawing.Size(81, 13);
+            this.labelCalcSizeText.TabIndex = 10;
+            this.labelCalcSizeText.Text = "Размер файла:";
+            // 
+            // labelVideoKbps
+            // 
+            this.labelVideoKbps.AutoSize = true;
+            this.labelVideoKbps.Location = new System.Drawing.Point(163, 98);
+            this.labelVideoKbps.Name = "labelVideoKbps";
+            this.labelVideoKbps.Size = new System.Drawing.Size(40, 13);
+            this.labelVideoKbps.TabIndex = 9;
+            this.labelVideoKbps.Text = "кбит/с";
+            // 
+            // labelMinQ
+            // 
+            this.labelMinQ.AutoSize = true;
+            this.labelMinQ.Location = new System.Drawing.Point(204, 62);
+            this.labelMinQ.Name = "labelMinQ";
+            this.labelMinQ.Size = new System.Drawing.Size(81, 13);
+            this.labelMinQ.TabIndex = 8;
+            this.labelMinQ.Text = "Мин. качество";
+            // 
+            // labelMaxQ
+            // 
+            this.labelMaxQ.AutoSize = true;
+            this.labelMaxQ.Location = new System.Drawing.Point(3, 62);
+            this.labelMaxQ.Name = "labelMaxQ";
+            this.labelMaxQ.Size = new System.Drawing.Size(86, 13);
+            this.labelMaxQ.TabIndex = 7;
+            this.labelMaxQ.Text = "Макс. качество";
+            // 
+            // labelCRF
+            // 
+            this.labelCRF.AutoSize = true;
+            this.labelCRF.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelCRF.Location = new System.Drawing.Point(139, 6);
+            this.labelCRF.Name = "labelCRF";
+            this.labelCRF.Size = new System.Drawing.Size(21, 13);
+            this.labelCRF.TabIndex = 6;
+            this.labelCRF.Text = "20";
+            // 
+            // radioButtonBitrate
+            // 
+            this.radioButtonBitrate.AutoSize = true;
+            this.radioButtonBitrate.Location = new System.Drawing.Point(4, 96);
+            this.radioButtonBitrate.Name = "radioButtonBitrate";
+            this.radioButtonBitrate.Size = new System.Drawing.Size(67, 17);
+            this.radioButtonBitrate.TabIndex = 2;
+            this.radioButtonBitrate.TabStop = true;
+            this.radioButtonBitrate.Text = "Битрейт";
+            this.radioButtonBitrate.UseVisualStyleBackColor = true;
+            this.radioButtonBitrate.CheckedChanged += new System.EventHandler(this.radioButtonBitrate_CheckedChanged);
+            // 
+            // radioButtonCRF
+            // 
+            this.radioButtonCRF.AutoSize = true;
+            this.radioButtonCRF.Location = new System.Drawing.Point(4, 4);
+            this.radioButtonCRF.Name = "radioButtonCRF";
+            this.radioButtonCRF.Size = new System.Drawing.Size(129, 17);
+            this.radioButtonCRF.TabIndex = 1;
+            this.radioButtonCRF.TabStop = true;
+            this.radioButtonCRF.Text = "Constant Rate Factor";
+            this.radioButtonCRF.UseVisualStyleBackColor = true;
+            this.radioButtonCRF.CheckedChanged += new System.EventHandler(this.radioButtonCRF_CheckedChanged);
+            // 
+            // trackBarCRF
+            // 
+            this.trackBarCRF.BackColor = System.Drawing.SystemColors.Window;
+            this.trackBarCRF.Location = new System.Drawing.Point(3, 30);
+            this.trackBarCRF.Maximum = 51;
+            this.trackBarCRF.Name = "trackBarCRF";
+            this.trackBarCRF.Size = new System.Drawing.Size(282, 45);
+            this.trackBarCRF.TabIndex = 0;
+            this.trackBarCRF.Value = 20;
+            this.trackBarCRF.ValueChanged += new System.EventHandler(this.trackBarCRF_ValueChanged);
+            // 
             // panelVideoParams
             // 
             this.panelVideoParams.Controls.Add(this.buttonVideoAdvanced);
@@ -828,24 +899,54 @@
             // 
             // panelAudioStreams
             // 
+            this.panelAudioStreams.Controls.Add(this.labelSelectStreams);
             this.panelAudioStreams.Controls.Add(this.checkedListBoxAudioStreams);
             this.panelAudioStreams.Location = new System.Drawing.Point(6, 6);
             this.panelAudioStreams.Name = "panelAudioStreams";
-            this.panelAudioStreams.Size = new System.Drawing.Size(251, 157);
+            this.panelAudioStreams.Size = new System.Drawing.Size(241, 157);
             this.panelAudioStreams.TabIndex = 18;
+            // 
+            // labelSelectStreams
+            // 
+            this.labelSelectStreams.AutoSize = true;
+            this.labelSelectStreams.Location = new System.Drawing.Point(3, 3);
+            this.labelSelectStreams.Name = "labelSelectStreams";
+            this.labelSelectStreams.Size = new System.Drawing.Size(99, 13);
+            this.labelSelectStreams.TabIndex = 1;
+            this.labelSelectStreams.Text = "Выбрать дорожки";
             // 
             // panelAudioParams
             // 
+            this.panelAudioParams.Controls.Add(this.labelAudioHz);
+            this.panelAudioParams.Controls.Add(this.labelAudioKbps);
             this.panelAudioParams.Controls.Add(this.comboBoxAudioBitrate);
             this.panelAudioParams.Controls.Add(this.labelAudioBitrate);
             this.panelAudioParams.Controls.Add(this.comboBoxFrequency);
             this.panelAudioParams.Controls.Add(this.labelChannels);
             this.panelAudioParams.Controls.Add(this.labelFrequency);
             this.panelAudioParams.Controls.Add(this.comboBoxChannels);
-            this.panelAudioParams.Location = new System.Drawing.Point(263, 6);
+            this.panelAudioParams.Location = new System.Drawing.Point(250, 6);
             this.panelAudioParams.Name = "panelAudioParams";
-            this.panelAudioParams.Size = new System.Drawing.Size(265, 157);
+            this.panelAudioParams.Size = new System.Drawing.Size(278, 157);
             this.panelAudioParams.TabIndex = 17;
+            // 
+            // labelAudioHz
+            // 
+            this.labelAudioHz.AutoSize = true;
+            this.labelAudioHz.Location = new System.Drawing.Point(224, 57);
+            this.labelAudioHz.Name = "labelAudioHz";
+            this.labelAudioHz.Size = new System.Drawing.Size(19, 13);
+            this.labelAudioHz.TabIndex = 7;
+            this.labelAudioHz.Text = "Гц";
+            // 
+            // labelAudioKbps
+            // 
+            this.labelAudioKbps.AutoSize = true;
+            this.labelAudioKbps.Location = new System.Drawing.Point(224, 25);
+            this.labelAudioKbps.Name = "labelAudioKbps";
+            this.labelAudioKbps.Size = new System.Drawing.Size(40, 13);
+            this.labelAudioKbps.TabIndex = 6;
+            this.labelAudioKbps.Text = "кбит/с";
             // 
             // buttonAbout
             // 
@@ -857,108 +958,6 @@
             this.buttonAbout.TabIndex = 10;
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
-            // 
-            // button1
-            // 
-            this.button1.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(162, 53);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(38, 19);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "360p";
-            this.toolTipHint.SetToolTip(this.button1, "Вписать в 640x360");
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // trackBarCRF
-            // 
-            this.trackBarCRF.BackColor = System.Drawing.SystemColors.Window;
-            this.trackBarCRF.Location = new System.Drawing.Point(3, 30);
-            this.trackBarCRF.Maximum = 51;
-            this.trackBarCRF.Name = "trackBarCRF";
-            this.trackBarCRF.Size = new System.Drawing.Size(282, 45);
-            this.trackBarCRF.TabIndex = 0;
-            this.trackBarCRF.Value = 20;
-            this.trackBarCRF.ValueChanged += new System.EventHandler(this.trackBarCRF_ValueChanged);
-            // 
-            // radioButtonCRF
-            // 
-            this.radioButtonCRF.AutoSize = true;
-            this.radioButtonCRF.Location = new System.Drawing.Point(4, 4);
-            this.radioButtonCRF.Name = "radioButtonCRF";
-            this.radioButtonCRF.Size = new System.Drawing.Size(129, 17);
-            this.radioButtonCRF.TabIndex = 1;
-            this.radioButtonCRF.TabStop = true;
-            this.radioButtonCRF.Text = "Constant Rate Factor";
-            this.radioButtonCRF.UseVisualStyleBackColor = true;
-            this.radioButtonCRF.CheckedChanged += new System.EventHandler(this.radioButtonCRF_CheckedChanged);
-            // 
-            // radioButtonBitrate
-            // 
-            this.radioButtonBitrate.AutoSize = true;
-            this.radioButtonBitrate.Location = new System.Drawing.Point(4, 93);
-            this.radioButtonBitrate.Name = "radioButtonBitrate";
-            this.radioButtonBitrate.Size = new System.Drawing.Size(67, 17);
-            this.radioButtonBitrate.TabIndex = 2;
-            this.radioButtonBitrate.TabStop = true;
-            this.radioButtonBitrate.Text = "Битрейт";
-            this.radioButtonBitrate.UseVisualStyleBackColor = true;
-            this.radioButtonBitrate.CheckedChanged += new System.EventHandler(this.radioButtonBitrate_CheckedChanged);
-            // 
-            // labelCRF
-            // 
-            this.labelCRF.AutoSize = true;
-            this.labelCRF.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelCRF.Location = new System.Drawing.Point(139, 6);
-            this.labelCRF.Name = "labelCRF";
-            this.labelCRF.Size = new System.Drawing.Size(21, 13);
-            this.labelCRF.TabIndex = 6;
-            this.labelCRF.Text = "20";
-            // 
-            // labelMaxQ
-            // 
-            this.labelMaxQ.AutoSize = true;
-            this.labelMaxQ.Location = new System.Drawing.Point(3, 62);
-            this.labelMaxQ.Name = "labelMaxQ";
-            this.labelMaxQ.Size = new System.Drawing.Size(86, 13);
-            this.labelMaxQ.TabIndex = 7;
-            this.labelMaxQ.Text = "Макс. качество";
-            // 
-            // labelMinQ
-            // 
-            this.labelMinQ.AutoSize = true;
-            this.labelMinQ.Location = new System.Drawing.Point(204, 62);
-            this.labelMinQ.Name = "labelMinQ";
-            this.labelMinQ.Size = new System.Drawing.Size(81, 13);
-            this.labelMinQ.TabIndex = 8;
-            this.labelMinQ.Text = "Мин. качество";
-            // 
-            // labelVideoKbps
-            // 
-            this.labelVideoKbps.AutoSize = true;
-            this.labelVideoKbps.Location = new System.Drawing.Point(163, 95);
-            this.labelVideoKbps.Name = "labelVideoKbps";
-            this.labelVideoKbps.Size = new System.Drawing.Size(40, 13);
-            this.labelVideoKbps.TabIndex = 9;
-            this.labelVideoKbps.Text = "кбит/с";
-            // 
-            // labelCalcSizeText
-            // 
-            this.labelCalcSizeText.AutoSize = true;
-            this.labelCalcSizeText.Location = new System.Drawing.Point(3, 141);
-            this.labelCalcSizeText.Name = "labelCalcSizeText";
-            this.labelCalcSizeText.Size = new System.Drawing.Size(81, 13);
-            this.labelCalcSizeText.TabIndex = 10;
-            this.labelCalcSizeText.Text = "Размер файла:";
-            // 
-            // labelCalcSize
-            // 
-            this.labelCalcSize.AutoSize = true;
-            this.labelCalcSize.Location = new System.Drawing.Point(84, 141);
-            this.labelCalcSize.Name = "labelCalcSize";
-            this.labelCalcSize.Size = new System.Drawing.Size(11, 13);
-            this.labelCalcSize.TabIndex = 11;
-            this.labelCalcSize.Text = "-";
             // 
             // MainForm
             // 
@@ -1003,13 +1002,14 @@
             this.tabPageVideo.ResumeLayout(false);
             this.panelVideo.ResumeLayout(false);
             this.panelVideo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarCRF)).EndInit();
             this.panelVideoParams.ResumeLayout(false);
             this.panelVideoParams.PerformLayout();
             this.tabPageAudio.ResumeLayout(false);
             this.panelAudioStreams.ResumeLayout(false);
+            this.panelAudioStreams.PerformLayout();
             this.panelAudioParams.ResumeLayout(false);
             this.panelAudioParams.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarCRF)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1059,9 +1059,6 @@
         private System.Windows.Forms.NumericUpDown numericCropTop;
         private System.Windows.Forms.Label labelCrop;
         private System.Windows.Forms.Label labelCropSize;
-        private System.Windows.Forms.Button buttonResize720p;
-        private System.Windows.Forms.Button buttonResize1080p;
-        private System.Windows.Forms.Button buttonResizeOriginal;
         private System.Windows.Forms.TabPage tabPageFile;
         private System.Windows.Forms.TabPage tabPageFilters;
         private System.Windows.Forms.Panel panelFilters;
@@ -1078,9 +1075,7 @@
         private System.Windows.Forms.Button buttonShowInfo;
         private System.Windows.Forms.Button buttonBrowseIn;
         private System.Windows.Forms.TextBox textBoxIn;
-        private System.Windows.Forms.Button buttonResize480p;
         private System.Windows.Forms.Panel panelVideo;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ToolTip toolTipHint;
         private System.Windows.Forms.TrackBar trackBarCRF;
         private System.Windows.Forms.RadioButton radioButtonBitrate;
@@ -1091,6 +1086,12 @@
         private System.Windows.Forms.Label labelVideoKbps;
         private System.Windows.Forms.Label labelCalcSize;
         private System.Windows.Forms.Label labelCalcSizeText;
+        private System.Windows.Forms.Label labelSelectStreams;
+        private System.Windows.Forms.Label labelAudioHz;
+        private System.Windows.Forms.Label labelAudioKbps;
+        private System.Windows.Forms.ComboBox comboBoxResizePreset;
+        private System.Windows.Forms.Label labelScalingAlgorithm;
+        private System.Windows.Forms.ComboBox comboBoxScalingAlgorithm;
     }
 }
 
