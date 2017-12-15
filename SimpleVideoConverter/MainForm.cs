@@ -23,11 +23,11 @@ namespace Alexantr.SimpleVideoConverter
         private const string EncodeModeBitrate = "bitrate";
         private const string EncodeModeCRF = "crf";
 
-        private const int MinWidth = 128;
-        private const int MaxWidth = 1920;
+        public const int MinWidth = 128;
+        public const int MaxWidth = 1920;
 
-        private const int MinHeight = 96;
-        private const int MaxHeight = 1080;
+        public const int MinHeight = 96;
+        public const int MaxHeight = 1080;
 
         private const int MinBitrate = 100;
         private const int MaxBitrate = 50000;
@@ -56,6 +56,8 @@ namespace Alexantr.SimpleVideoConverter
         private Dictionary<string, string> colorFilterList;
 
         private PictureSize cropSize;
+
+        private int cropLeft, cropTop, cropRight, cropBottom;
 
         private List<string> audioBitRateList;
         private List<string> frequencyList;
@@ -334,7 +336,11 @@ namespace Alexantr.SimpleVideoConverter
 
             foreach (string tempFile in tempFilesList)
             {
-                File.Delete(tempFile);
+                try
+                {
+                    File.Delete(tempFile);
+                }
+                catch { }
             }
         }
 
@@ -551,38 +557,16 @@ namespace Alexantr.SimpleVideoConverter
 
         #region Crop
 
-        private void numericCropTop_ValueChanged(object sender, EventArgs e)
+        public void SetCropValues(int left, int top, int rigth, int bottom)
         {
-            if ((int)numericCropTop.Value % 2 == 1)
-                numericCropTop.Value = Math.Max(0, (int)numericCropTop.Value - 1);
+            cropLeft = left;
+            cropTop = top;
+            cropRight = rigth;
+            cropBottom = bottom;
             RecalcOriginalAspectRatio();
             UpdateHeigth();
         }
-
-        private void numericCropLeft_ValueChanged(object sender, EventArgs e)
-        {
-            if ((int)numericCropLeft.Value % 2 == 1)
-                numericCropLeft.Value = Math.Max(0, (int)numericCropLeft.Value - 1);
-            RecalcOriginalAspectRatio();
-            UpdateHeigth();
-        }
-
-        private void numericCropRight_ValueChanged(object sender, EventArgs e)
-        {
-            if ((int)numericCropRight.Value % 2 == 1)
-                numericCropRight.Value = Math.Max(0, (int)numericCropRight.Value - 1);
-            RecalcOriginalAspectRatio();
-            UpdateHeigth();
-        }
-
-        private void numericCropBottom_ValueChanged(object sender, EventArgs e)
-        {
-            if ((int)numericCropBottom.Value % 2 == 1)
-                numericCropBottom.Value = Math.Max(0, (int)numericCropBottom.Value - 1);
-            RecalcOriginalAspectRatio();
-            UpdateHeigth();
-        }
-
+        
         #endregion
 
         #region Audio
@@ -613,6 +597,11 @@ namespace Alexantr.SimpleVideoConverter
         #endregion
 
         #region Buttons
+
+        private void buttonCrop_Click(object sender, EventArgs e)
+        {
+            new CropForm(videoFile, cropLeft, cropTop, cropRight, cropBottom).ShowDialog(this);
+        }
 
         private void buttonGo_Click(object sender, EventArgs e)
         {
@@ -730,21 +719,11 @@ namespace Alexantr.SimpleVideoConverter
             cropSize.Width = vStream.PictureSize.Width;
             cropSize.Height = vStream.PictureSize.Height;
 
-            // Update values for crop
-            int wCrop = vStream.PictureSize.Width;
-            int hCrop = vStream.PictureSize.Height;
-            decimal maxLeft = (wCrop - MinWidth) / 2;
-            decimal maxTop = (hCrop - MinHeight) / 2;
-            // set max values to prevent exceptions
-            numericCropTop.Maximum = maxTop;
-            numericCropBottom.Maximum = maxTop;
-            numericCropLeft.Maximum = maxLeft;
-            numericCropRight.Maximum = maxLeft;
-            // reset values
-            numericCropTop.Value = 0;
-            numericCropBottom.Value = 0;
-            numericCropLeft.Value = 0;
-            numericCropRight.Value = 0;
+            // reset crop values
+            cropTop = 0;
+            cropBottom = 0;
+            cropLeft = 0;
+            cropRight = 0;
 
             // if need resize
             bool needResize = false;
@@ -1000,14 +979,14 @@ namespace Alexantr.SimpleVideoConverter
                 filters.Add(deinterlaceFilter);
             }
 
-            if (numericCropTop.Value > 0 || numericCropBottom.Value > 0 || numericCropLeft.Value > 0 || numericCropRight.Value > 0)
+            if (cropTop > 0 || cropBottom > 0 || cropLeft > 0 || cropRight > 0)
             {
                 int origW = videoFile.VideoStreams[0].PictureSize.Width;
                 int origH = videoFile.VideoStreams[0].PictureSize.Height;
-                int cropW = origW - (int)Math.Round(numericCropLeft.Value + numericCropRight.Value, 0);
-                int cropH = origH - (int)Math.Round(numericCropTop.Value + numericCropBottom.Value, 0);
-                int cropX = (int)Math.Round(numericCropLeft.Value, 0);
-                int cropY = (int)Math.Round(numericCropTop.Value, 0);
+                int cropW = origW - (int)Math.Round((double)cropLeft + cropRight, 0);
+                int cropH = origH - (int)Math.Round((double)cropTop + cropBottom, 0);
+                int cropX = (int)Math.Round((double)cropLeft, 0);
+                int cropY = (int)Math.Round((double)cropTop, 0);
                 filters.Add($"crop={cropW}:{cropH}:{cropX}:{cropY}");
             }
 
@@ -1269,10 +1248,10 @@ namespace Alexantr.SimpleVideoConverter
             VideoStream stream = videoFile.VideoStreams[0];
             int newW = stream.PictureSize.Width;
             int newH = stream.PictureSize.Height;
-            if (numericCropTop.Value > 0 || numericCropBottom.Value > 0 || numericCropLeft.Value > 0 || numericCropRight.Value > 0)
+            if (cropTop > 0 || cropBottom > 0 || cropLeft > 0 || cropRight > 0)
             {
-                newW = stream.PictureSize.Width - (int)Math.Round(numericCropLeft.Value + numericCropRight.Value, 0);
-                newH = stream.PictureSize.Height - (int)Math.Round(numericCropTop.Value + numericCropBottom.Value, 0);
+                newW = stream.PictureSize.Width - (int)Math.Round((double)cropLeft + cropRight, 0);
+                newH = stream.PictureSize.Height - (int)Math.Round((double)cropTop + cropBottom, 0);
                 cropSize.Width = newW;
                 cropSize.Height = newH;
                 // show size changes
@@ -1369,14 +1348,14 @@ namespace Alexantr.SimpleVideoConverter
             fileInfo = info.ToString().TrimEnd();
         }
 
-        private string GetTempFile()
+        public string GetTempFile()
         {
             string tempFileName = Path.GetTempFileName();
             tempFilesList.Add(tempFileName);
             return tempFileName;
         }
 
-        private string GetTempLogFile(int streamIndex = 0)
+        public string GetTempLogFile(int streamIndex = 0)
         {
             string tempLogFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             string tempLogFileRealName = $"{tempLogFile}-{streamIndex}.log";
@@ -1409,10 +1388,5 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         #endregion
-
-        private void buttonResizeMethodHelp_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

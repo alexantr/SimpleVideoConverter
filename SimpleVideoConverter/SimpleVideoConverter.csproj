@@ -143,6 +143,7 @@
     <Compile Include="FFprobeProcess.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ImageHelper.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
