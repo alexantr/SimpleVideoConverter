@@ -86,7 +86,7 @@
             this.buttonFF.Location = new System.Drawing.Point(131, 29);
             this.buttonFF.Name = "buttonFF";
             this.buttonFF.Size = new System.Drawing.Size(30, 23);
-            this.buttonFF.TabIndex = 2;
+            this.buttonFF.TabIndex = 3;
             this.buttonFF.Text = ">";
             this.buttonFF.UseVisualStyleBackColor = true;
             this.buttonFF.Click += new System.EventHandler(this.buttonFF_Click);
@@ -97,7 +97,7 @@
             this.labelLoading.Location = new System.Drawing.Point(3, 3);
             this.labelLoading.Name = "labelLoading";
             this.labelLoading.Size = new System.Drawing.Size(80, 20);
-            this.labelLoading.TabIndex = 3;
+            this.labelLoading.TabIndex = 0;
             this.labelLoading.Text = "Загрузка...";
             this.labelLoading.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -107,7 +107,7 @@
             this.labelCropBottom.Location = new System.Drawing.Point(43, 124);
             this.labelCropBottom.Name = "labelCropBottom";
             this.labelCropBottom.Size = new System.Drawing.Size(37, 13);
-            this.labelCropBottom.TabIndex = 16;
+            this.labelCropBottom.TabIndex = 7;
             this.labelCropBottom.Text = "Снизу";
             // 
             // labelCropRight
@@ -116,7 +116,7 @@
             this.labelCropRight.Location = new System.Drawing.Point(36, 178);
             this.labelCropRight.Name = "labelCropRight";
             this.labelCropRight.Size = new System.Drawing.Size(44, 13);
-            this.labelCropRight.TabIndex = 15;
+            this.labelCropRight.TabIndex = 11;
             this.labelCropRight.Text = "Справа";
             // 
             // labelCropLeft
@@ -125,7 +125,7 @@
             this.labelCropLeft.Location = new System.Drawing.Point(42, 151);
             this.labelCropLeft.Name = "labelCropLeft";
             this.labelCropLeft.Size = new System.Drawing.Size(38, 13);
-            this.labelCropLeft.TabIndex = 14;
+            this.labelCropLeft.TabIndex = 9;
             this.labelCropLeft.Text = "Слева";
             // 
             // labelCropTop
@@ -134,7 +134,7 @@
             this.labelCropTop.Location = new System.Drawing.Point(36, 97);
             this.labelCropTop.Name = "labelCropTop";
             this.labelCropTop.Size = new System.Drawing.Size(44, 13);
-            this.labelCropTop.TabIndex = 13;
+            this.labelCropTop.TabIndex = 5;
             this.labelCropTop.Text = "Сверху";
             // 
             // numericCropBottom
@@ -147,8 +147,9 @@
             this.numericCropBottom.Location = new System.Drawing.Point(86, 122);
             this.numericCropBottom.Name = "numericCropBottom";
             this.numericCropBottom.Size = new System.Drawing.Size(55, 21);
-            this.numericCropBottom.TabIndex = 12;
+            this.numericCropBottom.TabIndex = 8;
             this.numericCropBottom.ValueChanged += new System.EventHandler(this.numericCropBottom_ValueChanged);
+            this.numericCropBottom.Enter += new System.EventHandler(this.numericCropBottom_Enter);
             // 
             // numericCropRight
             // 
@@ -160,8 +161,9 @@
             this.numericCropRight.Location = new System.Drawing.Point(86, 176);
             this.numericCropRight.Name = "numericCropRight";
             this.numericCropRight.Size = new System.Drawing.Size(55, 21);
-            this.numericCropRight.TabIndex = 11;
+            this.numericCropRight.TabIndex = 12;
             this.numericCropRight.ValueChanged += new System.EventHandler(this.numericCropRight_ValueChanged);
+            this.numericCropRight.Enter += new System.EventHandler(this.numericCropRight_Enter);
             // 
             // numericCropLeft
             // 
@@ -175,6 +177,7 @@
             this.numericCropLeft.Size = new System.Drawing.Size(55, 21);
             this.numericCropLeft.TabIndex = 10;
             this.numericCropLeft.ValueChanged += new System.EventHandler(this.numericCropLeft_ValueChanged);
+            this.numericCropLeft.Enter += new System.EventHandler(this.numericCropLeft_Enter);
             // 
             // numericCropTop
             // 
@@ -186,8 +189,9 @@
             this.numericCropTop.Location = new System.Drawing.Point(86, 95);
             this.numericCropTop.Name = "numericCropTop";
             this.numericCropTop.Size = new System.Drawing.Size(55, 21);
-            this.numericCropTop.TabIndex = 9;
+            this.numericCropTop.TabIndex = 6;
             this.numericCropTop.ValueChanged += new System.EventHandler(this.numericCropTop_ValueChanged);
+            this.numericCropTop.Enter += new System.EventHandler(this.numericCropTop_Enter);
             // 
             // buttonSave
             // 
@@ -195,7 +199,7 @@
             this.buttonSave.Location = new System.Drawing.Point(0, 357);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(164, 27);
-            this.buttonSave.TabIndex = 19;
+            this.buttonSave.TabIndex = 14;
             this.buttonSave.Text = "ОК";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
@@ -205,7 +209,7 @@
             this.labelTime.Location = new System.Drawing.Point(42, 34);
             this.labelTime.Name = "labelTime";
             this.labelTime.Size = new System.Drawing.Size(83, 13);
-            this.labelTime.TabIndex = 20;
+            this.labelTime.TabIndex = 2;
             this.labelTime.Text = "00:00:00.000";
             this.labelTime.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
@@ -223,7 +227,7 @@
             this.buttonReset.Location = new System.Drawing.Point(47, 219);
             this.buttonReset.Name = "buttonReset";
             this.buttonReset.Size = new System.Drawing.Size(75, 23);
-            this.buttonReset.TabIndex = 17;
+            this.buttonReset.TabIndex = 13;
             this.buttonReset.Text = "Сбросить";
             this.buttonReset.UseVisualStyleBackColor = true;
             this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
@@ -234,7 +238,7 @@
             this.labelCrop.Location = new System.Drawing.Point(3, 69);
             this.labelCrop.Name = "labelCrop";
             this.labelCrop.Size = new System.Drawing.Size(76, 13);
-            this.labelCrop.TabIndex = 0;
+            this.labelCrop.TabIndex = 4;
             this.labelCrop.Text = "Указать поля";
             // 
             // tableLayoutPanel1
@@ -250,7 +254,7 @@
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(688, 390);
-            this.tableLayoutPanel1.TabIndex = 22;
+            this.tableLayoutPanel1.TabIndex = 0;
             // 
             // panel1
             // 
@@ -273,7 +277,7 @@
             this.panel1.Location = new System.Drawing.Point(521, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(164, 384);
-            this.panel1.TabIndex = 0;
+            this.panel1.TabIndex = 1;
             // 
             // panel2
             // 
@@ -283,10 +287,11 @@
             this.panel2.Location = new System.Drawing.Point(3, 3);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(512, 384);
-            this.panel2.TabIndex = 1;
+            this.panel2.TabIndex = 0;
             // 
             // CropForm
             // 
+            this.AcceptButton = this.buttonSave;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 396);

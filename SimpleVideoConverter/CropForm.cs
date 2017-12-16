@@ -221,6 +221,26 @@ namespace Alexantr.SimpleVideoConverter
             LoadPicture();
         }
 
+        private void numericCropTop_Enter(object sender, EventArgs e)
+        {
+            numericCropTop.Select(0, numericCropTop.Text.Length);
+        }
+
+        private void numericCropBottom_Enter(object sender, EventArgs e)
+        {
+            numericCropBottom.Select(0, numericCropBottom.Text.Length);
+        }
+
+        private void numericCropLeft_Enter(object sender, EventArgs e)
+        {
+            numericCropLeft.Select(0, numericCropLeft.Text.Length);
+        }
+
+        private void numericCropRight_Enter(object sender, EventArgs e)
+        {
+            numericCropRight.Select(0, numericCropRight.Text.Length);
+        }
+
         private void CheckButtons()
         {
             buttonRew.Enabled = (currentTime - stepTime >= 0.0);
