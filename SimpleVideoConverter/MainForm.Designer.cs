@@ -141,7 +141,7 @@
             0,
             0,
             0});
-            this.numericUpDownWidth.Location = new System.Drawing.Point(153, 3);
+            this.numericUpDownWidth.Location = new System.Drawing.Point(153, 41);
             this.numericUpDownWidth.Maximum = new decimal(new int[] {
             1920,
             0,
@@ -166,7 +166,7 @@
             // labelX
             // 
             this.labelX.AutoSize = true;
-            this.labelX.Location = new System.Drawing.Point(217, 6);
+            this.labelX.Location = new System.Drawing.Point(217, 44);
             this.labelX.Name = "labelX";
             this.labelX.Size = new System.Drawing.Size(13, 13);
             this.labelX.TabIndex = 2;
@@ -179,7 +179,7 @@
             0,
             0,
             0});
-            this.numericUpDownHeight.Location = new System.Drawing.Point(233, 3);
+            this.numericUpDownHeight.Location = new System.Drawing.Point(233, 41);
             this.numericUpDownHeight.Maximum = new decimal(new int[] {
             1080,
             0,
@@ -239,7 +239,7 @@
             // checkBoxResizePicture
             // 
             this.checkBoxResizePicture.AutoSize = true;
-            this.checkBoxResizePicture.Location = new System.Drawing.Point(3, 5);
+            this.checkBoxResizePicture.Location = new System.Drawing.Point(3, 43);
             this.checkBoxResizePicture.Name = "checkBoxResizePicture";
             this.checkBoxResizePicture.Size = new System.Drawing.Size(120, 17);
             this.checkBoxResizePicture.TabIndex = 0;
@@ -325,7 +325,7 @@
             // comboBoxAspectRatio
             // 
             this.comboBoxAspectRatio.FormattingEnabled = true;
-            this.comboBoxAspectRatio.Location = new System.Drawing.Point(153, 30);
+            this.comboBoxAspectRatio.Location = new System.Drawing.Point(153, 68);
             this.comboBoxAspectRatio.Name = "comboBoxAspectRatio";
             this.comboBoxAspectRatio.Size = new System.Drawing.Size(90, 21);
             this.comboBoxAspectRatio.TabIndex = 5;
@@ -335,7 +335,7 @@
             // checkBoxKeepAspectRatio
             // 
             this.checkBoxKeepAspectRatio.AutoSize = true;
-            this.checkBoxKeepAspectRatio.Location = new System.Drawing.Point(3, 32);
+            this.checkBoxKeepAspectRatio.Location = new System.Drawing.Point(3, 70);
             this.checkBoxKeepAspectRatio.Name = "checkBoxKeepAspectRatio";
             this.checkBoxKeepAspectRatio.Size = new System.Drawing.Size(138, 17);
             this.checkBoxKeepAspectRatio.TabIndex = 4;
@@ -476,8 +476,8 @@
             // 
             // panelCrop
             // 
-            this.panelCrop.Controls.Add(this.buttonCrop);
-            this.panelCrop.Controls.Add(this.labelCropSize);
+            this.panelCrop.Controls.Add(this.labelColorFilter);
+            this.panelCrop.Controls.Add(this.comboBoxColorFilter);
             this.panelCrop.Location = new System.Drawing.Point(334, 6);
             this.panelCrop.Name = "panelCrop";
             this.panelCrop.Size = new System.Drawing.Size(264, 173);
@@ -505,10 +505,10 @@
             // 
             // panelResolution
             // 
-            this.panelResolution.Controls.Add(this.labelColorFilter);
-            this.panelResolution.Controls.Add(this.comboBoxColorFilter);
             this.panelResolution.Controls.Add(this.labelResizePreset);
+            this.panelResolution.Controls.Add(this.buttonCrop);
             this.panelResolution.Controls.Add(this.labelResizeMethod);
+            this.panelResolution.Controls.Add(this.labelCropSize);
             this.panelResolution.Controls.Add(this.comboBoxResizeMethod);
             this.panelResolution.Controls.Add(this.comboBoxResizePreset);
             this.panelResolution.Controls.Add(this.pictureBoxRatioError);
@@ -536,7 +536,7 @@
             // 
             this.comboBoxColorFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxColorFilter.FormattingEnabled = true;
-            this.comboBoxColorFilter.Location = new System.Drawing.Point(153, 149);
+            this.comboBoxColorFilter.Location = new System.Drawing.Point(151, 149);
             this.comboBoxColorFilter.Name = "comboBoxColorFilter";
             this.comboBoxColorFilter.Size = new System.Drawing.Size(110, 21);
             this.comboBoxColorFilter.TabIndex = 23;
@@ -544,7 +544,7 @@
             // labelResizePreset
             // 
             this.labelResizePreset.AutoSize = true;
-            this.labelResizePreset.Location = new System.Drawing.Point(3, 60);
+            this.labelResizePreset.Location = new System.Drawing.Point(3, 98);
             this.labelResizePreset.Name = "labelResizePreset";
             this.labelResizePreset.Size = new System.Drawing.Size(93, 13);
             this.labelResizePreset.TabIndex = 22;
@@ -553,7 +553,7 @@
             // labelResizeMethod
             // 
             this.labelResizeMethod.AutoSize = true;
-            this.labelResizeMethod.Location = new System.Drawing.Point(3, 96);
+            this.labelResizeMethod.Location = new System.Drawing.Point(3, 125);
             this.labelResizeMethod.Name = "labelResizeMethod";
             this.labelResizeMethod.Size = new System.Drawing.Size(83, 13);
             this.labelResizeMethod.TabIndex = 21;
@@ -563,7 +563,7 @@
             // 
             this.comboBoxResizeMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxResizeMethod.FormattingEnabled = true;
-            this.comboBoxResizeMethod.Location = new System.Drawing.Point(153, 93);
+            this.comboBoxResizeMethod.Location = new System.Drawing.Point(153, 122);
             this.comboBoxResizeMethod.Name = "comboBoxResizeMethod";
             this.comboBoxResizeMethod.Size = new System.Drawing.Size(110, 21);
             this.comboBoxResizeMethod.TabIndex = 20;
@@ -572,7 +572,7 @@
             // 
             this.comboBoxResizePreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxResizePreset.FormattingEnabled = true;
-            this.comboBoxResizePreset.Location = new System.Drawing.Point(153, 57);
+            this.comboBoxResizePreset.Location = new System.Drawing.Point(153, 95);
             this.comboBoxResizePreset.Name = "comboBoxResizePreset";
             this.comboBoxResizePreset.Size = new System.Drawing.Size(90, 21);
             this.comboBoxResizePreset.TabIndex = 19;
@@ -581,7 +581,7 @@
             // 
             // pictureBoxRatioError
             // 
-            this.pictureBoxRatioError.Location = new System.Drawing.Point(249, 32);
+            this.pictureBoxRatioError.Location = new System.Drawing.Point(249, 70);
             this.pictureBoxRatioError.Name = "pictureBoxRatioError";
             this.pictureBoxRatioError.Size = new System.Drawing.Size(16, 16);
             this.pictureBoxRatioError.TabIndex = 11;

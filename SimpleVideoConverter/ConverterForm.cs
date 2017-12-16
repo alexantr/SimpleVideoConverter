@@ -31,6 +31,8 @@ namespace Alexantr.SimpleVideoConverter
         private int collapsedWinHeight = 114;
         private bool enlarged = false;
 
+        private string formTitle;
+
         /// <summary>
         /// Converter Form. Based on code from nixx's WebMConverter.
         /// </summary>
@@ -52,6 +54,8 @@ namespace Alexantr.SimpleVideoConverter
 
         private void ConverterForm_Load(object sender, EventArgs e)
         {
+            formTitle = Text;
+
             taskbarManager.SetProgressState(TaskbarProgressBarState.Indeterminate);
 
             isTwoPass = !(arguments.Length == 1);
@@ -181,16 +185,16 @@ namespace Alexantr.SimpleVideoConverter
                     labelStatus.Text = "Ошибка конвертирования";
                 }
                 progressBarEncoding.Value = 0;
+                Text = formTitle;
             }
             else
             {
                 richTextBoxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}Video converted succesfully.");
                 progressBarEncoding.Value = 1000;
+                Text = $"{formTitle} - 100%";
                 labelStatus.Text = "Конвертирование выполнено";
-
                 buttonPlay.Enabled = true;
             }
-
             buttonCancel.Text = "Закрыть";
             buttonCancel.Enabled = true;
             processEnded = true;
@@ -238,7 +242,19 @@ namespace Alexantr.SimpleVideoConverter
                     progressBarEncoding.Value = progressPercentage;
                 });
                 taskbarManager.SetProgressValue(progressPercentage, 1000);
+                this.InvokeIfRequired(() =>
+                {
+                    int titlePercentage = (int)Math.Floor(progressPercentage / 10.0);
+                    Text = $"{formTitle} - {titlePercentage}%";
+                });
             }
+            /*else
+            {
+                this.InvokeIfRequired(() =>
+                {
+                    Text = formTitle;
+                });
+            }*/
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)

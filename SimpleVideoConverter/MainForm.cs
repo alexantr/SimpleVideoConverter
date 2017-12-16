@@ -55,9 +55,8 @@ namespace Alexantr.SimpleVideoConverter
 
         private Dictionary<string, string> colorFilterList;
 
-        private PictureSize cropSize;
-
-        private int cropLeft, cropTop, cropRight, cropBottom;
+        private int cropLeft, cropTop, cropRight, cropBottom; // values for dar
+        private PictureSize cropPictureSize; // fixed for sar
 
         private List<string> audioBitRateList;
         private List<string> frequencyList;
@@ -282,7 +281,7 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxAspectRatio.Enabled = checkBoxKeepAspectRatio.Checked;
 
             labelCropSize.Text = "";
-            cropSize = new PictureSize();
+            cropPictureSize = new PictureSize();
 
             // Audio bitrate
             int selectedIndexBitrate = 0, indexBitrate = 0;
@@ -535,7 +534,7 @@ namespace Alexantr.SimpleVideoConverter
             string size = ((ComboBoxItem)comboBoxResizePreset.SelectedItem).Value;
             if (string.IsNullOrWhiteSpace(size))
             {
-                int w = cropSize.Width;
+                int w = cropPictureSize.Width;
                 ResizeFromPreset(w, 0);
             }
             else
@@ -563,7 +562,7 @@ namespace Alexantr.SimpleVideoConverter
             cropTop = top;
             cropRight = rigth;
             cropBottom = bottom;
-            RecalcOriginalAspectRatio();
+            RecalcPictureAspectRatio();
             UpdateHeigth();
         }
         
@@ -688,8 +687,8 @@ namespace Alexantr.SimpleVideoConverter
                 buttonShowInfo.Enabled = false;
                 buttonOpenInputFile.Enabled = false;
                 labelCropSize.Text = "";
-                cropSize.Width = 0;
-                cropSize.Height = 0;
+                cropPictureSize.Width = 0;
+                cropPictureSize.Height = 0;
                 CalcFileSize();
                 ShowHideTabs();
                 Text = formTitle;
@@ -707,7 +706,7 @@ namespace Alexantr.SimpleVideoConverter
 
             VideoStream vStream = videoFile.VideoStreams[0];
 
-            // set original aspect ratio
+            // set original sar
             string original = "";
             if (vStream.PictureSize.Width > 0 && vStream.PictureSize.Height > 0)
             {
@@ -716,8 +715,8 @@ namespace Alexantr.SimpleVideoConverter
             FillComboBoxAspectRatio(original);
             checkBoxKeepAspectRatio.Checked = !doNotCheckKeepARAgain && !string.IsNullOrWhiteSpace(original);
 
-            cropSize.Width = vStream.PictureSize.Width;
-            cropSize.Height = vStream.PictureSize.Height;
+            cropPictureSize.Width = vStream.PictureSize.Width;
+            cropPictureSize.Height = vStream.PictureSize.Height;
 
             // reset crop values
             cropTop = 0;
@@ -969,6 +968,8 @@ namespace Alexantr.SimpleVideoConverter
 
             // Video filters
 
+            VideoStream vStream = videoFile.VideoStreams[0];
+
             List<string> filters = new List<string>();
 
             if (checkBoxDeinterlace.Checked)
@@ -979,22 +980,25 @@ namespace Alexantr.SimpleVideoConverter
                 filters.Add(deinterlaceFilter);
             }
 
+            // crop - using dar
             if (cropTop > 0 || cropBottom > 0 || cropLeft > 0 || cropRight > 0)
             {
-                int origW = videoFile.VideoStreams[0].PictureSize.Width;
-                int origH = videoFile.VideoStreams[0].PictureSize.Height;
-                int cropW = origW - (int)Math.Round((double)cropLeft + cropRight, 0);
-                int cropH = origH - (int)Math.Round((double)cropTop + cropBottom, 0);
-                int cropX = (int)Math.Round((double)cropLeft, 0);
-                int cropY = (int)Math.Round((double)cropTop, 0);
-                filters.Add($"crop={cropW}:{cropH}:{cropX}:{cropY}");
+                int cropW = vStream.OriginalSize.Width - cropLeft - cropRight;
+                int cropH = vStream.OriginalSize.Height - cropTop - cropBottom;
+                filters.Add($"crop={cropW}:{cropH}:{cropLeft}:{cropTop}");
             }
 
             if (checkBoxResizePicture.Checked)
             {
                 // https://www.ffmpeg.org/ffmpeg-scaler.html#sws_005fflags
-                filters.Add($"scale={width}x{height}:flags={resizeMethod},setsar=1:1");
+                filters.Add($"scale={width}x{height}:flags={resizeMethod}");
             }
+            else if (vStream.UsingDAR)
+            {
+                filters.Add($"scale={cropPictureSize.Width}x{cropPictureSize.Height}:flags={resizeMethod}");
+            }
+
+            filters.Add($"setsar=1:1");
 
             if (colorFilter == "gray")
                 filters.Add($"colorchannelmixer=.3:.4:.3:0:.3:.4:.3:0:.3:.4:.3");
@@ -1241,34 +1245,45 @@ namespace Alexantr.SimpleVideoConverter
             return ar;
         }
 
-        private void RecalcOriginalAspectRatio()
+        private void RecalcPictureAspectRatio()
         {
             if (videoFile == null)
                 return;
-            VideoStream stream = videoFile.VideoStreams[0];
-            int newW = stream.PictureSize.Width;
-            int newH = stream.PictureSize.Height;
+            VideoStream vStream = videoFile.VideoStreams[0];
             if (cropTop > 0 || cropBottom > 0 || cropLeft > 0 || cropRight > 0)
             {
-                newW = stream.PictureSize.Width - (int)Math.Round((double)cropLeft + cropRight, 0);
-                newH = stream.PictureSize.Height - (int)Math.Round((double)cropTop + cropBottom, 0);
-                cropSize.Width = newW;
-                cropSize.Height = newH;
+                // init with oar sizes
+                int newW = vStream.OriginalSize.Width - cropLeft - cropRight;
+                int newH = vStream.OriginalSize.Height - cropTop - cropBottom;
+                // correct dar -> sar
+                if (vStream.UsingDAR)
+                {
+                    double diffW = (double)vStream.PictureSize.Width / vStream.OriginalSize.Width;
+                    double diffH = (double)vStream.PictureSize.Height / vStream.OriginalSize.Height;
+                    newW = (int)Math.Round(newW * diffW, 0);
+                    newH = (int)Math.Round(newH * diffH, 0);
+                    if (newW % 2 == 1)
+                        newW -= 1;
+                    if (newW < MinWidth)
+                        newW = MinWidth;
+                    if (newH % 2 == 1)
+                        newH -= 1;
+                    if (newH < MinHeight)
+                        newH = MinHeight;
+                }
+                cropPictureSize.Width = newW;
+                cropPictureSize.Height = newH;
                 // show size changes
-                labelCropSize.Text = $"{stream.PictureSize.ToString()} → {cropSize.ToString()}";
+                labelCropSize.Text = $"{vStream.PictureSize.ToString()} → {cropPictureSize.ToString()}";
             }
             else
             {
-                cropSize.Width = stream.PictureSize.Width;
-                cropSize.Height = stream.PictureSize.Height;
+                cropPictureSize.Width = vStream.PictureSize.Width;
+                cropPictureSize.Height = vStream.PictureSize.Height;
                 labelCropSize.Text = "";
             }
-            // set original aspect ratio
-            string original = "";
-            if (newW > 0 && newH > 0)
-            {
-                original = $"{newW}:{newH}";
-            }
+            // set original sar
+            string original = $"{cropPictureSize.Width}:{cropPictureSize.Height}";
             FillComboBoxAspectRatio(original);
         }
 
