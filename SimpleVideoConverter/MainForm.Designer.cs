@@ -32,24 +32,18 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.textBoxOut = new System.Windows.Forms.TextBox();
             this.buttonBrowseOut = new System.Windows.Forms.Button();
-            this.numericUpDownWidth = new System.Windows.Forms.NumericUpDown();
-            this.labelX = new System.Windows.Forms.Label();
-            this.numericUpDownHeight = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownBitrate = new System.Windows.Forms.NumericUpDown();
             this.comboBoxFileType = new System.Windows.Forms.ComboBox();
             this.labelFrameRate = new System.Windows.Forms.Label();
             this.comboBoxFrameRate = new System.Windows.Forms.ComboBox();
-            this.checkBoxResizePicture = new System.Windows.Forms.CheckBox();
             this.comboBoxAudioBitrate = new System.Windows.Forms.ComboBox();
             this.labelAudioBitrate = new System.Windows.Forms.Label();
             this.labelChannels = new System.Windows.Forms.Label();
-            this.comboBoxChannels = new System.Windows.Forms.ComboBox();
+            this.comboBoxAudioChannels = new System.Windows.Forms.ComboBox();
             this.labelFrequency = new System.Windows.Forms.Label();
-            this.comboBoxFrequency = new System.Windows.Forms.ComboBox();
+            this.comboBoxAudioFrequency = new System.Windows.Forms.ComboBox();
             this.checkedListBoxAudioStreams = new System.Windows.Forms.CheckedListBox();
             this.buttonGo = new System.Windows.Forms.Button();
-            this.comboBoxAspectRatio = new System.Windows.Forms.ComboBox();
-            this.checkBoxKeepAspectRatio = new System.Windows.Forms.CheckBox();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageFile = new System.Windows.Forms.TabPage();
             this.panelFile = new System.Windows.Forms.Panel();
@@ -63,21 +57,20 @@
             this.textBoxIn = new System.Windows.Forms.TextBox();
             this.tabPagePicture = new System.Windows.Forms.TabPage();
             this.panelCrop = new System.Windows.Forms.Panel();
-            this.buttonCrop = new System.Windows.Forms.Button();
-            this.labelCropSize = new System.Windows.Forms.Label();
-            this.panelResolution = new System.Windows.Forms.Panel();
             this.labelColorFilter = new System.Windows.Forms.Label();
             this.comboBoxColorFilter = new System.Windows.Forms.ComboBox();
-            this.labelResizePreset = new System.Windows.Forms.Label();
+            this.panelResolution = new System.Windows.Forms.Panel();
+            this.labelFinalPictureSize = new System.Windows.Forms.Label();
+            this.pictureBoxSizeError = new System.Windows.Forms.PictureBox();
             this.labelResizeMethod = new System.Windows.Forms.Label();
             this.comboBoxResizeMethod = new System.Windows.Forms.ComboBox();
-            this.comboBoxResizePreset = new System.Windows.Forms.ComboBox();
-            this.pictureBoxRatioError = new System.Windows.Forms.PictureBox();
+            this.labelScalingAlgorithm = new System.Windows.Forms.Label();
+            this.comboBoxScalingAlgorithm = new System.Windows.Forms.ComboBox();
+            this.labelPictureSize = new System.Windows.Forms.Label();
+            this.comboBoxPictureSize = new System.Windows.Forms.ComboBox();
+            this.buttonCrop = new System.Windows.Forms.Button();
+            this.labelCropSize = new System.Windows.Forms.Label();
             this.tabPageVideo = new System.Windows.Forms.TabPage();
-            this.panelDeinterlace = new System.Windows.Forms.Panel();
-            this.labelFieldOrder = new System.Windows.Forms.Label();
-            this.checkBoxDeinterlace = new System.Windows.Forms.CheckBox();
-            this.comboBoxFieldOrder = new System.Windows.Forms.ComboBox();
             this.panelVideo = new System.Windows.Forms.Panel();
             this.labelCalcSize = new System.Windows.Forms.Label();
             this.labelCalcSizeText = new System.Windows.Forms.Label();
@@ -97,8 +90,11 @@
             this.labelAudioKbps = new System.Windows.Forms.Label();
             this.toolTipHint = new System.Windows.Forms.ToolTip(this.components);
             this.buttonAbout = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
+            this.labelFinalPictureSizeText = new System.Windows.Forms.Label();
+            this.panelDeinterlace = new System.Windows.Forms.Panel();
+            this.labelFieldOrder = new System.Windows.Forms.Label();
+            this.checkBoxDeinterlace = new System.Windows.Forms.CheckBox();
+            this.comboBoxFieldOrder = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBitrate)).BeginInit();
             this.tabControlMain.SuspendLayout();
             this.tabPageFile.SuspendLayout();
@@ -106,15 +102,15 @@
             this.tabPagePicture.SuspendLayout();
             this.panelCrop.SuspendLayout();
             this.panelResolution.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRatioError)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSizeError)).BeginInit();
             this.tabPageVideo.SuspendLayout();
-            this.panelDeinterlace.SuspendLayout();
             this.panelVideo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarCRF)).BeginInit();
             this.panelVideoParams.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioStreams.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
+            this.panelDeinterlace.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxOut
@@ -133,72 +129,6 @@
             this.buttonBrowseOut.Text = "Обзор";
             this.buttonBrowseOut.UseVisualStyleBackColor = true;
             this.buttonBrowseOut.Click += new System.EventHandler(this.buttonBrowseOut_Click);
-            // 
-            // numericUpDownWidth
-            // 
-            this.numericUpDownWidth.Increment = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.numericUpDownWidth.Location = new System.Drawing.Point(153, 41);
-            this.numericUpDownWidth.Maximum = new decimal(new int[] {
-            1920,
-            0,
-            0,
-            0});
-            this.numericUpDownWidth.Minimum = new decimal(new int[] {
-            128,
-            0,
-            0,
-            0});
-            this.numericUpDownWidth.Name = "numericUpDownWidth";
-            this.numericUpDownWidth.Size = new System.Drawing.Size(60, 21);
-            this.numericUpDownWidth.TabIndex = 1;
-            this.numericUpDownWidth.Value = new decimal(new int[] {
-            640,
-            0,
-            0,
-            0});
-            this.numericUpDownWidth.ValueChanged += new System.EventHandler(this.numericUpDownWidth_ValueChanged);
-            this.numericUpDownWidth.Leave += new System.EventHandler(this.numericUpDownWidth_Leave);
-            // 
-            // labelX
-            // 
-            this.labelX.AutoSize = true;
-            this.labelX.Location = new System.Drawing.Point(217, 44);
-            this.labelX.Name = "labelX";
-            this.labelX.Size = new System.Drawing.Size(13, 13);
-            this.labelX.TabIndex = 2;
-            this.labelX.Text = "x";
-            // 
-            // numericUpDownHeight
-            // 
-            this.numericUpDownHeight.Increment = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.numericUpDownHeight.Location = new System.Drawing.Point(233, 41);
-            this.numericUpDownHeight.Maximum = new decimal(new int[] {
-            1080,
-            0,
-            0,
-            0});
-            this.numericUpDownHeight.Minimum = new decimal(new int[] {
-            96,
-            0,
-            0,
-            0});
-            this.numericUpDownHeight.Name = "numericUpDownHeight";
-            this.numericUpDownHeight.Size = new System.Drawing.Size(60, 21);
-            this.numericUpDownHeight.TabIndex = 3;
-            this.numericUpDownHeight.Value = new decimal(new int[] {
-            360,
-            0,
-            0,
-            0});
-            this.numericUpDownHeight.Leave += new System.EventHandler(this.numericUpDownHeight_Leave);
             // 
             // numericUpDownBitrate
             // 
@@ -236,17 +166,6 @@
             this.comboBoxFrameRate.Size = new System.Drawing.Size(80, 21);
             this.comboBoxFrameRate.TabIndex = 1;
             // 
-            // checkBoxResizePicture
-            // 
-            this.checkBoxResizePicture.AutoSize = true;
-            this.checkBoxResizePicture.Location = new System.Drawing.Point(3, 43);
-            this.checkBoxResizePicture.Name = "checkBoxResizePicture";
-            this.checkBoxResizePicture.Size = new System.Drawing.Size(120, 17);
-            this.checkBoxResizePicture.TabIndex = 0;
-            this.checkBoxResizePicture.Text = "Изменить размеры";
-            this.checkBoxResizePicture.UseVisualStyleBackColor = true;
-            this.checkBoxResizePicture.CheckedChanged += new System.EventHandler(this.checkBoxResizePicture_CheckedChanged);
-            // 
             // comboBoxAudioBitrate
             // 
             this.comboBoxAudioBitrate.FormattingEnabled = true;
@@ -274,14 +193,14 @@
             this.labelChannels.TabIndex = 4;
             this.labelChannels.Text = "Количество каналов";
             // 
-            // comboBoxChannels
+            // comboBoxAudioChannels
             // 
-            this.comboBoxChannels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxChannels.FormattingEnabled = true;
-            this.comboBoxChannels.Location = new System.Drawing.Point(138, 86);
-            this.comboBoxChannels.Name = "comboBoxChannels";
-            this.comboBoxChannels.Size = new System.Drawing.Size(80, 21);
-            this.comboBoxChannels.TabIndex = 5;
+            this.comboBoxAudioChannels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAudioChannels.FormattingEnabled = true;
+            this.comboBoxAudioChannels.Location = new System.Drawing.Point(138, 86);
+            this.comboBoxAudioChannels.Name = "comboBoxAudioChannels";
+            this.comboBoxAudioChannels.Size = new System.Drawing.Size(80, 21);
+            this.comboBoxAudioChannels.TabIndex = 5;
             // 
             // labelFrequency
             // 
@@ -292,14 +211,14 @@
             this.labelFrequency.TabIndex = 2;
             this.labelFrequency.Text = "Частота дискретизации";
             // 
-            // comboBoxFrequency
+            // comboBoxAudioFrequency
             // 
-            this.comboBoxFrequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxFrequency.FormattingEnabled = true;
-            this.comboBoxFrequency.Location = new System.Drawing.Point(138, 54);
-            this.comboBoxFrequency.Name = "comboBoxFrequency";
-            this.comboBoxFrequency.Size = new System.Drawing.Size(80, 21);
-            this.comboBoxFrequency.TabIndex = 3;
+            this.comboBoxAudioFrequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAudioFrequency.FormattingEnabled = true;
+            this.comboBoxAudioFrequency.Location = new System.Drawing.Point(138, 54);
+            this.comboBoxAudioFrequency.Name = "comboBoxAudioFrequency";
+            this.comboBoxAudioFrequency.Size = new System.Drawing.Size(80, 21);
+            this.comboBoxAudioFrequency.TabIndex = 3;
             // 
             // checkedListBoxAudioStreams
             // 
@@ -321,27 +240,6 @@
             this.buttonGo.Text = "Конвертировать";
             this.buttonGo.UseVisualStyleBackColor = true;
             this.buttonGo.Click += new System.EventHandler(this.buttonGo_Click);
-            // 
-            // comboBoxAspectRatio
-            // 
-            this.comboBoxAspectRatio.FormattingEnabled = true;
-            this.comboBoxAspectRatio.Location = new System.Drawing.Point(153, 68);
-            this.comboBoxAspectRatio.Name = "comboBoxAspectRatio";
-            this.comboBoxAspectRatio.Size = new System.Drawing.Size(90, 21);
-            this.comboBoxAspectRatio.TabIndex = 5;
-            this.comboBoxAspectRatio.SelectedIndexChanged += new System.EventHandler(this.comboBoxAspectRatio_SelectedIndexChanged);
-            this.comboBoxAspectRatio.TextUpdate += new System.EventHandler(this.comboBoxAspectRatio_TextUpdate);
-            // 
-            // checkBoxKeepAspectRatio
-            // 
-            this.checkBoxKeepAspectRatio.AutoSize = true;
-            this.checkBoxKeepAspectRatio.Location = new System.Drawing.Point(3, 70);
-            this.checkBoxKeepAspectRatio.Name = "checkBoxKeepAspectRatio";
-            this.checkBoxKeepAspectRatio.Size = new System.Drawing.Size(138, 17);
-            this.checkBoxKeepAspectRatio.TabIndex = 4;
-            this.checkBoxKeepAspectRatio.Text = "Сохранять пропорции";
-            this.checkBoxKeepAspectRatio.UseVisualStyleBackColor = true;
-            this.checkBoxKeepAspectRatio.CheckedChanged += new System.EventHandler(this.checkBoxKeepAspectRatio_CheckedChanged);
             // 
             // tabControlMain
             // 
@@ -464,6 +362,7 @@
             // 
             // tabPagePicture
             // 
+            this.tabPagePicture.Controls.Add(this.panelDeinterlace);
             this.tabPagePicture.Controls.Add(this.panelCrop);
             this.tabPagePicture.Controls.Add(this.panelResolution);
             this.tabPagePicture.Location = new System.Drawing.Point(4, 22);
@@ -478,10 +377,120 @@
             // 
             this.panelCrop.Controls.Add(this.labelColorFilter);
             this.panelCrop.Controls.Add(this.comboBoxColorFilter);
-            this.panelCrop.Location = new System.Drawing.Point(334, 6);
+            this.panelCrop.Location = new System.Drawing.Point(314, 75);
             this.panelCrop.Name = "panelCrop";
-            this.panelCrop.Size = new System.Drawing.Size(264, 173);
+            this.panelCrop.Size = new System.Drawing.Size(284, 104);
             this.panelCrop.TabIndex = 11;
+            // 
+            // labelColorFilter
+            // 
+            this.labelColorFilter.AutoSize = true;
+            this.labelColorFilter.Location = new System.Drawing.Point(3, 83);
+            this.labelColorFilter.Name = "labelColorFilter";
+            this.labelColorFilter.Size = new System.Drawing.Size(98, 13);
+            this.labelColorFilter.TabIndex = 24;
+            this.labelColorFilter.Text = "Цветовой фильтр";
+            // 
+            // comboBoxColorFilter
+            // 
+            this.comboBoxColorFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxColorFilter.FormattingEnabled = true;
+            this.comboBoxColorFilter.Location = new System.Drawing.Point(107, 80);
+            this.comboBoxColorFilter.Name = "comboBoxColorFilter";
+            this.comboBoxColorFilter.Size = new System.Drawing.Size(110, 21);
+            this.comboBoxColorFilter.TabIndex = 23;
+            // 
+            // panelResolution
+            // 
+            this.panelResolution.Controls.Add(this.labelFinalPictureSizeText);
+            this.panelResolution.Controls.Add(this.labelFinalPictureSize);
+            this.panelResolution.Controls.Add(this.pictureBoxSizeError);
+            this.panelResolution.Controls.Add(this.labelResizeMethod);
+            this.panelResolution.Controls.Add(this.comboBoxResizeMethod);
+            this.panelResolution.Controls.Add(this.labelScalingAlgorithm);
+            this.panelResolution.Controls.Add(this.comboBoxScalingAlgorithm);
+            this.panelResolution.Controls.Add(this.labelPictureSize);
+            this.panelResolution.Controls.Add(this.comboBoxPictureSize);
+            this.panelResolution.Controls.Add(this.buttonCrop);
+            this.panelResolution.Controls.Add(this.labelCropSize);
+            this.panelResolution.Location = new System.Drawing.Point(6, 6);
+            this.panelResolution.Name = "panelResolution";
+            this.panelResolution.Size = new System.Drawing.Size(302, 173);
+            this.panelResolution.TabIndex = 8;
+            // 
+            // labelFinalPictureSize
+            // 
+            this.labelFinalPictureSize.AutoSize = true;
+            this.labelFinalPictureSize.Location = new System.Drawing.Point(124, 115);
+            this.labelFinalPictureSize.Name = "labelFinalPictureSize";
+            this.labelFinalPictureSize.Size = new System.Drawing.Size(30, 13);
+            this.labelFinalPictureSize.TabIndex = 27;
+            this.labelFinalPictureSize.Text = "WxH";
+            // 
+            // pictureBoxSizeError
+            // 
+            this.pictureBoxSizeError.Location = new System.Drawing.Point(251, 34);
+            this.pictureBoxSizeError.Name = "pictureBoxSizeError";
+            this.pictureBoxSizeError.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxSizeError.TabIndex = 25;
+            this.pictureBoxSizeError.TabStop = false;
+            // 
+            // labelResizeMethod
+            // 
+            this.labelResizeMethod.AutoSize = true;
+            this.labelResizeMethod.Location = new System.Drawing.Point(3, 63);
+            this.labelResizeMethod.Name = "labelResizeMethod";
+            this.labelResizeMethod.Size = new System.Drawing.Size(83, 13);
+            this.labelResizeMethod.TabIndex = 26;
+            this.labelResizeMethod.Text = "Метод ресайза";
+            // 
+            // comboBoxResizeMethod
+            // 
+            this.comboBoxResizeMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxResizeMethod.FormattingEnabled = true;
+            this.comboBoxResizeMethod.Location = new System.Drawing.Point(124, 60);
+            this.comboBoxResizeMethod.Name = "comboBoxResizeMethod";
+            this.comboBoxResizeMethod.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxResizeMethod.TabIndex = 25;
+            this.comboBoxResizeMethod.SelectedIndexChanged += new System.EventHandler(this.comboBoxResizeMethod_SelectedIndexChanged);
+            // 
+            // labelScalingAlgorithm
+            // 
+            this.labelScalingAlgorithm.AutoSize = true;
+            this.labelScalingAlgorithm.Location = new System.Drawing.Point(3, 90);
+            this.labelScalingAlgorithm.Name = "labelScalingAlgorithm";
+            this.labelScalingAlgorithm.Size = new System.Drawing.Size(98, 13);
+            this.labelScalingAlgorithm.TabIndex = 21;
+            this.labelScalingAlgorithm.Text = "Алгоритм ресайза";
+            // 
+            // comboBoxScalingAlgorithm
+            // 
+            this.comboBoxScalingAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxScalingAlgorithm.FormattingEnabled = true;
+            this.comboBoxScalingAlgorithm.Location = new System.Drawing.Point(124, 87);
+            this.comboBoxScalingAlgorithm.Name = "comboBoxScalingAlgorithm";
+            this.comboBoxScalingAlgorithm.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxScalingAlgorithm.TabIndex = 20;
+            // 
+            // labelPictureSize
+            // 
+            this.labelPictureSize.AutoSize = true;
+            this.labelPictureSize.Location = new System.Drawing.Point(3, 35);
+            this.labelPictureSize.Name = "labelPictureSize";
+            this.labelPictureSize.Size = new System.Drawing.Size(84, 13);
+            this.labelPictureSize.TabIndex = 24;
+            this.labelPictureSize.Text = "Размеры видео";
+            // 
+            // comboBoxPictureSize
+            // 
+            this.comboBoxPictureSize.FormattingEnabled = true;
+            this.comboBoxPictureSize.Location = new System.Drawing.Point(124, 32);
+            this.comboBoxPictureSize.Name = "comboBoxPictureSize";
+            this.comboBoxPictureSize.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxPictureSize.TabIndex = 23;
+            this.comboBoxPictureSize.SelectedIndexChanged += new System.EventHandler(this.comboBoxPictureSize_SelectedIndexChanged);
+            this.comboBoxPictureSize.TextUpdate += new System.EventHandler(this.comboBoxPictureSize_TextUpdate);
+            this.comboBoxPictureSize.Leave += new System.EventHandler(this.comboBoxPictureSize_Leave);
             // 
             // buttonCrop
             // 
@@ -503,93 +512,8 @@
             this.labelCropSize.Text = "WxH → WxH";
             this.labelCropSize.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // panelResolution
-            // 
-            this.panelResolution.Controls.Add(this.labelResizePreset);
-            this.panelResolution.Controls.Add(this.buttonCrop);
-            this.panelResolution.Controls.Add(this.labelResizeMethod);
-            this.panelResolution.Controls.Add(this.labelCropSize);
-            this.panelResolution.Controls.Add(this.comboBoxResizeMethod);
-            this.panelResolution.Controls.Add(this.comboBoxResizePreset);
-            this.panelResolution.Controls.Add(this.pictureBoxRatioError);
-            this.panelResolution.Controls.Add(this.checkBoxResizePicture);
-            this.panelResolution.Controls.Add(this.comboBoxAspectRatio);
-            this.panelResolution.Controls.Add(this.numericUpDownWidth);
-            this.panelResolution.Controls.Add(this.checkBoxKeepAspectRatio);
-            this.panelResolution.Controls.Add(this.labelX);
-            this.panelResolution.Controls.Add(this.numericUpDownHeight);
-            this.panelResolution.Location = new System.Drawing.Point(6, 6);
-            this.panelResolution.Name = "panelResolution";
-            this.panelResolution.Size = new System.Drawing.Size(322, 173);
-            this.panelResolution.TabIndex = 8;
-            // 
-            // labelColorFilter
-            // 
-            this.labelColorFilter.AutoSize = true;
-            this.labelColorFilter.Location = new System.Drawing.Point(3, 152);
-            this.labelColorFilter.Name = "labelColorFilter";
-            this.labelColorFilter.Size = new System.Drawing.Size(98, 13);
-            this.labelColorFilter.TabIndex = 24;
-            this.labelColorFilter.Text = "Цветовой фильтр";
-            // 
-            // comboBoxColorFilter
-            // 
-            this.comboBoxColorFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxColorFilter.FormattingEnabled = true;
-            this.comboBoxColorFilter.Location = new System.Drawing.Point(151, 149);
-            this.comboBoxColorFilter.Name = "comboBoxColorFilter";
-            this.comboBoxColorFilter.Size = new System.Drawing.Size(110, 21);
-            this.comboBoxColorFilter.TabIndex = 23;
-            // 
-            // labelResizePreset
-            // 
-            this.labelResizePreset.AutoSize = true;
-            this.labelResizePreset.Location = new System.Drawing.Point(3, 98);
-            this.labelResizePreset.Name = "labelResizePreset";
-            this.labelResizePreset.Size = new System.Drawing.Size(93, 13);
-            this.labelResizePreset.TabIndex = 22;
-            this.labelResizePreset.Text = "Пресет размеров";
-            // 
-            // labelResizeMethod
-            // 
-            this.labelResizeMethod.AutoSize = true;
-            this.labelResizeMethod.Location = new System.Drawing.Point(3, 125);
-            this.labelResizeMethod.Name = "labelResizeMethod";
-            this.labelResizeMethod.Size = new System.Drawing.Size(83, 13);
-            this.labelResizeMethod.TabIndex = 21;
-            this.labelResizeMethod.Text = "Метод ресайза";
-            // 
-            // comboBoxResizeMethod
-            // 
-            this.comboBoxResizeMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxResizeMethod.FormattingEnabled = true;
-            this.comboBoxResizeMethod.Location = new System.Drawing.Point(153, 122);
-            this.comboBoxResizeMethod.Name = "comboBoxResizeMethod";
-            this.comboBoxResizeMethod.Size = new System.Drawing.Size(110, 21);
-            this.comboBoxResizeMethod.TabIndex = 20;
-            // 
-            // comboBoxResizePreset
-            // 
-            this.comboBoxResizePreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxResizePreset.FormattingEnabled = true;
-            this.comboBoxResizePreset.Location = new System.Drawing.Point(153, 95);
-            this.comboBoxResizePreset.Name = "comboBoxResizePreset";
-            this.comboBoxResizePreset.Size = new System.Drawing.Size(90, 21);
-            this.comboBoxResizePreset.TabIndex = 19;
-            this.toolTipHint.SetToolTip(this.comboBoxResizePreset, resources.GetString("comboBoxResizePreset.ToolTip"));
-            this.comboBoxResizePreset.SelectedIndexChanged += new System.EventHandler(this.comboBoxResizePreset_SelectedIndexChanged);
-            // 
-            // pictureBoxRatioError
-            // 
-            this.pictureBoxRatioError.Location = new System.Drawing.Point(249, 70);
-            this.pictureBoxRatioError.Name = "pictureBoxRatioError";
-            this.pictureBoxRatioError.Size = new System.Drawing.Size(16, 16);
-            this.pictureBoxRatioError.TabIndex = 11;
-            this.pictureBoxRatioError.TabStop = false;
-            // 
             // tabPageVideo
             // 
-            this.tabPageVideo.Controls.Add(this.panelDeinterlace);
             this.tabPageVideo.Controls.Add(this.panelVideo);
             this.tabPageVideo.Controls.Add(this.panelVideoParams);
             this.tabPageVideo.Location = new System.Drawing.Point(4, 22);
@@ -599,44 +523,6 @@
             this.tabPageVideo.TabIndex = 0;
             this.tabPageVideo.Text = "Видео";
             this.tabPageVideo.UseVisualStyleBackColor = true;
-            // 
-            // panelDeinterlace
-            // 
-            this.panelDeinterlace.Controls.Add(this.labelFieldOrder);
-            this.panelDeinterlace.Controls.Add(this.checkBoxDeinterlace);
-            this.panelDeinterlace.Controls.Add(this.comboBoxFieldOrder);
-            this.panelDeinterlace.Location = new System.Drawing.Point(319, 43);
-            this.panelDeinterlace.Name = "panelDeinterlace";
-            this.panelDeinterlace.Size = new System.Drawing.Size(279, 69);
-            this.panelDeinterlace.TabIndex = 12;
-            // 
-            // labelFieldOrder
-            // 
-            this.labelFieldOrder.AutoSize = true;
-            this.labelFieldOrder.Location = new System.Drawing.Point(3, 29);
-            this.labelFieldOrder.Name = "labelFieldOrder";
-            this.labelFieldOrder.Size = new System.Drawing.Size(84, 13);
-            this.labelFieldOrder.TabIndex = 1;
-            this.labelFieldOrder.Text = "Порядок полей";
-            // 
-            // checkBoxDeinterlace
-            // 
-            this.checkBoxDeinterlace.AutoSize = true;
-            this.checkBoxDeinterlace.Location = new System.Drawing.Point(3, 3);
-            this.checkBoxDeinterlace.Name = "checkBoxDeinterlace";
-            this.checkBoxDeinterlace.Size = new System.Drawing.Size(153, 17);
-            this.checkBoxDeinterlace.TabIndex = 0;
-            this.checkBoxDeinterlace.Text = "Убрать чересстрочность";
-            this.checkBoxDeinterlace.UseVisualStyleBackColor = true;
-            // 
-            // comboBoxFieldOrder
-            // 
-            this.comboBoxFieldOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxFieldOrder.FormattingEnabled = true;
-            this.comboBoxFieldOrder.Location = new System.Drawing.Point(107, 26);
-            this.comboBoxFieldOrder.Name = "comboBoxFieldOrder";
-            this.comboBoxFieldOrder.Size = new System.Drawing.Size(110, 21);
-            this.comboBoxFieldOrder.TabIndex = 2;
             // 
             // panelVideo
             // 
@@ -790,10 +676,10 @@
             this.panelAudioParams.Controls.Add(this.labelAudioKbps);
             this.panelAudioParams.Controls.Add(this.comboBoxAudioBitrate);
             this.panelAudioParams.Controls.Add(this.labelAudioBitrate);
-            this.panelAudioParams.Controls.Add(this.comboBoxFrequency);
+            this.panelAudioParams.Controls.Add(this.comboBoxAudioFrequency);
             this.panelAudioParams.Controls.Add(this.labelChannels);
             this.panelAudioParams.Controls.Add(this.labelFrequency);
-            this.panelAudioParams.Controls.Add(this.comboBoxChannels);
+            this.panelAudioParams.Controls.Add(this.comboBoxAudioChannels);
             this.panelAudioParams.Location = new System.Drawing.Point(311, 6);
             this.panelAudioParams.Name = "panelAudioParams";
             this.panelAudioParams.Size = new System.Drawing.Size(287, 173);
@@ -828,6 +714,54 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
+            // labelFinalPictureSizeText
+            // 
+            this.labelFinalPictureSizeText.AutoSize = true;
+            this.labelFinalPictureSizeText.Location = new System.Drawing.Point(3, 115);
+            this.labelFinalPictureSizeText.Name = "labelFinalPictureSizeText";
+            this.labelFinalPictureSizeText.Size = new System.Drawing.Size(96, 13);
+            this.labelFinalPictureSizeText.TabIndex = 28;
+            this.labelFinalPictureSizeText.Text = "Выходной размер";
+            // 
+            // panelDeinterlace
+            // 
+            this.panelDeinterlace.Controls.Add(this.labelFieldOrder);
+            this.panelDeinterlace.Controls.Add(this.checkBoxDeinterlace);
+            this.panelDeinterlace.Controls.Add(this.comboBoxFieldOrder);
+            this.panelDeinterlace.Location = new System.Drawing.Point(314, 6);
+            this.panelDeinterlace.Name = "panelDeinterlace";
+            this.panelDeinterlace.Size = new System.Drawing.Size(284, 63);
+            this.panelDeinterlace.TabIndex = 25;
+            // 
+            // labelFieldOrder
+            // 
+            this.labelFieldOrder.AutoSize = true;
+            this.labelFieldOrder.Location = new System.Drawing.Point(3, 29);
+            this.labelFieldOrder.Name = "labelFieldOrder";
+            this.labelFieldOrder.Size = new System.Drawing.Size(84, 13);
+            this.labelFieldOrder.TabIndex = 1;
+            this.labelFieldOrder.Text = "Порядок полей";
+            // 
+            // checkBoxDeinterlace
+            // 
+            this.checkBoxDeinterlace.AutoSize = true;
+            this.checkBoxDeinterlace.Location = new System.Drawing.Point(3, 3);
+            this.checkBoxDeinterlace.Name = "checkBoxDeinterlace";
+            this.checkBoxDeinterlace.Size = new System.Drawing.Size(153, 17);
+            this.checkBoxDeinterlace.TabIndex = 0;
+            this.checkBoxDeinterlace.Text = "Убрать чересстрочность";
+            this.checkBoxDeinterlace.UseVisualStyleBackColor = true;
+            this.checkBoxDeinterlace.CheckedChanged += new System.EventHandler(this.checkBoxDeinterlace_CheckedChanged);
+            // 
+            // comboBoxFieldOrder
+            // 
+            this.comboBoxFieldOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFieldOrder.FormattingEnabled = true;
+            this.comboBoxFieldOrder.Location = new System.Drawing.Point(107, 26);
+            this.comboBoxFieldOrder.Name = "comboBoxFieldOrder";
+            this.comboBoxFieldOrder.Size = new System.Drawing.Size(110, 21);
+            this.comboBoxFieldOrder.TabIndex = 2;
+            // 
             // MainForm
             // 
             this.AcceptButton = this.buttonGo;
@@ -847,8 +781,6 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBitrate)).EndInit();
             this.tabControlMain.ResumeLayout(false);
             this.tabPageFile.ResumeLayout(false);
@@ -859,10 +791,8 @@
             this.panelCrop.PerformLayout();
             this.panelResolution.ResumeLayout(false);
             this.panelResolution.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRatioError)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSizeError)).EndInit();
             this.tabPageVideo.ResumeLayout(false);
-            this.panelDeinterlace.ResumeLayout(false);
-            this.panelDeinterlace.PerformLayout();
             this.panelVideo.ResumeLayout(false);
             this.panelVideo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarCRF)).EndInit();
@@ -873,30 +803,25 @@
             this.panelAudioStreams.PerformLayout();
             this.panelAudioParams.ResumeLayout(false);
             this.panelAudioParams.PerformLayout();
+            this.panelDeinterlace.ResumeLayout(false);
+            this.panelDeinterlace.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private System.Windows.Forms.Button buttonBrowseOut;
-        private System.Windows.Forms.NumericUpDown numericUpDownWidth;
-        private System.Windows.Forms.Label labelX;
-        private System.Windows.Forms.NumericUpDown numericUpDownHeight;
         private System.Windows.Forms.NumericUpDown numericUpDownBitrate;
         private System.Windows.Forms.Label labelAudioBitrate;
         private System.Windows.Forms.Label labelChannels;
-        private System.Windows.Forms.ComboBox comboBoxChannels;
+        private System.Windows.Forms.ComboBox comboBoxAudioChannels;
         private System.Windows.Forms.ComboBox comboBoxFileType;
-        private System.Windows.Forms.CheckBox checkBoxResizePicture;
         private System.Windows.Forms.Button buttonGo;
         public System.Windows.Forms.TextBox textBoxOut;
-        private System.Windows.Forms.ComboBox comboBoxFrequency;
+        private System.Windows.Forms.ComboBox comboBoxAudioFrequency;
         private System.Windows.Forms.Label labelFrequency;
         private System.Windows.Forms.CheckedListBox checkedListBoxAudioStreams;
-        private System.Windows.Forms.CheckBox checkBoxKeepAspectRatio;
-        private System.Windows.Forms.ComboBox comboBoxAspectRatio;
         private System.Windows.Forms.ComboBox comboBoxFrameRate;
-        private System.Windows.Forms.PictureBox pictureBoxRatioError;
         private System.Windows.Forms.Label labelFrameRate;
         private System.Windows.Forms.ComboBox comboBoxAudioBitrate;
         private System.Windows.Forms.TabControl tabControlMain;
@@ -934,17 +859,22 @@
         private System.Windows.Forms.Label labelSelectStreams;
         private System.Windows.Forms.Label labelAudioHz;
         private System.Windows.Forms.Label labelAudioKbps;
-        private System.Windows.Forms.ComboBox comboBoxResizePreset;
-        private System.Windows.Forms.Label labelResizeMethod;
-        private System.Windows.Forms.ComboBox comboBoxResizeMethod;
-        private System.Windows.Forms.Label labelResizePreset;
+        private System.Windows.Forms.Label labelScalingAlgorithm;
+        private System.Windows.Forms.ComboBox comboBoxScalingAlgorithm;
         private System.Windows.Forms.Label labelColorFilter;
         private System.Windows.Forms.ComboBox comboBoxColorFilter;
+        private System.Windows.Forms.Button buttonCrop;
+        private System.Windows.Forms.ComboBox comboBoxResizeMethod;
+        private System.Windows.Forms.Label labelPictureSize;
+        private System.Windows.Forms.ComboBox comboBoxPictureSize;
+        private System.Windows.Forms.Label labelResizeMethod;
+        private System.Windows.Forms.PictureBox pictureBoxSizeError;
+        private System.Windows.Forms.Label labelFinalPictureSize;
         private System.Windows.Forms.Panel panelDeinterlace;
         private System.Windows.Forms.Label labelFieldOrder;
         private System.Windows.Forms.CheckBox checkBoxDeinterlace;
         private System.Windows.Forms.ComboBox comboBoxFieldOrder;
-        private System.Windows.Forms.Button buttonCrop;
+        private System.Windows.Forms.Label labelFinalPictureSizeText;
     }
 }
 
