@@ -37,9 +37,7 @@
             this.buttonOpenInputFile = new System.Windows.Forms.Button();
             this.tabPageAudio = new System.Windows.Forms.TabPage();
             this.panelAudioStreams = new System.Windows.Forms.Panel();
-            this.labelSelectStreams = new System.Windows.Forms.Label();
-            this.checkedListBoxAudioStreams = new System.Windows.Forms.CheckedListBox();
-            this.panelAudioParams = new System.Windows.Forms.Panel();
+            this.pictureBoxAudioBitrateError = new System.Windows.Forms.PictureBox();
             this.labelAudioHz = new System.Windows.Forms.Label();
             this.labelAudioKbps = new System.Windows.Forms.Label();
             this.comboBoxAudioBitrate = new System.Windows.Forms.ComboBox();
@@ -93,11 +91,14 @@
             this.textBoxIn = new System.Windows.Forms.TextBox();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.labelOutputInfo = new System.Windows.Forms.Label();
-            this.pictureBoxAudioBitrateError = new System.Windows.Forms.PictureBox();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
+            this.labelSelectAudioStream = new System.Windows.Forms.Label();
+            this.comboBoxAudioStreams = new System.Windows.Forms.ComboBox();
+            this.panelAudioParams = new System.Windows.Forms.Panel();
+            this.checkBoxConvertAudio = new System.Windows.Forms.CheckBox();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioStreams.SuspendLayout();
-            this.panelAudioParams.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAudioBitrateError)).BeginInit();
             this.tabPageVideo.SuspendLayout();
             this.panelVideo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarCRF)).BeginInit();
@@ -111,7 +112,7 @@
             this.tabPageFile.SuspendLayout();
             this.panelFile.SuspendLayout();
             this.tabControlMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAudioBitrateError)).BeginInit();
+            this.panelAudioParams.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonGo
@@ -160,8 +161,8 @@
             // 
             // tabPageAudio
             // 
-            this.tabPageAudio.Controls.Add(this.panelAudioStreams);
             this.tabPageAudio.Controls.Add(this.panelAudioParams);
+            this.tabPageAudio.Controls.Add(this.panelAudioStreams);
             this.tabPageAudio.Location = new System.Drawing.Point(4, 22);
             this.tabPageAudio.Name = "tabPageAudio";
             this.tabPageAudio.Padding = new System.Windows.Forms.Padding(3);
@@ -172,53 +173,26 @@
             // 
             // panelAudioStreams
             // 
-            this.panelAudioStreams.Controls.Add(this.labelSelectStreams);
-            this.panelAudioStreams.Controls.Add(this.checkedListBoxAudioStreams);
+            this.panelAudioStreams.Controls.Add(this.comboBoxAudioStreams);
+            this.panelAudioStreams.Controls.Add(this.labelSelectAudioStream);
             this.panelAudioStreams.Location = new System.Drawing.Point(6, 6);
             this.panelAudioStreams.Name = "panelAudioStreams";
-            this.panelAudioStreams.Size = new System.Drawing.Size(299, 173);
+            this.panelAudioStreams.Size = new System.Drawing.Size(364, 38);
             this.panelAudioStreams.TabIndex = 18;
             // 
-            // labelSelectStreams
+            // pictureBoxAudioBitrateError
             // 
-            this.labelSelectStreams.AutoSize = true;
-            this.labelSelectStreams.Location = new System.Drawing.Point(3, 3);
-            this.labelSelectStreams.Name = "labelSelectStreams";
-            this.labelSelectStreams.Size = new System.Drawing.Size(99, 13);
-            this.labelSelectStreams.TabIndex = 1;
-            this.labelSelectStreams.Text = "Выбрать дорожки";
-            // 
-            // checkedListBoxAudioStreams
-            // 
-            this.checkedListBoxAudioStreams.CheckOnClick = true;
-            this.checkedListBoxAudioStreams.FormattingEnabled = true;
-            this.checkedListBoxAudioStreams.HorizontalScrollbar = true;
-            this.checkedListBoxAudioStreams.Location = new System.Drawing.Point(3, 22);
-            this.checkedListBoxAudioStreams.Name = "checkedListBoxAudioStreams";
-            this.checkedListBoxAudioStreams.Size = new System.Drawing.Size(293, 148);
-            this.checkedListBoxAudioStreams.TabIndex = 0;
-            this.checkedListBoxAudioStreams.SelectedIndexChanged += new System.EventHandler(this.checkedListBoxAudioStreams_SelectedIndexChanged);
-            // 
-            // panelAudioParams
-            // 
-            this.panelAudioParams.Controls.Add(this.pictureBoxAudioBitrateError);
-            this.panelAudioParams.Controls.Add(this.labelAudioHz);
-            this.panelAudioParams.Controls.Add(this.labelAudioKbps);
-            this.panelAudioParams.Controls.Add(this.comboBoxAudioBitrate);
-            this.panelAudioParams.Controls.Add(this.labelAudioBitrate);
-            this.panelAudioParams.Controls.Add(this.comboBoxAudioFrequency);
-            this.panelAudioParams.Controls.Add(this.labelChannels);
-            this.panelAudioParams.Controls.Add(this.labelFrequency);
-            this.panelAudioParams.Controls.Add(this.comboBoxAudioChannels);
-            this.panelAudioParams.Location = new System.Drawing.Point(311, 6);
-            this.panelAudioParams.Name = "panelAudioParams";
-            this.panelAudioParams.Size = new System.Drawing.Size(287, 173);
-            this.panelAudioParams.TabIndex = 17;
+            this.pictureBoxAudioBitrateError.Location = new System.Drawing.Point(270, 35);
+            this.pictureBoxAudioBitrateError.Name = "pictureBoxAudioBitrateError";
+            this.pictureBoxAudioBitrateError.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxAudioBitrateError.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBoxAudioBitrateError.TabIndex = 8;
+            this.pictureBoxAudioBitrateError.TabStop = false;
             // 
             // labelAudioHz
             // 
             this.labelAudioHz.AutoSize = true;
-            this.labelAudioHz.Location = new System.Drawing.Point(224, 57);
+            this.labelAudioHz.Location = new System.Drawing.Point(224, 68);
             this.labelAudioHz.Name = "labelAudioHz";
             this.labelAudioHz.Size = new System.Drawing.Size(19, 13);
             this.labelAudioHz.TabIndex = 7;
@@ -227,7 +201,7 @@
             // labelAudioKbps
             // 
             this.labelAudioKbps.AutoSize = true;
-            this.labelAudioKbps.Location = new System.Drawing.Point(224, 25);
+            this.labelAudioKbps.Location = new System.Drawing.Point(224, 36);
             this.labelAudioKbps.Name = "labelAudioKbps";
             this.labelAudioKbps.Size = new System.Drawing.Size(40, 13);
             this.labelAudioKbps.TabIndex = 6;
@@ -236,7 +210,7 @@
             // comboBoxAudioBitrate
             // 
             this.comboBoxAudioBitrate.FormattingEnabled = true;
-            this.comboBoxAudioBitrate.Location = new System.Drawing.Point(138, 22);
+            this.comboBoxAudioBitrate.Location = new System.Drawing.Point(138, 33);
             this.comboBoxAudioBitrate.Name = "comboBoxAudioBitrate";
             this.comboBoxAudioBitrate.Size = new System.Drawing.Size(80, 21);
             this.comboBoxAudioBitrate.TabIndex = 1;
@@ -247,7 +221,7 @@
             // labelAudioBitrate
             // 
             this.labelAudioBitrate.AutoSize = true;
-            this.labelAudioBitrate.Location = new System.Drawing.Point(3, 25);
+            this.labelAudioBitrate.Location = new System.Drawing.Point(3, 36);
             this.labelAudioBitrate.Name = "labelAudioBitrate";
             this.labelAudioBitrate.Size = new System.Drawing.Size(49, 13);
             this.labelAudioBitrate.TabIndex = 0;
@@ -257,7 +231,7 @@
             // 
             this.comboBoxAudioFrequency.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAudioFrequency.FormattingEnabled = true;
-            this.comboBoxAudioFrequency.Location = new System.Drawing.Point(138, 54);
+            this.comboBoxAudioFrequency.Location = new System.Drawing.Point(138, 65);
             this.comboBoxAudioFrequency.Name = "comboBoxAudioFrequency";
             this.comboBoxAudioFrequency.Size = new System.Drawing.Size(80, 21);
             this.comboBoxAudioFrequency.TabIndex = 3;
@@ -266,7 +240,7 @@
             // labelChannels
             // 
             this.labelChannels.AutoSize = true;
-            this.labelChannels.Location = new System.Drawing.Point(3, 89);
+            this.labelChannels.Location = new System.Drawing.Point(3, 100);
             this.labelChannels.Name = "labelChannels";
             this.labelChannels.Size = new System.Drawing.Size(112, 13);
             this.labelChannels.TabIndex = 4;
@@ -275,7 +249,7 @@
             // labelFrequency
             // 
             this.labelFrequency.AutoSize = true;
-            this.labelFrequency.Location = new System.Drawing.Point(3, 57);
+            this.labelFrequency.Location = new System.Drawing.Point(3, 68);
             this.labelFrequency.Name = "labelFrequency";
             this.labelFrequency.Size = new System.Drawing.Size(129, 13);
             this.labelFrequency.TabIndex = 2;
@@ -285,7 +259,7 @@
             // 
             this.comboBoxAudioChannels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAudioChannels.FormattingEnabled = true;
-            this.comboBoxAudioChannels.Location = new System.Drawing.Point(138, 86);
+            this.comboBoxAudioChannels.Location = new System.Drawing.Point(138, 97);
             this.comboBoxAudioChannels.Name = "comboBoxAudioChannels";
             this.comboBoxAudioChannels.Size = new System.Drawing.Size(80, 21);
             this.comboBoxAudioChannels.TabIndex = 5;
@@ -751,15 +725,6 @@
             this.labelOutputInfo.TabIndex = 10;
             this.labelOutputInfo.Text = "...";
             // 
-            // pictureBoxAudioBitrateError
-            // 
-            this.pictureBoxAudioBitrateError.Location = new System.Drawing.Point(268, 23);
-            this.pictureBoxAudioBitrateError.Name = "pictureBoxAudioBitrateError";
-            this.pictureBoxAudioBitrateError.Size = new System.Drawing.Size(16, 16);
-            this.pictureBoxAudioBitrateError.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.pictureBoxAudioBitrateError.TabIndex = 8;
-            this.pictureBoxAudioBitrateError.TabStop = false;
-            // 
             // labelOutputInfoTitle
             // 
             this.labelOutputInfoTitle.AutoSize = true;
@@ -769,6 +734,53 @@
             this.labelOutputInfoTitle.Size = new System.Drawing.Size(47, 26);
             this.labelOutputInfoTitle.TabIndex = 11;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
+            // 
+            // labelSelectAudioStream
+            // 
+            this.labelSelectAudioStream.AutoSize = true;
+            this.labelSelectAudioStream.Location = new System.Drawing.Point(3, 6);
+            this.labelSelectAudioStream.Name = "labelSelectAudioStream";
+            this.labelSelectAudioStream.Size = new System.Drawing.Size(53, 13);
+            this.labelSelectAudioStream.TabIndex = 2;
+            this.labelSelectAudioStream.Text = "Дорожка";
+            // 
+            // comboBoxAudioStreams
+            // 
+            this.comboBoxAudioStreams.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAudioStreams.FormattingEnabled = true;
+            this.comboBoxAudioStreams.Location = new System.Drawing.Point(77, 3);
+            this.comboBoxAudioStreams.Name = "comboBoxAudioStreams";
+            this.comboBoxAudioStreams.Size = new System.Drawing.Size(220, 21);
+            this.comboBoxAudioStreams.TabIndex = 3;
+            this.comboBoxAudioStreams.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioStreams_SelectedIndexChanged);
+            // 
+            // panelAudioParams
+            // 
+            this.panelAudioParams.Controls.Add(this.checkBoxConvertAudio);
+            this.panelAudioParams.Controls.Add(this.pictureBoxAudioBitrateError);
+            this.panelAudioParams.Controls.Add(this.comboBoxAudioBitrate);
+            this.panelAudioParams.Controls.Add(this.labelAudioHz);
+            this.panelAudioParams.Controls.Add(this.labelChannels);
+            this.panelAudioParams.Controls.Add(this.labelFrequency);
+            this.panelAudioParams.Controls.Add(this.labelAudioKbps);
+            this.panelAudioParams.Controls.Add(this.comboBoxAudioFrequency);
+            this.panelAudioParams.Controls.Add(this.comboBoxAudioChannels);
+            this.panelAudioParams.Controls.Add(this.labelAudioBitrate);
+            this.panelAudioParams.Location = new System.Drawing.Point(6, 50);
+            this.panelAudioParams.Name = "panelAudioParams";
+            this.panelAudioParams.Size = new System.Drawing.Size(364, 129);
+            this.panelAudioParams.TabIndex = 19;
+            // 
+            // checkBoxConvertAudio
+            // 
+            this.checkBoxConvertAudio.AutoSize = true;
+            this.checkBoxConvertAudio.Location = new System.Drawing.Point(3, 3);
+            this.checkBoxConvertAudio.Name = "checkBoxConvertAudio";
+            this.checkBoxConvertAudio.Size = new System.Drawing.Size(135, 17);
+            this.checkBoxConvertAudio.TabIndex = 9;
+            this.checkBoxConvertAudio.Text = "Переконвертировать";
+            this.checkBoxConvertAudio.UseVisualStyleBackColor = true;
+            this.checkBoxConvertAudio.CheckedChanged += new System.EventHandler(this.checkBoxConvertAudio_CheckedChanged);
             // 
             // MainForm
             // 
@@ -793,8 +805,7 @@
             this.tabPageAudio.ResumeLayout(false);
             this.panelAudioStreams.ResumeLayout(false);
             this.panelAudioStreams.PerformLayout();
-            this.panelAudioParams.ResumeLayout(false);
-            this.panelAudioParams.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAudioBitrateError)).EndInit();
             this.tabPageVideo.ResumeLayout(false);
             this.panelVideo.ResumeLayout(false);
             this.panelVideo.PerformLayout();
@@ -814,7 +825,8 @@
             this.panelFile.ResumeLayout(false);
             this.panelFile.PerformLayout();
             this.tabControlMain.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAudioBitrateError)).EndInit();
+            this.panelAudioParams.ResumeLayout(false);
+            this.panelAudioParams.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -825,9 +837,6 @@
         private System.Windows.Forms.ToolTip toolTipHint;
         private System.Windows.Forms.TabPage tabPageAudio;
         private System.Windows.Forms.Panel panelAudioStreams;
-        private System.Windows.Forms.Label labelSelectStreams;
-        private System.Windows.Forms.CheckedListBox checkedListBoxAudioStreams;
-        private System.Windows.Forms.Panel panelAudioParams;
         private System.Windows.Forms.Label labelAudioHz;
         private System.Windows.Forms.Label labelAudioKbps;
         private System.Windows.Forms.ComboBox comboBoxAudioBitrate;
@@ -886,6 +895,10 @@
         private System.Windows.Forms.Label labelOutputInfo;
         private System.Windows.Forms.PictureBox pictureBoxAudioBitrateError;
         private System.Windows.Forms.Label labelOutputInfoTitle;
+        private System.Windows.Forms.ComboBox comboBoxAudioStreams;
+        private System.Windows.Forms.Label labelSelectAudioStream;
+        private System.Windows.Forms.Panel panelAudioParams;
+        private System.Windows.Forms.CheckBox checkBoxConvertAudio;
     }
 }
 
