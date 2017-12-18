@@ -97,14 +97,15 @@ namespace Alexantr.SimpleVideoConverter
                 "854x480",
                 "720x404",
                 "640x480",
-                "640x360"
+                "640x360",
+                "320x240"
             };
 
             resizeMethodList = new Dictionary<string, string>
             {
-                { ResizeMethodFit, "Вписать в размер" },
+                { ResizeMethodFit, "Вписать" },
                 { ResizeMethodStretch, "Растянуть" },
-                { ResizeMethodBorders, "Вписать с полосами" }
+                { ResizeMethodBorders, "C полосами" }
             };
 
             // see https://superuser.com/questions/375718/which-resize-algorithm-to-choose-for-videos
@@ -286,7 +287,7 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxFieldOrder.SelectedIndex = 0;
 
             // Deinterlace
-            ManageCheckPanel(checkBoxDeinterlace, panelDeinterlace);
+            comboBoxFieldOrder.Enabled = checkBoxDeinterlace.Checked;
 
             // Color filter
             comboBoxColorFilter.Items.Clear();
@@ -508,7 +509,13 @@ namespace Alexantr.SimpleVideoConverter
 
         private void checkBoxDeinterlace_CheckedChanged(object sender, EventArgs e)
         {
-            ManageCheckPanel(checkBoxDeinterlace, panelDeinterlace);
+            comboBoxFieldOrder.Enabled = checkBoxDeinterlace.Checked;
+            SetOutputInfo();
+        }
+
+        private void comboBoxFieldOrder_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetOutputInfo();
         }
 
         #endregion
@@ -538,7 +545,7 @@ namespace Alexantr.SimpleVideoConverter
                 {
                     comboBoxPictureSize.Text = chkPictureSize;
                 }
-                pictureBoxSizeError.BackgroundImage = null;
+                pictureBoxSizeError.Image = null;
             }
         }
 
@@ -577,18 +584,6 @@ namespace Alexantr.SimpleVideoConverter
 
         #region Audio
 
-        private void comboBoxAudioBitrate_Leave(object sender, EventArgs e)
-        {
-            string input = comboBoxAudioBitrate.SelectedIndex < 0 ? comboBoxAudioBitrate.Text : ((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value;
-            int.TryParse(input, out int audioBitrate);
-            if (audioBitrate < MinAudioBitrate)
-                audioBitrate = MinAudioBitrate;
-            if (audioBitrate > MaxAudioBitrate)
-                audioBitrate = MaxAudioBitrate;
-            comboBoxAudioBitrate.Text = audioBitrate.ToString();
-            CalcFileSize();
-        }
-
         private void checkedListBoxAudioStreams_SelectedIndexChanged(object sender, EventArgs e)
         {
             List<int> selectedAudioList = new List<int>();
@@ -596,8 +591,52 @@ namespace Alexantr.SimpleVideoConverter
             {
                 selectedAudioList.Add(checkedIndex);
             }
-            panelAudioParams.Enabled = selectedAudioList.Count > 0;
+            //panelAudioParams.Enabled = selectedAudioList.Count > 0;
             CalcFileSize();
+            SetOutputInfo();
+        }
+
+        private void comboBoxAudioBitrate_Leave(object sender, EventArgs e)
+        {
+            if (comboBoxAudioBitrate.SelectedIndex < 0)
+            {
+                string input = comboBoxAudioBitrate.Text;
+                int.TryParse(input, out int audioBitrate);
+                if (audioBitrate < MinAudioBitrate)
+                    audioBitrate = MinAudioBitrate;
+                if (audioBitrate > MaxAudioBitrate)
+                    audioBitrate = MaxAudioBitrate;
+                comboBoxAudioBitrate.Text = audioBitrate.ToString();
+                pictureBoxAudioBitrateError.Image = null;
+            }
+            CalcFileSize();
+            SetOutputInfo();
+        }
+
+        private void comboBoxAudioBitrate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CalcFileSize();
+            SetOutputInfo();
+        }
+
+        private void comboBoxAudioBitrate_TextUpdate(object sender, EventArgs e)
+        {
+            string input = comboBoxAudioBitrate.SelectedIndex < 0 ? comboBoxAudioBitrate.Text : ((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value;
+            int.TryParse(input, out int audioBitrate);
+            if (audioBitrate < MinAudioBitrate || audioBitrate > MaxAudioBitrate)
+                pictureBoxAudioBitrateError.Image = Properties.Resources.critical;
+            else
+                pictureBoxAudioBitrateError.Image = null;
+        }
+
+        private void comboBoxAudioFrequency_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetOutputInfo();
+        }
+
+        private void comboBoxAudioChannels_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetOutputInfo();
         }
 
         #endregion
@@ -851,7 +890,8 @@ namespace Alexantr.SimpleVideoConverter
             string fieldOrder = ((ComboBoxItem)comboBoxFieldOrder.SelectedItem).Value;
             string frameRate = ((ComboBoxItem)comboBoxFrameRate.SelectedItem).Value;
 
-            int.TryParse(((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value, out int audioBitrate);
+            string audioBitrateVal = comboBoxAudioBitrate.SelectedIndex < 0 ? comboBoxAudioBitrate.Text : ((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value;
+            int.TryParse(audioBitrateVal, out int audioBitrate);
             string audioChannels = ((ComboBoxItem)comboBoxAudioChannels.SelectedItem).Value;
             string audioFrequency = ((ComboBoxItem)comboBoxAudioFrequency.SelectedItem).Value;
             
@@ -1182,7 +1222,7 @@ namespace Alexantr.SimpleVideoConverter
         {
             if (videoFile == null)
                 return;
-            pictureBoxSizeError.BackgroundImage = null;
+            pictureBoxSizeError.Image = null;
             // "do not change size" selected size = crop size
             if (comboBoxPictureSize.SelectedIndex == 0)
             {
@@ -1210,12 +1250,12 @@ namespace Alexantr.SimpleVideoConverter
                     selectedPictureSize.Height = newHeight;
                 }
                 catch {
-                    pictureBoxSizeError.BackgroundImage = Properties.Resources.critical;
+                    pictureBoxSizeError.Image = Properties.Resources.critical;
                 }
             }
             else
             {
-                pictureBoxSizeError.BackgroundImage = Properties.Resources.critical;
+                pictureBoxSizeError.Image = Properties.Resources.critical;
             }
         }
         
@@ -1310,7 +1350,8 @@ namespace Alexantr.SimpleVideoConverter
                 selectedAudioList.Add(checkedIndex);
             }
 
-            int.TryParse(((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value, out int audioBitrate);
+            string audioBitrateVal = comboBoxAudioBitrate.SelectedIndex < 0 ? comboBoxAudioBitrate.Text : ((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value;
+            int.TryParse(audioBitrateVal, out int audioBitrate);
             int videoBitrate = (int)Math.Round(numericUpDownBitrate.Value, 0);
 
             double fileSize = (videoBitrate * duration / 8.0 + audioBitrate * duration * selectedAudioList.Count / 8.0) / 1024.0; // MiB
@@ -1328,11 +1369,14 @@ namespace Alexantr.SimpleVideoConverter
         {
             if (videoFile == null)
             {
+                labelOutputInfoTitle.Visible = false;
                 labelOutputInfo.Text = "";
                 return;
             }
 
             StringBuilder info = new StringBuilder();
+
+            // Video
 
             string selectedMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
             if (selectedMethod == ResizeMethodFit)
@@ -1342,25 +1386,74 @@ namespace Alexantr.SimpleVideoConverter
 
             string selectedMethodText = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Text;
             if (comboBoxPictureSize.SelectedIndex > 0 || string.IsNullOrWhiteSpace(comboBoxPictureSize.Text))
-                info.Append($" ({selectedMethodText.ToLower()})");
+                info.Append($", {selectedMethodText.ToLower()}");
 
             if (checkBoxDeinterlace.Checked)
-                info.Append(", деинтерлейсинг");
+            {
+                string fieldOrder = ((ComboBoxItem)comboBoxFieldOrder.SelectedItem).Value;
+                if (string.IsNullOrWhiteSpace(fieldOrder))
+                    info.Append(", деинт.");
+                else
+                    info.Append($", деинт. {fieldOrder.ToUpper()}");
+            }
 
             if (comboBoxColorFilter.SelectedIndex > 0)
             {
-                string colorFilter = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Text;
-                info.Append($", {colorFilter.ToLower()}");
+                string colorFilter = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Value;
+                string colorFilterText = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Text;
+                if (colorFilter == "gray")
+                    colorFilterText = "ч/б";
+                info.Append($", {colorFilterText.ToLower()}");
             }
             if (radioButtonCRF.Checked)
-                info.Append($"{Environment.NewLine}CRF {trackBarCRF.Value}");
+                info.Append($", CRF {trackBarCRF.Value}");
             else
-                info.Append($"{Environment.NewLine}{numericUpDownBitrate.Value} kbps");
+                info.Append($", {numericUpDownBitrate.Value} кбит/с");
 
             double finalFrameRate = CalcFinalFrameRate();
             if (finalFrameRate > 0)
                 info.Append($", {finalFrameRate} fps");
 
+            // Audio
+
+            info.Append($"{Environment.NewLine}");
+
+            List<int> selectedAudioList = new List<int>();
+            foreach (int checkedIndex in checkedListBoxAudioStreams.CheckedIndices)
+            {
+                selectedAudioList.Add(checkedIndex);
+            }
+
+            if (selectedAudioList.Count == 0)
+            {
+                info.Append("нет");
+            }
+            else
+            {
+                string audioBitrate = comboBoxAudioBitrate.SelectedIndex < 0 ? comboBoxAudioBitrate.Text : ((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value;
+                string audioChannels = ((ComboBoxItem)comboBoxAudioChannels.SelectedItem).Value;
+                string audioFrequency = ((ComboBoxItem)comboBoxAudioFrequency.SelectedItem).Value;
+
+                info.Append($"{audioBitrate} кбит/с");
+
+                if (!string.IsNullOrWhiteSpace(audioFrequency))
+                {
+                    info.Append($", {audioFrequency} Гц");
+                }
+                if (!string.IsNullOrWhiteSpace(audioChannels))
+                {
+                    if (audioChannels == "1")
+                        info.Append(", моно");
+                    else if (audioChannels == "2")
+                        info.Append(", стерео");
+                    else
+                        info.Append($", каналы: audioChannels");
+                }
+            }
+
+            // Show
+
+            labelOutputInfoTitle.Visible = true;
             labelOutputInfo.Text = info.ToString();
         }
 

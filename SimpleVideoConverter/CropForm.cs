@@ -56,8 +56,6 @@ namespace Alexantr.SimpleVideoConverter
 
             currentTime = totalTime / 2;
 
-            pictureBoxPreview.SizeMode = PictureBoxSizeMode.CenterImage;
-
             size = GetWidthHeight();
 
             // Update values for crop
