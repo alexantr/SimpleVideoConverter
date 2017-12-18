@@ -114,7 +114,8 @@ namespace Alexantr.SimpleVideoConverter
                             };
 
                             // frame rate
-                            string[] frameRateParts = frameRate.Split('/');
+                            string avgFrameRate = stream.GetAttribute("avg_frame_rate", "");
+                            string[] frameRateParts = !string.IsNullOrWhiteSpace(avgFrameRate) ? avgFrameRate.Split('/')  : frameRate.Split('/');
                             videoStream.FrameRate = frameRateParts.Length != 2 ? 0.0 : Math.Round(double.Parse(frameRateParts[0]) / double.Parse(frameRateParts[1]), 3);
 
                             // frame count

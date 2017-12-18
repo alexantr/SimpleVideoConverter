@@ -120,6 +120,12 @@
   <metadata name="toolTipHint.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="comboBoxResizeMethod.ToolTip" xml:space="preserve">
+    <value>Вписать в размер — вписать в выбранный размер с сохранением пропорций
+Растянуть — растянуть картинку до выбранного размера без сохранения пропорций
+Вписать с полосами — вписать с сохранением пропорций и добавить черные полосы
+для получения выбранного размера</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

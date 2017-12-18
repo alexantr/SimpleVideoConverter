@@ -24,13 +24,13 @@ namespace Alexantr.SimpleVideoConverter
         private const string EncodeModeCRF = "crf";
 
         public const int MinWidth = 128;
-        public const int MaxWidth = 1920;
+        public const int MaxWidth = 8192;
 
         public const int MinHeight = 96;
-        public const int MaxHeight = 1080;
+        public const int MaxHeight = 4320;
 
         private const int MinBitrate = 100;
-        private const int MaxBitrate = 50000;
+        private const int MaxBitrate = 500000;
         private const int DefaultBitrate = 3000;
 
         private const int DefaultMp4CRF = 20;
@@ -185,7 +185,8 @@ namespace Alexantr.SimpleVideoConverter
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            formTitle = Text;
+            formTitle = AppendAppVersion(Text);
+            Text = formTitle;
 
             buttonGo.Enabled = false;
             buttonShowInfo.Enabled = false;
@@ -200,7 +201,6 @@ namespace Alexantr.SimpleVideoConverter
             cropPictureSize.Height = MinHeight;
 
             // init new size
-            labelFinalPictureSize.Text = "";
             selectedPictureSize = new PictureSize();
             selectedPictureSize.Width = MinWidth;
             selectedPictureSize.Height = MinHeight;
@@ -338,6 +338,8 @@ namespace Alexantr.SimpleVideoConverter
 
             // Tabs
             ShowHideTabs();
+
+            SetOutputInfo();
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -455,7 +457,7 @@ namespace Alexantr.SimpleVideoConverter
 
         #endregion
 
-        #region Format, Mode, CRF, Bitrate
+        #region Format, Mode, CRF, Bitrate, FPS
 
         private void comboBoxFileType_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -473,25 +475,33 @@ namespace Alexantr.SimpleVideoConverter
         {
             CheckVideoModeRadioButtons();
             CalcFileSize();
+            SetOutputInfo();
         }
 
         private void radioButtonBitrate_CheckedChanged(object sender, EventArgs e)
         {
             CheckVideoModeRadioButtons();
             CalcFileSize();
+            SetOutputInfo();
         }
 
         private void trackBarCRF_ValueChanged(object sender, EventArgs e)
         {
-            var crf = trackBarCRF.Value;
-            labelCRF.Text = $"{crf}";
+            labelCRF.Text = $"{trackBarCRF.Value}";
+            SetOutputInfo();
         }
 
         private void numericUpDownBitrate_ValueChanged(object sender, EventArgs e)
         {
             CalcFileSize();
+            SetOutputInfo();
         }
 
+        private void comboBoxFrameRate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetOutputInfo();
+        }
+        
         #endregion
 
         #region Deinterlace
@@ -508,11 +518,13 @@ namespace Alexantr.SimpleVideoConverter
         private void comboBoxPictureSize_SelectedIndexChanged(object sender, EventArgs e)
         {
             CalcFinalPictureSize();
+            SetOutputInfo();
         }
 
         private void comboBoxPictureSize_TextUpdate(object sender, EventArgs e)
         {
             CalcFinalPictureSize();
+            SetOutputInfo();
         }
 
         private void comboBoxPictureSize_Leave(object sender, EventArgs e)
@@ -533,6 +545,16 @@ namespace Alexantr.SimpleVideoConverter
         private void comboBoxResizeMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
             CalcFinalPictureSize();
+            SetOutputInfo();
+        }
+
+        #endregion
+
+        #region Filters
+
+        private void comboBoxColorFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetOutputInfo();
         }
 
         #endregion
@@ -548,8 +570,9 @@ namespace Alexantr.SimpleVideoConverter
 
             CalcCropPictureSize();
             CalcFinalPictureSize();
+            SetOutputInfo();
         }
-        
+
         #endregion
 
         #region Audio
@@ -598,7 +621,11 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
-        private void buttonAbout_Click(object sender, EventArgs e)
+        #endregion
+
+        #region Functions
+
+        private string AppendAppVersion(string title)
         {
             Assembly ass = Assembly.GetExecutingAssembly();
 
@@ -617,14 +644,8 @@ namespace Alexantr.SimpleVideoConverter
 
             string whatBits = Environment.Is64BitProcess ? "64" : "32";
 
-            string copyright = ((AssemblyCopyrightAttribute)ass.GetCustomAttribute(typeof(AssemblyCopyrightAttribute))).Copyright;
-
-            MessageBox.Show(this, $"{appName} v{niceVersion} ({whatBits} bit){Environment.NewLine}{copyright}", "О программе", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return $"{title} v{niceVersion} ({whatBits} bit)";
         }
-
-        #endregion
-
-        #region Functions
 
         private void ShowHideTabs()
         {
@@ -677,7 +698,6 @@ namespace Alexantr.SimpleVideoConverter
                 cropPictureSize.Width = MinWidth;
                 cropPictureSize.Height = MinHeight;
 
-                labelFinalPictureSize.Text = "";
                 selectedPictureSize.Width = MinWidth;
                 selectedPictureSize.Height = MinHeight;
 
@@ -688,11 +708,17 @@ namespace Alexantr.SimpleVideoConverter
 
                 ShowHideTabs();
 
+                SetOutputInfo();
+
                 Text = formTitle;
 
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 return;
             }
+
+#if DEBUG
+            Console.WriteLine(videoFile.StreamInfo);
+#endif
 
             textBoxIn.Text = path;
             Properties.Settings.Default.InPath = Path.GetDirectoryName(path);
@@ -733,6 +759,8 @@ namespace Alexantr.SimpleVideoConverter
             buttonGo.Enabled = true;
             buttonShowInfo.Enabled = true;
             buttonOpenInputFile.Enabled = true;
+
+            SetOutputInfo();
 
             try
             {
@@ -815,6 +843,8 @@ namespace Alexantr.SimpleVideoConverter
                 throw new Exception("Пути не должны совпадать!");
             }
 
+            VideoStream vStream = videoFile.VideoStreams[0];
+
             string selectedMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
             string scalingAlgorithm = ((ComboBoxItem)comboBoxScalingAlgorithm.SelectedItem).Value;
             string colorFilter = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Value;
@@ -890,10 +920,22 @@ namespace Alexantr.SimpleVideoConverter
                 // must be configurable
                 string videoPreset = "slow";
                 string videoProfile = "high"; // or "main" and more
-                string videoLevel = "4.1"; // or "3.1" and more
+                string videoLevel = ""; // or "3.1" and more ' -level {videoLevel}'
                 string videoParams = "-fast-pskip 0 -mbtree 0 -pix_fmt yuv420p -movflags +faststart";
 
-                string moreVideoArgs = string.Format("-preset:v {0} -profile:v {1} -level {2} {3}", videoPreset, videoProfile, videoLevel, videoParams);
+                double finalFrameRate = CalcFinalFrameRate();
+                if (finalFrameRate == 0)
+                    finalFrameRate = vStream.FrameRate;
+                // force level 4.1, max bitrate for high 4.1 - 62500, use max avg bitrate 50000
+                if (encodeMode != EncodeModeBitrate || videoBitrate <= 50000)
+                {
+                    if (finalPictureSize.Width <= 1280 && finalPictureSize.Height <= 720 && finalFrameRate <= 60.0)
+                        videoLevel = " -level 4.1";
+                    else if (finalPictureSize.Width <= 1920 && finalPictureSize.Height <= 1080 && finalFrameRate <= 30.0)
+                        videoLevel = " -level 4.1";
+                }
+
+                string moreVideoArgs = $"-preset:v {videoPreset} -profile:v {videoProfile}{videoLevel} {videoParams}";
                 string moreAudioArgs = "-strict -2"; // for "aac" codec
 
                 if (encodeMode == EncodeModeBitrate)
@@ -931,8 +973,6 @@ namespace Alexantr.SimpleVideoConverter
 
             // Video filters
 
-            VideoStream vStream = videoFile.VideoStreams[0];
-
             List<string> filters = new List<string>();
 
             if (checkBoxDeinterlace.Checked)
@@ -958,15 +998,9 @@ namespace Alexantr.SimpleVideoConverter
             }
             else if (vStream.UsingDAR)
             {
+                // force scale for not square pixels
                 filters.Add($"scale={cropPictureSize.Width}x{cropPictureSize.Height}:flags={scalingAlgorithm}");
             }
-
-            filters.Add($"setsar=1:1");
-
-            if (colorFilter == "gray")
-                filters.Add($"colorchannelmixer=.3:.4:.3:0:.3:.4:.3:0:.3:.4:.3");
-            else if (colorFilter == "sepia")
-                filters.Add($"colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131");
 
             // add borders
             // https://ffmpeg.org/ffmpeg-filters.html#toc-pad-1
@@ -977,6 +1011,15 @@ namespace Alexantr.SimpleVideoConverter
                 if (padX > 0 || padY > 0)
                     filters.Add($"pad={selectedPictureSize.Width}:{selectedPictureSize.Height}:{padX}:{padY}");
             }
+
+            // force sar 1:1
+            filters.Add($"setsar=1:1");
+
+            // color filter
+            if (colorFilter == "gray")
+                filters.Add($"colorchannelmixer=.3:.4:.3:0:.3:.4:.3:0:.3:.4:.3");
+            else if (colorFilter == "sepia")
+                filters.Add($"colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131");
 
             // More video args
 
@@ -1081,8 +1124,6 @@ namespace Alexantr.SimpleVideoConverter
                 tabPageAudio.Parent = tabControlMain;
             }
 
-            bool isChecked = true;
-
             foreach (AudioStream stream in videoFile.AudioStreams)
             {
                 StringBuilder audio = new StringBuilder();
@@ -1099,10 +1140,7 @@ namespace Alexantr.SimpleVideoConverter
                 if (!string.IsNullOrWhiteSpace(stream.Language) && stream.Language != "und")
                     audio.Append($" ({stream.Language})");
 
-                checkedListBoxAudioStreams.Items.Add(audio.ToString(), isChecked);
-
-                if (isChecked)
-                    isChecked = false;
+                checkedListBoxAudioStreams.Items.Add(audio.ToString(), true);
             }
         }
 
@@ -1127,17 +1165,17 @@ namespace Alexantr.SimpleVideoConverter
                     newWidth -= 1;
                 if (newWidth < MinWidth)
                     newWidth = MinWidth;
+                if (newWidth > MaxWidth)
+                    newWidth = MaxWidth;
                 if (newHeight % 2 == 1)
                     newHeight -= 1;
                 if (newHeight < MinHeight)
                     newHeight = MinHeight;
+                if (newHeight > MaxHeight)
+                    newHeight = MaxHeight;
                 finalPictureSize.Width = newWidth;
                 finalPictureSize.Height = newHeight;
             }
-            if (selectedMethod == ResizeMethodFit)
-                labelFinalPictureSize.Text = finalPictureSize.ToString();
-            else
-                labelFinalPictureSize.Text = selectedPictureSize.ToString();
         }
 
         private void ParseSelectedPictureSize()
@@ -1219,6 +1257,18 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
+        private double CalcFinalFrameRate()
+        {
+            if (comboBoxFrameRate.SelectedIndex > 0)
+            {
+                string frameRateText = ((ComboBoxItem)comboBoxFrameRate.SelectedItem).Text;
+                double.TryParse(frameRateText, out double frameRate);
+                if (frameRate > 0)
+                    return Math.Round(frameRate, 3);
+            }
+            return 0;
+        }
+
         private void CheckVideoModeRadioButtons()
         {
             trackBarCRF.Enabled = radioButtonCRF.Checked;
@@ -1272,6 +1322,46 @@ namespace Alexantr.SimpleVideoConverter
                 sizeString = "меньше 1 МБ";
 
             labelCalcSize.Text = sizeString;
+        }
+
+        private void SetOutputInfo()
+        {
+            if (videoFile == null)
+            {
+                labelOutputInfo.Text = "";
+                return;
+            }
+
+            StringBuilder info = new StringBuilder();
+
+            string selectedMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
+            if (selectedMethod == ResizeMethodFit)
+                info.Append(finalPictureSize.ToString());
+            else
+                info.Append(selectedPictureSize.ToString());
+
+            string selectedMethodText = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Text;
+            if (comboBoxPictureSize.SelectedIndex > 0 || string.IsNullOrWhiteSpace(comboBoxPictureSize.Text))
+                info.Append($" ({selectedMethodText.ToLower()})");
+
+            if (checkBoxDeinterlace.Checked)
+                info.Append(", деинтерлейсинг");
+
+            if (comboBoxColorFilter.SelectedIndex > 0)
+            {
+                string colorFilter = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Text;
+                info.Append($", {colorFilter.ToLower()}");
+            }
+            if (radioButtonCRF.Checked)
+                info.Append($"{Environment.NewLine}CRF {trackBarCRF.Value}");
+            else
+                info.Append($"{Environment.NewLine}{numericUpDownBitrate.Value} kbps");
+
+            double finalFrameRate = CalcFinalFrameRate();
+            if (finalFrameRate > 0)
+                info.Append($", {finalFrameRate} fps");
+
+            labelOutputInfo.Text = info.ToString();
         }
 
         private void SetInfo()
