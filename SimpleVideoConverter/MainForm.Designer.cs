@@ -35,6 +35,7 @@
             this.comboBoxResizeMethod = new System.Windows.Forms.ComboBox();
             this.buttonShowInfo = new System.Windows.Forms.Button();
             this.buttonOpenInputFile = new System.Windows.Forms.Button();
+            this.checkBoxWebOptimized = new System.Windows.Forms.CheckBox();
             this.tabPageAudio = new System.Windows.Forms.TabPage();
             this.panelAudioParams = new System.Windows.Forms.Panel();
             this.checkBoxConvertAudio = new System.Windows.Forms.CheckBox();
@@ -96,7 +97,6 @@
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.labelOutputInfo = new System.Windows.Forms.Label();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
-            this.checkBoxWebOptimized = new System.Windows.Forms.CheckBox();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAudioBitrateError)).BeginInit();
@@ -121,7 +121,7 @@
             this.buttonGo.Location = new System.Drawing.Point(488, 223);
             this.buttonGo.Name = "buttonGo";
             this.buttonGo.Size = new System.Drawing.Size(130, 32);
-            this.buttonGo.TabIndex = 8;
+            this.buttonGo.TabIndex = 3;
             this.buttonGo.Text = "Конвертировать";
             this.buttonGo.UseVisualStyleBackColor = true;
             this.buttonGo.Click += new System.EventHandler(this.buttonGo_Click);
@@ -133,7 +133,7 @@
             this.comboBoxResizeMethod.Location = new System.Drawing.Point(124, 67);
             this.comboBoxResizeMethod.Name = "comboBoxResizeMethod";
             this.comboBoxResizeMethod.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxResizeMethod.TabIndex = 25;
+            this.comboBoxResizeMethod.TabIndex = 5;
             this.toolTipHint.SetToolTip(this.comboBoxResizeMethod, resources.GetString("comboBoxResizeMethod.ToolTip"));
             this.comboBoxResizeMethod.SelectedIndexChanged += new System.EventHandler(this.comboBoxResizeMethod_SelectedIndexChanged);
             // 
@@ -143,7 +143,7 @@
             this.buttonShowInfo.Location = new System.Drawing.Point(92, 31);
             this.buttonShowInfo.Name = "buttonShowInfo";
             this.buttonShowInfo.Size = new System.Drawing.Size(75, 23);
-            this.buttonShowInfo.TabIndex = 7;
+            this.buttonShowInfo.TabIndex = 3;
             this.buttonShowInfo.Text = "Инфо";
             this.toolTipHint.SetToolTip(this.buttonShowInfo, "Показать информацию об исходном файле");
             this.buttonShowInfo.UseVisualStyleBackColor = true;
@@ -154,11 +154,23 @@
             this.buttonOpenInputFile.Location = new System.Drawing.Point(173, 31);
             this.buttonOpenInputFile.Name = "buttonOpenInputFile";
             this.buttonOpenInputFile.Size = new System.Drawing.Size(75, 23);
-            this.buttonOpenInputFile.TabIndex = 17;
+            this.buttonOpenInputFile.TabIndex = 4;
             this.buttonOpenInputFile.Text = "Открыть";
             this.toolTipHint.SetToolTip(this.buttonOpenInputFile, "Открыть исходный файл в проигрывателе по умолчанию");
             this.buttonOpenInputFile.UseVisualStyleBackColor = true;
             this.buttonOpenInputFile.Click += new System.EventHandler(this.buttonOpenInputFile_Click);
+            // 
+            // checkBoxWebOptimized
+            // 
+            this.checkBoxWebOptimized.AutoSize = true;
+            this.checkBoxWebOptimized.Location = new System.Drawing.Point(173, 145);
+            this.checkBoxWebOptimized.Name = "checkBoxWebOptimized";
+            this.checkBoxWebOptimized.Size = new System.Drawing.Size(129, 17);
+            this.checkBoxWebOptimized.TabIndex = 11;
+            this.checkBoxWebOptimized.Text = "Web-оптимизирован";
+            this.toolTipHint.SetToolTip(this.checkBoxWebOptimized, "Служебная информация будет перенесена в начало файла для быстрого старта воспроиз" +
+        "ведения в браузерах");
+            this.checkBoxWebOptimized.UseVisualStyleBackColor = true;
             // 
             // tabPageAudio
             // 
@@ -187,7 +199,7 @@
             this.panelAudioParams.Location = new System.Drawing.Point(6, 50);
             this.panelAudioParams.Name = "panelAudioParams";
             this.panelAudioParams.Size = new System.Drawing.Size(364, 129);
-            this.panelAudioParams.TabIndex = 19;
+            this.panelAudioParams.TabIndex = 1;
             // 
             // checkBoxConvertAudio
             // 
@@ -195,7 +207,7 @@
             this.checkBoxConvertAudio.Location = new System.Drawing.Point(3, 3);
             this.checkBoxConvertAudio.Name = "checkBoxConvertAudio";
             this.checkBoxConvertAudio.Size = new System.Drawing.Size(135, 17);
-            this.checkBoxConvertAudio.TabIndex = 9;
+            this.checkBoxConvertAudio.TabIndex = 0;
             this.checkBoxConvertAudio.Text = "Переконвертировать";
             this.checkBoxConvertAudio.UseVisualStyleBackColor = true;
             this.checkBoxConvertAudio.CheckedChanged += new System.EventHandler(this.checkBoxConvertAudio_CheckedChanged);
@@ -215,7 +227,7 @@
             this.comboBoxAudioBitrate.Location = new System.Drawing.Point(77, 33);
             this.comboBoxAudioBitrate.Name = "comboBoxAudioBitrate";
             this.comboBoxAudioBitrate.Size = new System.Drawing.Size(80, 21);
-            this.comboBoxAudioBitrate.TabIndex = 1;
+            this.comboBoxAudioBitrate.TabIndex = 2;
             this.comboBoxAudioBitrate.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioBitrate_SelectedIndexChanged);
             this.comboBoxAudioBitrate.TextUpdate += new System.EventHandler(this.comboBoxAudioBitrate_TextUpdate);
             this.comboBoxAudioBitrate.Leave += new System.EventHandler(this.comboBoxAudioBitrate_Leave);
@@ -226,7 +238,7 @@
             this.labelAudioHz.Location = new System.Drawing.Point(163, 68);
             this.labelAudioHz.Name = "labelAudioHz";
             this.labelAudioHz.Size = new System.Drawing.Size(19, 13);
-            this.labelAudioHz.TabIndex = 7;
+            this.labelAudioHz.TabIndex = 6;
             this.labelAudioHz.Text = "Гц";
             // 
             // labelChannels
@@ -235,7 +247,7 @@
             this.labelChannels.Location = new System.Drawing.Point(3, 100);
             this.labelChannels.Name = "labelChannels";
             this.labelChannels.Size = new System.Drawing.Size(46, 13);
-            this.labelChannels.TabIndex = 4;
+            this.labelChannels.TabIndex = 7;
             this.labelChannels.Text = "Каналы";
             // 
             // labelFrequency
@@ -244,7 +256,7 @@
             this.labelFrequency.Location = new System.Drawing.Point(3, 68);
             this.labelFrequency.Name = "labelFrequency";
             this.labelFrequency.Size = new System.Drawing.Size(49, 13);
-            this.labelFrequency.TabIndex = 2;
+            this.labelFrequency.TabIndex = 4;
             this.labelFrequency.Text = "Частота";
             // 
             // labelAudioKbps
@@ -253,7 +265,7 @@
             this.labelAudioKbps.Location = new System.Drawing.Point(163, 36);
             this.labelAudioKbps.Name = "labelAudioKbps";
             this.labelAudioKbps.Size = new System.Drawing.Size(40, 13);
-            this.labelAudioKbps.TabIndex = 6;
+            this.labelAudioKbps.TabIndex = 3;
             this.labelAudioKbps.Text = "кбит/с";
             // 
             // comboBoxAudioFrequency
@@ -263,7 +275,7 @@
             this.comboBoxAudioFrequency.Location = new System.Drawing.Point(77, 65);
             this.comboBoxAudioFrequency.Name = "comboBoxAudioFrequency";
             this.comboBoxAudioFrequency.Size = new System.Drawing.Size(80, 21);
-            this.comboBoxAudioFrequency.TabIndex = 3;
+            this.comboBoxAudioFrequency.TabIndex = 5;
             this.comboBoxAudioFrequency.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioFrequency_SelectedIndexChanged);
             // 
             // comboBoxAudioChannels
@@ -273,7 +285,7 @@
             this.comboBoxAudioChannels.Location = new System.Drawing.Point(77, 97);
             this.comboBoxAudioChannels.Name = "comboBoxAudioChannels";
             this.comboBoxAudioChannels.Size = new System.Drawing.Size(80, 21);
-            this.comboBoxAudioChannels.TabIndex = 5;
+            this.comboBoxAudioChannels.TabIndex = 8;
             this.comboBoxAudioChannels.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioChannels_SelectedIndexChanged);
             // 
             // labelAudioBitrate
@@ -282,7 +294,7 @@
             this.labelAudioBitrate.Location = new System.Drawing.Point(3, 36);
             this.labelAudioBitrate.Name = "labelAudioBitrate";
             this.labelAudioBitrate.Size = new System.Drawing.Size(49, 13);
-            this.labelAudioBitrate.TabIndex = 0;
+            this.labelAudioBitrate.TabIndex = 1;
             this.labelAudioBitrate.Text = "Битрейт";
             // 
             // panelAudioStreams
@@ -292,7 +304,7 @@
             this.panelAudioStreams.Location = new System.Drawing.Point(6, 6);
             this.panelAudioStreams.Name = "panelAudioStreams";
             this.panelAudioStreams.Size = new System.Drawing.Size(364, 38);
-            this.panelAudioStreams.TabIndex = 18;
+            this.panelAudioStreams.TabIndex = 0;
             // 
             // comboBoxAudioStreams
             // 
@@ -301,7 +313,7 @@
             this.comboBoxAudioStreams.Location = new System.Drawing.Point(77, 3);
             this.comboBoxAudioStreams.Name = "comboBoxAudioStreams";
             this.comboBoxAudioStreams.Size = new System.Drawing.Size(220, 21);
-            this.comboBoxAudioStreams.TabIndex = 3;
+            this.comboBoxAudioStreams.TabIndex = 1;
             this.comboBoxAudioStreams.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioStreams_SelectedIndexChanged);
             // 
             // labelSelectAudioStream
@@ -310,7 +322,7 @@
             this.labelSelectAudioStream.Location = new System.Drawing.Point(3, 6);
             this.labelSelectAudioStream.Name = "labelSelectAudioStream";
             this.labelSelectAudioStream.Size = new System.Drawing.Size(53, 13);
-            this.labelSelectAudioStream.TabIndex = 2;
+            this.labelSelectAudioStream.TabIndex = 0;
             this.labelSelectAudioStream.Text = "Дорожка";
             // 
             // tabPageVideo
@@ -340,7 +352,7 @@
             this.panelVideo.Location = new System.Drawing.Point(6, 6);
             this.panelVideo.Name = "panelVideo";
             this.panelVideo.Size = new System.Drawing.Size(307, 173);
-            this.panelVideo.TabIndex = 8;
+            this.panelVideo.TabIndex = 0;
             // 
             // labelCalcSize
             // 
@@ -348,7 +360,7 @@
             this.labelCalcSize.Location = new System.Drawing.Point(84, 157);
             this.labelCalcSize.Name = "labelCalcSize";
             this.labelCalcSize.Size = new System.Drawing.Size(11, 13);
-            this.labelCalcSize.TabIndex = 11;
+            this.labelCalcSize.TabIndex = 9;
             this.labelCalcSize.Text = "-";
             // 
             // labelCalcSizeText
@@ -357,7 +369,7 @@
             this.labelCalcSizeText.Location = new System.Drawing.Point(3, 157);
             this.labelCalcSizeText.Name = "labelCalcSizeText";
             this.labelCalcSizeText.Size = new System.Drawing.Size(81, 13);
-            this.labelCalcSizeText.TabIndex = 10;
+            this.labelCalcSizeText.TabIndex = 8;
             this.labelCalcSizeText.Text = "Размер файла:";
             // 
             // labelVideoKbps
@@ -366,7 +378,7 @@
             this.labelVideoKbps.Location = new System.Drawing.Point(162, 106);
             this.labelVideoKbps.Name = "labelVideoKbps";
             this.labelVideoKbps.Size = new System.Drawing.Size(40, 13);
-            this.labelVideoKbps.TabIndex = 9;
+            this.labelVideoKbps.TabIndex = 7;
             this.labelVideoKbps.Text = "кбит/с";
             // 
             // labelMinQ
@@ -375,7 +387,7 @@
             this.labelMinQ.Location = new System.Drawing.Point(223, 62);
             this.labelMinQ.Name = "labelMinQ";
             this.labelMinQ.Size = new System.Drawing.Size(81, 13);
-            this.labelMinQ.TabIndex = 8;
+            this.labelMinQ.TabIndex = 4;
             this.labelMinQ.Text = "Мин. качество";
             // 
             // labelMaxQ
@@ -384,7 +396,7 @@
             this.labelMaxQ.Location = new System.Drawing.Point(3, 62);
             this.labelMaxQ.Name = "labelMaxQ";
             this.labelMaxQ.Size = new System.Drawing.Size(86, 13);
-            this.labelMaxQ.TabIndex = 7;
+            this.labelMaxQ.TabIndex = 3;
             this.labelMaxQ.Text = "Макс. качество";
             // 
             // labelCRF
@@ -394,7 +406,7 @@
             this.labelCRF.Location = new System.Drawing.Point(139, 6);
             this.labelCRF.Name = "labelCRF";
             this.labelCRF.Size = new System.Drawing.Size(21, 13);
-            this.labelCRF.TabIndex = 6;
+            this.labelCRF.TabIndex = 1;
             this.labelCRF.Text = "20";
             // 
             // radioButtonBitrate
@@ -403,7 +415,7 @@
             this.radioButtonBitrate.Location = new System.Drawing.Point(3, 104);
             this.radioButtonBitrate.Name = "radioButtonBitrate";
             this.radioButtonBitrate.Size = new System.Drawing.Size(67, 17);
-            this.radioButtonBitrate.TabIndex = 2;
+            this.radioButtonBitrate.TabIndex = 5;
             this.radioButtonBitrate.TabStop = true;
             this.radioButtonBitrate.Text = "Битрейт";
             this.radioButtonBitrate.UseVisualStyleBackColor = true;
@@ -415,7 +427,7 @@
             this.radioButtonCRF.Location = new System.Drawing.Point(4, 4);
             this.radioButtonCRF.Name = "radioButtonCRF";
             this.radioButtonCRF.Size = new System.Drawing.Size(129, 17);
-            this.radioButtonCRF.TabIndex = 1;
+            this.radioButtonCRF.TabIndex = 0;
             this.radioButtonCRF.TabStop = true;
             this.radioButtonCRF.Text = "Constant Rate Factor";
             this.radioButtonCRF.UseVisualStyleBackColor = true;
@@ -428,7 +440,7 @@
             this.trackBarCRF.Maximum = 51;
             this.trackBarCRF.Name = "trackBarCRF";
             this.trackBarCRF.Size = new System.Drawing.Size(301, 45);
-            this.trackBarCRF.TabIndex = 0;
+            this.trackBarCRF.TabIndex = 2;
             this.trackBarCRF.Value = 20;
             this.trackBarCRF.ValueChanged += new System.EventHandler(this.trackBarCRF_ValueChanged);
             // 
@@ -437,7 +449,7 @@
             this.numericUpDownBitrate.Location = new System.Drawing.Point(76, 103);
             this.numericUpDownBitrate.Name = "numericUpDownBitrate";
             this.numericUpDownBitrate.Size = new System.Drawing.Size(80, 21);
-            this.numericUpDownBitrate.TabIndex = 5;
+            this.numericUpDownBitrate.TabIndex = 6;
             this.numericUpDownBitrate.ValueChanged += new System.EventHandler(this.numericUpDownBitrate_ValueChanged);
             // 
             // panelVideoParams
@@ -447,7 +459,7 @@
             this.panelVideoParams.Location = new System.Drawing.Point(319, 6);
             this.panelVideoParams.Name = "panelVideoParams";
             this.panelVideoParams.Size = new System.Drawing.Size(279, 31);
-            this.panelVideoParams.TabIndex = 7;
+            this.panelVideoParams.TabIndex = 1;
             // 
             // labelFrameRate
             // 
@@ -489,7 +501,7 @@
             this.panelDeinterlace.Location = new System.Drawing.Point(314, 6);
             this.panelDeinterlace.Name = "panelDeinterlace";
             this.panelDeinterlace.Size = new System.Drawing.Size(284, 63);
-            this.panelDeinterlace.TabIndex = 25;
+            this.panelDeinterlace.TabIndex = 1;
             // 
             // labelFieldOrder
             // 
@@ -528,7 +540,7 @@
             this.panelCrop.Location = new System.Drawing.Point(314, 75);
             this.panelCrop.Name = "panelCrop";
             this.panelCrop.Size = new System.Drawing.Size(284, 104);
-            this.panelCrop.TabIndex = 11;
+            this.panelCrop.TabIndex = 2;
             // 
             // labelColorFilter
             // 
@@ -536,7 +548,7 @@
             this.labelColorFilter.Location = new System.Drawing.Point(3, 83);
             this.labelColorFilter.Name = "labelColorFilter";
             this.labelColorFilter.Size = new System.Drawing.Size(98, 13);
-            this.labelColorFilter.TabIndex = 24;
+            this.labelColorFilter.TabIndex = 0;
             this.labelColorFilter.Text = "Цветовой фильтр";
             // 
             // comboBoxColorFilter
@@ -546,7 +558,7 @@
             this.comboBoxColorFilter.Location = new System.Drawing.Point(107, 80);
             this.comboBoxColorFilter.Name = "comboBoxColorFilter";
             this.comboBoxColorFilter.Size = new System.Drawing.Size(110, 21);
-            this.comboBoxColorFilter.TabIndex = 23;
+            this.comboBoxColorFilter.TabIndex = 1;
             this.comboBoxColorFilter.SelectedIndexChanged += new System.EventHandler(this.comboBoxColorFilter_SelectedIndexChanged);
             // 
             // panelResolution
@@ -563,7 +575,7 @@
             this.panelResolution.Location = new System.Drawing.Point(6, 6);
             this.panelResolution.Name = "panelResolution";
             this.panelResolution.Size = new System.Drawing.Size(302, 173);
-            this.panelResolution.TabIndex = 8;
+            this.panelResolution.TabIndex = 0;
             // 
             // pictureBoxSizeError
             // 
@@ -580,7 +592,7 @@
             this.labelResizeMethod.Location = new System.Drawing.Point(3, 70);
             this.labelResizeMethod.Name = "labelResizeMethod";
             this.labelResizeMethod.Size = new System.Drawing.Size(83, 13);
-            this.labelResizeMethod.TabIndex = 26;
+            this.labelResizeMethod.TabIndex = 4;
             this.labelResizeMethod.Text = "Метод ресайза";
             // 
             // labelScalingAlgorithm
@@ -589,7 +601,7 @@
             this.labelScalingAlgorithm.Location = new System.Drawing.Point(3, 101);
             this.labelScalingAlgorithm.Name = "labelScalingAlgorithm";
             this.labelScalingAlgorithm.Size = new System.Drawing.Size(98, 13);
-            this.labelScalingAlgorithm.TabIndex = 21;
+            this.labelScalingAlgorithm.TabIndex = 6;
             this.labelScalingAlgorithm.Text = "Алгоритм ресайза";
             // 
             // comboBoxScalingAlgorithm
@@ -599,7 +611,7 @@
             this.comboBoxScalingAlgorithm.Location = new System.Drawing.Point(124, 98);
             this.comboBoxScalingAlgorithm.Name = "comboBoxScalingAlgorithm";
             this.comboBoxScalingAlgorithm.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxScalingAlgorithm.TabIndex = 20;
+            this.comboBoxScalingAlgorithm.TabIndex = 7;
             // 
             // labelPictureSize
             // 
@@ -607,7 +619,7 @@
             this.labelPictureSize.Location = new System.Drawing.Point(3, 40);
             this.labelPictureSize.Name = "labelPictureSize";
             this.labelPictureSize.Size = new System.Drawing.Size(84, 13);
-            this.labelPictureSize.TabIndex = 24;
+            this.labelPictureSize.TabIndex = 2;
             this.labelPictureSize.Text = "Размеры видео";
             // 
             // comboBoxPictureSize
@@ -616,7 +628,7 @@
             this.comboBoxPictureSize.Location = new System.Drawing.Point(124, 37);
             this.comboBoxPictureSize.Name = "comboBoxPictureSize";
             this.comboBoxPictureSize.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxPictureSize.TabIndex = 23;
+            this.comboBoxPictureSize.TabIndex = 3;
             this.comboBoxPictureSize.SelectedIndexChanged += new System.EventHandler(this.comboBoxPictureSize_SelectedIndexChanged);
             this.comboBoxPictureSize.TextUpdate += new System.EventHandler(this.comboBoxPictureSize_TextUpdate);
             this.comboBoxPictureSize.Leave += new System.EventHandler(this.comboBoxPictureSize_Leave);
@@ -626,7 +638,7 @@
             this.buttonCrop.Location = new System.Drawing.Point(3, 3);
             this.buttonCrop.Name = "buttonCrop";
             this.buttonCrop.Size = new System.Drawing.Size(100, 23);
-            this.buttonCrop.TabIndex = 16;
+            this.buttonCrop.TabIndex = 0;
             this.buttonCrop.Text = "Обрезать края";
             this.buttonCrop.UseVisualStyleBackColor = true;
             this.buttonCrop.Click += new System.EventHandler(this.buttonCrop_Click);
@@ -637,7 +649,7 @@
             this.labelCropSize.Location = new System.Drawing.Point(109, 8);
             this.labelCropSize.Name = "labelCropSize";
             this.labelCropSize.Size = new System.Drawing.Size(70, 13);
-            this.labelCropSize.TabIndex = 15;
+            this.labelCropSize.TabIndex = 1;
             this.labelCropSize.Text = "WxH → WxH";
             this.labelCropSize.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
@@ -678,7 +690,7 @@
             this.comboBoxFileType.Location = new System.Drawing.Point(92, 142);
             this.comboBoxFileType.Name = "comboBoxFileType";
             this.comboBoxFileType.Size = new System.Drawing.Size(75, 21);
-            this.comboBoxFileType.TabIndex = 1;
+            this.comboBoxFileType.TabIndex = 10;
             this.comboBoxFileType.SelectedIndexChanged += new System.EventHandler(this.comboBoxFileType_SelectedIndexChanged);
             // 
             // labelFileType
@@ -687,7 +699,7 @@
             this.labelFileType.Location = new System.Drawing.Point(3, 145);
             this.labelFileType.Name = "labelFileType";
             this.labelFileType.Size = new System.Drawing.Size(60, 13);
-            this.labelFileType.TabIndex = 0;
+            this.labelFileType.TabIndex = 9;
             this.labelFileType.Text = "Тип файла";
             // 
             // labelOut
@@ -696,7 +708,7 @@
             this.labelOut.Location = new System.Drawing.Point(3, 78);
             this.labelOut.Name = "labelOut";
             this.labelOut.Size = new System.Drawing.Size(83, 13);
-            this.labelOut.TabIndex = 3;
+            this.labelOut.TabIndex = 5;
             this.labelOut.Text = "Сохранить как";
             // 
             // labelInputFile
@@ -705,7 +717,7 @@
             this.labelInputFile.Location = new System.Drawing.Point(3, 8);
             this.labelInputFile.Name = "labelInputFile";
             this.labelInputFile.Size = new System.Drawing.Size(80, 13);
-            this.labelInputFile.TabIndex = 15;
+            this.labelInputFile.TabIndex = 0;
             this.labelInputFile.Text = "Выбрать файл";
             // 
             // textBoxOut
@@ -713,7 +725,7 @@
             this.textBoxOut.Location = new System.Drawing.Point(92, 74);
             this.textBoxOut.Name = "textBoxOut";
             this.textBoxOut.Size = new System.Drawing.Size(416, 21);
-            this.textBoxOut.TabIndex = 4;
+            this.textBoxOut.TabIndex = 6;
             // 
             // checkBoxKeepOutPath
             // 
@@ -721,7 +733,7 @@
             this.checkBoxKeepOutPath.Location = new System.Drawing.Point(92, 101);
             this.checkBoxKeepOutPath.Name = "checkBoxKeepOutPath";
             this.checkBoxKeepOutPath.Size = new System.Drawing.Size(175, 17);
-            this.checkBoxKeepOutPath.TabIndex = 12;
+            this.checkBoxKeepOutPath.TabIndex = 8;
             this.checkBoxKeepOutPath.Text = "Запомнить выбранную папку";
             this.checkBoxKeepOutPath.UseVisualStyleBackColor = true;
             // 
@@ -740,7 +752,7 @@
             this.buttonBrowseOut.Location = new System.Drawing.Point(514, 73);
             this.buttonBrowseOut.Name = "buttonBrowseOut";
             this.buttonBrowseOut.Size = new System.Drawing.Size(75, 23);
-            this.buttonBrowseOut.TabIndex = 5;
+            this.buttonBrowseOut.TabIndex = 7;
             this.buttonBrowseOut.Text = "Обзор";
             this.buttonBrowseOut.UseVisualStyleBackColor = true;
             this.buttonBrowseOut.Click += new System.EventHandler(this.buttonBrowseOut_Click);
@@ -751,7 +763,7 @@
             this.textBoxIn.Name = "textBoxIn";
             this.textBoxIn.ReadOnly = true;
             this.textBoxIn.Size = new System.Drawing.Size(416, 21);
-            this.textBoxIn.TabIndex = 16;
+            this.textBoxIn.TabIndex = 1;
             // 
             // tabControlMain
             // 
@@ -763,7 +775,7 @@
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
             this.tabControlMain.Size = new System.Drawing.Size(612, 211);
-            this.tabControlMain.TabIndex = 9;
+            this.tabControlMain.TabIndex = 0;
             // 
             // labelOutputInfo
             // 
@@ -771,7 +783,7 @@
             this.labelOutputInfo.Location = new System.Drawing.Point(60, 223);
             this.labelOutputInfo.Name = "labelOutputInfo";
             this.labelOutputInfo.Size = new System.Drawing.Size(19, 13);
-            this.labelOutputInfo.TabIndex = 10;
+            this.labelOutputInfo.TabIndex = 2;
             this.labelOutputInfo.Text = "...";
             // 
             // labelOutputInfoTitle
@@ -781,20 +793,8 @@
             this.labelOutputInfoTitle.Location = new System.Drawing.Point(7, 223);
             this.labelOutputInfoTitle.Name = "labelOutputInfoTitle";
             this.labelOutputInfoTitle.Size = new System.Drawing.Size(47, 26);
-            this.labelOutputInfoTitle.TabIndex = 11;
+            this.labelOutputInfoTitle.TabIndex = 1;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
-            // 
-            // checkBoxWebOptimized
-            // 
-            this.checkBoxWebOptimized.AutoSize = true;
-            this.checkBoxWebOptimized.Location = new System.Drawing.Point(173, 145);
-            this.checkBoxWebOptimized.Name = "checkBoxWebOptimized";
-            this.checkBoxWebOptimized.Size = new System.Drawing.Size(129, 17);
-            this.checkBoxWebOptimized.TabIndex = 18;
-            this.checkBoxWebOptimized.Text = "Web-оптимизирован";
-            this.toolTipHint.SetToolTip(this.checkBoxWebOptimized, "Служебная информация будет перенесена в начало файла для быстрого старта воспроиз" +
-        "ведения в браузерах");
-            this.checkBoxWebOptimized.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
