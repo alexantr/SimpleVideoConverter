@@ -95,6 +95,7 @@ namespace Alexantr.SimpleVideoConverter
                 "1280x720",
                 "1024x576",
                 "854x480",
+                "720x540",
                 "720x404",
                 "640x480",
                 "640x360",
@@ -195,6 +196,8 @@ namespace Alexantr.SimpleVideoConverter
             buttonOpenInputFile.Enabled = false;
 
             checkBoxKeepOutPath.Checked = Properties.Settings.Default.RememberOutPath;
+
+            checkBoxWebOptimized.Checked = true;
 
             // init crop size
             labelCropSize.Text = "";
@@ -655,6 +658,54 @@ namespace Alexantr.SimpleVideoConverter
 
         #endregion
 
+        #region Meta
+
+        private void textBoxTagTitle_TextChanged(object sender, EventArgs e)
+        {
+            Tags.Title = textBoxTagTitle.Text;
+        }
+
+        private void textBoxTagAuthor_TextChanged(object sender, EventArgs e)
+        {
+            Tags.Author = textBoxTagAuthor.Text;
+        }
+
+        private void textBoxTagCopyright_TextChanged(object sender, EventArgs e)
+        {
+            Tags.Copyright = textBoxTagCopyright.Text;
+        }
+
+        private void textBoxTagComment_TextChanged(object sender, EventArgs e)
+        {
+            Tags.Comment = textBoxTagComment.Text;
+        }
+
+        private void textBoxTagCreationTime_TextChanged(object sender, EventArgs e)
+        {
+            Tags.CreationTime = textBoxTagCreationTime.Text;
+        }
+
+        public void SetTagsFromInputFile()
+        {
+            ClearTags();
+            textBoxTagTitle.Text = inputFile.TagTitle;
+            textBoxTagAuthor.Text = inputFile.TagAuthor;
+            textBoxTagCopyright.Text = inputFile.TagCopyright;
+            textBoxTagComment.Text = inputFile.TagComment;
+            textBoxTagCreationTime.Text = inputFile.TagCreationTime;
+        }
+
+        public void ClearTags()
+        {
+            textBoxTagTitle.Text = "";
+            textBoxTagAuthor.Text = "";
+            textBoxTagCopyright.Text = "";
+            textBoxTagComment.Text = "";
+            textBoxTagCreationTime.Text = "";
+        }
+
+        #endregion
+
         #region Buttons
 
         private void buttonCrop_Click(object sender, EventArgs e)
@@ -707,12 +758,14 @@ namespace Alexantr.SimpleVideoConverter
                 tabPagePicture.Parent = null;
                 tabPageVideo.Parent = null;
                 tabPageAudio.Parent = null;
+                tabPageTags.Parent = null;
             }
             else
             {
                 tabPagePicture.Parent = tabControlMain;
                 tabPageVideo.Parent = tabControlMain;
                 tabPageAudio.Parent = tabControlMain;
+                tabPageTags.Parent = tabControlMain;
             }
         }
 
@@ -763,6 +816,8 @@ namespace Alexantr.SimpleVideoConverter
 
                 SetOutputInfo();
 
+                ClearTags();
+
                 Text = formTitle;
 
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
@@ -811,6 +866,8 @@ namespace Alexantr.SimpleVideoConverter
             buttonOpenInputFile.Enabled = true;
 
             SetOutputInfo();
+
+            SetTagsFromInputFile();
 
             try
             {
@@ -1009,13 +1066,15 @@ namespace Alexantr.SimpleVideoConverter
                 string videoCodec = "libvpx-vp9"; // "libvpx" or "libvpx-vp9"
                 string audioCodec = "libopus"; // "libvorbis" or "libopus"
 
+                int threads = Environment.ProcessorCount / 2;
+
                 if (encodeMode == EncodeModeBitrate)
                 {
-                    videoArgs = $"-c:v {videoCodec} -b:v {videoBitrate}k";
+                    videoArgs = $"-c:v {videoCodec} -b:v {videoBitrate}k -threads {threads}";
                 }
                 else
                 {
-                    videoArgs = $"-c:v {videoCodec} -crf {crf} -b:v 0";
+                    videoArgs = $"-c:v {videoCodec} -crf {crf} -b:v 0 -threads {threads}";
                 }
 
                 if (checkBoxConvertAudio.Checked)
@@ -1123,9 +1182,25 @@ namespace Alexantr.SimpleVideoConverter
             string moreArgs = "";
 
             if (fileType == FileTypeMP4 && checkBoxWebOptimized.Checked)
-                moreArgs += $" -movflags +faststart";
+                moreArgs += " -movflags +faststart";
 
-            moreArgs += $" -map_metadata -1 -f {fileType}";
+            // Meta
+
+            moreArgs += " -map_metadata -1";
+            if (Tags.Title.Length > 0)
+                moreArgs += $" -metadata title=\"{Tags.Title.Replace("\"", "\\\"")}\"";
+            if (Tags.Author.Length > 0)
+                moreArgs += $" -metadata artist=\"{Tags.Author.Replace("\"", "\\\"")}\"";
+            if (Tags.Copyright.Length > 0)
+                moreArgs += $" -metadata copyright=\"{Tags.Copyright.Replace("\"", "\\\"")}\"";
+            if (Tags.Comment.Length > 0)
+                moreArgs += $" -metadata comment=\"{Tags.Comment.Replace("\"", "\\\"")}\"";
+            if (Tags.CreationTime.Length > 0)
+                moreArgs += $" -metadata creation_time=\"{Tags.CreationTime.Replace("\"", "\\\"")}\"";
+
+            // Force file type
+
+            moreArgs += $" -f {fileType}";
 
             // Convert
 
@@ -1159,11 +1234,8 @@ namespace Alexantr.SimpleVideoConverter
             {
                 comboBoxAudioStreams.SelectedIndex = 0;
                 CheckAudioMustConvert();
-                tabPageAudio.Parent = null;
                 return;
             }
-
-            tabPageAudio.Parent = tabControlMain;
 
             comboBoxAudioBitrate.Enabled = checkBoxConvertAudio.Checked;
             comboBoxAudioFrequency.Enabled = checkBoxConvertAudio.Checked;

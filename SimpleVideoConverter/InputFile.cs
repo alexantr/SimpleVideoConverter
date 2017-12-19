@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml.XPath;
 
 namespace Alexantr.SimpleVideoConverter
@@ -8,7 +9,6 @@ namespace Alexantr.SimpleVideoConverter
     public class InputFile
     {
         public List<VideoStream> VideoStreams = new List<VideoStream>();
-
         public List<AudioStream> AudioStreams = new List<AudioStream>();
 
         public string FullPath { get; private set; }
@@ -23,6 +23,14 @@ namespace Alexantr.SimpleVideoConverter
 
         public int BitRate { get; private set; }
 
+        // tags
+        public string TagTitle { get; private set; }
+        public string TagAuthor { get; private set; }
+        public string TagCopyright { get; private set; }
+        public string TagComment { get; private set; }
+        public string TagCreationTime { get; private set; }
+
+        // full xml
         public string StreamInfo { get; private set; }
 
         public InputFile(string path)
@@ -58,6 +66,33 @@ namespace Alexantr.SimpleVideoConverter
                         // bit rate
                         double.TryParse(format.GetAttribute("bit_rate", ""), out double bitRate);
                         BitRate = Convert.ToInt32(Math.Round(bitRate / 1000.0, 0));
+
+                        if (!format.IsEmptyElement)
+                        {
+                            XPathNodeIterator formatTags = format.Select(".//tag");
+                            foreach (XPathNavigator formatTag in formatTags)
+                            {
+                                string tagKey = formatTag.GetAttribute("key", "");
+                                string tagValue = formatTag.GetAttribute("value", "");
+
+                                byte[] valueBytes = Encoding.Default.GetBytes(tagValue);
+
+                                if (tagKey == "title")
+                                    TagTitle = Encoding.UTF8.GetString(valueBytes);
+
+                                if (tagKey == "artist")
+                                    TagAuthor = Encoding.UTF8.GetString(valueBytes);
+
+                                if (tagKey == "copyright")
+                                    TagCopyright = Encoding.UTF8.GetString(valueBytes);
+
+                                if (tagKey == "comment")
+                                    TagComment = Encoding.UTF8.GetString(valueBytes);
+
+                                if (tagKey == "creation_time")
+                                    TagCreationTime = Encoding.UTF8.GetString(valueBytes);
+                            }
+                        }
                     }
                     else
                     {
