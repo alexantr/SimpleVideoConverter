@@ -248,13 +248,6 @@ namespace Alexantr.SimpleVideoConverter
                     Text = $"{formTitle} - {titlePercentage}%";
                 });
             }
-            /*else
-            {
-                this.InvokeIfRequired(() =>
-                {
-                    Text = formTitle;
-                });
-            }*/
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -264,9 +257,7 @@ namespace Alexantr.SimpleVideoConverter
             if (!processEnded || processPanic)
             {
                 if (!ffmpegProcess.HasExited)
-                {
                     ffmpegProcess.Kill();
-                }
             }
             else
             {
@@ -277,13 +268,9 @@ namespace Alexantr.SimpleVideoConverter
         private void buttonPlay_Click(object sender, EventArgs e)
         {
             if (!File.Exists(outputFile))
-            {
                 MessageBox.Show("Выходной файл не найден!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
             else
-            {
                 Process.Start(outputFile);
-            }
         }
 
         // manually scroll to bottom cause AppendText doesn't do it if it doesn't have focus

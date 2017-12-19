@@ -13,7 +13,7 @@ namespace Alexantr.SimpleVideoConverter
 {
     public partial class MainForm : Form
     {
-        private VideoFile videoFile;
+        private InputFile inputFile;
 
         private char[] invalidChars = Path.GetInvalidPathChars();
 
@@ -450,13 +450,13 @@ namespace Alexantr.SimpleVideoConverter
 
         private void buttonOpenInputFile_Click(object sender, EventArgs e)
         {
-            if (!File.Exists(videoFile.FullPath))
+            if (!File.Exists(inputFile.FullPath))
             {
                 MessageBox.Show("Исходный файл не найден!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                Process.Start(videoFile.FullPath);
+                Process.Start(inputFile.FullPath);
             }
         }
 
@@ -659,7 +659,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void buttonCrop_Click(object sender, EventArgs e)
         {
-            new CropForm(videoFile, cropLeft, cropTop, cropRight, cropBottom).ShowDialog(this);
+            new CropForm(inputFile, cropLeft, cropTop, cropRight, cropBottom).ShowDialog(this);
         }
 
         private void buttonGo_Click(object sender, EventArgs e)
@@ -702,7 +702,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void ShowHideTabs()
         {
-            if (videoFile == null)
+            if (inputFile == null)
             {
                 tabPagePicture.Parent = null;
                 tabPageVideo.Parent = null;
@@ -733,12 +733,12 @@ namespace Alexantr.SimpleVideoConverter
             try
             {
                 ValidateInputFile(path);
-                videoFile = new VideoFile(path);
-                videoFile.Probe();
+                inputFile = new InputFile(path);
+                inputFile.Probe();
             }
             catch (Exception ex)
             {
-                videoFile = null;
+                inputFile = null;
 
                 textBoxIn.Text = "Файл не выбран";
                 textBoxOut.Text = "";
@@ -770,7 +770,7 @@ namespace Alexantr.SimpleVideoConverter
             }
 
 #if DEBUG
-            Console.WriteLine(videoFile.StreamInfo);
+            Console.WriteLine(inputFile.StreamInfo);
 #endif
 
             textBoxIn.Text = path;
@@ -780,7 +780,7 @@ namespace Alexantr.SimpleVideoConverter
 
             Text = Path.GetFileName(path) + " - " + formTitle;
 
-            VideoStream vStream = videoFile.VideoStreams[0];
+            VideoStream vStream = inputFile.VideoStreams[0];
 
             // reset crop values
             cropTop = 0;
@@ -878,12 +878,12 @@ namespace Alexantr.SimpleVideoConverter
 
         private void ConvertVideo()
         {
-            if (videoFile == null)
+            if (inputFile == null)
             {
                 throw new Exception("Видео-файл не определен!");
             }
 
-            string input = Path.GetFullPath(videoFile.FullPath);
+            string input = Path.GetFullPath(inputFile.FullPath);
             string output = !string.IsNullOrWhiteSpace(textBoxOut.Text) ? Path.GetFullPath(textBoxOut.Text) : "";
 
             ValidateOutputFile(output);
@@ -893,7 +893,7 @@ namespace Alexantr.SimpleVideoConverter
                 throw new Exception("Пути не должны совпадать!");
             }
 
-            VideoStream vStream = videoFile.VideoStreams[0];
+            VideoStream vStream = inputFile.VideoStreams[0];
 
             string selectedMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
             string scalingAlgorithm = ((ComboBoxItem)comboBoxScalingAlgorithm.SelectedItem).Value;
@@ -1080,7 +1080,7 @@ namespace Alexantr.SimpleVideoConverter
 
             // More video args
 
-            videoArgs += string.Format(" -map 0:{0}", videoFile.VideoStreams[0].Index);
+            videoArgs += string.Format(" -map 0:{0}", inputFile.VideoStreams[0].Index);
 
             if (!string.IsNullOrWhiteSpace(frameRate))
             {
@@ -1145,7 +1145,7 @@ namespace Alexantr.SimpleVideoConverter
                 arguments[0] = $"{videoArgs} {audioArgs}{moreArgs}";
             }
 
-            new ConverterForm(input, output, arguments, videoFile.Duration.TotalSeconds).ShowDialog(this);
+            new ConverterForm(input, output, arguments, inputFile.Duration.TotalSeconds).ShowDialog(this);
         }
 
         private void FillAudioStreams()
@@ -1155,7 +1155,7 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxAudioStreams.Items.Clear();
             comboBoxAudioStreams.Items.Add(new ComboBoxItem(string.Empty, "Без звука"));
 
-            if (videoFile.AudioStreams.Count == 0)
+            if (inputFile.AudioStreams.Count == 0)
             {
                 comboBoxAudioStreams.SelectedIndex = 0;
                 CheckAudioMustConvert();
@@ -1170,7 +1170,7 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxAudioChannels.Enabled = checkBoxConvertAudio.Checked;
 
             int idx = 1;
-            foreach (AudioStream stream in videoFile.AudioStreams)
+            foreach (AudioStream stream in inputFile.AudioStreams)
             {
                 StringBuilder audio = new StringBuilder();
 
@@ -1212,7 +1212,7 @@ namespace Alexantr.SimpleVideoConverter
                 {
                     string val = ((ComboBoxItem)comboBoxAudioStreams.SelectedItem).Value;
                     int.TryParse(val, out int index);
-                    foreach (AudioStream aStream in videoFile.AudioStreams)
+                    foreach (AudioStream aStream in inputFile.AudioStreams)
                     {
                         if (aStream.Index == index)
                         {
@@ -1240,7 +1240,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void CalcFinalPictureSize()
         {
-            if (videoFile == null)
+            if (inputFile == null)
                 return;
             // fit or stretch
             ParseSelectedPictureSize();
@@ -1274,7 +1274,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void ParseSelectedPictureSize()
         {
-            if (videoFile == null)
+            if (inputFile == null)
                 return;
             pictureBoxSizeError.Image = null;
             // "do not change size" selected size = crop size
@@ -1315,9 +1315,9 @@ namespace Alexantr.SimpleVideoConverter
         
         private void CalcCropPictureSize()
         {
-            if (videoFile == null)
+            if (inputFile == null)
                 return;
-            VideoStream vStream = videoFile.VideoStreams[0];
+            VideoStream vStream = inputFile.VideoStreams[0];
             if (cropTop > 0 || cropBottom > 0 || cropLeft > 0 || cropRight > 0)
             {
                 // init with oar sizes
@@ -1385,7 +1385,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void CalcFileSize()
         {
-            if (videoFile == null || !radioButtonBitrate.Checked)
+            if (inputFile == null || !radioButtonBitrate.Checked)
             {
                 labelCalcSize.Text = "-";
                 labelCalcSize.Visible = false;
@@ -1396,7 +1396,7 @@ namespace Alexantr.SimpleVideoConverter
             labelCalcSize.Visible = true;
             labelCalcSizeText.Visible = true;
 
-            double duration = videoFile.Duration.TotalMilliseconds / 1000;
+            double duration = inputFile.Duration.TotalMilliseconds / 1000;
 
             int videoBitrate = (int)Math.Round(numericUpDownBitrate.Value, 0);
 
@@ -1420,7 +1420,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void SetOutputInfo()
         {
-            if (videoFile == null)
+            if (inputFile == null)
             {
                 labelOutputInfoTitle.Visible = false;
                 labelOutputInfo.Text = "";
@@ -1475,7 +1475,7 @@ namespace Alexantr.SimpleVideoConverter
                 int.TryParse(val, out int index);
 
                 int idx = 1;
-                foreach (AudioStream aStream in videoFile.AudioStreams)
+                foreach (AudioStream aStream in inputFile.AudioStreams)
                 {
                     if (aStream.Index == index)
                     {
@@ -1521,21 +1521,21 @@ namespace Alexantr.SimpleVideoConverter
 
         private void SetInfo()
         {
-            VideoStream stream = videoFile.VideoStreams[0];
+            VideoStream stream = inputFile.VideoStreams[0];
 
             StringBuilder info = new StringBuilder();
 
-            string dur = new TimeSpan((long)videoFile.Duration.TotalMilliseconds * 10000L).ToString("hh\\:mm\\:ss\\.fff");
+            string dur = new TimeSpan((long)inputFile.Duration.TotalMilliseconds * 10000L).ToString("hh\\:mm\\:ss\\.fff");
 
-            info.AppendLine($"Формат: {videoFile.Format}");
-            info.AppendLine($"Размер файла: {Utility.FormatFileSize(videoFile.FileSize)}");
+            info.AppendLine($"Формат: {inputFile.Format}");
+            info.AppendLine($"Размер файла: {Utility.FormatFileSize(inputFile.FileSize)}");
             info.AppendLine($"Длительность: {dur}");
-            info.AppendLine($"Битрейт: {videoFile.BitRate} kbps");
+            info.AppendLine($"Битрейт: {inputFile.BitRate} kbps");
             info.AppendLine($"Разрешение: {stream.PictureSize.ToString()}{(stream.UsingDAR ? " (исх.: " + stream.OriginalSize.ToString() + ")" : "")}");
             info.AppendLine($"Частота кадров: {stream.FrameRate} fps");
             info.AppendLine($"Развертка: {(stream.FieldOrder == "progressive" ? "прогрессивная" : "чересстрочная")}");
             info.AppendLine($"Видеокодек: {stream.CodecName.ToUpper()}");
-            info.AppendLine($"Дорожки аудио: {(videoFile.AudioStreams.Count > 0 ? videoFile.AudioStreams.Count.ToString() : "нет")}");
+            info.AppendLine($"Дорожки аудио: {(inputFile.AudioStreams.Count > 0 ? inputFile.AudioStreams.Count.ToString() : "нет")}");
 
             fileInfo = info.ToString().TrimEnd();
         }

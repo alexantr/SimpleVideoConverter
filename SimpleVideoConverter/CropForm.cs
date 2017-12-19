@@ -10,7 +10,7 @@ namespace Alexantr.SimpleVideoConverter
 {
     public partial class CropForm : Form
     {
-        private readonly VideoFile videoFile;
+        private readonly InputFile inputFile;
 
         private string tempFile;
 
@@ -32,11 +32,11 @@ namespace Alexantr.SimpleVideoConverter
 
         private bool resizing = false;
 
-        public CropForm(VideoFile vFile, int cropL, int cropT, int cropR, int cropB)
+        public CropForm(InputFile vFile, int cropL, int cropT, int cropR, int cropB)
         {
             InitializeComponent();
 
-            videoFile = vFile;
+            inputFile = vFile;
             cropLeft = cropL;
             cropTop = cropT;
             cropRight = cropR;
@@ -51,7 +51,7 @@ namespace Alexantr.SimpleVideoConverter
         {
             tempFile = ((MainForm)Owner).GetTempFile();
 
-            totalTime = videoFile.Duration.TotalMilliseconds;
+            totalTime = inputFile.Duration.TotalMilliseconds;
             stepTime = totalTime / 10;
 
             currentTime = totalTime / 2;
@@ -59,7 +59,7 @@ namespace Alexantr.SimpleVideoConverter
             size = GetWidthHeight();
 
             // Update values for crop
-            VideoStream stream = videoFile.VideoStreams[0];
+            VideoStream stream = inputFile.VideoStreams[0];
             int wCrop = stream.OriginalSize.Width;
             int hCrop = stream.OriginalSize.Height;
             decimal maxLeft = (wCrop - MainForm.MinWidth) / 2;
@@ -177,12 +177,12 @@ namespace Alexantr.SimpleVideoConverter
             Console.WriteLine(currTime);
 
             string filters = "";
-            if (videoFile.VideoStreams[0].FieldOrder != "progressive")
+            if (inputFile.VideoStreams[0].FieldOrder != "progressive")
             {
-                filters = " -vf \"yadif\"";
+                filters = " -vf \"yadif,setsar=1:1\"";
             }
 
-            string arguments = $"-ss {currTime} -i \"{videoFile.FullPath}\"{filters} -vframes 1 -f mjpeg \"{tempFile}\"";
+            string arguments = $"-ss {currTime} -i \"{inputFile.FullPath}\"{filters} -vframes 1 -f mjpeg \"{tempFile}\"";
 
             ffmpegProcess = new FFmpegProcess(arguments);
             ffmpegProcess.Exited += (o, args) => pictureBoxPreview.Invoke((Action)(() =>
@@ -335,7 +335,7 @@ namespace Alexantr.SimpleVideoConverter
                 Color customColor = Color.FromArgb(255, 0, 255);
                 SolidBrush brush = new SolidBrush(customColor);
 
-                VideoStream stream = videoFile.VideoStreams[0];
+                VideoStream stream = inputFile.VideoStreams[0];
                 int vWidth = stream.OriginalSize.Width;
                 int vHeight = stream.OriginalSize.Height;
 
@@ -393,7 +393,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private int[] GetWidthHeight()
         {
-            VideoStream stream = videoFile.VideoStreams[0];
+            VideoStream stream = inputFile.VideoStreams[0];
             int vWidth = stream.OriginalSize.Width;
             int vHeight = stream.OriginalSize.Height;
 

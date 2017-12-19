@@ -5,7 +5,7 @@ using System.Xml.XPath;
 
 namespace Alexantr.SimpleVideoConverter
 {
-    public class VideoFile
+    public class InputFile
     {
         public List<VideoStream> VideoStreams = new List<VideoStream>();
 
@@ -25,7 +25,7 @@ namespace Alexantr.SimpleVideoConverter
 
         public string StreamInfo { get; private set; }
 
-        public VideoFile(string path)
+        public InputFile(string path)
         {
             FullPath = path;
             FileName = Path.GetFileName(FullPath);
@@ -172,6 +172,11 @@ namespace Alexantr.SimpleVideoConverter
                                     {
                                         videoStream.PictureSize.Width = height;
                                         videoStream.PictureSize.Height = width;
+
+                                        int ow = videoStream.OriginalSize.Width;
+                                        int oh = videoStream.OriginalSize.Height;
+                                        videoStream.OriginalSize.Width = oh;
+                                        videoStream.OriginalSize.Height = ow;
                                     }
                                 }
                             }
