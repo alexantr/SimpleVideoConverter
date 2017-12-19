@@ -220,11 +220,14 @@ namespace Alexantr.SimpleVideoConverter
             {
                 comboBoxFileType.SelectedIndex = 1;
                 fileType = FileTypeWebM;
+                checkBoxWebOptimized.Visible = false;
             }
             else
             {
                 comboBoxFileType.SelectedIndex = 0;
                 fileType = FileTypeMP4;
+                checkBoxWebOptimized.Visible = true;
+                checkBoxWebOptimized.Checked = true;
             }
 
             // Encode mode
@@ -471,6 +474,8 @@ namespace Alexantr.SimpleVideoConverter
                 trackBarCRF.Value = maxValue;
             trackBarCRF.Maximum = maxValue;
             trackBarCRF.Value = (fileType == FileTypeMP4) ? DefaultMp4CRF : DefaultWebmCRF;
+
+            checkBoxWebOptimized.Visible = (fileType == FileTypeMP4);
 
             checkBoxConvertAudio.Checked = false;
             CheckAudioMustConvert();
@@ -964,10 +969,10 @@ namespace Alexantr.SimpleVideoConverter
                 string audioCodec = "aac";
 
                 // must be configurable
-                string videoPreset = "slow";
+                string videoPreset = "veryslow";
                 string videoProfile = "high"; // or "main" and more
                 string videoLevel = ""; // or "3.1" and more ' -level {videoLevel}'
-                string videoParams = "-fast-pskip 0 -mbtree 0 -pix_fmt yuv420p";
+                string videoParams = "-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p -x264-params \"no-dct-decimate=1:merange=32:subme=11:sar=1/1\"";
 
                 double finalFrameRate = CalcFinalFrameRate();
                 if (finalFrameRate == 0)
@@ -1117,7 +1122,7 @@ namespace Alexantr.SimpleVideoConverter
 
             string moreArgs = "";
 
-            if (fileType == FileTypeMP4)
+            if (fileType == FileTypeMP4 && checkBoxWebOptimized.Checked)
                 moreArgs += $" -movflags +faststart";
 
             moreArgs += $" -map_metadata -1 -f {fileType}";
@@ -1437,13 +1442,7 @@ namespace Alexantr.SimpleVideoConverter
                 info.Append($", {selectedMethodText.ToLower()}");
 
             if (checkBoxDeinterlace.Checked)
-            {
-                string fieldOrder = ((ComboBoxItem)comboBoxFieldOrder.SelectedItem).Value;
-                if (string.IsNullOrWhiteSpace(fieldOrder))
-                    info.Append(", деинт.");
-                else
-                    info.Append($", деинт. {fieldOrder.ToUpper()}");
-            }
+                info.Append(", деинт.");
 
             if (comboBoxColorFilter.SelectedIndex > 0)
             {
@@ -1552,9 +1551,10 @@ namespace Alexantr.SimpleVideoConverter
         {
             string tempLogFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             string tempLogFileRealName = $"{tempLogFile}-{streamIndex}.log";
-            string tempLogMbtreeFileRealName = $"{tempLogFile}-{streamIndex}.log.mbtree";
             tempFilesList.Add(tempLogFileRealName);
-            tempFilesList.Add(tempLogMbtreeFileRealName);
+            // if mbtree is on
+            //string tempLogMbtreeFileRealName = $"{tempLogFile}-{streamIndex}.log.mbtree";
+            //tempFilesList.Add(tempLogMbtreeFileRealName);
             return tempLogFile;
         }
 
