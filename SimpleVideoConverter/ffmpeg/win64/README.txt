@@ -1,6 +1,6 @@
 Zeranoe FFmpeg Builds <http://ffmpeg.zeranoe.com/builds/>
 
-Build: ffmpeg-3.4-win64-shared
+Build: ffmpeg-3.4.1-win32-shared
 
 Configuration:
   --disable-static
@@ -44,14 +44,14 @@ Configuration:
   --enable-libmfx
 
 Libraries:
-  SDL 2.0.6 <https://libsdl.org>
+  SDL 2.0.7 <https://libsdl.org>
   bzip2 1.0.6 <http://bzip.org/>
   Fontconfig 2.12.6 <http://freedesktop.org/wiki/Software/fontconfig>
-  GnuTLS 3.5.15 <http://gnutls.org>
-  libiconv 1.15 <http://gnu.org/software/libiconv/>
-  libass 0.13.7 <https://github.com/libass/libass>
-  libbluray 20171011-b5216ad <http://videolan.org/developers/libbluray.html>
-  FreeType 2.8 <http://freetype.sourceforge.net>
+  GnuTLS 3.5.16 <http://gnutls.org>
+  libiconv 1.15 <http://gnu.org/software/libiconv>
+  libass 0.14.0 <https://github.com/libass/libass>
+  libbluray 20171203-c02d5a6 <http://videolan.org/developers/libbluray.html>
+  FreeType 2.8.1 <http://freetype.sourceforge.net>
   LAME 3.100 <http://lame.sourceforge.net>
   OpenJPEG 2.3.0 <https://github.com/uclouvain/openjpeg>
   Opus 1.2.1 <http://opus-codec.org>
@@ -62,11 +62,11 @@ Libraries:
   TwoLAME 0.3.13 <http://twolame.org>
   vpx 1.6.1 <http://webmproject.org>
   WavPack 5.1.0 <http://wavpack.com>
-  WebP 0.6.0 <https://developers.google.com/speed/webp>
+  WebP 0.6.1 <https://developers.google.com/speed/webp>
   x264 20170626-ba24899 <http://videolan.org/developers/x264.html>
-  x265 20171009-0e168bd <https://bitbucket.org/multicoreware/x265/wiki/Home>
-  libxml2 2.9.6 <http://xmlsoft.org>
-  z.lib 20171013-4166d55 <https://github.com/sekrit-twc/zimg>
+  x265 20171207-6b07985 <https://bitbucket.org/multicoreware/x265/wiki/Home>
+  libxml2 2.9.7 <http://xmlsoft.org>
+  z.lib 20171205-373a10c <https://github.com/sekrit-twc/zimg>
   XZ Utils 5.2.3 <http://tukaani.org/xz>
   zlib 1.2.11 <http://zlib.net>
   GMP 6.1.2 <https://gmplib.org>
