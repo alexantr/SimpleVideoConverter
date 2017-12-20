@@ -65,7 +65,7 @@ namespace Alexantr.SimpleVideoConverter
         // lists
 
         private List<string> pictureSizeList;
-        private Dictionary<string, string> resizeMethodList;
+
         private Dictionary<string, string> scalingAlgorithmList;
 
         private Dictionary<string, string> fieldOrderList;
@@ -105,14 +105,8 @@ namespace Alexantr.SimpleVideoConverter
                 "640x480",
                 "640x360",
                 "512x384",
-                "320x240"
-            };
-
-            resizeMethodList = new Dictionary<string, string>
-            {
-                { ResizeMethodFit, "Вписать" },
-                { ResizeMethodStretch, "Растянуть" },
-                { ResizeMethodBorders, "C полосами" }
+                "320x240",
+                "176x144"
             };
 
             // see https://superuser.com/questions/375718/which-resize-algorithm-to-choose-for-videos
@@ -263,11 +257,14 @@ namespace Alexantr.SimpleVideoConverter
 
             // Resize method
             comboBoxResizeMethod.Items.Clear();
-            foreach (KeyValuePair<string, string> rm in resizeMethodList)
+            int selectedResizeMethodIndex = 0, resizeMethodListLength = Picture.ResizeMethodList.GetLength(0);
+            for (int i = 0; i < resizeMethodListLength; i++)
             {
-                comboBoxResizeMethod.Items.Add(new ComboBoxItem(rm.Key, rm.Value));
+                comboBoxResizeMethod.Items.Add(new ComboBoxItem(Picture.ResizeMethodList[i, 0], Picture.ResizeMethodList[i, 1]));
+                if (Picture.ResizeMethodList[i, 0] == Picture.ResizeMethod)
+                    selectedResizeMethodIndex = i;
             }
-            comboBoxResizeMethod.SelectedIndex = 0;
+            comboBoxResizeMethod.SelectedIndex = selectedResizeMethodIndex;
 
             // Scaling algorithm
             int selectedScalingAlgorithm = 0, indexScalingAlgorithm = 0;
@@ -1132,7 +1129,7 @@ namespace Alexantr.SimpleVideoConverter
 
             // add borders
             // https://ffmpeg.org/ffmpeg-filters.html#toc-pad-1
-            if (selectedMethod == ResizeMethodBorders)
+            if (selectedMethod == Picture.ResizeMethodBorders)
             {
                 int padX = (int)Math.Round((selectedPictureSize.Width - finalPictureSize.Width) / 2.0);
                 int padY = (int)Math.Round((selectedPictureSize.Height - finalPictureSize.Height) / 2.0);
@@ -1326,7 +1323,7 @@ namespace Alexantr.SimpleVideoConverter
             // fit or stretch
             ParseSelectedPictureSize();
             string selectedMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
-            if (selectedMethod == ResizeMethodStretch)
+            if (selectedMethod == Picture.ResizeMethodStretch)
             {
                 finalPictureSize.Width = selectedPictureSize.Width;
                 finalPictureSize.Height = selectedPictureSize.Height;
@@ -1518,7 +1515,7 @@ namespace Alexantr.SimpleVideoConverter
                 info.Append($"VP9");
 
             string selectedMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
-            if (selectedMethod == ResizeMethodFit)
+            if (selectedMethod == Picture.ResizeMethodFit)
                 info.Append($", {finalPictureSize.ToString()}");
             else
                 info.Append($", {selectedPictureSize.ToString()}");

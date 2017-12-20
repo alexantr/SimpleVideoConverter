@@ -43,6 +43,39 @@ namespace Alexantr.SimpleVideoConverter
                 return value.ToString("0.0");
             return value.ToString("0.00");
         }
+
+        /// <summary>
+        /// Checks if value matches a value from a array.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="items"></param>       
+        public static bool IsValid(string value, string[,] items)
+        {
+            bool valid = false;
+            for (int i = 0; i < items.GetLength(0); i++)
+            {
+                if (value == items[i, 0])
+                {
+                    valid = true;
+                    break;
+                }
+            }
+            return valid;
+        }
+
+        public static bool IsValid(int x, int[] items)
+        {
+            bool valid = false;
+            for (int i = 0; i < items.GetLength(0); i++)
+            {
+                if (x == items[i])
+                {
+                    valid = true;
+                    break;
+                }
+            }
+            return valid;
+        }
     }
 
     public static class Extensions
