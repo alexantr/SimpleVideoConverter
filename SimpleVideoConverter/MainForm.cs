@@ -1193,6 +1193,8 @@ namespace Alexantr.SimpleVideoConverter
                 moreArgs.Add($"-metadata comment=\"{Tags.Comment.Replace("\"", "\\\"")}\"");
             if (!string.IsNullOrWhiteSpace(Tags.CreationTime))
                 moreArgs.Add($"-metadata creation_time=\"{Tags.CreationTime.Replace("\"", "\\\"")}\"");
+            else
+                moreArgs.Add($"-metadata creation_time=\"{DateTime.Now.ToString("o")}\"");
 
             // Force file type
 
@@ -1205,7 +1207,7 @@ namespace Alexantr.SimpleVideoConverter
             if (twoPass)
             {
                 string passLogFile = GetTempLogFile();
-                string twoPassTpl = "-pass {3} -passlogfile \"{4}\" {0} {1}{2}";
+                string twoPassTpl = "-pass {3} -passlogfile \"{4}\" {0} {1} {2}";
 
                 arguments = new string[2];
                 arguments[0] = string.Format(twoPassTpl, string.Join(" ", videoArgs), "-an", string.Join(" ", moreArgs), "1", passLogFile);
@@ -1214,7 +1216,7 @@ namespace Alexantr.SimpleVideoConverter
             else
             {
                 arguments = new string[1];
-                arguments[0] = string.Format("{0} {1}{2}", string.Join(" ", videoArgs), string.Join(" ", audioArgs), string.Join(" ", moreArgs));
+                arguments[0] = string.Format("{0} {1} {2}", string.Join(" ", videoArgs), string.Join(" ", audioArgs), string.Join(" ", moreArgs));
             }
 
             new ConverterForm(input, output, arguments, inputFile.Duration.TotalSeconds).ShowDialog(this);
