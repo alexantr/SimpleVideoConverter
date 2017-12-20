@@ -36,7 +36,17 @@
             this.buttonShowInfo = new System.Windows.Forms.Button();
             this.buttonOpenInputFile = new System.Windows.Forms.Button();
             this.checkBoxWebOptimized = new System.Windows.Forms.CheckBox();
+            this.tabPageTags = new System.Windows.Forms.TabPage();
+            this.labelTagCopyright = new System.Windows.Forms.Label();
+            this.textBoxTagCopyright = new System.Windows.Forms.TextBox();
+            this.labelTagAuthor = new System.Windows.Forms.Label();
+            this.textBoxTagAuthor = new System.Windows.Forms.TextBox();
+            this.labelTagComment = new System.Windows.Forms.Label();
+            this.textBoxTagComment = new System.Windows.Forms.TextBox();
             this.textBoxTagCreationTime = new System.Windows.Forms.TextBox();
+            this.labelTagCreationTime = new System.Windows.Forms.Label();
+            this.textBoxTagTitle = new System.Windows.Forms.TextBox();
+            this.labelTagTitle = new System.Windows.Forms.Label();
             this.tabPageAudio = new System.Windows.Forms.TabPage();
             this.panelAudioParams = new System.Windows.Forms.Panel();
             this.checkBoxConvertAudio = new System.Windows.Forms.CheckBox();
@@ -96,18 +106,9 @@
             this.buttonBrowseOut = new System.Windows.Forms.Button();
             this.textBoxIn = new System.Windows.Forms.TextBox();
             this.tabControlMain = new System.Windows.Forms.TabControl();
-            this.tabPageTags = new System.Windows.Forms.TabPage();
-            this.labelTagCopyright = new System.Windows.Forms.Label();
-            this.textBoxTagCopyright = new System.Windows.Forms.TextBox();
-            this.labelTagAuthor = new System.Windows.Forms.Label();
-            this.textBoxTagAuthor = new System.Windows.Forms.TextBox();
-            this.labelTagComment = new System.Windows.Forms.Label();
-            this.textBoxTagComment = new System.Windows.Forms.TextBox();
-            this.labelTagCreationTime = new System.Windows.Forms.Label();
-            this.textBoxTagTitle = new System.Windows.Forms.TextBox();
-            this.labelTagTitle = new System.Windows.Forms.Label();
             this.labelOutputInfo = new System.Windows.Forms.Label();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
+            this.tabPageTags.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAudioBitrateError)).BeginInit();
@@ -125,7 +126,6 @@
             this.tabPageFile.SuspendLayout();
             this.panelFile.SuspendLayout();
             this.tabControlMain.SuspendLayout();
-            this.tabPageTags.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonGo
@@ -184,13 +184,113 @@
         "ведения в браузерах");
             this.checkBoxWebOptimized.UseVisualStyleBackColor = true;
             // 
+            // tabPageTags
+            // 
+            this.tabPageTags.Controls.Add(this.labelTagCopyright);
+            this.tabPageTags.Controls.Add(this.textBoxTagCopyright);
+            this.tabPageTags.Controls.Add(this.labelTagAuthor);
+            this.tabPageTags.Controls.Add(this.textBoxTagAuthor);
+            this.tabPageTags.Controls.Add(this.labelTagComment);
+            this.tabPageTags.Controls.Add(this.textBoxTagComment);
+            this.tabPageTags.Controls.Add(this.textBoxTagCreationTime);
+            this.tabPageTags.Controls.Add(this.labelTagCreationTime);
+            this.tabPageTags.Controls.Add(this.textBoxTagTitle);
+            this.tabPageTags.Controls.Add(this.labelTagTitle);
+            this.tabPageTags.Location = new System.Drawing.Point(4, 22);
+            this.tabPageTags.Name = "tabPageTags";
+            this.tabPageTags.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageTags.Size = new System.Drawing.Size(604, 185);
+            this.tabPageTags.TabIndex = 4;
+            this.tabPageTags.Text = "Теги";
+            this.tabPageTags.UseVisualStyleBackColor = true;
+            // 
+            // labelTagCopyright
+            // 
+            this.labelTagCopyright.AutoSize = true;
+            this.labelTagCopyright.Location = new System.Drawing.Point(6, 66);
+            this.labelTagCopyright.Name = "labelTagCopyright";
+            this.labelTagCopyright.Size = new System.Drawing.Size(56, 13);
+            this.labelTagCopyright.TabIndex = 4;
+            this.labelTagCopyright.Text = "Копирайт";
+            // 
+            // textBoxTagCopyright
+            // 
+            this.textBoxTagCopyright.Location = new System.Drawing.Point(126, 63);
+            this.textBoxTagCopyright.Name = "textBoxTagCopyright";
+            this.textBoxTagCopyright.Size = new System.Drawing.Size(472, 21);
+            this.textBoxTagCopyright.TabIndex = 5;
+            this.textBoxTagCopyright.TextChanged += new System.EventHandler(this.textBoxTagCopyright_TextChanged);
+            // 
+            // labelTagAuthor
+            // 
+            this.labelTagAuthor.AutoSize = true;
+            this.labelTagAuthor.Location = new System.Drawing.Point(6, 38);
+            this.labelTagAuthor.Name = "labelTagAuthor";
+            this.labelTagAuthor.Size = new System.Drawing.Size(115, 13);
+            this.labelTagAuthor.TabIndex = 2;
+            this.labelTagAuthor.Text = "Автор (Исполнитель)";
+            // 
+            // textBoxTagAuthor
+            // 
+            this.textBoxTagAuthor.Location = new System.Drawing.Point(126, 35);
+            this.textBoxTagAuthor.Name = "textBoxTagAuthor";
+            this.textBoxTagAuthor.Size = new System.Drawing.Size(472, 21);
+            this.textBoxTagAuthor.TabIndex = 3;
+            this.textBoxTagAuthor.TextChanged += new System.EventHandler(this.textBoxTagAuthor_TextChanged);
+            // 
+            // labelTagComment
+            // 
+            this.labelTagComment.AutoSize = true;
+            this.labelTagComment.Location = new System.Drawing.Point(6, 93);
+            this.labelTagComment.Name = "labelTagComment";
+            this.labelTagComment.Size = new System.Drawing.Size(74, 13);
+            this.labelTagComment.TabIndex = 6;
+            this.labelTagComment.Text = "Комментарий";
+            // 
+            // textBoxTagComment
+            // 
+            this.textBoxTagComment.Location = new System.Drawing.Point(126, 90);
+            this.textBoxTagComment.Name = "textBoxTagComment";
+            this.textBoxTagComment.Size = new System.Drawing.Size(472, 21);
+            this.textBoxTagComment.TabIndex = 7;
+            this.textBoxTagComment.TextChanged += new System.EventHandler(this.textBoxTagComment_TextChanged);
+            // 
             // textBoxTagCreationTime
             // 
             this.textBoxTagCreationTime.Location = new System.Drawing.Point(126, 117);
             this.textBoxTagCreationTime.Name = "textBoxTagCreationTime";
             this.textBoxTagCreationTime.Size = new System.Drawing.Size(180, 21);
             this.textBoxTagCreationTime.TabIndex = 9;
+            this.toolTipHint.SetToolTip(this.textBoxTagCreationTime, "Дата и время в формате ISO 8601 или \"yyyy-MM-dd HH:mm:ss\"\r\nПримеры:\r\n2005-08-09 1" +
+        "8:31:42\r\n2005-08-09T18:31:42\r\n2005-08-09T18:31:42+03:00\r\n2005-08-09T15:31:42.000" +
+        "000Z\r\n2005-08-09T18:31:42.000000+03:00");
             this.textBoxTagCreationTime.TextChanged += new System.EventHandler(this.textBoxTagCreationTime_TextChanged);
+            // 
+            // labelTagCreationTime
+            // 
+            this.labelTagCreationTime.AutoSize = true;
+            this.labelTagCreationTime.Location = new System.Drawing.Point(6, 120);
+            this.labelTagCreationTime.Name = "labelTagCreationTime";
+            this.labelTagCreationTime.Size = new System.Drawing.Size(83, 13);
+            this.labelTagCreationTime.TabIndex = 8;
+            this.labelTagCreationTime.Text = "Дата создания";
+            // 
+            // textBoxTagTitle
+            // 
+            this.textBoxTagTitle.Location = new System.Drawing.Point(126, 7);
+            this.textBoxTagTitle.Name = "textBoxTagTitle";
+            this.textBoxTagTitle.Size = new System.Drawing.Size(472, 21);
+            this.textBoxTagTitle.TabIndex = 1;
+            this.textBoxTagTitle.TextChanged += new System.EventHandler(this.textBoxTagTitle_TextChanged);
+            // 
+            // labelTagTitle
+            // 
+            this.labelTagTitle.AutoSize = true;
+            this.labelTagTitle.Location = new System.Drawing.Point(6, 10);
+            this.labelTagTitle.Name = "labelTagTitle";
+            this.labelTagTitle.Size = new System.Drawing.Size(60, 13);
+            this.labelTagTitle.TabIndex = 0;
+            this.labelTagTitle.Text = "Заголовок";
             // 
             // tabPageAudio
             // 
@@ -799,104 +899,6 @@
             this.tabControlMain.Size = new System.Drawing.Size(612, 211);
             this.tabControlMain.TabIndex = 0;
             // 
-            // tabPageTags
-            // 
-            this.tabPageTags.Controls.Add(this.labelTagCopyright);
-            this.tabPageTags.Controls.Add(this.textBoxTagCopyright);
-            this.tabPageTags.Controls.Add(this.labelTagAuthor);
-            this.tabPageTags.Controls.Add(this.textBoxTagAuthor);
-            this.tabPageTags.Controls.Add(this.labelTagComment);
-            this.tabPageTags.Controls.Add(this.textBoxTagComment);
-            this.tabPageTags.Controls.Add(this.textBoxTagCreationTime);
-            this.tabPageTags.Controls.Add(this.labelTagCreationTime);
-            this.tabPageTags.Controls.Add(this.textBoxTagTitle);
-            this.tabPageTags.Controls.Add(this.labelTagTitle);
-            this.tabPageTags.Location = new System.Drawing.Point(4, 22);
-            this.tabPageTags.Name = "tabPageTags";
-            this.tabPageTags.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTags.Size = new System.Drawing.Size(604, 185);
-            this.tabPageTags.TabIndex = 4;
-            this.tabPageTags.Text = "Теги";
-            this.toolTipHint.SetToolTip(this.tabPageTags, resources.GetString("tabPageTags.ToolTip"));
-            this.tabPageTags.UseVisualStyleBackColor = true;
-            // 
-            // labelTagCopyright
-            // 
-            this.labelTagCopyright.AutoSize = true;
-            this.labelTagCopyright.Location = new System.Drawing.Point(6, 66);
-            this.labelTagCopyright.Name = "labelTagCopyright";
-            this.labelTagCopyright.Size = new System.Drawing.Size(56, 13);
-            this.labelTagCopyright.TabIndex = 4;
-            this.labelTagCopyright.Text = "Копирайт";
-            // 
-            // textBoxTagCopyright
-            // 
-            this.textBoxTagCopyright.Location = new System.Drawing.Point(126, 63);
-            this.textBoxTagCopyright.Name = "textBoxTagCopyright";
-            this.textBoxTagCopyright.Size = new System.Drawing.Size(472, 21);
-            this.textBoxTagCopyright.TabIndex = 5;
-            this.textBoxTagCopyright.TextChanged += new System.EventHandler(this.textBoxTagCopyright_TextChanged);
-            // 
-            // labelTagAuthor
-            // 
-            this.labelTagAuthor.AutoSize = true;
-            this.labelTagAuthor.Location = new System.Drawing.Point(6, 38);
-            this.labelTagAuthor.Name = "labelTagAuthor";
-            this.labelTagAuthor.Size = new System.Drawing.Size(115, 13);
-            this.labelTagAuthor.TabIndex = 2;
-            this.labelTagAuthor.Text = "Автор (Исполнитель)";
-            // 
-            // textBoxTagAuthor
-            // 
-            this.textBoxTagAuthor.Location = new System.Drawing.Point(126, 35);
-            this.textBoxTagAuthor.Name = "textBoxTagAuthor";
-            this.textBoxTagAuthor.Size = new System.Drawing.Size(472, 21);
-            this.textBoxTagAuthor.TabIndex = 3;
-            this.textBoxTagAuthor.TextChanged += new System.EventHandler(this.textBoxTagAuthor_TextChanged);
-            // 
-            // labelTagComment
-            // 
-            this.labelTagComment.AutoSize = true;
-            this.labelTagComment.Location = new System.Drawing.Point(6, 93);
-            this.labelTagComment.Name = "labelTagComment";
-            this.labelTagComment.Size = new System.Drawing.Size(74, 13);
-            this.labelTagComment.TabIndex = 6;
-            this.labelTagComment.Text = "Комментарий";
-            // 
-            // textBoxTagComment
-            // 
-            this.textBoxTagComment.Location = new System.Drawing.Point(126, 90);
-            this.textBoxTagComment.Name = "textBoxTagComment";
-            this.textBoxTagComment.Size = new System.Drawing.Size(472, 21);
-            this.textBoxTagComment.TabIndex = 7;
-            this.textBoxTagComment.TextChanged += new System.EventHandler(this.textBoxTagComment_TextChanged);
-            // 
-            // labelTagCreationTime
-            // 
-            this.labelTagCreationTime.AutoSize = true;
-            this.labelTagCreationTime.Location = new System.Drawing.Point(6, 120);
-            this.labelTagCreationTime.Name = "labelTagCreationTime";
-            this.labelTagCreationTime.Size = new System.Drawing.Size(83, 13);
-            this.labelTagCreationTime.TabIndex = 8;
-            this.labelTagCreationTime.Text = "Дата создания";
-            // 
-            // textBoxTagTitle
-            // 
-            this.textBoxTagTitle.Location = new System.Drawing.Point(126, 7);
-            this.textBoxTagTitle.Name = "textBoxTagTitle";
-            this.textBoxTagTitle.Size = new System.Drawing.Size(472, 21);
-            this.textBoxTagTitle.TabIndex = 1;
-            this.textBoxTagTitle.TextChanged += new System.EventHandler(this.textBoxTagTitle_TextChanged);
-            // 
-            // labelTagTitle
-            // 
-            this.labelTagTitle.AutoSize = true;
-            this.labelTagTitle.Location = new System.Drawing.Point(6, 10);
-            this.labelTagTitle.Name = "labelTagTitle";
-            this.labelTagTitle.Size = new System.Drawing.Size(60, 13);
-            this.labelTagTitle.TabIndex = 0;
-            this.labelTagTitle.Text = "Заголовок";
-            // 
             // labelOutputInfo
             // 
             this.labelOutputInfo.AutoSize = true;
@@ -936,6 +938,8 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
+            this.tabPageTags.ResumeLayout(false);
+            this.tabPageTags.PerformLayout();
             this.tabPageAudio.ResumeLayout(false);
             this.panelAudioParams.ResumeLayout(false);
             this.panelAudioParams.PerformLayout();
@@ -961,8 +965,6 @@
             this.panelFile.ResumeLayout(false);
             this.panelFile.PerformLayout();
             this.tabControlMain.ResumeLayout(false);
-            this.tabPageTags.ResumeLayout(false);
-            this.tabPageTags.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
