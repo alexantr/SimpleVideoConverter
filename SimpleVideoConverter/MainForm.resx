@@ -126,6 +126,16 @@
 С полосами — вписать с сохранением пропорций и добавить черные полосы
 для получения выбранного размера</value>
   </data>
+  <data name="tabPageTags.ToolTip" xml:space="preserve">
+    <value>Дата и время в формате ISO 8601 или "yyyy-MM-dd HH:mm:ss"
+Примеры:
+2005-08-09 18:31:42
+2005-08-09T18:31:42
+2005-08-09T18:31:42+03:00
+2005-08-09T15:31:42.000000Z
+2005-08-09T18:31:42.000000+03:00
+</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

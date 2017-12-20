@@ -17,6 +17,9 @@ namespace Alexantr.SimpleVideoConverter
 
         private char[] invalidChars = Path.GetInvalidPathChars();
 
+        // http://dev.beandog.org/x264_preset_reference.html
+        // http://www.videorip.info/x264/71-nekotorye-sovety-nastrojki-kodeka-x264-ot-polzovatelej
+        // https://forum.videohelp.com/threads/369463-x264-Tweaking-testing-and-comparing-settings
         private const string FileTypeMP4 = "mp4";
 
         // https://www.webmproject.org/docs/container/
@@ -1036,7 +1039,12 @@ namespace Alexantr.SimpleVideoConverter
                 string videoPreset = "veryslow";
                 string videoProfile = "high";
                 string videoLevel = "";
-                string videoParams = "-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p -x264-params \"no-dct-decimate=1:merange=32:subme=11:sar=1/1\"";
+
+                string x264Params = "sar=1/1";
+                if (twoPass)
+                    x264Params += ":no-dct-decimate=1";
+
+                string videoParams = $"-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p -x264-params \"{x264Params}\"";
 
                 double finalFrameRate = CalcFinalFrameRate();
                 if (finalFrameRate == 0)
@@ -1177,9 +1185,6 @@ namespace Alexantr.SimpleVideoConverter
 
             List<string> moreArgs = new List<string>();
 
-            if (fileType == FileTypeMP4 && checkBoxWebOptimized.Checked)
-                moreArgs.Add("-movflags +faststart");
-
             // Meta
 
             moreArgs.Add("-map_metadata -1");
@@ -1195,6 +1200,11 @@ namespace Alexantr.SimpleVideoConverter
                 moreArgs.Add($"-metadata creation_time=\"{Tags.CreationTime.Replace("\"", "\\\"")}\"");
             else
                 moreArgs.Add($"-metadata creation_time=\"{DateTime.Now.ToString("o")}\"");
+
+            // mp4
+
+            if (fileType == FileTypeMP4 && checkBoxWebOptimized.Checked)
+                moreArgs.Add("-movflags +faststart");
 
             // Force file type
 
