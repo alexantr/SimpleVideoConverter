@@ -36,6 +36,7 @@
             this.buttonShowInfo = new System.Windows.Forms.Button();
             this.buttonOpenInputFile = new System.Windows.Forms.Button();
             this.checkBoxWebOptimized = new System.Windows.Forms.CheckBox();
+            this.textBoxTagCreationTime = new System.Windows.Forms.TextBox();
             this.tabPageTags = new System.Windows.Forms.TabPage();
             this.labelTagCopyright = new System.Windows.Forms.Label();
             this.textBoxTagCopyright = new System.Windows.Forms.TextBox();
@@ -43,7 +44,6 @@
             this.textBoxTagAuthor = new System.Windows.Forms.TextBox();
             this.labelTagComment = new System.Windows.Forms.Label();
             this.textBoxTagComment = new System.Windows.Forms.TextBox();
-            this.textBoxTagCreationTime = new System.Windows.Forms.TextBox();
             this.labelTagCreationTime = new System.Windows.Forms.Label();
             this.textBoxTagTitle = new System.Windows.Forms.TextBox();
             this.labelTagTitle = new System.Windows.Forms.Label();
@@ -184,6 +184,17 @@
         "ведения в браузерах");
             this.checkBoxWebOptimized.UseVisualStyleBackColor = true;
             // 
+            // textBoxTagCreationTime
+            // 
+            this.textBoxTagCreationTime.Location = new System.Drawing.Point(126, 117);
+            this.textBoxTagCreationTime.Name = "textBoxTagCreationTime";
+            this.textBoxTagCreationTime.Size = new System.Drawing.Size(180, 21);
+            this.textBoxTagCreationTime.TabIndex = 9;
+            this.toolTipHint.SetToolTip(this.textBoxTagCreationTime, "Дата и время в формате ISO 8601 или \"yyyy-MM-dd HH:mm:ss\"\r\nПримеры:\r\n2005-08-09 1" +
+        "8:31:42\r\n2005-08-09T18:31:42\r\n2005-08-09T18:31:42+03:00\r\n2005-08-09T15:31:42.000" +
+        "000Z\r\n2005-08-09T18:31:42.000000+03:00");
+            this.textBoxTagCreationTime.TextChanged += new System.EventHandler(this.textBoxTagCreationTime_TextChanged);
+            // 
             // tabPageTags
             // 
             this.tabPageTags.Controls.Add(this.labelTagCopyright);
@@ -254,17 +265,6 @@
             this.textBoxTagComment.Size = new System.Drawing.Size(472, 21);
             this.textBoxTagComment.TabIndex = 7;
             this.textBoxTagComment.TextChanged += new System.EventHandler(this.textBoxTagComment_TextChanged);
-            // 
-            // textBoxTagCreationTime
-            // 
-            this.textBoxTagCreationTime.Location = new System.Drawing.Point(126, 117);
-            this.textBoxTagCreationTime.Name = "textBoxTagCreationTime";
-            this.textBoxTagCreationTime.Size = new System.Drawing.Size(180, 21);
-            this.textBoxTagCreationTime.TabIndex = 9;
-            this.toolTipHint.SetToolTip(this.textBoxTagCreationTime, "Дата и время в формате ISO 8601 или \"yyyy-MM-dd HH:mm:ss\"\r\nПримеры:\r\n2005-08-09 1" +
-        "8:31:42\r\n2005-08-09T18:31:42\r\n2005-08-09T18:31:42+03:00\r\n2005-08-09T15:31:42.000" +
-        "000Z\r\n2005-08-09T18:31:42.000000+03:00");
-            this.textBoxTagCreationTime.TextChanged += new System.EventHandler(this.textBoxTagCreationTime_TextChanged);
             // 
             // labelTagCreationTime
             // 
@@ -920,7 +920,6 @@
             // 
             // MainForm
             // 
-            this.AcceptButton = this.buttonGo;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 261);

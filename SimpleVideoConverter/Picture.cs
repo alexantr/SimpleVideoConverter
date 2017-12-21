@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Alexantr.SimpleVideoConverter
 {
-    class Picture
+    public static class Picture
     {
         public const string DefaultNone = "none";
         public const string DefaultAuto = "auto";
@@ -19,17 +19,30 @@ namespace Alexantr.SimpleVideoConverter
 
         public const string DefaultScalingAlgorithm = "bicubic";
 
-        public const string ResizeMethodFit = "fit";
-        public const string ResizeMethodStretch = "stretch";
+        // increases or decreases the size of the image to fill the box whilst preserving its aspect-ratio
+        // Элемент масштабируется, чтобы целиком уместиться в заданные размеры с соблюдением пропорций
+        public const string ResizeMethodContain = "contain";
+        // stretches the image to fit the box, regardless of its aspect-ratio
+        // Элемент масштабируется, чтобы соответствовать заданным размерам, при этом пропорции игнорируются
+        public const string ResizeMethodFill = "fill";
+        // the image will fill the height and width of its box, once again maintaining its aspect ratio but often cropping the image in the process
+        // Элемент увеличивается или уменьшается, чтобы целиком заполнить заданную область с сохранением пропорций
+        public const string ResizeMethodCover = "cover";
+        // contain with black borders
         public const string ResizeMethodBorders = "borders";
+
 
         public static bool Deinterlace = false;
 
-        private static int cropLeft, cropTop, cropRight, cropBottom; // values for dar
-        private PictureSize cropPictureSize; // picture size after crop but fixed for sar
-        private PictureSize selectedPictureSize; // selected size from comboBoxResizeMethod
-        private PictureSize finalPictureSize; // final picture size for video
 
+        private static Crop crop;
+
+        private static PictureSize inputOriginalPictureSize; // DAR
+        private static PictureSize inputPictureSize; // SAR
+        private static PictureSize croppedPictureSize; // inpit size with crop (SAR)
+        private static PictureSize outputPictureSize; // final output size
+
+        private static PictureSize selectedPictureSize;
         private static string[] pictureSizeList = new string[]
         {
             "1920x1080",
@@ -43,11 +56,12 @@ namespace Alexantr.SimpleVideoConverter
             "176x144"
         };
 
-        private static string resizeMethod = ResizeMethodFit;
+        private static string resizeMethod = ResizeMethodContain;
         private static string[,] resizeMethodList = new string[,]
         {
-            { ResizeMethodFit, "Вписать" },
-            { ResizeMethodStretch, "Растянуть" },
+            { ResizeMethodContain, "Вписать" },
+            { ResizeMethodFill, "Растянуть" },
+            //{ ResizeMethodCover, "Заполнить" },
             { ResizeMethodBorders, "C полосами" }
         };
 
@@ -73,22 +87,52 @@ namespace Alexantr.SimpleVideoConverter
         };
 
         private static string fieldOrder = DefaultAuto;
-        private static string[,] fieldOrderList = new string[,]
-        {
+        private static string[,] fieldOrderList = new string[,] {
             { "auto", "Авто" },
             { "tff", "Top Field First" },
             { "bff", "Bottom Field First" }
         };
 
-        // Picture Size
-        
+        /// <summary>
+        /// Init values for new file
+        /// </summary>
+        public static void Init()
+        {
+            crop = new Crop();
+            Deinterlace = false;
+            fieldOrder = DefaultAuto;
+        }
+
+        public static Crop Crop
+        {
+            get {
+                if (crop == null)
+                    crop = new Crop();
+                return crop;
+            }
+            set { crop = value; }
+        }
+
+        /// <summary>
+        /// Check if crop is applied
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsCropped()
+        {
+            return (crop.Left > 0 || crop.Top > 0 || crop.Right > 0 || crop.Bottom > 0);
+        }
+
+        /// <summary>
+        /// List of picture sizes
+        /// </summary>
         public static string[] PictureSizeList
         {
             get { return pictureSizeList; }
         }
 
-        // Resize Method
-
+        /// <summary>
+        /// Resize method
+        /// </summary>
         public static string ResizeMethod
         {
             get { return resizeMethod; }
@@ -97,17 +141,21 @@ namespace Alexantr.SimpleVideoConverter
                 if (Utility.IsValid(value, resizeMethodList))
                     resizeMethod = value;
                 else
-                    resizeMethod = ResizeMethodFit;
+                    resizeMethod = ResizeMethodContain;
             }
         }
 
+        /// <summary>
+        /// List of resize methods
+        /// </summary>
         public static string[,] ResizeMethodList
         {
             get { return resizeMethodList; }
         }
 
-        // Scaling Algorithm
-
+        /// <summary>
+        /// Scaling algorithm
+        /// </summary>
         public static string ScalingAlgorithm
         {
             get { return scalingAlgorithm; }
@@ -119,13 +167,17 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
+        /// <summary>
+        /// List of scaling algorithms
+        /// </summary>
         public static string[,] ScalingAlgorithmList
         {
             get { return scalingAlgorithmList; }
         }
 
-        // Color Filter
-
+        /// <summary>
+        /// Color filter
+        /// </summary>
         public static string ColorFilter
         {
             get { return colorFilter; }
@@ -138,13 +190,17 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
+        /// <summary>
+        /// List of color filter
+        /// </summary>
         public static string[,] ColorFilterList
         {
             get { return colorFilterList; }
         }
 
-        // Field Order
-
+        /// <summary>
+        /// Field order for deinterlace
+        /// </summary>
         public static string FieldOrder
         {
             get { return fieldOrder; }
@@ -157,6 +213,9 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
+        /// <summary>
+        /// List of field order types
+        /// </summary>
         public static string[,] FieldOrderList
         {
             get { return fieldOrderList; }

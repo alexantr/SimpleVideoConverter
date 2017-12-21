@@ -28,12 +28,6 @@ namespace Alexantr.SimpleVideoConverter
         private const string EncodeModeBitrate = "bitrate";
         private const string EncodeModeCRF = "crf";
 
-        public const int MinWidth = 128;
-        public const int MaxWidth = 8192;
-
-        public const int MinHeight = 96;
-        public const int MaxHeight = 4320;
-
         private const int MinBitrate = 100;
         private const int MaxBitrate = 500000;
         private const int DefaultBitrate = 3000;
@@ -44,10 +38,6 @@ namespace Alexantr.SimpleVideoConverter
         private const int MinAudioBitrate = 8;
         private const int MaxAudioBitrate = 320;
 
-        private const string ResizeMethodFit = "fit";
-        private const string ResizeMethodStretch = "stretch";
-        private const string ResizeMethodBorders = "borders";
-
         private string fileType; // mp4 or webm
         private string encodeMode; // bitrate or crf
 
@@ -57,7 +47,6 @@ namespace Alexantr.SimpleVideoConverter
 
         private TaskbarManager taskbarManager;
 
-        private int cropLeft, cropTop, cropRight, cropBottom; // values for dar
         private PictureSize cropPictureSize; // picture size after crop but fixed for sar
         private PictureSize selectedPictureSize; // selected size from comboBoxResizeMethod
         private PictureSize finalPictureSize; // final picture size for video
@@ -198,21 +187,29 @@ namespace Alexantr.SimpleVideoConverter
 
             checkBoxWebOptimized.Checked = true;
 
+            Picture.Init();
+
             // init crop size
             labelCropSize.Text = "";
-            cropPictureSize = new PictureSize();
-            cropPictureSize.Width = MinWidth;
-            cropPictureSize.Height = MinHeight;
+            cropPictureSize = new PictureSize
+            {
+                Width = Picture.MinWidth,
+                Height = Picture.MinHeight
+            };
 
             // init new size
-            selectedPictureSize = new PictureSize();
-            selectedPictureSize.Width = MinWidth;
-            selectedPictureSize.Height = MinHeight;
+            selectedPictureSize = new PictureSize
+            {
+                Width = Picture.MinWidth,
+                Height = Picture.MinHeight
+            };
 
             // init final size
-            finalPictureSize = new PictureSize();
-            finalPictureSize.Width = MinWidth;
-            finalPictureSize.Height = MinHeight;
+            finalPictureSize = new PictureSize
+            {
+                Width = Picture.MinWidth,
+                Height = Picture.MinHeight
+            };
 
             // Format: 0 - mp4, 1 - webm
             comboBoxFileType.Items.Clear();
@@ -582,13 +579,8 @@ namespace Alexantr.SimpleVideoConverter
 
         #region Crop
 
-        public void SetCropValues(int left, int top, int rigth, int bottom)
+        public void SetCropValues()
         {
-            cropLeft = left;
-            cropTop = top;
-            cropRight = rigth;
-            cropBottom = bottom;
-
             CalcCropPictureSize();
             CalcFinalPictureSize();
             SetOutputInfo();
@@ -717,7 +709,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void buttonCrop_Click(object sender, EventArgs e)
         {
-            new CropForm(inputFile, cropLeft, cropTop, cropRight, cropBottom).ShowDialog(this);
+            new CropForm(inputFile).ShowDialog(this);
         }
 
         private void buttonGo_Click(object sender, EventArgs e)
@@ -800,6 +792,8 @@ namespace Alexantr.SimpleVideoConverter
             {
                 inputFile = null;
 
+                Picture.Init();
+
                 textBoxIn.Text = "Файл не выбран";
                 textBoxOut.Text = "";
 
@@ -808,14 +802,14 @@ namespace Alexantr.SimpleVideoConverter
                 buttonOpenInputFile.Enabled = false;
 
                 labelCropSize.Text = "";
-                cropPictureSize.Width = MinWidth;
-                cropPictureSize.Height = MinHeight;
+                cropPictureSize.Width = Picture.MinWidth;
+                cropPictureSize.Height = Picture.MinHeight;
 
-                selectedPictureSize.Width = MinWidth;
-                selectedPictureSize.Height = MinHeight;
+                selectedPictureSize.Width = Picture.MinWidth;
+                selectedPictureSize.Height = Picture.MinHeight;
 
-                finalPictureSize.Width = MinWidth;
-                finalPictureSize.Height = MinHeight;
+                finalPictureSize.Width = Picture.MinWidth;
+                finalPictureSize.Height = Picture.MinHeight;
 
                 CalcFileSize();
 
@@ -844,15 +838,12 @@ namespace Alexantr.SimpleVideoConverter
 
             VideoStream vStream = inputFile.VideoStreams[0];
 
-            // reset crop values
-            cropTop = 0;
-            cropBottom = 0;
-            cropLeft = 0;
-            cropRight = 0;
+            Picture.Init();
 
             cropPictureSize.Width = vStream.PictureSize.Width;
             cropPictureSize.Height = vStream.PictureSize.Height;
 
+            CalcCropPictureSize();
             CalcFinalPictureSize();
 
             // if need deinterlace
@@ -1109,11 +1100,11 @@ namespace Alexantr.SimpleVideoConverter
             }
 
             // crop - using dar
-            if (cropTop > 0 || cropBottom > 0 || cropLeft > 0 || cropRight > 0)
+            if (Picture.IsCropped())
             {
-                int cropW = vStream.OriginalSize.Width - cropLeft - cropRight;
-                int cropH = vStream.OriginalSize.Height - cropTop - cropBottom;
-                filters.Add($"crop={cropW}:{cropH}:{cropLeft}:{cropTop}");
+                int cropW = vStream.OriginalSize.Width - Picture.Crop.Left - Picture.Crop.Right;
+                int cropH = vStream.OriginalSize.Height - Picture.Crop.Top - Picture.Crop.Bottom;
+                filters.Add($"crop={cropW}:{cropH}:{Picture.Crop.Left}:{Picture.Crop.Top}");
             }
 
             if (finalPictureSize.Width != cropPictureSize.Width || finalPictureSize.Height != cropPictureSize.Height)
@@ -1323,7 +1314,7 @@ namespace Alexantr.SimpleVideoConverter
             // fit or stretch
             ParseSelectedPictureSize();
             string selectedMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
-            if (selectedMethod == Picture.ResizeMethodStretch)
+            if (selectedMethod == Picture.ResizeMethodFill)
             {
                 finalPictureSize.Width = selectedPictureSize.Width;
                 finalPictureSize.Height = selectedPictureSize.Height;
@@ -1335,16 +1326,16 @@ namespace Alexantr.SimpleVideoConverter
                 int newHeight = (int)Math.Round(cropPictureSize.Height * aspectRatio);
                 if (newWidth % 2 == 1)
                     newWidth -= 1;
-                if (newWidth < MinWidth)
-                    newWidth = MinWidth;
-                if (newWidth > MaxWidth)
-                    newWidth = MaxWidth;
+                if (newWidth < Picture.MinWidth)
+                    newWidth = Picture.MinWidth;
+                if (newWidth > Picture.MaxWidth)
+                    newWidth = Picture.MaxWidth;
                 if (newHeight % 2 == 1)
                     newHeight -= 1;
-                if (newHeight < MinHeight)
-                    newHeight = MinHeight;
-                if (newHeight > MaxHeight)
-                    newHeight = MaxHeight;
+                if (newHeight < Picture.MinHeight)
+                    newHeight = Picture.MinHeight;
+                if (newHeight > Picture.MaxHeight)
+                    newHeight = Picture.MaxHeight;
                 finalPictureSize.Width = newWidth;
                 finalPictureSize.Height = newHeight;
             }
@@ -1372,12 +1363,12 @@ namespace Alexantr.SimpleVideoConverter
                     int newHeight = Convert.ToInt32(match.Groups[2].Value);
                     if (newWidth % 2 == 1)
                         newWidth -= 1;
-                    if (newWidth < MinWidth)
-                        newWidth = MinWidth;
+                    if (newWidth < Picture.MinWidth)
+                        newWidth = Picture.MinWidth;
                     if (newHeight % 2 == 1)
                         newHeight -= 1;
-                    if (newHeight < MinHeight)
-                        newHeight = MinHeight;
+                    if (newHeight < Picture.MinHeight)
+                        newHeight = Picture.MinHeight;
                     selectedPictureSize.Width = newWidth;
                     selectedPictureSize.Height = newHeight;
                 }
@@ -1396,11 +1387,11 @@ namespace Alexantr.SimpleVideoConverter
             if (inputFile == null)
                 return;
             VideoStream vStream = inputFile.VideoStreams[0];
-            if (cropTop > 0 || cropBottom > 0 || cropLeft > 0 || cropRight > 0)
+            if (Picture.IsCropped())
             {
                 // init with oar sizes
-                int newW = vStream.OriginalSize.Width - cropLeft - cropRight;
-                int newH = vStream.OriginalSize.Height - cropTop - cropBottom;
+                int newW = vStream.OriginalSize.Width - Picture.Crop.Left - Picture.Crop.Right;
+                int newH = vStream.OriginalSize.Height - Picture.Crop.Top - Picture.Crop.Bottom;
                 // correct dar -> sar
                 if (vStream.UsingDAR)
                 {
@@ -1410,12 +1401,12 @@ namespace Alexantr.SimpleVideoConverter
                     newH = (int)Math.Round(newH * diffH, 0);
                     if (newW % 2 == 1)
                         newW -= 1;
-                    if (newW < MinWidth)
-                        newW = MinWidth;
+                    if (newW < Picture.MinWidth)
+                        newW = Picture.MinWidth;
                     if (newH % 2 == 1)
                         newH -= 1;
-                    if (newH < MinHeight)
-                        newH = MinHeight;
+                    if (newH < Picture.MinHeight)
+                        newH = Picture.MinHeight;
                 }
                 cropPictureSize.Width = newW;
                 cropPictureSize.Height = newH;
@@ -1515,7 +1506,7 @@ namespace Alexantr.SimpleVideoConverter
                 info.Append($"VP9");
 
             string selectedMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
-            if (selectedMethod == Picture.ResizeMethodFit)
+            if (selectedMethod == Picture.ResizeMethodContain)
                 info.Append($", {finalPictureSize.ToString()}");
             else
                 info.Append($", {selectedPictureSize.ToString()}");

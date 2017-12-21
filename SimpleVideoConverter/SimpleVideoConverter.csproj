@@ -131,6 +131,7 @@
     <Compile Include="ConverterForm.Designer.cs">
       <DependentUpon>ConverterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Crop.cs" />
     <Compile Include="CropForm.cs">
       <SubType>Form</SubType>
     </Compile>
