@@ -46,20 +46,8 @@ namespace Alexantr.SimpleVideoConverter
         private string formTitle;
 
         private TaskbarManager taskbarManager;
-
-        private PictureSize cropPictureSize; // picture size after crop but fixed for sar
-        private PictureSize selectedPictureSize; // selected size from comboBoxResizeMethod
-        private PictureSize finalPictureSize; // final picture size for video
-
+        
         // lists
-
-        private List<string> pictureSizeList;
-
-        private Dictionary<string, string> scalingAlgorithmList;
-
-        private Dictionary<string, string> fieldOrderList;
-
-        private Dictionary<string, string> colorFilterList;
 
         private Dictionary<string, string> frameRateList;
 
@@ -82,45 +70,6 @@ namespace Alexantr.SimpleVideoConverter
             DragDrop += HandleDragDrop;
 
             taskbarManager = TaskbarManager.Instance;
-
-            pictureSizeList = new List<string>
-            {
-                "1920x1080",
-                "1280x720",
-                "1024x576",
-                "854x480",
-                "720x540",
-                "720x404",
-                "640x480",
-                "640x360",
-                "512x384",
-                "320x240",
-                "176x144"
-            };
-
-            // see https://superuser.com/questions/375718/which-resize-algorithm-to-choose-for-videos
-            // see http://www.thnsolutions.com/technology/sunfire/graphic/image.html
-            scalingAlgorithmList = new Dictionary<string, string>
-            {
-                { "neighbor", "Nearest Neighbor" },
-                { "bilinear", "Bilinear" },
-                { "bicubic", "Bicubic" },
-                { "lanczos", "Lanczos" },
-                { "sinc", "Sinc" },
-                { "gauss", "Gaussian" },
-            };
-
-            fieldOrderList = new Dictionary<string, string>
-            {
-                { "tff", "Top Field First" },
-                { "bff", "Bottom Field First" }
-            };
-
-            colorFilterList = new Dictionary<string, string>
-            {
-                { "gray", "Черно-белое" },
-                { "sepia", "Сепия" }
-            };
 
             frameRateList = new Dictionary<string, string>
             {
@@ -187,29 +136,12 @@ namespace Alexantr.SimpleVideoConverter
 
             checkBoxWebOptimized.Checked = true;
 
+            int selectedIndex = 0;
+
             Picture.Init();
 
             // init crop size
             labelCropSize.Text = "";
-            cropPictureSize = new PictureSize
-            {
-                Width = Picture.MinWidth,
-                Height = Picture.MinHeight
-            };
-
-            // init new size
-            selectedPictureSize = new PictureSize
-            {
-                Width = Picture.MinWidth,
-                Height = Picture.MinHeight
-            };
-
-            // init final size
-            finalPictureSize = new PictureSize
-            {
-                Width = Picture.MinWidth,
-                Height = Picture.MinHeight
-            };
 
             // Format: 0 - mp4, 1 - webm
             comboBoxFileType.Items.Clear();
@@ -246,7 +178,7 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxPictureSize.Text = string.Empty;
             comboBoxPictureSize.Items.Clear();
             comboBoxPictureSize.Items.Add(new ComboBoxItem(string.Empty, "Не изменять"));
-            foreach (string ps in pictureSizeList)
+            foreach (string ps in Picture.SizeList)
             {
                 comboBoxPictureSize.Items.Add(new ComboBoxItem(ps, ps));
             }
@@ -254,26 +186,25 @@ namespace Alexantr.SimpleVideoConverter
 
             // Resize method
             comboBoxResizeMethod.Items.Clear();
-            int selectedResizeMethodIndex = 0, resizeMethodListLength = Picture.ResizeMethodList.GetLength(0);
-            for (int i = 0; i < resizeMethodListLength; i++)
+            selectedIndex = 0;
+            for (int i = 0; i < Picture.ResizeMethodList.GetLength(0); i++)
             {
                 comboBoxResizeMethod.Items.Add(new ComboBoxItem(Picture.ResizeMethodList[i, 0], Picture.ResizeMethodList[i, 1]));
                 if (Picture.ResizeMethodList[i, 0] == Picture.ResizeMethod)
-                    selectedResizeMethodIndex = i;
+                    selectedIndex = i;
             }
-            comboBoxResizeMethod.SelectedIndex = selectedResizeMethodIndex;
+            comboBoxResizeMethod.SelectedIndex = selectedIndex;
 
             // Scaling algorithm
-            int selectedScalingAlgorithm = 0, indexScalingAlgorithm = 0;
             comboBoxScalingAlgorithm.Items.Clear();
-            foreach (KeyValuePair<string, string> scm in scalingAlgorithmList)
+            selectedIndex = 0;
+            for (int i = 0; i < Picture.ScalingAlgorithmList.GetLength(0); i++)
             {
-                comboBoxScalingAlgorithm.Items.Add(new ComboBoxItem(scm.Key, scm.Value));
-                if (scm.Key == "bicubic")
-                    selectedScalingAlgorithm = indexScalingAlgorithm;
-                indexScalingAlgorithm++;
+                comboBoxScalingAlgorithm.Items.Add(new ComboBoxItem(Picture.ScalingAlgorithmList[i, 0], Picture.ScalingAlgorithmList[i, 1]));
+                if (Picture.ScalingAlgorithmList[i, 0] == Picture.ScalingAlgorithm)
+                    selectedIndex = i;
             }
-            comboBoxScalingAlgorithm.SelectedIndex = selectedScalingAlgorithm;
+            comboBoxScalingAlgorithm.SelectedIndex = selectedIndex;
 
             // Bitrate
             numericUpDownBitrate.Maximum = MaxBitrate;
@@ -285,24 +216,28 @@ namespace Alexantr.SimpleVideoConverter
 
             // Field order
             comboBoxFieldOrder.Items.Clear();
-            comboBoxFieldOrder.Items.Add(new ComboBoxItem(string.Empty, "Авто"));
-            foreach (KeyValuePair<string, string> fieldOrder in fieldOrderList)
+            selectedIndex = 0;
+            for (int i = 0; i < Picture.FieldOrderList.GetLength(0); i++)
             {
-                comboBoxFieldOrder.Items.Add(new ComboBoxItem(fieldOrder.Key, fieldOrder.Value));
+                comboBoxFieldOrder.Items.Add(new ComboBoxItem(Picture.FieldOrderList[i, 0], Picture.FieldOrderList[i, 1]));
+                if (Picture.FieldOrderList[i, 0] == Picture.FieldOrder)
+                    selectedIndex = i;
             }
-            comboBoxFieldOrder.SelectedIndex = 0;
+            comboBoxFieldOrder.SelectedIndex = selectedIndex;
 
             // Deinterlace
             comboBoxFieldOrder.Enabled = checkBoxDeinterlace.Checked;
 
             // Color filter
             comboBoxColorFilter.Items.Clear();
-            comboBoxColorFilter.Items.Add(new ComboBoxItem(string.Empty, "Нет"));
-            foreach (KeyValuePair<string, string> cf in colorFilterList)
+            selectedIndex = 0;
+            for (int i = 0; i < Picture.ColorFilterList.GetLength(0); i++)
             {
-                comboBoxColorFilter.Items.Add(new ComboBoxItem(cf.Key, cf.Value));
+                comboBoxColorFilter.Items.Add(new ComboBoxItem(Picture.ColorFilterList[i, 0], Picture.ColorFilterList[i, 1]));
+                if (Picture.ColorFilterList[i, 0] == Picture.ColorFilter)
+                    selectedIndex = i;
             }
-            comboBoxColorFilter.SelectedIndex = 0;
+            comboBoxColorFilter.SelectedIndex = selectedIndex;
 
             // Frame rate
             comboBoxFrameRate.Items.Clear();
@@ -314,16 +249,17 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxFrameRate.SelectedIndex = 0;
 
             // Audio bitrate
-            int selectedIndexBitrate = 0, indexBitrate = 0;
+            selectedIndex = 0;
+            int indexBitrate = 0;
             comboBoxAudioBitrate.Items.Clear();
             foreach (string ab in audioBitRateList)
             {
                 comboBoxAudioBitrate.Items.Add(new ComboBoxItem(ab, ab));
                 if (ab == "128")
-                    selectedIndexBitrate = indexBitrate;
+                    selectedIndex = indexBitrate;
                 indexBitrate++;
             }
-            comboBoxAudioBitrate.SelectedIndex = selectedIndexBitrate;
+            comboBoxAudioBitrate.SelectedIndex = selectedIndex;
 
             // Audio frequency
             comboBoxAudioFrequency.Items.Clear();
@@ -520,12 +456,13 @@ namespace Alexantr.SimpleVideoConverter
 
         private void checkBoxDeinterlace_CheckedChanged(object sender, EventArgs e)
         {
-            comboBoxFieldOrder.Enabled = checkBoxDeinterlace.Checked;
+            Picture.Deinterlace = comboBoxFieldOrder.Enabled = checkBoxDeinterlace.Checked;
             SetOutputInfo();
         }
 
         private void comboBoxFieldOrder_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Picture.ResizeMethod = ((ComboBoxItem)comboBoxFieldOrder.SelectedItem).Value;
             SetOutputInfo();
         }
 
@@ -535,23 +472,25 @@ namespace Alexantr.SimpleVideoConverter
 
         private void comboBoxPictureSize_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CalcFinalPictureSize();
+            ParseSelectedPictureSize();
+            UpdateCroppedPictureSizeInfo();
             SetOutputInfo();
         }
 
         private void comboBoxPictureSize_TextUpdate(object sender, EventArgs e)
         {
-            CalcFinalPictureSize();
+            ParseSelectedPictureSize();
+            UpdateCroppedPictureSizeInfo();
             SetOutputInfo();
         }
 
         private void comboBoxPictureSize_Leave(object sender, EventArgs e)
         {
             // correct custom resolution
-            if (comboBoxPictureSize.SelectedIndex < 0)
+            if (comboBoxPictureSize.SelectedIndex < 0 && Picture.SelectedSize != null)
             {
                 string input = comboBoxPictureSize.Text;
-                string chkPictureSize = $"{selectedPictureSize.Width}x{selectedPictureSize.Height}";
+                string chkPictureSize = Picture.SelectedSize.ToString();
                 if (comboBoxPictureSize.SelectedIndex < 0 && !input.Equals(chkPictureSize, StringComparison.OrdinalIgnoreCase))
                 {
                     comboBoxPictureSize.Text = chkPictureSize;
@@ -562,8 +501,15 @@ namespace Alexantr.SimpleVideoConverter
 
         private void comboBoxResizeMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CalcFinalPictureSize();
+            Picture.ResizeMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
+
+            UpdateCroppedPictureSizeInfo();
             SetOutputInfo();
+        }
+
+        private void comboBoxScalingAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Picture.ScalingAlgorithm = ((ComboBoxItem)comboBoxScalingAlgorithm.SelectedItem).Value;
         }
 
         #endregion
@@ -572,6 +518,8 @@ namespace Alexantr.SimpleVideoConverter
 
         private void comboBoxColorFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
+            Picture.ColorFilter = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Value;
+
             SetOutputInfo();
         }
 
@@ -579,10 +527,12 @@ namespace Alexantr.SimpleVideoConverter
 
         #region Crop
 
-        public void SetCropValues()
+        /// <summary>
+        /// Call after crop window closed
+        /// </summary>
+        public void UpdateOutputInfo()
         {
-            CalcCropPictureSize();
-            CalcFinalPictureSize();
+            UpdateCroppedPictureSizeInfo();
             SetOutputInfo();
         }
 
@@ -802,14 +752,6 @@ namespace Alexantr.SimpleVideoConverter
                 buttonOpenInputFile.Enabled = false;
 
                 labelCropSize.Text = "";
-                cropPictureSize.Width = Picture.MinWidth;
-                cropPictureSize.Height = Picture.MinHeight;
-
-                selectedPictureSize.Width = Picture.MinWidth;
-                selectedPictureSize.Height = Picture.MinHeight;
-
-                finalPictureSize.Width = Picture.MinWidth;
-                finalPictureSize.Height = Picture.MinHeight;
 
                 CalcFileSize();
 
@@ -839,23 +781,20 @@ namespace Alexantr.SimpleVideoConverter
             VideoStream vStream = inputFile.VideoStreams[0];
 
             Picture.Init();
-
-            cropPictureSize.Width = vStream.PictureSize.Width;
-            cropPictureSize.Height = vStream.PictureSize.Height;
-
-            CalcCropPictureSize();
-            CalcFinalPictureSize();
+            Picture.InputOriginalSize = vStream.OriginalSize;
+            Picture.InputSize = vStream.PictureSize;
 
             // if need deinterlace
-            checkBoxDeinterlace.Checked = vStream.FieldOrder != "progressive";
-            comboBoxFieldOrder.SelectedIndex = 0;
+            Picture.Deinterlace = checkBoxDeinterlace.Checked = vStream.FieldOrder != "progressive";
+            comboBoxFieldOrder.SelectedIndex = 0; // TODO: get from Picture
+
             comboBoxFrameRate.SelectedIndex = 0;
 
             // fill audio streams
             FillAudioStreams();
 
             // show info
-            SetInfo();
+            SetInputInfo();
 
             CalcFileSize();
 
@@ -863,6 +802,7 @@ namespace Alexantr.SimpleVideoConverter
             buttonShowInfo.Enabled = true;
             buttonOpenInputFile.Enabled = true;
 
+            UpdateCroppedPictureSizeInfo();
             SetOutputInfo();
 
             SetTagsFromInputFile();
@@ -950,10 +890,6 @@ namespace Alexantr.SimpleVideoConverter
 
             VideoStream vStream = inputFile.VideoStreams[0];
 
-            string selectedMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
-            string scalingAlgorithm = ((ComboBoxItem)comboBoxScalingAlgorithm.SelectedItem).Value;
-            string colorFilter = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Value;
-            string fieldOrder = ((ComboBoxItem)comboBoxFieldOrder.SelectedItem).Value;
             string frameRate = ((ComboBoxItem)comboBoxFrameRate.SelectedItem).Value;
 
             string audioBitrateVal = comboBoxAudioBitrate.SelectedIndex < 0 ? comboBoxAudioBitrate.Text : ((ComboBoxItem)comboBoxAudioBitrate.SelectedItem).Value;
@@ -1040,7 +976,7 @@ namespace Alexantr.SimpleVideoConverter
                 // force level 4.1, max bitrate for high 4.1 - 62500, use max avg bitrate 50000
                 if (encodeMode != EncodeModeBitrate || videoBitrate <= 50000)
                 {
-                    if (finalPictureSize.Width <= 1920 && finalPictureSize.Height <= 1080 && finalFrameRate <= 30.0)
+                    if (Picture.OutputSize.Width <= 1920 && Picture.OutputSize.Height <= 1080 && finalFrameRate <= 30.0)
                         videoLevel = " -level 4.1";
                 }
 
@@ -1091,15 +1027,15 @@ namespace Alexantr.SimpleVideoConverter
 
             List<string> filters = new List<string>();
 
-            if (checkBoxDeinterlace.Checked)
+            if (Picture.Deinterlace)
             {
                 string deinterlaceFilter = "yadif";
-                if (!string.IsNullOrWhiteSpace(fieldOrder))
-                    deinterlaceFilter += $"=parity={fieldOrder}";
+                if (Picture.FieldOrder != Picture.DefaultAuto)
+                    deinterlaceFilter += $"=parity={Picture.FieldOrder}";
                 filters.Add(deinterlaceFilter);
             }
 
-            // crop - using dar
+            // crop - using oar
             if (Picture.IsCropped())
             {
                 int cropW = vStream.OriginalSize.Width - Picture.Crop.Left - Picture.Crop.Right;
@@ -1107,35 +1043,34 @@ namespace Alexantr.SimpleVideoConverter
                 filters.Add($"crop={cropW}:{cropH}:{Picture.Crop.Left}:{Picture.Crop.Top}");
             }
 
-            if (finalPictureSize.Width != cropPictureSize.Width || finalPictureSize.Height != cropPictureSize.Height)
+            if (Picture.OutputSize.Width != Picture.CropSize.Width || Picture.OutputSize.Height != Picture.CropSize.Height)
             {
                 // https://www.ffmpeg.org/ffmpeg-scaler.html#sws_005fflags
-                filters.Add($"scale={finalPictureSize.Width}x{finalPictureSize.Height}:flags={scalingAlgorithm}");
+                filters.Add($"scale={Picture.OutputSize.Width}x{Picture.OutputSize.Height}:flags={Picture.ScalingAlgorithm}");
             }
-            else if (vStream.UsingDAR)
+            else if (Picture.UsingDAR())
             {
                 // force scale for not square pixels
-                filters.Add($"scale={cropPictureSize.Width}x{cropPictureSize.Height}:flags={scalingAlgorithm}");
+                filters.Add($"scale={Picture.CropSize.Width}x{Picture.CropSize.Height}:flags={Picture.ScalingAlgorithm}");
             }
 
             // add borders
             // https://ffmpeg.org/ffmpeg-filters.html#toc-pad-1
-            if (selectedMethod == Picture.ResizeMethodBorders)
+            if (Picture.ResizeMethod == Picture.ResizeMethodBorders && Picture.SelectedSize != null)
             {
-                int padX = (int)Math.Round((selectedPictureSize.Width - finalPictureSize.Width) / 2.0);
-                int padY = (int)Math.Round((selectedPictureSize.Height - finalPictureSize.Height) / 2.0);
+                int padX = (int)Math.Round((Picture.SelectedSize.Width - Picture.OutputSize.Width) / 2.0);
+                int padY = (int)Math.Round((Picture.SelectedSize.Height - Picture.OutputSize.Height) / 2.0);
                 if (padX > 0 || padY > 0)
-                    filters.Add($"pad={selectedPictureSize.Width}:{selectedPictureSize.Height}:{padX}:{padY}");
+                    filters.Add($"pad={Picture.SelectedSize.Width}:{Picture.SelectedSize.Height}:{padX}:{padY}");
             }
 
             // force sar 1:1
             filters.Add($"setsar=1:1");
 
             // color filter
-            if (colorFilter == "gray")
-                filters.Add($"colorchannelmixer=.3:.4:.3:0:.3:.4:.3:0:.3:.4:.3");
-            else if (colorFilter == "sepia")
-                filters.Add($"colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131");
+            string cf = Helper.FindSecondByFirst(Picture.ColorFilter, Picture.ColorChannelMixerList);
+            if (!string.IsNullOrEmpty(cf))
+                filters.Add($"colorchannelmixer={cf}");
 
             // More video args
 
@@ -1307,52 +1242,15 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
-        private void CalcFinalPictureSize()
-        {
-            if (inputFile == null)
-                return;
-            // fit or stretch
-            ParseSelectedPictureSize();
-            string selectedMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
-            if (selectedMethod == Picture.ResizeMethodFill)
-            {
-                finalPictureSize.Width = selectedPictureSize.Width;
-                finalPictureSize.Height = selectedPictureSize.Height;
-            }
-            else
-            {
-                double aspectRatio = Math.Min((double)selectedPictureSize.Width / cropPictureSize.Width, (double)selectedPictureSize.Height / cropPictureSize.Height);
-                int newWidth = (int)Math.Round(cropPictureSize.Width * aspectRatio);
-                int newHeight = (int)Math.Round(cropPictureSize.Height * aspectRatio);
-                if (newWidth % 2 == 1)
-                    newWidth -= 1;
-                if (newWidth < Picture.MinWidth)
-                    newWidth = Picture.MinWidth;
-                if (newWidth > Picture.MaxWidth)
-                    newWidth = Picture.MaxWidth;
-                if (newHeight % 2 == 1)
-                    newHeight -= 1;
-                if (newHeight < Picture.MinHeight)
-                    newHeight = Picture.MinHeight;
-                if (newHeight > Picture.MaxHeight)
-                    newHeight = Picture.MaxHeight;
-                finalPictureSize.Width = newWidth;
-                finalPictureSize.Height = newHeight;
-            }
-        }
-
         private void ParseSelectedPictureSize()
         {
-            if (inputFile == null)
-                return;
-            pictureBoxSizeError.Image = null;
-            // "do not change size" selected size = crop size
-            if (comboBoxPictureSize.SelectedIndex == 0)
+            if (inputFile == null || comboBoxPictureSize.SelectedIndex == 0)
             {
-                selectedPictureSize.Width = cropPictureSize.Width;
-                selectedPictureSize.Height = cropPictureSize.Height;
+                Picture.SelectedSize = null;
                 return;
             }
+
+            pictureBoxSizeError.Image = null;
             string input = comboBoxPictureSize.SelectedIndex < 0 ? comboBoxPictureSize.Text : ((ComboBoxItem)comboBoxPictureSize.SelectedItem).Value;
             Match match = new Regex("^([0-9]+)x([0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Singleline).Match(input);
             if (match.Success)
@@ -1369,8 +1267,12 @@ namespace Alexantr.SimpleVideoConverter
                         newHeight -= 1;
                     if (newHeight < Picture.MinHeight)
                         newHeight = Picture.MinHeight;
-                    selectedPictureSize.Width = newWidth;
-                    selectedPictureSize.Height = newHeight;
+
+                    Picture.SelectedSize = new PictureSize
+                    {
+                        Width = newWidth,
+                        Height = newHeight
+                    };
                 }
                 catch {
                     pictureBoxSizeError.Image = Properties.Resources.critical;
@@ -1382,42 +1284,14 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
         
-        private void CalcCropPictureSize()
+        private void UpdateCroppedPictureSizeInfo()
         {
             if (inputFile == null)
                 return;
-            VideoStream vStream = inputFile.VideoStreams[0];
             if (Picture.IsCropped())
-            {
-                // init with oar sizes
-                int newW = vStream.OriginalSize.Width - Picture.Crop.Left - Picture.Crop.Right;
-                int newH = vStream.OriginalSize.Height - Picture.Crop.Top - Picture.Crop.Bottom;
-                // correct dar -> sar
-                if (vStream.UsingDAR)
-                {
-                    double diffW = (double)vStream.PictureSize.Width / vStream.OriginalSize.Width;
-                    double diffH = (double)vStream.PictureSize.Height / vStream.OriginalSize.Height;
-                    newW = (int)Math.Round(newW * diffW, 0);
-                    newH = (int)Math.Round(newH * diffH, 0);
-                    if (newW % 2 == 1)
-                        newW -= 1;
-                    if (newW < Picture.MinWidth)
-                        newW = Picture.MinWidth;
-                    if (newH % 2 == 1)
-                        newH -= 1;
-                    if (newH < Picture.MinHeight)
-                        newH = Picture.MinHeight;
-                }
-                cropPictureSize.Width = newW;
-                cropPictureSize.Height = newH;
-                labelCropSize.Text = $"{vStream.PictureSize.ToString()} → {cropPictureSize.ToString()}";
-            }
+                labelCropSize.Text = $"{Picture.InputSize.ToString()} → {Picture.CropSize.ToString()}";
             else
-            {
-                cropPictureSize.Width = vStream.PictureSize.Width;
-                cropPictureSize.Height = vStream.PictureSize.Height;
                 labelCropSize.Text = "";
-            }
         }
 
         private double CalcFinalFrameRate()
@@ -1505,26 +1379,22 @@ namespace Alexantr.SimpleVideoConverter
             else
                 info.Append($"VP9");
 
-            string selectedMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
-            if (selectedMethod == Picture.ResizeMethodContain)
-                info.Append($", {finalPictureSize.ToString()}");
+            if (Picture.ResizeMethod == Picture.ResizeMethodBorders && Picture.SelectedSize != null)
+                info.Append($", {Picture.SelectedSize.ToString()}");
             else
-                info.Append($", {selectedPictureSize.ToString()}");
+                info.Append($", {Picture.OutputSize.ToString()}");
 
-            string selectedMethodText = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Text;
+            string selectedMethod = Helper.FindSecondByFirst(Picture.ResizeMethod, Picture.ResizeMethodList);
             if (comboBoxPictureSize.SelectedIndex > 0 || string.IsNullOrWhiteSpace(comboBoxPictureSize.Text))
-                info.Append($", {selectedMethodText.ToLower()}");
+                info.Append($", {selectedMethod.ToLower()}");
 
-            if (checkBoxDeinterlace.Checked)
+            if (Picture.Deinterlace)
                 info.Append(", деинт.");
 
-            if (comboBoxColorFilter.SelectedIndex > 0)
+            if (Picture.ColorFilter != Picture.DefaultNone)
             {
-                string colorFilter = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Value;
-                string colorFilterText = ((ComboBoxItem)comboBoxColorFilter.SelectedItem).Text;
-                if (colorFilter == "gray")
-                    colorFilterText = "ч-б";
-                info.Append($", {colorFilterText.ToLower()}");
+                string selectedFilter = Helper.FindSecondByFirst(Picture.ColorFilter, Picture.ColorFilterList);
+                info.Append($", {selectedFilter.ToLower()}");
             }
             if (radioButtonCRF.Checked)
                 info.Append($", CRF {trackBarCRF.Value}");
@@ -1598,7 +1468,7 @@ namespace Alexantr.SimpleVideoConverter
             labelOutputInfo.Text = info.ToString();
         }
 
-        private void SetInfo()
+        private void SetInputInfo()
         {
             VideoStream stream = inputFile.VideoStreams[0];
 
@@ -1607,7 +1477,7 @@ namespace Alexantr.SimpleVideoConverter
             string dur = new TimeSpan((long)inputFile.Duration.TotalMilliseconds * 10000L).ToString("hh\\:mm\\:ss\\.fff");
 
             info.AppendLine($"Формат: {inputFile.Format}");
-            info.AppendLine($"Размер файла: {Utility.FormatFileSize(inputFile.FileSize)}");
+            info.AppendLine($"Размер файла: {Helper.FormatFileSize(inputFile.FileSize)}");
             info.AppendLine($"Длительность: {dur}");
             info.AppendLine($"Битрейт: {inputFile.BitRate} kbps");
             info.AppendLine($"Разрешение: {stream.PictureSize.ToString()}{(stream.UsingDAR ? " (исх.: " + stream.OriginalSize.ToString() + ")" : "")}");

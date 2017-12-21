@@ -93,7 +93,7 @@ namespace Alexantr.SimpleVideoConverter
         private void buttonSave_Click(object sender, EventArgs e)
         {
             Picture.Crop = crop; // upd global crop
-            ((MainForm)Owner).SetCropValues(); // TODO: remove
+            ((MainForm)Owner).UpdateOutputInfo();
 
             if (!processEnded || processPanic)
             {

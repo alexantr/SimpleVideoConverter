@@ -733,6 +733,7 @@
             this.comboBoxScalingAlgorithm.Name = "comboBoxScalingAlgorithm";
             this.comboBoxScalingAlgorithm.Size = new System.Drawing.Size(121, 21);
             this.comboBoxScalingAlgorithm.TabIndex = 7;
+            this.comboBoxScalingAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxScalingAlgorithm_SelectedIndexChanged);
             // 
             // labelPictureSize
             // 

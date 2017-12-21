@@ -11,7 +11,7 @@ namespace Alexantr.SimpleVideoConverter
         internal static extern IntPtr SendMessage(IntPtr window, int message, int wparam, int lparam);
     }
 
-    public static class Utility
+    public static class Helper
     {
         public static string FormatFileSize(this double value)
         {
@@ -45,7 +45,7 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         /// <summary>
-        /// Checks if value matches a value from a array.
+        /// Checks if value matches a value from array.
         /// </summary>
         /// <param name="value"></param>
         /// <param name="items"></param>       
@@ -75,6 +75,24 @@ namespace Alexantr.SimpleVideoConverter
                 }
             }
             return valid;
+        }
+
+        /// <summary>
+        /// Find second value by first from array.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public static string FindSecondByFirst(string value, string[,] items)
+        {
+            for (int i = 0; i < items.GetLength(0); i++)
+            {
+                if (value == items[i, 0])
+                {
+                    return items[i, 1];
+                }
+            }
+            return string.Empty;
         }
     }
 

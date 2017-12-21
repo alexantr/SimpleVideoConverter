@@ -157,7 +157,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Utility.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="InputFile.cs" />
     <Compile Include="VideoStream.cs" />
     <EmbeddedResource Include="ConverterForm.resx">
