@@ -179,6 +179,10 @@ namespace Alexantr.SimpleVideoConverter
 
             string arguments = $"-ss {currTime} -i \"{inputFile.FullPath}\"{filters} -vframes 1 -f mjpeg \"{tempFile}\"";
 
+#if DEBUG
+            Console.WriteLine(arguments);
+#endif
+
             ffmpegProcess = new FFmpegProcess(arguments);
             ffmpegProcess.Exited += (o, args) => pictureBoxPreview.Invoke((Action)(() =>
             {
