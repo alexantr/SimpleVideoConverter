@@ -32,13 +32,12 @@ namespace Alexantr.SimpleVideoConverter
 
         private bool resizing = false;
 
-        public CropForm(InputFile inpFile)
+        public CropForm(InputFile inpFile, Crop picCrop)
         {
             InitializeComponent();
 
             inputFile = inpFile;
-
-            crop = Picture.Crop;
+            crop = picCrop;
 
             images = new Dictionary<string, Image>();
 
@@ -92,8 +91,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            Picture.Crop = crop; // upd global crop
-            ((MainForm)Owner).UpdateOutputInfo();
+            ((MainForm)Owner).UpdateCrop(crop);
 
             if (!processEnded || processPanic)
             {

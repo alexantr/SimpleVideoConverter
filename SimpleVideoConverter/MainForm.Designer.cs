@@ -88,8 +88,8 @@
             this.panelResolution = new System.Windows.Forms.Panel();
             this.pictureBoxSizeError = new System.Windows.Forms.PictureBox();
             this.labelResizeMethod = new System.Windows.Forms.Label();
-            this.labelScalingAlgorithm = new System.Windows.Forms.Label();
-            this.comboBoxScalingAlgorithm = new System.Windows.Forms.ComboBox();
+            this.labelInterpolation = new System.Windows.Forms.Label();
+            this.comboBoxInterpolation = new System.Windows.Forms.ComboBox();
             this.labelPictureSize = new System.Windows.Forms.Label();
             this.comboBoxPictureSize = new System.Windows.Forms.ComboBox();
             this.buttonCrop = new System.Windows.Forms.Button();
@@ -687,8 +687,8 @@
             this.panelResolution.Controls.Add(this.pictureBoxSizeError);
             this.panelResolution.Controls.Add(this.labelResizeMethod);
             this.panelResolution.Controls.Add(this.comboBoxResizeMethod);
-            this.panelResolution.Controls.Add(this.labelScalingAlgorithm);
-            this.panelResolution.Controls.Add(this.comboBoxScalingAlgorithm);
+            this.panelResolution.Controls.Add(this.labelInterpolation);
+            this.panelResolution.Controls.Add(this.comboBoxInterpolation);
             this.panelResolution.Controls.Add(this.labelPictureSize);
             this.panelResolution.Controls.Add(this.comboBoxPictureSize);
             this.panelResolution.Controls.Add(this.buttonCrop);
@@ -716,24 +716,24 @@
             this.labelResizeMethod.TabIndex = 4;
             this.labelResizeMethod.Text = "Метод ресайза";
             // 
-            // labelScalingAlgorithm
+            // labelInterpolation
             // 
-            this.labelScalingAlgorithm.AutoSize = true;
-            this.labelScalingAlgorithm.Location = new System.Drawing.Point(3, 101);
-            this.labelScalingAlgorithm.Name = "labelScalingAlgorithm";
-            this.labelScalingAlgorithm.Size = new System.Drawing.Size(98, 13);
-            this.labelScalingAlgorithm.TabIndex = 6;
-            this.labelScalingAlgorithm.Text = "Алгоритм ресайза";
+            this.labelInterpolation.AutoSize = true;
+            this.labelInterpolation.Location = new System.Drawing.Point(3, 101);
+            this.labelInterpolation.Name = "labelInterpolation";
+            this.labelInterpolation.Size = new System.Drawing.Size(80, 13);
+            this.labelInterpolation.TabIndex = 6;
+            this.labelInterpolation.Text = "Интерполяция";
             // 
-            // comboBoxScalingAlgorithm
+            // comboBoxInterpolation
             // 
-            this.comboBoxScalingAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxScalingAlgorithm.FormattingEnabled = true;
-            this.comboBoxScalingAlgorithm.Location = new System.Drawing.Point(124, 98);
-            this.comboBoxScalingAlgorithm.Name = "comboBoxScalingAlgorithm";
-            this.comboBoxScalingAlgorithm.Size = new System.Drawing.Size(121, 21);
-            this.comboBoxScalingAlgorithm.TabIndex = 7;
-            this.comboBoxScalingAlgorithm.SelectedIndexChanged += new System.EventHandler(this.comboBoxScalingAlgorithm_SelectedIndexChanged);
+            this.comboBoxInterpolation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxInterpolation.FormattingEnabled = true;
+            this.comboBoxInterpolation.Location = new System.Drawing.Point(124, 98);
+            this.comboBoxInterpolation.Name = "comboBoxInterpolation";
+            this.comboBoxInterpolation.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxInterpolation.TabIndex = 7;
+            this.comboBoxInterpolation.SelectedIndexChanged += new System.EventHandler(this.comboBoxInterpolation_SelectedIndexChanged);
             // 
             // labelPictureSize
             // 
@@ -1010,8 +1010,8 @@
         private System.Windows.Forms.PictureBox pictureBoxSizeError;
         private System.Windows.Forms.Label labelResizeMethod;
         private System.Windows.Forms.ComboBox comboBoxResizeMethod;
-        private System.Windows.Forms.Label labelScalingAlgorithm;
-        private System.Windows.Forms.ComboBox comboBoxScalingAlgorithm;
+        private System.Windows.Forms.Label labelInterpolation;
+        private System.Windows.Forms.ComboBox comboBoxInterpolation;
         private System.Windows.Forms.Label labelPictureSize;
         private System.Windows.Forms.ComboBox comboBoxPictureSize;
         private System.Windows.Forms.Button buttonCrop;

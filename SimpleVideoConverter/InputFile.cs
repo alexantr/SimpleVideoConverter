@@ -9,6 +9,7 @@ namespace Alexantr.SimpleVideoConverter
     public class InputFile
     {
         public List<VideoStream> VideoStreams = new List<VideoStream>();
+
         public List<AudioStream> AudioStreams = new List<AudioStream>();
 
         public string FullPath { get; private set; }
@@ -23,12 +24,7 @@ namespace Alexantr.SimpleVideoConverter
 
         public int BitRate { get; private set; }
 
-        // tags
-        public string TagTitle { get; private set; }
-        public string TagAuthor { get; private set; }
-        public string TagCopyright { get; private set; }
-        public string TagComment { get; private set; }
-        public string TagCreationTime { get; private set; }
+        public Tags Tags { get; private set; }
 
         // full xml
         public string StreamInfo { get; private set; }
@@ -67,6 +63,8 @@ namespace Alexantr.SimpleVideoConverter
                         double.TryParse(format.GetAttribute("bit_rate", ""), out double bitRate);
                         BitRate = Convert.ToInt32(Math.Round(bitRate / 1000.0, 0));
 
+                        Tags = new Tags();
+
                         if (!format.IsEmptyElement)
                         {
                             XPathNodeIterator formatTags = format.Select(".//tag");
@@ -78,25 +76,25 @@ namespace Alexantr.SimpleVideoConverter
                                 byte[] valueBytes = Encoding.Default.GetBytes(tagValue);
 
                                 if (tagKey == "title")
-                                    TagTitle = Encoding.UTF8.GetString(valueBytes);
+                                    Tags.Title = Encoding.UTF8.GetString(valueBytes);
 
                                 if (tagKey == "artist")
-                                    TagAuthor = Encoding.UTF8.GetString(valueBytes);
+                                    Tags.Author = Encoding.UTF8.GetString(valueBytes);
 
                                 if (tagKey == "copyright")
-                                    TagCopyright = Encoding.UTF8.GetString(valueBytes);
+                                    Tags.Copyright = Encoding.UTF8.GetString(valueBytes);
 
                                 if (tagKey == "comment")
-                                    TagComment = Encoding.UTF8.GetString(valueBytes);
+                                    Tags.Comment = Encoding.UTF8.GetString(valueBytes);
 
                                 if (tagKey == "creation_time")
-                                    TagCreationTime = Encoding.UTF8.GetString(valueBytes);
+                                    Tags.CreationTime = Encoding.UTF8.GetString(valueBytes);
                             }
                         }
                     }
                     else
                     {
-                        throw new InvalidDataException("Can't determine video format");
+                        throw new InvalidDataException("Не удалось определить формат видео."); // Can't determine video format
                     }
 
                     XPathNodeIterator streams = doc.CreateNavigator().Select("//ffprobe/streams/stream");
@@ -222,7 +220,7 @@ namespace Alexantr.SimpleVideoConverter
 
                     if (VideoStreams.Count == 0)
                     {
-                        throw new InvalidDataException("Can't find any video stream");
+                        throw new InvalidDataException("Не удалось найти видеопоток в файле."); // Can't find any video stream
                     }
                 }
             }

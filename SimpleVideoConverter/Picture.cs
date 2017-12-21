@@ -1,47 +1,44 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Alexantr.SimpleVideoConverter
 {
-    public static class Picture
+    public class Picture
     {
-        public const string DefaultNone = "none";
-        public const string DefaultAuto = "auto";
-
         public const int MinWidth = 128;
         public const int MaxWidth = 8192;
 
         public const int MinHeight = 96;
         public const int MaxHeight = 4320;
 
-        public const string DefaultScalingAlgorithm = "bicubic";
-
-        // increases or decreases the size of the image to fill the box whilst preserving its aspect-ratio
-        // Элемент масштабируется, чтобы целиком уместиться в заданные размеры с соблюдением пропорций
         public const string ResizeMethodContain = "contain";
-        // stretches the image to fit the box, regardless of its aspect-ratio
-        // Элемент масштабируется, чтобы соответствовать заданным размерам, при этом пропорции игнорируются
         public const string ResizeMethodStretch = "stretch";
-        // the image will fill the height and width of its box, once again maintaining its aspect ratio but often cropping the image in the process
-        // Элемент увеличивается или уменьшается, чтобы целиком заполнить заданную область с сохранением пропорций
-        public const string ResizeMethodCover = "cover";
-        // contain with black borders
         public const string ResizeMethodBorders = "borders";
 
-        public const string ColorFilterGray = "gray";
-        public const string ColorFilterSepia = "sepia";
+        public const string DefaultResizeMethod = "contain";
+        public const string DefaultInterpolation = "bicubic";
+        public const string DefaultFieldOrder = "auto";
+        public const string DefaultColorFilter = "none";
 
+        private PictureSize inputOriginalSize; // OAR
+        private PictureSize inputDisplaySize; // DAR
+        private PictureSize cropSize; // inpit size with crop (DAR)
+        private PictureSize outputSize; // final output size
 
-        public static bool Deinterlace = false;
+        private PictureSize selectedSize; // if null - stay original size
 
+        private Crop crop;
 
-        private static Crop crop;
+        private string resizeMethod;
+        
+        // see https://superuser.com/questions/375718/which-resize-algorithm-to-choose-for-videos
+        // see http://www.thnsolutions.com/technology/sunfire/graphic/image.html
+        private string interpolation;
 
-        private static PictureSize inputOriginalSize; // OAR
-        private static PictureSize inputSize; // DAR
-        private static PictureSize cropSize; // inpit size with crop (DAR)
-        private static PictureSize outputSize; // final output size
+        private bool deinterlace = false;
+        private string fieldOrder;
 
-        private static PictureSize selectedSize; // if null - stay original size
+        private string colorFilter;
 
         private static string[] sizeList = new string[]
         {
@@ -56,19 +53,14 @@ namespace Alexantr.SimpleVideoConverter
             "192x144"
         };
 
-        private static string resizeMethod = ResizeMethodContain;
         private static string[,] resizeMethodList = new string[,]
         {
             { ResizeMethodContain, "Вместить" },
             { ResizeMethodStretch, "Растянуть" },
-            //{ ResizeMethodCover, "Заполнить" },
             { ResizeMethodBorders, "C полосами" }
         };
 
-        // see https://superuser.com/questions/375718/which-resize-algorithm-to-choose-for-videos
-        // see http://www.thnsolutions.com/technology/sunfire/graphic/image.html
-        private static string scalingAlgorithm = DefaultScalingAlgorithm;
-        private static string[,] scalingAlgorithmList = new string[,]
+        private static string[,] interpolationList = new string[,]
         {
             { "neighbor", "Nearest Neighbor" },
             { "bilinear", "Bilinear" },
@@ -78,81 +70,57 @@ namespace Alexantr.SimpleVideoConverter
             { "gauss", "Gaussian" }
         };
 
-        private static string colorFilter = DefaultNone;
         private static string[,] colorFilterList = new string[,]
         {
-            { DefaultNone, "Нет" },
-            { ColorFilterGray, "Черно-белое" },
-            { ColorFilterSepia, "Сепия" }
+            { "none", "Нет" },
+            { "gray", "Черно-белое" },
+            { "sepia", "Сепия" }
         };
         private static string[,] colorChannelMixerList = new string[,]
         {
-            { ColorFilterGray, ".3:.4:.3:0:.3:.4:.3:0:.3:.4:.3" },
-            { ColorFilterSepia, ".393:.769:.189:0:.349:.686:.168:0:.272:.534:.131" }
+            { "gray", ".3:.4:.3:0:.3:.4:.3:0:.3:.4:.3" },
+            { "sepia", ".393:.769:.189:0:.349:.686:.168:0:.272:.534:.131" }
         };
 
-        private static string fieldOrder = DefaultAuto;
         private static string[,] fieldOrderList = new string[,] {
-            { DefaultAuto, "Авто" },
+            { "auto", "Авто" },
             { "tff", "Top Field First" },
             { "bff", "Bottom Field First" }
         };
 
-        /// <summary>
-        /// Init values for new file
-        /// </summary>
-        public static void Init()
-        {
-            inputOriginalSize = null;
-            inputSize = null;
-            cropSize = null;
-            outputSize = null;
+        #region Get Set
 
-            crop = new Crop();
-
-            Deinterlace = false;
-            fieldOrder = DefaultAuto;
-        }
-
-        /// <summary>
-        /// Input picture size (OAR)
-        /// </summary>
-        public static PictureSize InputOriginalSize
+        public PictureSize InputOriginalSize
         {
             get { return inputOriginalSize; }
             set
             {
                 inputOriginalSize = value;
 
-                if (inputSize == null)
-                    inputSize = inputOriginalSize;
+                if (inputDisplaySize == null)
+                    inputDisplaySize = inputOriginalSize;
 
                 CalcCroppedSize();
                 CalcOutputSize();
             }
         }
 
-        /// <summary>
-        /// Input picture size (SAR)
-        /// </summary>
-        public static PictureSize InputSize
+        public PictureSize InputDisplaySize
         {
-            get { return inputSize; }
-            set {
-                inputSize = value;
+            get { return inputDisplaySize; }
+            set
+            {
+                inputDisplaySize = value;
 
                 if (inputOriginalSize == null)
-                    inputOriginalSize = inputSize;
+                    inputOriginalSize = inputDisplaySize;
 
                 CalcCroppedSize();
                 CalcOutputSize();
             }
         }
 
-        /// <summary>
-        /// Selected picture size for resize
-        /// </summary>
-        public static PictureSize SelectedSize
+        public PictureSize SelectedSize
         {
             get { return selectedSize; }
             set
@@ -164,44 +132,21 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
-        /// <summary>
-        /// Cropped picture size (before scaling)
-        /// </summary>
-        public static PictureSize CropSize
+        public PictureSize CropSize
         {
             get { return cropSize; }
         }
 
-        /// <summary>
-        /// Output picture size (after scaling, w/o borders if ResizeMethodBorders)
-        /// </summary>
-        public static PictureSize OutputSize
+        public PictureSize OutputSize
         {
             get { return outputSize; }
         }
 
-        /// <summary>
-        /// Check if using DAR
-        /// </summary>
-        /// <returns></returns>
-        public static bool UsingDAR()
+        public Crop Crop
         {
-            if (inputOriginalSize == null)
-                return false;
-            return (inputOriginalSize.Width != inputSize.Width || inputOriginalSize.Height != inputSize.Height);
-        }
-
-        /// <summary>
-        /// Crop values
-        /// </summary>
-        public static Crop Crop
-        {
-            get {
-                if (crop == null)
-                    crop = new Crop();
-                return crop;
-            }
-            set {
+            get { return crop ?? new Crop(); }
+            set
+            {
                 crop = value;
 
                 CalcCroppedSize();
@@ -209,128 +154,156 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
-        /// <summary>
-        /// Check if crop is applied
-        /// </summary>
-        /// <returns></returns>
-        public static bool IsCropped()
+        public string ResizeMethod
         {
-            return (crop.Left > 0 || crop.Top > 0 || crop.Right > 0 || crop.Bottom > 0);
-        }
-
-        /// <summary>
-        /// List of picture sizes
-        /// </summary>
-        public static string[] SizeList
-        {
-            get { return sizeList; }
-        }
-
-        /// <summary>
-        /// Resize method
-        /// </summary>
-        public static string ResizeMethod
-        {
-            get { return resizeMethod; }
+            get { return resizeMethod ?? DefaultResizeMethod; }
             set
             {
-                if (Helper.IsValid(value, resizeMethodList))
-                    resizeMethod = value;
-                else
-                    resizeMethod = ResizeMethodContain;
+                resizeMethod = Helper.IsValid(value, resizeMethodList) ? value : DefaultResizeMethod;
 
                 CalcCroppedSize();
                 CalcOutputSize();
             }
         }
 
+        public string Interpolation
+        {
+            get { return interpolation ?? DefaultInterpolation; }
+            set { interpolation = Helper.IsValid(value, interpolationList) ? value : DefaultInterpolation; }
+        }
+
+        public string ColorFilter
+        {
+            get { return colorFilter ?? DefaultColorFilter; }
+            set { colorFilter = Helper.IsValid(value, colorFilterList) ? value : DefaultColorFilter; }
+        }
+
+        public bool Deinterlace
+        {
+            get { return deinterlace; }
+            set { deinterlace = value; }
+        }
+
+        public string FieldOrder
+        {
+            get { return fieldOrder ?? DefaultFieldOrder; }
+            set { fieldOrder = Helper.IsValid(value, fieldOrderList) ? value : DefaultFieldOrder; }
+        }
+
+        #endregion
+
         /// <summary>
-        /// List of resize methods
+        /// Reset values for new file
         /// </summary>
+        public void Reset()
+        {
+            inputOriginalSize = null;
+            inputDisplaySize = null;
+            cropSize = null;
+            outputSize = null;
+
+            crop.Reset();
+
+            deinterlace = false;
+            fieldOrder = DefaultFieldOrder;
+        }
+
+        /// <summary>
+        /// Check if using DAR
+        /// </summary>
+        /// <returns></returns>
+        public bool UsingDAR()
+        {
+            if (inputOriginalSize == null)
+                return false;
+            return (inputOriginalSize.Width != inputDisplaySize.Width || inputOriginalSize.Height != inputDisplaySize.Height);
+        }
+
+        /// <summary>
+        /// Check if crop is applied
+        /// </summary>
+        /// <returns></returns>
+        public bool IsCropped()
+        {
+            return (crop.Left > 0 || crop.Top > 0 || crop.Right > 0 || crop.Bottom > 0);
+        }
+
+        /// <summary>
+        /// Parse size from combobox value
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public bool ParseSelectedPictureSize(string input)
+        {
+            Match match = new Regex("^([0-9]+)x([0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Singleline).Match(input);
+            if (match.Success)
+            {
+                try
+                {
+                    int newWidth = Convert.ToInt32(match.Groups[1].Value);
+                    int newHeight = Convert.ToInt32(match.Groups[2].Value);
+                    if (newWidth % 2 == 1)
+                        newWidth -= 1;
+                    if (newWidth < MinWidth)
+                        newWidth = MinWidth;
+                    if (newHeight % 2 == 1)
+                        newHeight -= 1;
+                    if (newHeight < MinHeight)
+                        newHeight = MinHeight;
+
+                    selectedSize = new PictureSize
+                    {
+                        Width = newWidth,
+                        Height = newHeight
+                    };
+
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        #region Lists
+
+        public static string[] SizeList
+        {
+            get { return sizeList; }
+        }
+
         public static string[,] ResizeMethodList
         {
             get { return resizeMethodList; }
         }
 
-        /// <summary>
-        /// Scaling algorithm
-        /// </summary>
-        public static string ScalingAlgorithm
+        public static string[,] InterpolationList
         {
-            get { return scalingAlgorithm; }
-            set {
-                if (Helper.IsValid(value, scalingAlgorithmList))
-                    scalingAlgorithm = value;
-                else
-                    scalingAlgorithm = DefaultScalingAlgorithm;
-            }
+            get { return interpolationList; }
         }
 
-        /// <summary>
-        /// List of scaling algorithms
-        /// </summary>
-        public static string[,] ScalingAlgorithmList
-        {
-            get { return scalingAlgorithmList; }
-        }
-
-        /// <summary>
-        /// Color filter
-        /// </summary>
-        public static string ColorFilter
-        {
-            get { return colorFilter; }
-            set
-            {
-                if (Helper.IsValid(value, colorFilterList))
-                    colorFilter = value;
-                else
-                    colorFilter = DefaultNone;
-            }
-        }
-
-        /// <summary>
-        /// List of color filter
-        /// </summary>
         public static string[,] ColorFilterList
         {
             get { return colorFilterList; }
         }
 
-        /// <summary>
-        /// List of filters for 'colorchannelmixer'
-        /// </summary>
         public static string[,] ColorChannelMixerList
         {
             get { return colorChannelMixerList; }
         }
 
-        /// <summary>
-        /// Field order for deinterlace
-        /// </summary>
-        public static string FieldOrder
-        {
-            get { return fieldOrder; }
-            set
-            {
-                if (Helper.IsValid(value, fieldOrderList))
-                    fieldOrder = value;
-                else
-                    fieldOrder = DefaultAuto;
-            }
-        }
-
-        /// <summary>
-        /// List of field order types
-        /// </summary>
         public static string[,] FieldOrderList
         {
             get { return fieldOrderList; }
         }
 
-        private static void CalcCroppedSize()
+        #endregion
+
+        private void CalcCroppedSize()
         {
-            if (inputOriginalSize == null || inputSize == null)
+            if (inputOriginalSize == null || inputDisplaySize == null)
                 return;
 
             if (IsCropped())
@@ -341,8 +314,8 @@ namespace Alexantr.SimpleVideoConverter
                 // correct oar -> dar
                 if (UsingDAR())
                 {
-                    double diffW = (double)inputSize.Width / inputOriginalSize.Width;
-                    double diffH = (double)inputSize.Height / inputOriginalSize.Height;
+                    double diffW = (double)inputDisplaySize.Width / inputOriginalSize.Width;
+                    double diffH = (double)inputDisplaySize.Height / inputOriginalSize.Height;
                     newW = (int)Math.Round(newW * diffW, 0);
                     newH = (int)Math.Round(newH * diffH, 0);
                     if (newW % 2 == 1)
@@ -365,13 +338,13 @@ namespace Alexantr.SimpleVideoConverter
             {
                 cropSize = new PictureSize
                 {
-                    Width = inputSize.Width,
-                    Height = inputSize.Height
+                    Width = inputDisplaySize.Width,
+                    Height = inputDisplaySize.Height
                 };
             }
         }
 
-        private static void CalcOutputSize()
+        private void CalcOutputSize()
         {
             if (cropSize == null)
                 return;

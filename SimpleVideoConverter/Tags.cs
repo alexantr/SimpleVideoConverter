@@ -1,11 +1,24 @@
 ﻿namespace Alexantr.SimpleVideoConverter
 {
-    public static class Tags
+    public class Tags
     {
-        public static string Title = "";
-        public static string Author = "";
-        public static string Copyright = "";
-        public static string Comment = "";
-        public static string CreationTime = "";
+        public string Title { get; set; } = "";
+
+        public string Author { get; set; } = "";
+
+        public string Copyright { get; set; } = "";
+
+        public string Comment { get; set; } = "";
+
+        public string CreationTime { get; set; } = "";
+
+        public void Clear()
+        {
+            Title = "";
+            Author = "";
+            Copyright = "";
+            Comment = "";
+            CreationTime = "";
+        }
     }
 }
