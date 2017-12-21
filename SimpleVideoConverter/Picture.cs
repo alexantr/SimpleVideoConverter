@@ -192,6 +192,11 @@ namespace Alexantr.SimpleVideoConverter
 
         #endregion
 
+        public Picture()
+        {
+            crop = new Crop();
+        }
+
         /// <summary>
         /// Reset values for new file
         /// </summary>
