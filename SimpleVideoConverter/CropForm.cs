@@ -278,7 +278,7 @@ namespace Alexantr.SimpleVideoConverter
             {
                 try
                 {
-                    Image img = ImageHelper.FromFile(tempFile);
+                    Image img = Helper.ImageFromFile(tempFile);
                     DrawImageWithRects(img);
 
                     string dur = new TimeSpan((long)currentTime * 10000L).ToString("hh\\:mm\\:ss\\.fff");

@@ -1,18 +1,75 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
 
 namespace Alexantr.SimpleVideoConverter
 {
-    internal static class NativeMethods
-    {
-        [DllImport("user32.dll")]
-        internal static extern IntPtr SendMessage(IntPtr window, int message, int wparam, int lparam);
-    }
-
     public static class Helper
     {
+        /// <summary>
+        /// Get Image from file without lock
+        /// https://stackoverflow.com/questions/4803935/free-file-locked-by-new-bitmapfilepath
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static Image ImageFromFile(string path)
+        {
+            var bytes = File.ReadAllBytes(path);
+            var ms = new MemoryStream(bytes);
+            var img = Image.FromStream(ms);
+            return img;
+        }
+
+        /// <summary>
+        /// Resize image by width and height
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public static Bitmap ResizeImage(Image image, int width, int height)
+        {
+            if (image.Width == width && image.Height == height)
+                return new Bitmap(image);
+            Rectangle destRect = new Rectangle(0, 0, width, height);
+            Bitmap bitmap = new Bitmap(width, height);
+            bitmap.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.Bicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                using (ImageAttributes imageAttr = new ImageAttributes())
+                {
+                    imageAttr.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, imageAttr);
+                }
+            }
+            return bitmap;
+        }
+
+        /// <summary>
+        /// Resize image by percentage
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="percentage"></param>
+        /// <returns></returns>
+        public static Bitmap ResizeImage(Image image, Decimal percentage)
+        {
+            int width = (int)Math.Round(image.Width * percentage, MidpointRounding.AwayFromZero);
+            int height = (int)Math.Round(image.Height * percentage, MidpointRounding.AwayFromZero);
+            return ResizeImage(image, width, height);
+        }
+
+        /// <summary>
+        /// Show formatted file size
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static string FormatFileSize(this double value)
         {
             string[] strArray = new string[9]
@@ -93,23 +150,6 @@ namespace Alexantr.SimpleVideoConverter
                 }
             }
             return string.Empty;
-        }
-    }
-
-    public static class Extensions
-    {
-        // http://stackoverflow.com/a/12179408/174466
-        public static void InvokeIfRequired(this ISynchronizeInvoke obj, MethodInvoker action)
-        {
-            if (obj.InvokeRequired)
-            {
-                var args = new object[0];
-                obj.Invoke(action, args);
-            }
-            else
-            {
-                action();
-            }
         }
     }
 }
