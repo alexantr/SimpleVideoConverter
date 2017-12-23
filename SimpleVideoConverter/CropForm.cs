@@ -59,8 +59,8 @@ namespace Alexantr.SimpleVideoConverter
             VideoStream stream = inputFile.VideoStreams[0];
             int wCrop = stream.OriginalSize.Width;
             int hCrop = stream.OriginalSize.Height;
-            decimal maxLeft = (wCrop - Picture.MinWidth) / 2; // check summ of crops for min with
-            decimal maxTop = (hCrop - Picture.MinHeight) / 2;
+            decimal maxLeft = (wCrop - PictureConfig.MinWidth) / 2; // check summ of crops for min with
+            decimal maxTop = (hCrop - PictureConfig.MinHeight) / 2;
             // set max values to prevent exceptions
             numericCropTop.Maximum = maxTop;
             numericCropBottom.Maximum = maxTop;

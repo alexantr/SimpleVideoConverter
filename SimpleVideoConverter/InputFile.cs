@@ -24,7 +24,7 @@ namespace Alexantr.SimpleVideoConverter
 
         public int BitRate { get; private set; }
 
-        public Tags Tags { get; private set; }
+        public FileTags Tags { get; private set; }
 
         // full xml
         public string StreamInfo { get; private set; }
@@ -63,7 +63,7 @@ namespace Alexantr.SimpleVideoConverter
                         double.TryParse(format.GetAttribute("bit_rate", ""), out double bitRate);
                         BitRate = Convert.ToInt32(Math.Round(bitRate / 1000.0, 0));
 
-                        Tags = new Tags();
+                        Tags = new FileTags();
 
                         if (!format.IsEmptyElement)
                         {

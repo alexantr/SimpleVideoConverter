@@ -123,6 +123,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioConfig.cs" />
     <Compile Include="AudioStream.cs" />
     <Compile Include="ComboBoxItem.cs" />
     <Compile Include="ConverterForm.cs">
@@ -145,14 +146,15 @@
     <Compile Include="FFprobeProcess.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="FileTags.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Picture.cs" />
-    <Compile Include="Tags.cs" />
+    <Compile Include="PictureConfig.cs" />
+    <Compile Include="TagsConfig.cs" />
     <Compile Include="PictureSize.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
