@@ -11,6 +11,7 @@ namespace Alexantr.SimpleVideoConverter
     public partial class CropForm : Form
     {
         private readonly InputFile inputFile;
+        private readonly PictureSize originalSize;
 
         private string tempFile;
 
@@ -39,6 +40,14 @@ namespace Alexantr.SimpleVideoConverter
             inputFile = inpFile;
             crop = picCrop;
 
+            VideoStream stream = inputFile.VideoStreams[0];
+
+            originalSize = new PictureSize()
+            {
+                Width = stream.OriginalSize.Width,
+                Height = stream.OriginalSize.Height
+            };
+
             images = new Dictionary<string, Image>();
 
             taskbarManager = TaskbarManager.Instance;
@@ -55,17 +64,11 @@ namespace Alexantr.SimpleVideoConverter
 
             size = GetWidthHeight();
 
-            // Update values for crop
-            VideoStream stream = inputFile.VideoStreams[0];
-            int wCrop = stream.OriginalSize.Width;
-            int hCrop = stream.OriginalSize.Height;
-            decimal maxLeft = (wCrop - PictureConfig.MinWidth) / 2; // check summ of crops for min with
-            decimal maxTop = (hCrop - PictureConfig.MinHeight) / 2;
-            // set max values to prevent exceptions
-            numericCropTop.Maximum = maxTop;
-            numericCropBottom.Maximum = maxTop;
-            numericCropLeft.Maximum = maxLeft;
-            numericCropRight.Maximum = maxLeft;
+            // set max values
+            numericCropTop.Maximum = originalSize.Height;
+            numericCropBottom.Maximum = originalSize.Height;
+            numericCropLeft.Maximum = originalSize.Width;
+            numericCropRight.Maximum = originalSize.Width;
             // set values
             numericCropTop.Value = crop.Top;
             numericCropBottom.Value = crop.Bottom;
@@ -120,33 +123,57 @@ namespace Alexantr.SimpleVideoConverter
 
         private void numericCropLeft_ValueChanged(object sender, EventArgs e)
         {
-            if ((int)numericCropLeft.Value % 2 == 1)
-                numericCropLeft.Value = Math.Max(0, (int)numericCropLeft.Value - 1);
-            crop.Left = (int)numericCropLeft.Value;
-            LoadPicture();
-        }
-
-        private void numericCropTop_ValueChanged(object sender, EventArgs e)
-        {
-            if ((int)numericCropTop.Value % 2 == 1)
-                numericCropTop.Value = Math.Max(0, (int)numericCropTop.Value - 1);
-            crop.Top = (int)numericCropTop.Value;
+            int value = (int)numericCropLeft.Value;
+            if (value % 2 == 1)
+                value = Math.Max(0, value - 1);
+            if (originalSize.Width - crop.Right - value < PictureConfig.MinWidth)
+            {
+                value = originalSize.Width - crop.Right - PictureConfig.MinWidth;
+                numericCropLeft.Value = value;
+            }
+            crop.Left = value;
             LoadPicture();
         }
 
         private void numericCropRight_ValueChanged(object sender, EventArgs e)
         {
-            if ((int)numericCropRight.Value % 2 == 1)
-                numericCropRight.Value = Math.Max(0, (int)numericCropRight.Value - 1);
-            crop.Right = (int)numericCropRight.Value;
+            int value = (int)numericCropRight.Value;
+            if (value % 2 == 1)
+                value = Math.Max(0, value - 1);
+            if (originalSize.Width - crop.Left - value < PictureConfig.MinWidth)
+            {
+                value = originalSize.Width - crop.Left - PictureConfig.MinWidth;
+                numericCropRight.Value = value;
+            }
+            crop.Right = value;
+            LoadPicture();
+        }
+
+        private void numericCropTop_ValueChanged(object sender, EventArgs e)
+        {
+            int value = (int)numericCropTop.Value;
+            if (value % 2 == 1)
+                value = Math.Max(0, value - 1);
+            if (originalSize.Height - crop.Bottom - value < PictureConfig.MinHeight)
+            {
+                value = originalSize.Height - crop.Bottom - PictureConfig.MinHeight;
+                numericCropTop.Value = value;
+            }
+            crop.Top = value;
             LoadPicture();
         }
 
         private void numericCropBottom_ValueChanged(object sender, EventArgs e)
         {
-            if ((int)numericCropBottom.Value % 2 == 1)
-                numericCropBottom.Value = Math.Max(0, (int)numericCropBottom.Value - 1);
-            crop.Bottom = (int)numericCropBottom.Value;
+            int value = (int)numericCropBottom.Value;
+            if (value % 2 == 1)
+                value = Math.Max(0, value - 1);
+            if (originalSize.Height - crop.Top - value < PictureConfig.MinHeight)
+            {
+                value = originalSize.Height - crop.Top - PictureConfig.MinHeight;
+                numericCropBottom.Value = value;
+            }
+            crop.Bottom = value;
             LoadPicture();
         }
 
@@ -206,8 +233,6 @@ namespace Alexantr.SimpleVideoConverter
             double correctedTime = currentTime;
             if (correctedTime > totalTime - 1000.0)
                 correctedTime -= 1000.0;
-            else if (correctedTime < 1000.0)
-                correctedTime += 1000.0;
             return new TimeSpan((long)correctedTime * 10000L).ToString("hh\\:mm\\:ss\\.fff");
         }
 
@@ -335,14 +360,10 @@ namespace Alexantr.SimpleVideoConverter
                 Color customColor = Color.FromArgb(255, 0, 255);
                 SolidBrush brush = new SolidBrush(customColor);
 
-                VideoStream stream = inputFile.VideoStreams[0];
-                int vWidth = stream.OriginalSize.Width;
-                int vHeight = stream.OriginalSize.Height;
+                int maxBoxWidth = Math.Min(pictureBoxPreview.Width, originalSize.Width);
+                int maxBoxHeight = Math.Min(pictureBoxPreview.Height, originalSize.Height);
 
-                int maxBoxWidth = Math.Min(pictureBoxPreview.Width, vWidth);
-                int maxBoxHeight = Math.Min(pictureBoxPreview.Height, vHeight);
-
-                double aspectRatio = Math.Min((double)maxBoxWidth / vWidth, (double)maxBoxHeight / vHeight);
+                double aspectRatio = Math.Min((double)maxBoxWidth / originalSize.Width, (double)maxBoxHeight / originalSize.Height);
 
                 int topH = (int)Math.Round(crop.Top * aspectRatio);
                 int bottomH = (int)Math.Round(crop.Bottom * aspectRatio);
@@ -393,17 +414,13 @@ namespace Alexantr.SimpleVideoConverter
 
         private int[] GetWidthHeight()
         {
-            VideoStream stream = inputFile.VideoStreams[0];
-            int vWidth = stream.OriginalSize.Width;
-            int vHeight = stream.OriginalSize.Height;
+            int maxBoxWidth = Math.Min(pictureBoxPreview.Width, originalSize.Width);
+            int maxBoxHeight = Math.Min(pictureBoxPreview.Height, originalSize.Height);
 
-            int maxBoxWidth = Math.Min(pictureBoxPreview.Width, vWidth);
-            int maxBoxHeight = Math.Min(pictureBoxPreview.Height, vHeight);
+            double aspectRatio = Math.Min((double)maxBoxWidth / originalSize.Width, (double)maxBoxHeight / originalSize.Height);
 
-            double aspectRatio = Math.Min((double)maxBoxWidth / vWidth, (double)maxBoxHeight / vHeight);
-
-            int newWidth = (int)Math.Round(vWidth * aspectRatio, 0);
-            int newHeight = (int)Math.Round(vHeight * aspectRatio, 0);
+            int newWidth = (int)Math.Round(originalSize.Width * aspectRatio, 0);
+            int newHeight = (int)Math.Round(originalSize.Height * aspectRatio, 0);
 
             if (newHeight % 2 == 1)
                 newHeight -= 1;

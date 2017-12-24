@@ -147,12 +147,14 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FileTags.cs" />
+    <Compile Include="FormatConfig.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Padding.cs" />
     <Compile Include="PictureConfig.cs" />
     <Compile Include="TagsConfig.cs" />
     <Compile Include="PictureSize.cs" />
@@ -161,6 +163,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="InputFile.cs" />
+    <Compile Include="VideoConfig.cs" />
     <Compile Include="VideoStream.cs" />
     <EmbeddedResource Include="ConverterForm.resx">
       <DependentUpon>ConverterForm.cs</DependentUpon>

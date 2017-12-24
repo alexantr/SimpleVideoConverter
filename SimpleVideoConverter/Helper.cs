@@ -142,6 +142,18 @@ namespace Alexantr.SimpleVideoConverter
         /// <returns></returns>
         public static string FindSecondByFirst(string value, string[,] items)
         {
+            return FindSecondByFirst(value, items, string.Empty);
+        }
+
+        /// <summary>
+        /// Find second value by first from array. Set defaultValue if not found.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="items"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static string FindSecondByFirst(string value, string[,] items, string defaultValue)
+        {
             for (int i = 0; i < items.GetLength(0); i++)
             {
                 if (value == items[i, 0])
@@ -149,7 +161,7 @@ namespace Alexantr.SimpleVideoConverter
                     return items[i, 1];
                 }
             }
-            return string.Empty;
+            return defaultValue;
         }
     }
 }

@@ -8,45 +8,30 @@ namespace Alexantr.SimpleVideoConverter
 {
     public static class AudioConfig
     {
-        //public const int MinBitrate = 8;
-        //public const int MaxBitrate = 320;
-
-        /*private static string[] bitrateList = new string[] {
-            "32", "48", "64", "96",
-            "112", "128", "160", "192",
-            "224", "256", "320"
-        };*/
-
-        /*private static string[] frequencyList = new string[] {
-            "8000", "12000", "16000", "22050",
-            "24000", "32000", "44100", "48000"
-        };*/
-
-        /*private static string[,] channelsList = new string[,] {
-            { "1", "1 (моно)" },
-            { "2", "2 (стерео)" }
-        };*/
-
         private static int bitrate;
-        private static int[] bitrates;
+        private static int[] bitrateList;
 
-        private static int channels;
-
-        private static int maxChannels;
+        private static string channels;
 
         private static int quality;
 
         private static int sampleRate;
-        private static int[] sampleRates;
+        private static int[] sampleRateList;
 
-        private static int[] vbrModes;
+        private static int[] vbrModeList;
         private static bool vbrSupported;
         private static bool vbrOn;
 
         private static string codec;
+        private static string[,] codecList;
+
         private static string encoder;
 
-        //private static string[,] channelsList;
+        private static string[,] channelsList = new string[,] {
+            { "auto", "Авто" },
+            { "1", "1 (моно)" },
+            { "2", "2 (стерео)" }
+        };
 
         /// <summary>
         /// Stores audio codec value and determines available encoders for
@@ -65,50 +50,50 @@ namespace Alexantr.SimpleVideoConverter
                 {
                     case "aac":
                         bitrate = 128;
-                        channels = 0;
-                        maxChannels = 8;
+                        channels = "auto";
+                        //maxChannels = 8;
                         sampleRate = 0;
-                        sampleRates = new int[] {
+                        sampleRateList = new int[] {
                             8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
                         };
                         Encoder = "aac";
                         break;
                     case "mp3":
                         bitrate = 128;
-                        channels = 0;
-                        maxChannels = 2;
+                        channels = "auto";
+                        //maxChannels = 2;
                         sampleRate = 0;
-                        sampleRates = new int[] {
+                        sampleRateList = new int[] {
                             8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000
                         };
                         Encoder = "libmp3lame";
                         break;
                     case "opus":
-                        bitrate = 96;
-                        channels = 0;
-                        maxChannels = 8;
+                        bitrate = 128;
+                        channels = "auto";
+                        //maxChannels = 8;
                         sampleRate = 0;
-                        sampleRates = new int[] {
+                        sampleRateList = new int[] {
                             8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
                         };
                         Encoder = "libopus";
                         break;
                     case "vorbis":
                         bitrate = 128;
-                        channels = 0;
-                        maxChannels = 8;
+                        channels = "auto";
+                        //maxChannels = 8;
                         sampleRate = 0;
-                        sampleRates = new int[] {
+                        sampleRateList = new int[] {
                             8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
                         };
                         Encoder = "libvorbis";
                         break;
                     default:
                         bitrate = 128;
-                        channels = 0;
-                        maxChannels = 8;
+                        channels = "auto";
+                        //maxChannels = 8;
                         sampleRate = 0;
-                        sampleRates = new int[] {
+                        sampleRateList = new int[] {
                             8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
                         };
                         Encoder = codec;
@@ -117,17 +102,30 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
+        public static string[,] CodecList
+        {
+            get { return codecList; }
+            set { codecList = value; }
+        }
+
         public static int Bitrate
         {
             get { return bitrate; }
-            set { bitrate = value; }
+            set {
+                if (Helper.IsValid(value, bitrateList))
+                    bitrate = value;
+                else if (bitrateList.Length > 0)
+                    bitrate = bitrateList[bitrateList.Length - 1];
+                else
+                    bitrate = 64; // max value in everywhere
+            }
         }
 
         /// <summary>
         /// Determines and returns supported bitrates that is based on
         /// the audio codec and sample rates.
         /// </summary>
-        public static int[] Bitrates
+        public static int[] BitrateList
         {
             get
             {
@@ -137,40 +135,45 @@ namespace Alexantr.SimpleVideoConverter
                         if (sampleRate == 8000 || sampleRate == 11025 || sampleRate == 12000)
                         {
                             // MPEG-2.5 Layer III bitrates
-                            bitrates = new int[] {
+                            bitrateList = new int[] {
                                 8, 16, 24, 32, 40, 48, 56, 64
                             };
                         }
                         else if (sampleRate == 16000 || sampleRate == 22050 || sampleRate == 24000)
                         {
                             // MPEG-2 Layer III bitrates
-                            bitrates = new int[] {
+                            bitrateList = new int[] {
                                 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160
                             };
                         }
                         else
                         {
                             // MPEG-1 Layer III bitrates
-                            bitrates = new int[] {
+                            bitrateList = new int[] {
                                 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 192, 224, 256, 320
                             };
                         }
                         break;
                     default:
-                        bitrates = new int[] {
+                        bitrateList = new int[] {
                             8, 16, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320
                         };
                         break;
                 }
 
-                return bitrates;
+                return bitrateList;
             }
         }
 
-        public static int Channels
+        public static string Channels
         {
             get { return channels; }
             set { channels = value; }
+        }
+
+        public static string[,] ChannelsList
+        {
+            get { return channelsList; }
         }
 
         /// <summary>
@@ -179,7 +182,7 @@ namespace Alexantr.SimpleVideoConverter
         public static string Encoder
         {
             get { return encoder; }
-            set
+            private set
             {
                 encoder = value;
 
@@ -189,7 +192,7 @@ namespace Alexantr.SimpleVideoConverter
                         vbrSupported = true;
                         quality = 4; // 3-6 is a good range to try
                         // 10 is highest quality
-                        vbrModes = new int[] {
+                        vbrModeList = new int[] {
                             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
                         };
                         break;
@@ -201,11 +204,11 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
-        public static int MaxChannels
+        /*public static int MaxChannels
         {
             get { return maxChannels; }
             set { maxChannels = value; }
-        }
+        }*/
 
         public static int Quality
         {
@@ -219,14 +222,14 @@ namespace Alexantr.SimpleVideoConverter
             set { sampleRate = value; }
         }
 
-        public static int[] SampleRates
+        public static int[] SampleRateList
         {
-            get { return sampleRates; }
+            get { return sampleRateList; }
         }
 
-        public static int[] VBRModes
+        public static int[] VBRModeList
         {
-            get { return vbrModes; }
+            get { return vbrModeList; }
         }
 
         public static bool VBRSupported

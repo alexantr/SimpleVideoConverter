@@ -11,10 +11,6 @@ namespace Alexantr.SimpleVideoConverter
         public const int MinHeight = 96;
         public const int MaxHeight = 4320;
 
-        public const string ResizeMethodContain = "contain";
-        public const string ResizeMethodStretch = "stretch";
-        public const string ResizeMethodBorders = "borders";
-
         public const string DefaultResizeMethod = "contain";
         public const string DefaultInterpolation = "bicubic";
         public const string DefaultFieldOrder = "auto";
@@ -25,12 +21,13 @@ namespace Alexantr.SimpleVideoConverter
         private static PictureSize inputOriginalSize; // OAR
         private static PictureSize inputDisplaySize; // DAR
 
-        public static PictureSize CropSize { get; private set; } // inpit size with crop (DAR)
+        public static PictureSize CropSize { get; private set; } // input size with crop (DAR)
         public static PictureSize OutputSize { get; private set; } // final output size
 
         private static PictureSize selectedSize; // if null - stay original size
 
         private static Crop crop;
+        private static Padding padding;
 
         private static string resizeMethod;
         
@@ -48,9 +45,9 @@ namespace Alexantr.SimpleVideoConverter
         };
 
         private static string[,] resizeMethodList = new string[,] {
-            { ResizeMethodContain, "Вместить" },
-            { ResizeMethodStretch, "Растянуть" },
-            { ResizeMethodBorders, "C полосами" }
+            { "contain", "Вместить" },
+            { "stretch", "Растянуть" },
+            { "borders", "C полосами" }
         };
 
         private static string[,] interpolationList = new string[,] {
@@ -91,6 +88,7 @@ namespace Alexantr.SimpleVideoConverter
 
                 CalcCroppedSize();
                 CalcOutputSize();
+                CalcPadding();
             }
         }
 
@@ -106,6 +104,7 @@ namespace Alexantr.SimpleVideoConverter
 
                 CalcCroppedSize();
                 CalcOutputSize();
+                CalcPadding();
             }
         }
 
@@ -118,6 +117,7 @@ namespace Alexantr.SimpleVideoConverter
 
                 CalcCroppedSize();
                 CalcOutputSize();
+                CalcPadding();
             }
         }
 
@@ -130,7 +130,13 @@ namespace Alexantr.SimpleVideoConverter
 
                 CalcCroppedSize();
                 CalcOutputSize();
+                CalcPadding();
             }
+        }
+
+        public static Padding Padding
+        {
+            get { return padding ?? new Padding(); }
         }
 
         public static string ResizeMethod
@@ -142,6 +148,7 @@ namespace Alexantr.SimpleVideoConverter
 
                 CalcCroppedSize();
                 CalcOutputSize();
+                CalcPadding();
             }
         }
 
@@ -208,10 +215,8 @@ namespace Alexantr.SimpleVideoConverter
             CropSize = null;
             OutputSize = null;
 
-            if (crop == null)
-                crop = new Crop();
-            else
-                crop.Reset();
+            crop = new Crop();
+            padding = new Padding();
 
             Deinterlace = false;
             fieldOrder = DefaultFieldOrder;
@@ -238,11 +243,22 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         /// <summary>
+        /// Check if resize is applied (after crop or w/o it)
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsResized()
+        {
+            if (inputOriginalSize == null)
+                return false;
+            return (CropSize.Width != OutputSize.Width || CropSize.Height != OutputSize.Height);
+        }
+
+        /// <summary>
         /// Parse size from combobox value
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static bool ParseSelectedPictureSize(string input)
+        public static bool ParseSelectedSize(string input)
         {
             Match match = new Regex("^([0-9]+)x([0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Singleline).Match(input);
             if (match.Success)
@@ -260,7 +276,7 @@ namespace Alexantr.SimpleVideoConverter
                     if (newHeight < MinHeight)
                         newHeight = MinHeight;
 
-                    selectedSize = new PictureSize
+                    SelectedSize = new PictureSize
                     {
                         Width = newWidth,
                         Height = newHeight
@@ -333,7 +349,7 @@ namespace Alexantr.SimpleVideoConverter
                 };
                 return;
             }
-            if (resizeMethod == ResizeMethodStretch)
+            if (resizeMethod == "stretch")
             {
                 OutputSize = new PictureSize
                 {
@@ -364,6 +380,23 @@ namespace Alexantr.SimpleVideoConverter
                     Width = newWidth,
                     Height = newHeight
                 };
+            }
+        }
+
+        private static void CalcPadding()
+        {
+            if (inputOriginalSize == null || inputDisplaySize == null)
+                return;
+
+            if (resizeMethod == "borders")
+            {
+                padding.X = (int)Math.Round((SelectedSize.Width - OutputSize.Width) / 2.0);
+                padding.Y = (int)Math.Round((SelectedSize.Height - OutputSize.Height) / 2.0);
+            }
+            else
+            {
+                padding.X = 0;
+                padding.Y = 0;
             }
         }
     }

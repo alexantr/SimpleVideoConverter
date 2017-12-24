@@ -50,12 +50,12 @@ namespace Alexantr.SimpleVideoConverter.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string OutFileType {
+        public string OutFormat {
             get {
-                return ((string)(this["OutFileType"]));
+                return ((string)(this["OutFormat"]));
             }
             set {
-                this["OutFileType"] = value;
+                this["OutFormat"] = value;
             }
         }
         

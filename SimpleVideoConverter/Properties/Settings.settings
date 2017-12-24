@@ -8,7 +8,7 @@
     <Setting Name="UpgradeRequired" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="OutFileType" Type="System.String" Scope="User">
+    <Setting Name="OutFormat" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="OutPath" Type="System.String" Scope="User">
