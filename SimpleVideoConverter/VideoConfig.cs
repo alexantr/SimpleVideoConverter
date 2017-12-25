@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Alexantr.SimpleVideoConverter
 {
@@ -25,9 +21,9 @@ namespace Alexantr.SimpleVideoConverter
         private static int defaultBitrate;
 
         private static string codec;
-        private static string[,] codecList;
+        private static Dictionary<string, string> codecList;
 
-        private static string[,] defaultAudioCodecs;
+        private static Dictionary<string, string> defaultAudioCodecs;
 
         public static string Codec
         {
@@ -38,13 +34,13 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
-        public static string[,] CodecList
+        public static Dictionary<string, string> CodecList
         {
             get { return codecList; }
             set { codecList = value; }
         }
 
-        public static string[,] DefaultAudioCodecs
+        public static Dictionary<string, string> DefaultAudioCodecs
         {
             get { return defaultAudioCodecs; }
             set

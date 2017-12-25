@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Alexantr.SimpleVideoConverter
@@ -44,7 +45,8 @@ namespace Alexantr.SimpleVideoConverter
             "640x480", "512x384", "320x240", "192x144"
         };
 
-        private static string[,] resizeMethodList = new string[,] {
+        private static Dictionary<string, string> resizeMethodList = new Dictionary<string, string>
+        {
             { "contain", "Вместить" },
             { "stretch", "Растянуть" },
             { "borders", "C полосами" }
@@ -144,7 +146,7 @@ namespace Alexantr.SimpleVideoConverter
             get { return resizeMethod ?? DefaultResizeMethod; }
             set
             {
-                resizeMethod = Helper.IsValid(value, resizeMethodList) ? value : DefaultResizeMethod;
+                resizeMethod = resizeMethodList.ContainsKey(value) ? value : DefaultResizeMethod;
 
                 CalcCroppedSize();
                 CalcOutputSize();
@@ -177,7 +179,7 @@ namespace Alexantr.SimpleVideoConverter
             get { return sizeList; }
         }
 
-        public static string[,] ResizeMethodList
+        public static Dictionary<string, string> ResizeMethodList
         {
             get { return resizeMethodList; }
         }

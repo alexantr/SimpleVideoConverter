@@ -1,37 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Alexantr.SimpleVideoConverter
 {
     public static class AudioConfig
     {
+        //public static int StreamIndex = -1;
+        //public static bool MustEncode = false;
+
         private static int bitrate;
         private static int[] bitrateList;
 
-        private static string channels;
-
-        private static int quality;
+        private static int channels = 0;
+        private static Dictionary<int, string> channelsList = new Dictionary<int, string>
+        {
+            { 0, "Авто" },
+            { 1, "1 (моно)" },
+            { 2, "2 (стерео)" }
+        };
 
         private static int sampleRate;
         private static int[] sampleRateList;
 
-        private static int[] vbrModeList;
-        private static bool vbrSupported;
         private static bool vbrOn;
+        private static bool vbrSupported;
+        private static int[] vbrModeList;
+
+        private static int quality;
 
         private static string codec;
-        private static string[,] codecList;
+        private static Dictionary<string, string> codecList;
 
         private static string encoder;
 
-        private static string[,] channelsList = new string[,] {
-            { "auto", "Авто" },
-            { "1", "1 (моно)" },
-            { "2", "2 (стерео)" }
-        };
+        private static string additionalArguments;
 
         /// <summary>
         /// Stores audio codec value and determines available encoders for
@@ -50,8 +51,6 @@ namespace Alexantr.SimpleVideoConverter
                 {
                     case "aac":
                         bitrate = 128;
-                        channels = "auto";
-                        //maxChannels = 8;
                         sampleRate = 0;
                         sampleRateList = new int[] {
                             8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
@@ -60,8 +59,6 @@ namespace Alexantr.SimpleVideoConverter
                         break;
                     case "mp3":
                         bitrate = 128;
-                        channels = "auto";
-                        //maxChannels = 2;
                         sampleRate = 0;
                         sampleRateList = new int[] {
                             8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000
@@ -70,8 +67,6 @@ namespace Alexantr.SimpleVideoConverter
                         break;
                     case "opus":
                         bitrate = 128;
-                        channels = "auto";
-                        //maxChannels = 8;
                         sampleRate = 0;
                         sampleRateList = new int[] {
                             8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
@@ -80,8 +75,6 @@ namespace Alexantr.SimpleVideoConverter
                         break;
                     case "vorbis":
                         bitrate = 128;
-                        channels = "auto";
-                        //maxChannels = 8;
                         sampleRate = 0;
                         sampleRateList = new int[] {
                             8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
@@ -90,8 +83,6 @@ namespace Alexantr.SimpleVideoConverter
                         break;
                     default:
                         bitrate = 128;
-                        channels = "auto";
-                        //maxChannels = 8;
                         sampleRate = 0;
                         sampleRateList = new int[] {
                             8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
@@ -102,7 +93,7 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
-        public static string[,] CodecList
+        public static Dictionary<string, string> CodecList
         {
             get { return codecList; }
             set { codecList = value; }
@@ -111,14 +102,7 @@ namespace Alexantr.SimpleVideoConverter
         public static int Bitrate
         {
             get { return bitrate; }
-            set {
-                if (Helper.IsValid(value, bitrateList))
-                    bitrate = value;
-                else if (bitrateList.Length > 0)
-                    bitrate = bitrateList[bitrateList.Length - 1];
-                else
-                    bitrate = 64; // max value in everywhere
-            }
+            set { bitrate = value; }
         }
 
         /// <summary>
@@ -165,13 +149,13 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
-        public static string Channels
+        public static int Channels
         {
             get { return channels; }
             set { channels = value; }
         }
 
-        public static string[,] ChannelsList
+        public static Dictionary<int, string> ChannelsList
         {
             get { return channelsList; }
         }
@@ -195,20 +179,21 @@ namespace Alexantr.SimpleVideoConverter
                         vbrModeList = new int[] {
                             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
                         };
+                        additionalArguments = "";
+                        break;
+                    case "aac":
+                        vbrSupported = false;
+                        vbrOn = false;
+                        additionalArguments = "-strict -2";
                         break;
                     default:
                         vbrSupported = false;
                         vbrOn = false;
+                        additionalArguments = "";
                         break;
                 }
             }
         }
-
-        /*public static int MaxChannels
-        {
-            get { return maxChannels; }
-            set { maxChannels = value; }
-        }*/
 
         public static int Quality
         {
@@ -241,6 +226,11 @@ namespace Alexantr.SimpleVideoConverter
         {
             get { return vbrOn; }
             set { vbrOn = value; }
+        }
+
+        public static string AdditionalArguments
+        {
+            get { return additionalArguments; }
         }
     }
 }
