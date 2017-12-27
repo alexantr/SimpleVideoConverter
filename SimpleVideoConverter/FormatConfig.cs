@@ -30,7 +30,8 @@ namespace Alexantr.SimpleVideoConverter
                 {
                     case "mp4":
                         VideoConfig.CodecList = new Dictionary<string, string> {
-                            { "h264", "H264" }
+                            { "h264", "H.264" },
+                            { "h265", "H.265" }
                         };
                         AudioConfig.CodecList = new Dictionary<string, string>
                         {

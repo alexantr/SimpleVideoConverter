@@ -41,8 +41,8 @@ namespace Alexantr.SimpleVideoConverter
         private static string colorFilter;
 
         private static string[] sizeList = new string[] {
-            "1920x1080", "1280x720", "1024x576", "854x480", "720x540",
-            "640x480", "512x384", "320x240", "192x144"
+            "1920x1080", "1280x720", "1024x576", "854x480",
+            "720x576", "640x480", "512x384", "320x240"
         };
 
         private static Dictionary<string, string> resizeMethodList = new Dictionary<string, string>
@@ -52,7 +52,8 @@ namespace Alexantr.SimpleVideoConverter
             { "borders", "C полосами" }
         };
 
-        private static string[,] interpolationList = new string[,] {
+        private static Dictionary<string, string> interpolationList = new Dictionary<string, string>
+        {
             { "neighbor", "Nearest Neighbor" },
             { "bilinear", "Bilinear" },
             { "bicubic", "Bicubic" },
@@ -61,18 +62,21 @@ namespace Alexantr.SimpleVideoConverter
             { "gauss", "Gaussian" }
         };
 
-        private static string[,] colorFilterList = new string[,] {
+        private static Dictionary<string, string> colorFilterList = new Dictionary<string, string>
+        {
             { "none", "Нет" },
             { "gray", "Черно-белое" },
             { "sepia", "Сепия" }
         };
 
-        private static string[,] colorChannelMixerList = new string[,] {
+        private static Dictionary<string, string> colorChannelMixerList = new Dictionary<string, string>
+        {
             { "gray", ".3:.4:.3:0:.3:.4:.3:0:.3:.4:.3" },
             { "sepia", ".393:.769:.189:0:.349:.686:.168:0:.272:.534:.131" }
         };
 
-        private static string[,] fieldOrderList = new string[,] {
+        private static Dictionary<string, string> fieldOrderList = new Dictionary<string, string>
+        {
             { "auto", "Авто" },
             { "tff", "Top Field First" },
             { "bff", "Bottom Field First" }
@@ -157,19 +161,19 @@ namespace Alexantr.SimpleVideoConverter
         public static string Interpolation
         {
             get { return interpolation ?? DefaultInterpolation; }
-            set { interpolation = Helper.IsValid(value, interpolationList) ? value : DefaultInterpolation; }
+            set { interpolation = interpolationList.ContainsKey(value) ? value : DefaultInterpolation; }
         }
 
         public static string ColorFilter
         {
             get { return colorFilter ?? DefaultColorFilter; }
-            set { colorFilter = Helper.IsValid(value, colorFilterList) ? value : DefaultColorFilter; }
+            set { colorFilter = colorFilterList.ContainsKey(value) ? value : DefaultColorFilter; }
         }
         
         public static string FieldOrder
         {
             get { return fieldOrder ?? DefaultFieldOrder; }
-            set { fieldOrder = Helper.IsValid(value, fieldOrderList) ? value : DefaultFieldOrder; }
+            set { fieldOrder = fieldOrderList.ContainsKey(value) ? value : DefaultFieldOrder; }
         }
 
         #region Lists
@@ -184,22 +188,22 @@ namespace Alexantr.SimpleVideoConverter
             get { return resizeMethodList; }
         }
 
-        public static string[,] InterpolationList
+        public static Dictionary<string, string> InterpolationList
         {
             get { return interpolationList; }
         }
 
-        public static string[,] ColorFilterList
+        public static Dictionary<string, string> ColorFilterList
         {
             get { return colorFilterList; }
         }
 
-        public static string[,] ColorChannelMixerList
+        public static Dictionary<string, string> ColorChannelMixerList
         {
             get { return colorChannelMixerList; }
         }
 
-        public static string[,] FieldOrderList
+        public static Dictionary<string, string> FieldOrderList
         {
             get { return fieldOrderList; }
         }

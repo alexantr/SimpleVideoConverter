@@ -66,42 +66,6 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         /// <summary>
-        /// Show formatted file size
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static string FormatFileSize(this double value)
-        {
-            string[] strArray = new string[9]
-            {
-                "bytes",
-                "KiB",
-                "MiB",
-                "GiB",
-                "TiB",
-                "PiB",
-                "EiB",
-                "ZiB",
-                "YiB"
-            };
-            for (int index = 0; index < strArray.Length; ++index)
-            {
-                if (value <= Math.Pow(1024.0, (index + 1)))
-                    return ThreeNonZeroDigits(value / Math.Pow(1024.0, index)) + " " + strArray[index];
-            }
-            return ThreeNonZeroDigits(value / Math.Pow(1024.0, (strArray.Length - 1))) + " " + strArray[strArray.Length - 1];
-        }
-
-        private static string ThreeNonZeroDigits(double value)
-        {
-            if (value >= 100.0)
-                return value.ToString("0,0");
-            if (value >= 10.0)
-                return value.ToString("0.0");
-            return value.ToString("0.00");
-        }
-
-        /// <summary>
         /// Checks if value matches a value from array.
         /// </summary>
         /// <param name="value"></param>
@@ -132,36 +96,6 @@ namespace Alexantr.SimpleVideoConverter
                 }
             }
             return valid;
-        }
-
-        /// <summary>
-        /// Find second value by first from array.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="items"></param>
-        /// <returns></returns>
-        public static string FindSecondByFirst(string value, string[,] items)
-        {
-            return FindSecondByFirst(value, items, string.Empty);
-        }
-
-        /// <summary>
-        /// Find second value by first from array. Set defaultValue if not found.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="items"></param>
-        /// <param name="defaultValue"></param>
-        /// <returns></returns>
-        public static string FindSecondByFirst(string value, string[,] items, string defaultValue)
-        {
-            for (int i = 0; i < items.GetLength(0); i++)
-            {
-                if (value == items[i, 0])
-                {
-                    return items[i, 1];
-                }
-            }
-            return defaultValue;
         }
     }
 }

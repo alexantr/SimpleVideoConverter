@@ -21,9 +21,10 @@ namespace Alexantr.SimpleVideoConverter
         private static int sampleRate;
         private static int[] sampleRateList;
 
-        private static bool vbrOn;
         private static bool vbrSupported;
-        private static int[] vbrModeList;
+        private static bool vbrOn;
+        private static int vbrMinValue;
+        private static int vbrMaxValue;
 
         private static int quality;
 
@@ -46,7 +47,10 @@ namespace Alexantr.SimpleVideoConverter
             {
                 codec = value;
 
-                // Init codec values
+                vbrSupported = false;
+                vbrOn = false;
+                additionalArguments = "";
+
                 switch (codec)
                 {
                     case "aac":
@@ -55,7 +59,10 @@ namespace Alexantr.SimpleVideoConverter
                         sampleRateList = new int[] {
                             8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
                         };
-                        Encoder = "aac";
+                        encoder = "aac";
+                        vbrSupported = false;
+                        vbrOn = false;
+                        additionalArguments = "-strict -2";
                         break;
                     case "mp3":
                         bitrate = 128;
@@ -63,7 +70,7 @@ namespace Alexantr.SimpleVideoConverter
                         sampleRateList = new int[] {
                             8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000
                         };
-                        Encoder = "libmp3lame";
+                        encoder = "libmp3lame";
                         break;
                     case "opus":
                         bitrate = 128;
@@ -71,7 +78,7 @@ namespace Alexantr.SimpleVideoConverter
                         sampleRateList = new int[] {
                             8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
                         };
-                        Encoder = "libopus";
+                        encoder = "libopus";
                         break;
                     case "vorbis":
                         bitrate = 128;
@@ -79,15 +86,12 @@ namespace Alexantr.SimpleVideoConverter
                         sampleRateList = new int[] {
                             8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
                         };
-                        Encoder = "libvorbis";
-                        break;
-                    default:
-                        bitrate = 128;
-                        sampleRate = 0;
-                        sampleRateList = new int[] {
-                            8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
-                        };
-                        Encoder = codec;
+                        encoder = "libvorbis";
+                        vbrSupported = true;
+                        quality = 4; // 3-6 is a good range to try
+                        // 10 is highest quality
+                        vbrMinValue = 0;
+                        vbrMaxValue = 10;
                         break;
                 }
             }
@@ -97,6 +101,11 @@ namespace Alexantr.SimpleVideoConverter
         {
             get { return codecList; }
             set { codecList = value; }
+        }
+
+        public static string Encoder
+        {
+            get { return encoder; }
         }
 
         public static int Bitrate
@@ -149,6 +158,33 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
+        public static bool VBRSupported
+        {
+            get { return vbrSupported; }
+        }
+
+        public static bool UseVBR
+        {
+            get { return vbrOn; }
+            set { vbrOn = value; }
+        }
+
+        private static int VBRMinValue
+        {
+            get { return vbrMinValue; }
+        }
+
+        private static int VBRMaxValue
+        {
+            get { return vbrMaxValue; }
+        }
+
+        public static int Quality
+        {
+            get { return quality; }
+            set { quality = value; }
+        }
+
         public static int Channels
         {
             get { return channels; }
@@ -160,47 +196,6 @@ namespace Alexantr.SimpleVideoConverter
             get { return channelsList; }
         }
 
-        /// <summary>
-        /// Stores audio encoder value and determines encoder settings and presets.
-        /// </summary>
-        public static string Encoder
-        {
-            get { return encoder; }
-            private set
-            {
-                encoder = value;
-
-                switch (encoder)
-                {
-                    case "libvorbis":
-                        vbrSupported = true;
-                        quality = 4; // 3-6 is a good range to try
-                        // 10 is highest quality
-                        vbrModeList = new int[] {
-                            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-                        };
-                        additionalArguments = "";
-                        break;
-                    case "aac":
-                        vbrSupported = false;
-                        vbrOn = false;
-                        additionalArguments = "-strict -2";
-                        break;
-                    default:
-                        vbrSupported = false;
-                        vbrOn = false;
-                        additionalArguments = "";
-                        break;
-                }
-            }
-        }
-
-        public static int Quality
-        {
-            get { return quality; }
-            set { quality = value; }
-        }
-
         public static int SampleRate
         {
             get { return sampleRate; }
@@ -210,22 +205,6 @@ namespace Alexantr.SimpleVideoConverter
         public static int[] SampleRateList
         {
             get { return sampleRateList; }
-        }
-
-        public static int[] VBRModeList
-        {
-            get { return vbrModeList; }
-        }
-
-        public static bool VBRSupported
-        {
-            get { return vbrSupported; }
-        }
-
-        public static bool UseVBR
-        {
-            get { return vbrOn; }
-            set { vbrOn = value; }
         }
 
         public static string AdditionalArguments

@@ -76,6 +76,8 @@
             this.trackBarCRF = new System.Windows.Forms.TrackBar();
             this.numericUpDownBitrate = new System.Windows.Forms.NumericUpDown();
             this.panelVideoParams = new System.Windows.Forms.Panel();
+            this.labelVideoCodec = new System.Windows.Forms.Label();
+            this.comboBoxVideoCodec = new System.Windows.Forms.ComboBox();
             this.labelFrameRate = new System.Windows.Forms.Label();
             this.comboBoxFrameRate = new System.Windows.Forms.ComboBox();
             this.tabPagePicture = new System.Windows.Forms.TabPage();
@@ -533,7 +535,7 @@
             // 
             this.labelCRF.AutoSize = true;
             this.labelCRF.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelCRF.Location = new System.Drawing.Point(139, 6);
+            this.labelCRF.Location = new System.Drawing.Point(110, 6);
             this.labelCRF.Name = "labelCRF";
             this.labelCRF.Size = new System.Drawing.Size(21, 13);
             this.labelCRF.TabIndex = 1;
@@ -556,10 +558,10 @@
             this.radioButtonCRF.AutoSize = true;
             this.radioButtonCRF.Location = new System.Drawing.Point(4, 4);
             this.radioButtonCRF.Name = "radioButtonCRF";
-            this.radioButtonCRF.Size = new System.Drawing.Size(129, 17);
+            this.radioButtonCRF.Size = new System.Drawing.Size(100, 17);
             this.radioButtonCRF.TabIndex = 0;
             this.radioButtonCRF.TabStop = true;
-            this.radioButtonCRF.Text = "Constant Rate Factor";
+            this.radioButtonCRF.Text = "Качество, CRF";
             this.radioButtonCRF.UseVisualStyleBackColor = true;
             this.radioButtonCRF.CheckedChanged += new System.EventHandler(this.radioButtonCRF_CheckedChanged);
             // 
@@ -585,17 +587,38 @@
             // 
             // panelVideoParams
             // 
+            this.panelVideoParams.Controls.Add(this.labelVideoCodec);
+            this.panelVideoParams.Controls.Add(this.comboBoxVideoCodec);
             this.panelVideoParams.Controls.Add(this.labelFrameRate);
             this.panelVideoParams.Controls.Add(this.comboBoxFrameRate);
             this.panelVideoParams.Location = new System.Drawing.Point(319, 6);
             this.panelVideoParams.Name = "panelVideoParams";
-            this.panelVideoParams.Size = new System.Drawing.Size(279, 31);
+            this.panelVideoParams.Size = new System.Drawing.Size(279, 173);
             this.panelVideoParams.TabIndex = 1;
+            // 
+            // labelVideoCodec
+            // 
+            this.labelVideoCodec.AutoSize = true;
+            this.labelVideoCodec.Location = new System.Drawing.Point(3, 6);
+            this.labelVideoCodec.Name = "labelVideoCodec";
+            this.labelVideoCodec.Size = new System.Drawing.Size(39, 13);
+            this.labelVideoCodec.TabIndex = 3;
+            this.labelVideoCodec.Text = "Кодек";
+            // 
+            // comboBoxVideoCodec
+            // 
+            this.comboBoxVideoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxVideoCodec.FormattingEnabled = true;
+            this.comboBoxVideoCodec.Location = new System.Drawing.Point(98, 3);
+            this.comboBoxVideoCodec.Name = "comboBoxVideoCodec";
+            this.comboBoxVideoCodec.Size = new System.Drawing.Size(80, 21);
+            this.comboBoxVideoCodec.TabIndex = 2;
+            this.comboBoxVideoCodec.SelectedIndexChanged += new System.EventHandler(this.comboBoxVideoCodec_SelectedIndexChanged);
             // 
             // labelFrameRate
             // 
             this.labelFrameRate.AutoSize = true;
-            this.labelFrameRate.Location = new System.Drawing.Point(3, 6);
+            this.labelFrameRate.Location = new System.Drawing.Point(3, 57);
             this.labelFrameRate.Name = "labelFrameRate";
             this.labelFrameRate.Size = new System.Drawing.Size(89, 13);
             this.labelFrameRate.TabIndex = 0;
@@ -605,7 +628,7 @@
             // 
             this.comboBoxFrameRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFrameRate.FormattingEnabled = true;
-            this.comboBoxFrameRate.Location = new System.Drawing.Point(98, 3);
+            this.comboBoxFrameRate.Location = new System.Drawing.Point(98, 54);
             this.comboBoxFrameRate.Name = "comboBoxFrameRate";
             this.comboBoxFrameRate.Size = new System.Drawing.Size(80, 21);
             this.comboBoxFrameRate.TabIndex = 1;
@@ -1059,6 +1082,8 @@
         private System.Windows.Forms.TextBox textBoxTagCopyright;
         private System.Windows.Forms.Label labelAudioCodec;
         private System.Windows.Forms.ComboBox comboBoxAudioCodec;
+        private System.Windows.Forms.Label labelVideoCodec;
+        private System.Windows.Forms.ComboBox comboBoxVideoCodec;
     }
 }
 

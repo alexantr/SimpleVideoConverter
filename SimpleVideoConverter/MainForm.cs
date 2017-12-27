@@ -30,12 +30,7 @@ namespace Alexantr.SimpleVideoConverter
         private const int DefaultMp4CRF = 20;
         private const int DefaultWebmCRF = 30;
 
-        private const int MinAudioBitrate = 8;
-        private const int MaxAudioBitrate = 320;
-
         private InputFile inputFile;
-
-        private string encodeMode; // bitrate or crf
 
         private string fileInfo;
 
@@ -46,8 +41,6 @@ namespace Alexantr.SimpleVideoConverter
         private char[] invalidChars = Path.GetInvalidPathChars();
 
         // lists
-
-        private Dictionary<string, string> frameRateList;
 
         private List<string> tempFilesList;
 
@@ -64,24 +57,6 @@ namespace Alexantr.SimpleVideoConverter
             DragDrop += HandleDragDrop;
 
             taskbarManager = TaskbarManager.Instance;
-
-            frameRateList = new Dictionary<string, string>
-            {
-                { "10", "10" },
-                { "12", "12" },
-                { "15", "15" },
-                { "18", "18" },
-                { "20", "20" },
-                { "24000/1001", "23.976" },
-                { "24", "24" },
-                { "25", "25" },
-                { "30000/1001", "29.97" },
-                { "30", "30" },
-                { "48", "48" },
-                { "50", "50" },
-                { "60000/1001", "59.94" },
-                { "60", "60" }
-            };
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -131,16 +106,9 @@ namespace Alexantr.SimpleVideoConverter
             }
 
             // Encode mode
-            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.EncodeMode) && Properties.Settings.Default.EncodeMode == EncodeModeBitrate)
-            {
-                radioButtonBitrate.Checked = true;
-                radioButtonCRF.Checked = false;
-            }
-            else
-            {
-                radioButtonCRF.Checked = true;
-                radioButtonBitrate.Checked = false;
-            }
+            radioButtonCRF.Checked = true;
+            radioButtonBitrate.Checked = false;
+
             CheckVideoModeRadioButtons();
 
             // Picture Size
@@ -169,13 +137,18 @@ namespace Alexantr.SimpleVideoConverter
             // Interpolation
             comboBoxInterpolation.Items.Clear();
             selectedIndex = 0;
-            for (int i = 0; i < PictureConfig.InterpolationList.GetLength(0); i++)
+            index = 0;
+            foreach (KeyValuePair<string, string> rm in PictureConfig.InterpolationList)
             {
-                comboBoxInterpolation.Items.Add(new ComboBoxItem(PictureConfig.InterpolationList[i, 0], PictureConfig.InterpolationList[i, 1]));
-                if (PictureConfig.InterpolationList[i, 0] == PictureConfig.DefaultInterpolation)
-                    selectedIndex = i;
+                comboBoxInterpolation.Items.Add(new ComboBoxItem(rm.Key, rm.Value));
+                if (rm.Key == PictureConfig.DefaultInterpolation)
+                    selectedIndex = index;
+                index++;
             }
             comboBoxInterpolation.SelectedIndex = selectedIndex;
+
+            // Video codec
+            FillVideoCodec();
 
             // Bitrate
             numericUpDownBitrate.Maximum = MaxBitrate;
@@ -188,11 +161,13 @@ namespace Alexantr.SimpleVideoConverter
             // Field order
             comboBoxFieldOrder.Items.Clear();
             selectedIndex = 0;
-            for (int i = 0; i < PictureConfig.FieldOrderList.GetLength(0); i++)
+            index = 0;
+            foreach (KeyValuePair<string, string> rm in PictureConfig.FieldOrderList)
             {
-                comboBoxFieldOrder.Items.Add(new ComboBoxItem(PictureConfig.FieldOrderList[i, 0], PictureConfig.FieldOrderList[i, 1]));
-                if (PictureConfig.FieldOrderList[i, 0] == PictureConfig.DefaultFieldOrder)
-                    selectedIndex = i;
+                comboBoxFieldOrder.Items.Add(new ComboBoxItem(rm.Key, rm.Value));
+                if (rm.Key == PictureConfig.DefaultFieldOrder)
+                    selectedIndex = index;
+                index++;
             }
             comboBoxFieldOrder.SelectedIndex = selectedIndex;
 
@@ -202,18 +177,20 @@ namespace Alexantr.SimpleVideoConverter
             // Color filter
             comboBoxColorFilter.Items.Clear();
             selectedIndex = 0;
-            for (int i = 0; i < PictureConfig.ColorFilterList.GetLength(0); i++)
+            index = 0;
+            foreach (KeyValuePair<string, string> rm in PictureConfig.ColorFilterList)
             {
-                comboBoxColorFilter.Items.Add(new ComboBoxItem(PictureConfig.ColorFilterList[i, 0], PictureConfig.ColorFilterList[i, 1]));
-                if (PictureConfig.ColorFilterList[i, 0] == PictureConfig.DefaultColorFilter)
-                    selectedIndex = i;
+                comboBoxColorFilter.Items.Add(new ComboBoxItem(rm.Key, rm.Value));
+                if (rm.Key == PictureConfig.DefaultColorFilter)
+                    selectedIndex = index;
+                index++;
             }
             comboBoxColorFilter.SelectedIndex = selectedIndex;
 
             // Frame rate
             comboBoxFrameRate.Items.Clear();
             comboBoxFrameRate.Items.Add(new ComboBoxItem(string.Empty, "Исходная"));
-            foreach (KeyValuePair<string, string> frameRate in frameRateList)
+            foreach (KeyValuePair<string, string> frameRate in VideoConfig.FrameRateList)
             {
                 comboBoxFrameRate.Items.Add(new ComboBoxItem(frameRate.Key, frameRate.Value));
             }
@@ -268,6 +245,54 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         #endregion
+
+        private void FillCRFAndBitrate()
+        {
+            if (VideoConfig.CRFSupported)
+            {
+                if (trackBarCRF.Value > VideoConfig.CRFMaxValue)
+                    trackBarCRF.Value = VideoConfig.CRFMaxValue;
+                if (trackBarCRF.Value < VideoConfig.CRFMinValue)
+                    trackBarCRF.Value = VideoConfig.CRFMinValue;
+
+                trackBarCRF.Minimum = VideoConfig.CRFMinValue;
+                trackBarCRF.Maximum = VideoConfig.CRFMaxValue;
+                trackBarCRF.Value = VideoConfig.CRF;
+                
+                radioButtonCRF.Enabled = true;
+            }
+            else
+            {
+                radioButtonCRF.Checked = false;
+                radioButtonCRF.Enabled = false;
+                radioButtonBitrate.Checked = true;
+            }
+
+            if (numericUpDownBitrate.Value > VideoConfig.BitrateMaxValue)
+                numericUpDownBitrate.Value = VideoConfig.BitrateMaxValue;
+            if (numericUpDownBitrate.Value < VideoConfig.BitrateMinValue)
+                numericUpDownBitrate.Value = VideoConfig.BitrateMinValue;
+
+            numericUpDownBitrate.Minimum = VideoConfig.BitrateMinValue;
+            numericUpDownBitrate.Maximum = VideoConfig.BitrateMaxValue;
+            //numericUpDownBitrate.Value = VideoConfig.Bitrate;
+
+            CheckVideoModeRadioButtons();
+        }
+
+        private void FillVideoCodec()
+        {
+            comboBoxVideoCodec.Items.Clear();
+            int selectedIndex = 0, index = 0;
+            foreach (KeyValuePair<string, string> c in VideoConfig.CodecList)
+            {
+                comboBoxVideoCodec.Items.Add(new ComboBoxItem(c.Key, c.Value));
+                if (c.Key == VideoConfig.Codec)
+                    selectedIndex = index;
+                index++;
+            }
+            comboBoxVideoCodec.SelectedIndex = selectedIndex;
+        }
 
         private void FillAudioCodec()
         {
@@ -408,14 +433,10 @@ namespace Alexantr.SimpleVideoConverter
             Properties.Settings.Default.OutFormat = FormatConfig.Format;
             ChangeOutExtension();
 
-            // deal with VideoConfig
-            int maxValue = (FormatConfig.Format == FormatMP4) ? 51 : 63;
-            if (trackBarCRF.Value > maxValue)
-                trackBarCRF.Value = maxValue;
-            trackBarCRF.Maximum = maxValue;
-            trackBarCRF.Value = (FormatConfig.Format == FormatMP4) ? DefaultMp4CRF : DefaultWebmCRF;
-
             checkBoxWebOptimized.Visible = (FormatConfig.Format == FormatMP4);
+
+            FillVideoCodec();
+            FillCRFAndBitrate();
 
             FillAudioCodec();
             FillAudioBitrate();
@@ -541,6 +562,32 @@ namespace Alexantr.SimpleVideoConverter
             PictureConfig.Crop = newCrop;
             UpdateCroppedPictureSizeInfo();
             SetOutputInfo();
+        }
+
+        #endregion
+
+        #region Video
+
+        private void comboBoxVideoCodec_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            VideoConfig.Codec = ((ComboBoxItem)comboBoxVideoCodec.SelectedItem).Value;
+
+            // change audio codec to default for selected video codec
+            if (VideoConfig.DefaultAudioCodecs.ContainsKey(VideoConfig.Codec))
+            {
+                int index = 0;
+                foreach (ComboBoxItem item in comboBoxAudioCodec.Items)
+                {
+                    if (item.Value == VideoConfig.DefaultAudioCodecs[VideoConfig.Codec])
+                    {
+                        comboBoxAudioCodec.SelectedIndex = index;
+                        break;
+                    }
+                    index++;
+                }
+            }
+
+            FillCRFAndBitrate();
         }
 
         #endregion
@@ -888,22 +935,6 @@ namespace Alexantr.SimpleVideoConverter
             int videoBitrate = (int)Math.Round(numericUpDownBitrate.Value, 0);
             int crf = trackBarCRF.Value;
 
-            if (encodeMode == EncodeModeBitrate)
-            {
-                if (videoBitrate < MinBitrate || videoBitrate > MaxBitrate)
-                {
-                    throw new Exception("Неверно задано значение битрейта для видео!");
-                }
-            }
-            if (encodeMode == EncodeModeCRF)
-            {
-                int maxCrfValue = (FormatConfig.Format == FormatMP4) ? 51 : 63;
-                if (crf < 1 || crf > maxCrfValue)
-                {
-                    throw new Exception("Неверно задано значение CRF!");
-                }
-            }
-
             string outputDir = Path.GetDirectoryName(output);
 
             // try to create out folder
@@ -930,7 +961,7 @@ namespace Alexantr.SimpleVideoConverter
 
             int audioStreamIndex = ((ComboBoxIntItem)comboBoxAudioStreams.SelectedItem).Value;
 
-            bool twoPass = (encodeMode == EncodeModeBitrate);
+            bool twoPass = !VideoConfig.UseCRF;
 
             List<string> videoArgs = new List<string>();
             List<string> audioArgs = new List<string>();
@@ -945,8 +976,6 @@ namespace Alexantr.SimpleVideoConverter
             if (FormatConfig.Format == FormatMP4)
             {
                 // https://trac.ffmpeg.org/wiki/Encode/H.264
-
-                string videoEncoder = "libx264";
 
                 // must be configurable
                 string videoPreset = "veryslow";
@@ -963,18 +992,16 @@ namespace Alexantr.SimpleVideoConverter
                 if (finalFrameRate == 0)
                     finalFrameRate = vStream.FrameRate;
                 // force level 4.1, max bitrate for high 4.1 - 62500, use max avg bitrate 50000
-                if (encodeMode != EncodeModeBitrate || videoBitrate <= 50000)
+                if (VideoConfig.UseCRF || videoBitrate <= 50000)
                 {
                     if (PictureConfig.OutputSize.Width <= 1920 && PictureConfig.OutputSize.Height <= 1080 && finalFrameRate <= 30.0)
                         videoLevel = " -level 4.1";
                 }
 
-                string moreAudioArgs = AudioConfig.Encoder == "aac" ? "-strict -2" : ""; // for "aac" codec
-
-                if (encodeMode == EncodeModeBitrate)
-                    videoArgs.Add($"-c:v {videoEncoder} -b:v {videoBitrate}k");
+                if (VideoConfig.UseCRF)
+                    videoArgs.Add($"-c:v {VideoConfig.Encoder} -crf {crf}");
                 else
-                    videoArgs.Add($"-c:v {videoEncoder} -crf {crf}");
+                    videoArgs.Add($"-c:v {VideoConfig.Encoder} -b:v {videoBitrate}k");
 
                 videoArgs.Add($"-preset:v {videoPreset} -profile:v {videoProfile}{videoLevel} {videoParams}");
             }
@@ -983,14 +1010,12 @@ namespace Alexantr.SimpleVideoConverter
                 // https://trac.ffmpeg.org/wiki/Encode/VP9
                 // https://trac.ffmpeg.org/wiki/Encode/VP8
 
-                string videoEncoder = "libvpx-vp9"; // "libvpx" or "libvpx-vp9"
-
                 int threads = Environment.ProcessorCount;
 
-                if (encodeMode == EncodeModeBitrate)
-                    videoArgs.Add($"-c:v {videoEncoder} -b:v {videoBitrate}k -threads {threads}");
+                if (VideoConfig.UseCRF)
+                    videoArgs.Add($"-c:v {VideoConfig.Encoder} -crf {crf} -b:v 0 -threads {threads}");
                 else
-                    videoArgs.Add($"-c:v {videoEncoder} -crf {crf} -b:v 0 -threads {threads}");
+                    videoArgs.Add($"-c:v {VideoConfig.Encoder} -b:v {videoBitrate}k -threads {threads}");
 
                 specialArgsPass1 = "-speed 4";
                 specialArgsPass2 = "-speed 1";
@@ -1045,9 +1070,8 @@ namespace Alexantr.SimpleVideoConverter
             filters.Add($"setsar=1:1");
 
             // color filter
-            string cf = Helper.FindSecondByFirst(PictureConfig.ColorFilter, PictureConfig.ColorChannelMixerList);
-            if (!string.IsNullOrEmpty(cf))
-                filters.Add($"colorchannelmixer={cf}");
+            if (PictureConfig.ColorChannelMixerList.ContainsKey(PictureConfig.ColorFilter))
+                filters.Add($"colorchannelmixer={PictureConfig.ColorChannelMixerList[PictureConfig.ColorFilter]}");
 
             // More video args
 
@@ -1269,15 +1293,7 @@ namespace Alexantr.SimpleVideoConverter
             numericUpDownBitrate.Enabled = radioButtonBitrate.Checked;
             labelVideoKbps.Enabled = radioButtonBitrate.Checked;
 
-            if (radioButtonCRF.Checked)
-            {
-                Properties.Settings.Default.EncodeMode = encodeMode = EncodeModeCRF;
-            }
-
-            if (radioButtonBitrate.Checked)
-            {
-                Properties.Settings.Default.EncodeMode = encodeMode = EncodeModeBitrate;
-            }
+            VideoConfig.UseCRF = radioButtonCRF.Checked;
         }
 
         private void CalcFileSize()
@@ -1326,10 +1342,10 @@ namespace Alexantr.SimpleVideoConverter
 
             // Video
 
-            if (FormatConfig.Format == FormatMP4)
-                info.Append($"H264");
+            if (VideoConfig.CodecList.ContainsKey(VideoConfig.Codec))
+                info.Append($"{VideoConfig.CodecList[VideoConfig.Codec]}");
             else
-                info.Append($"VP9");
+                info.Append($"{VideoConfig.Codec}");
 
             if (PictureConfig.Padding.X > 0 || PictureConfig.Padding.Y > 0)
             {
@@ -1355,10 +1371,8 @@ namespace Alexantr.SimpleVideoConverter
                 info.Append(", деинт.");
 
             if (PictureConfig.ColorFilter != "none")
-            {
-                string selectedFilter = Helper.FindSecondByFirst(PictureConfig.ColorFilter, PictureConfig.ColorFilterList);
-                info.Append($", {selectedFilter.ToLower()}");
-            }
+                info.Append($", {PictureConfig.ColorFilterList[PictureConfig.ColorFilter].ToLower()}");
+
             if (radioButtonCRF.Checked)
                 info.Append($", CRF {trackBarCRF.Value}");
             else
@@ -1431,7 +1445,7 @@ namespace Alexantr.SimpleVideoConverter
             string dur = new TimeSpan((long)inputFile.Duration.TotalMilliseconds * 10000L).ToString("hh\\:mm\\:ss\\.fff");
 
             info.AppendLine($"Формат: {inputFile.Format}");
-            info.AppendLine($"Размер файла: {Helper.FormatFileSize(inputFile.FileSize)}");
+            info.AppendLine($"Размер файла: {inputFile.FileSize.FormatFileSize()}");
             info.AppendLine($"Длительность: {dur}");
             info.AppendLine($"Битрейт: {inputFile.BitRate} kbps");
             info.AppendLine($"Разрешение: {stream.PictureSize.ToString()}{(stream.UsingDAR ? " (исх.: " + stream.OriginalSize.ToString() + ")" : "")}");

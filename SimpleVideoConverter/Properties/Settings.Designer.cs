@@ -82,17 +82,5 @@ namespace Alexantr.SimpleVideoConverter.Properties {
                 this["RememberOutPath"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string EncodeMode {
-            get {
-                return ((string)(this["EncodeMode"]));
-            }
-            set {
-                this["EncodeMode"] = value;
-            }
-        }
     }
 }

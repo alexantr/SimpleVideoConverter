@@ -4,26 +4,44 @@ namespace Alexantr.SimpleVideoConverter
 {
     public static class VideoConfig
     {
-        public const string EncodeModeBitrate = "bitrate";
-        public const string EncodeModeCRF = "crf";
+        private static bool crfSupported = true;
+        private static bool crfOn = true;
+        private static int crfMinValue;
+        private static int crfMaxValue;
 
-        private static bool canCRF = false;
-        private static bool canBitrate = false;
+        private static int crf;
 
-        private static string encodeMode;
-
-        private static int minCRF;
-        private static int maxCRF;
-        private static int defaultCRF;
-
-        private static int minBitrate;
-        private static int maxBitrate;
-        private static int defaultBitrate;
+        private static int bitrate;
+        private static int bitrateMinValue;
+        private static int bitrateMaxValue;
 
         private static string codec;
         private static Dictionary<string, string> codecList;
 
         private static Dictionary<string, string> defaultAudioCodecs;
+
+        private static string encoder;
+
+        private static string additionalArguments;
+
+        private static string frameRate;
+        private static Dictionary<string, string> frameRateList = new Dictionary<string, string>
+        {
+            { "10", "10" },
+            { "12", "12" },
+            { "15", "15" },
+            { "18", "18" },
+            { "20", "20" },
+            { "24000/1001", "23.976" },
+            { "24", "24" },
+            { "25", "25" },
+            { "30000/1001", "29.97" },
+            { "30", "30" },
+            { "48", "48" },
+            { "50", "50" },
+            { "60000/1001", "59.94" },
+            { "60", "60" }
+        };
 
         public static string Codec
         {
@@ -31,6 +49,35 @@ namespace Alexantr.SimpleVideoConverter
             set
             {
                 codec = value;
+
+                bitrateMinValue = 100;
+                bitrateMaxValue = 100000;
+                bitrate = 3000;
+                
+                switch (codec)
+                {
+                    case "h264":
+                        encoder = "libx264";
+                        crfMinValue = 1;
+                        crfMaxValue = 51;
+                        crf = 20;
+                        additionalArguments = "-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p"; // todo: do
+                        break;
+                    case "vp9":
+                        encoder = "libvpx-vp9";
+                        crfMinValue = 1;
+                        crfMaxValue = 63;
+                        crf = 30;
+                        additionalArguments = "";
+                        break;
+                    case "vp8":
+                        encoder = "libvpx";
+                        crfMinValue = 4;
+                        crfMaxValue = 63;
+                        crf = 20;
+                        additionalArguments = "";
+                        break;
+                }
             }
         }
 
@@ -43,10 +90,87 @@ namespace Alexantr.SimpleVideoConverter
         public static Dictionary<string, string> DefaultAudioCodecs
         {
             get { return defaultAudioCodecs; }
+            set { defaultAudioCodecs = value; }
+        }
+
+        public static string Encoder
+        {
+            get { return encoder; }
+        }
+
+        public static bool CRFSupported
+        {
+            get { return crfSupported; }
+        }
+
+        public static bool UseCRF
+        {
+            get { return crfOn; }
+            set { crfOn = value; }
+        }
+
+        public static int CRFMinValue
+        {
+            get { return crfMinValue; }
+        }
+
+        public static int CRFMaxValue
+        {
+            get { return crfMaxValue; }
+        }
+
+        public static int CRF
+        {
+            get { return crf; }
             set
             {
-                defaultAudioCodecs = value;
+                if (value < crfMinValue)
+                    crf = crfMinValue;
+                else if (value > crfMaxValue)
+                    crf = crfMaxValue;
+                else
+                    crf = value;
             }
+        }
+
+        public static int BitrateMinValue
+        {
+            get { return bitrateMinValue; }
+        }
+
+        public static int BitrateMaxValue
+        {
+            get { return bitrateMaxValue; }
+        }
+
+        public static int Bitrate
+        {
+            get { return bitrate; }
+            set
+            {
+                if (value < bitrateMinValue)
+                    bitrate = bitrateMinValue;
+                else if (value > bitrateMaxValue)
+                    bitrate = bitrateMaxValue;
+                else
+                    bitrate = value;
+            }
+        }
+
+        public static string FrameRate
+        {
+            get { return frameRate; }
+            set { frameRate = value; }
+        }
+
+        public static Dictionary<string, string> FrameRateList
+        {
+            get { return frameRateList; }
+        }
+
+        public static string AdditionalArguments
+        {
+            get { return additionalArguments; }
         }
     }
 }
