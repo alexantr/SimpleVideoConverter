@@ -24,6 +24,8 @@ namespace Alexantr.SimpleVideoConverter
 
         private static string additionalArguments;
 
+        private static bool noAudioInFirstPass = true;
+
         private static string frameRate;
         private static Dictionary<string, string> frameRateList = new Dictionary<string, string>
         {
@@ -53,7 +55,13 @@ namespace Alexantr.SimpleVideoConverter
                 bitrateMinValue = 100;
                 bitrateMaxValue = 100000;
                 bitrate = 3000;
-                
+
+                crfSupported = true;
+
+                additionalArguments = "";
+
+                noAudioInFirstPass = true;
+
                 switch (codec)
                 {
                     case "h264":
@@ -63,19 +71,29 @@ namespace Alexantr.SimpleVideoConverter
                         crf = 20;
                         additionalArguments = "-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p"; // todo: do
                         break;
+                    case "h265":
+                        encoder = "libx265";
+                        crfMinValue = 1;
+                        crfMaxValue = 51;
+                        crf = 25;
+                        noAudioInFirstPass = false;
+                        break;
                     case "vp9":
                         encoder = "libvpx-vp9";
                         crfMinValue = 1;
                         crfMaxValue = 63;
                         crf = 30;
-                        additionalArguments = "";
+                        noAudioInFirstPass = false;
                         break;
                     case "vp8":
                         encoder = "libvpx";
-                        crfMinValue = 4;
-                        crfMaxValue = 63;
-                        crf = 20;
-                        additionalArguments = "";
+                        crfSupported = false;
+                        crfOn = false;
+                        break;
+                    default:
+                        encoder = "none";
+                        crfSupported = false;
+                        crfOn = false;
                         break;
                 }
             }
@@ -171,6 +189,11 @@ namespace Alexantr.SimpleVideoConverter
         public static string AdditionalArguments
         {
             get { return additionalArguments; }
+        }
+
+        public static bool NoAudioInFirstPass
+        {
+            get { return noAudioInFirstPass; }
         }
     }
 }
