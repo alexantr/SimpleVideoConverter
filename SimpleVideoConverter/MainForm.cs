@@ -635,9 +635,9 @@ namespace Alexantr.SimpleVideoConverter
             List<string> videoArgs = new List<string>();
             List<string> audioArgs = new List<string>();
 
-            string specialCrfArgs = "";
-            string specialArgsPass1 = "";
-            string specialArgsPass2 = "";
+            List<string> specialCrfArgs = new List<string>();
+            List<string> specialArgsPass1 = new List<string>();
+            List<string> specialArgsPass2 = new List<string>();
 
             // Video args
 
@@ -693,10 +693,10 @@ namespace Alexantr.SimpleVideoConverter
                 int threads = Environment.ProcessorCount;
                 videoArgs.Add($"-threads {threads}");
 
-                specialArgsPass1 = "-cpu-used 4";
-                specialArgsPass2 = "-cpu-used 1";
+                specialArgsPass1.Add("-cpu-used 4");
+                specialArgsPass2.Add("-cpu-used 1");
 
-                specialCrfArgs = "-cpu-used 1";
+                specialCrfArgs.Add("-cpu-used 1");
             }
 
             // https://trac.ffmpeg.org/wiki/Encode/VP8
@@ -790,34 +790,31 @@ namespace Alexantr.SimpleVideoConverter
                 }
             }
 
-            // More args
-
-            List<string> moreArgs = new List<string>();
-
             // Meta
 
-            moreArgs.Add("-map_metadata -1");
+            List<string> metadataArgs = new List<string>();
+
+            metadataArgs.Add("-map_metadata -1");
             if (!string.IsNullOrWhiteSpace(TagsConfig.Title))
-                moreArgs.Add($"-metadata title=\"{TagsConfig.Title.Replace("\"", "\\\"")}\"");
+                metadataArgs.Add($"-metadata title=\"{TagsConfig.Title.Replace("\"", "\\\"")}\"");
             if (!string.IsNullOrWhiteSpace(TagsConfig.Author))
-                moreArgs.Add($"-metadata artist=\"{TagsConfig.Author.Replace("\"", "\\\"")}\"");
+                metadataArgs.Add($"-metadata artist=\"{TagsConfig.Author.Replace("\"", "\\\"")}\"");
             if (!string.IsNullOrWhiteSpace(TagsConfig.Copyright))
-                moreArgs.Add($"-metadata copyright=\"{TagsConfig.Copyright.Replace("\"", "\\\"")}\"");
+                metadataArgs.Add($"-metadata copyright=\"{TagsConfig.Copyright.Replace("\"", "\\\"")}\"");
             if (!string.IsNullOrWhiteSpace(TagsConfig.Comment))
-                moreArgs.Add($"-metadata comment=\"{TagsConfig.Comment.Replace("\"", "\\\"")}\"");
+                metadataArgs.Add($"-metadata comment=\"{TagsConfig.Comment.Replace("\"", "\\\"")}\"");
             if (!string.IsNullOrWhiteSpace(TagsConfig.CreationTime))
-                moreArgs.Add($"-metadata creation_time=\"{TagsConfig.CreationTime.Replace("\"", "\\\"")}\"");
+                metadataArgs.Add($"-metadata creation_time=\"{TagsConfig.CreationTime.Replace("\"", "\\\"")}\"");
             else
-                moreArgs.Add($"-metadata creation_time=\"{DateTime.Now.ToString("o")}\"");
+                metadataArgs.Add($"-metadata creation_time=\"{DateTime.Now.ToString("o")}\"");
 
             // mp4
 
             if (FormatConfig.Format == FormatMP4 && checkBoxWebOptimized.Checked)
-                moreArgs.Add("-movflags +faststart");
-
-            // Force file type
-
-            moreArgs.Add($"-f {FormatConfig.Format}");
+            {
+                specialArgsPass2.Add("-movflags +faststart");
+                specialCrfArgs.Add("-movflags +faststart");
+            }
 
             // Convert
 
@@ -826,18 +823,44 @@ namespace Alexantr.SimpleVideoConverter
             if (twoPass)
             {
                 string passLogFile = GetTempLogFile();
-                string twoPassTpl = "-pass {3} -passlogfile \"{4}\" {0} {1} {2} {4}";
+                string twoPassTpl = "-pass {5} -passlogfile \"{6}\" {0} {1} {2} {3} -f {4}";
                 if (VideoConfig.Encoder == "libx265")
-                    twoPassTpl = "-x265-params pass={3} -passlogfile \"{4}\" {0} {1} {2} {4}";
+                {
+                    twoPassTpl = "-x265-params pass={5} -passlogfile \"{6}\" {0} {1} {2} {3} -f {4}";
+                }
 
                 arguments = new string[2];
-                arguments[0] = string.Format(twoPassTpl, string.Join(" ", videoArgs), (VideoConfig.NoAudioInFirstPass ? "-an" : string.Join(" ", audioArgs)), string.Join(" ", moreArgs), 1, passLogFile, specialArgsPass1);
-                arguments[1] = string.Format(twoPassTpl, string.Join(" ", videoArgs), string.Join(" ", audioArgs), string.Join(" ", moreArgs), 2, passLogFile, specialArgsPass2);
+                arguments[0] = string.Format(
+                    twoPassTpl,
+                    string.Join(" ", videoArgs),
+                    (VideoConfig.NoAudioInFirstPass ? "-an" : string.Join(" ", audioArgs)),
+                    string.Join(" ", specialArgsPass1),
+                    "",
+                    FormatConfig.Format,
+                    1,
+                    passLogFile
+                );
+                arguments[1] = string.Format(
+                    twoPassTpl,
+                    string.Join(" ", videoArgs),
+                    string.Join(" ", audioArgs),
+                    string.Join(" ", specialArgsPass2),
+                    string.Join(" ", metadataArgs),
+                    FormatConfig.Format,
+                    2,
+                    passLogFile
+                );
             }
             else
             {
                 arguments = new string[1];
-                arguments[0] = string.Format("{0} {1} {2} {3}", string.Join(" ", videoArgs), string.Join(" ", audioArgs), string.Join(" ", moreArgs), specialCrfArgs);
+                arguments[0] = string.Format(
+                    "{0} {1} {2} {3}",
+                    string.Join(" ", videoArgs),
+                    string.Join(" ", audioArgs),
+                    string.Join(" ", specialCrfArgs),
+                    FormatConfig.Format
+                );
             }
 
             new ConverterForm(input, output, arguments, inputFile.Duration.TotalSeconds).ShowDialog(this);
