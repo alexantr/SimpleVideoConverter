@@ -29,10 +29,6 @@ namespace Alexantr.SimpleVideoConverter
         {
             InitializeComponent();
 
-            AllowDrop = true;
-            DragEnter += HandleDragEnter;
-            DragDrop += HandleDragDrop;
-
             taskbarManager = TaskbarManager.Instance;
         }
 
@@ -125,6 +121,19 @@ namespace Alexantr.SimpleVideoConverter
             DeleteTempFiles();
         }
 
+        private void MainForm_DragEnter(object sender, DragEventArgs e)
+        {
+            // show copy cursor for files
+            bool dataPresent = e.Data.GetDataPresent(DataFormats.FileDrop);
+            e.Effect = dataPresent ? DragDropEffects.Copy : DragDropEffects.None;
+        }
+
+        private void MainForm_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            SetFile(files[0]);
+        }
+
         #region In, Out, Format, Go
 
         private void buttonBrowseIn_Click(object sender, EventArgs e)
@@ -149,19 +158,6 @@ namespace Alexantr.SimpleVideoConverter
                     SetFile(dialog.FileName);
                 }
             }
-        }
-
-        private void HandleDragEnter(object sender, DragEventArgs e)
-        {
-            // show copy cursor for files
-            bool dataPresent = e.Data.GetDataPresent(DataFormats.FileDrop);
-            e.Effect = dataPresent ? DragDropEffects.Copy : DragDropEffects.None;
-        }
-
-        private void HandleDragDrop(object sender, DragEventArgs e)
-        {
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            SetFile(files[0]);
         }
 
         private void buttonBrowseOut_Click(object sender, EventArgs e)

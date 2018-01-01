@@ -41,8 +41,8 @@ namespace Alexantr.SimpleVideoConverter
         private static string colorFilter;
 
         private static string[] sizeList = new string[] {
-            "1920x1080", "1280x720", "1024x576", "854x480",
-            "720x576", "640x480", "512x384", "320x240"
+            "1920x1080 (16:9)", "1280x720 (16:9)", "1024x576 (16:9)", "854x480 (16:9)",
+            "720x576 (5:4)", "640x480 (4:3)", "512x384 (4:3)", "320x240 (4:3)"
         };
 
         private static Dictionary<string, string> resizeMethodList = new Dictionary<string, string>
@@ -266,7 +266,7 @@ namespace Alexantr.SimpleVideoConverter
         /// <returns></returns>
         public static bool ParseSelectedSize(string input)
         {
-            Match match = new Regex("^([0-9]+)x([0-9]+)$", RegexOptions.IgnoreCase | RegexOptions.Singleline).Match(input);
+            Match match = new Regex("^([0-9]+)x([0-9]+)", RegexOptions.IgnoreCase | RegexOptions.Singleline).Match(input);
             if (match.Success)
             {
                 try
