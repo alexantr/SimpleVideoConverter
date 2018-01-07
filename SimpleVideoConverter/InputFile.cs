@@ -8,9 +8,9 @@ namespace Alexantr.SimpleVideoConverter
 {
     public class InputFile
     {
-        public List<VideoStream> VideoStreams = new List<VideoStream>();
+        public List<VideoStream> VideoStreams { get; private set; }
 
-        public List<AudioStream> AudioStreams = new List<AudioStream>();
+        public List<AudioStream> AudioStreams { get; private set; }
 
         public string FullPath { get; private set; }
 
@@ -97,6 +97,9 @@ namespace Alexantr.SimpleVideoConverter
                         throw new InvalidDataException("Не удалось определить формат видео."); // Can't determine video format
                     }
 
+                    VideoStreams = new List<VideoStream>();
+                    AudioStreams = new List<AudioStream>();
+
                     XPathNodeIterator streams = doc.CreateNavigator().Select("//ffprobe/streams/stream");
                     foreach (XPathNavigator stream in streams)
                     {
@@ -139,12 +142,25 @@ namespace Alexantr.SimpleVideoConverter
                             if (frameRate == "90000/1")
                                 continue;
 
+                            // original width and height
+                            int.TryParse(stream.GetAttribute("width", ""), out int width);
+                            int.TryParse(stream.GetAttribute("height", ""), out int height);
+
+                            // wrong size
+                            if (width == 0 || height == 0)
+                                continue;
+
                             VideoStream videoStream = new VideoStream
                             {
                                 Index = streamIndex,
                                 CodecName = stream.GetAttribute("codec_name", ""),
-                                CodecLongName = stream.GetAttribute("codec_long_name", "")
+                                CodecLongName = stream.GetAttribute("codec_long_name", ""),
+                                OriginalSize = new PictureSize(),
+                                PictureSize = new PictureSize(),
                             };
+
+                            videoStream.OriginalSize.Width = width;
+                            videoStream.OriginalSize.Height = height;
 
                             // frame rate
                             string avgFrameRate = stream.GetAttribute("avg_frame_rate", "");
@@ -162,13 +178,6 @@ namespace Alexantr.SimpleVideoConverter
                             if (string.IsNullOrWhiteSpace(fieldOrder))
                                 fieldOrder = "progressive";
                             videoStream.FieldOrder = fieldOrder;
-
-                            // original width and height
-                            int.TryParse(stream.GetAttribute("width", ""), out int width);
-                            int.TryParse(stream.GetAttribute("height", ""), out int height);
-                            videoStream.OriginalSize.Width = width;
-                            videoStream.OriginalSize.Height = height;
-                            videoStream.UsingDAR = false;
 
                             // picture width and height
                             string[] sarParts = stream.GetAttribute("sample_aspect_ratio", "").Split(':');

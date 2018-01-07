@@ -21,8 +21,6 @@ namespace Alexantr.SimpleVideoConverter
         private bool processEnded;
         private bool processPanic;
 
-        private Dictionary<string, Image> images;
-
         private double totalTime, currentTime, stepTime;
 
         private Crop crop;
@@ -47,8 +45,6 @@ namespace Alexantr.SimpleVideoConverter
                 Width = stream.OriginalSize.Width,
                 Height = stream.OriginalSize.Height
             };
-
-            images = new Dictionary<string, Image>();
 
             taskbarManager = TaskbarManager.Instance;
         }
@@ -182,19 +178,13 @@ namespace Alexantr.SimpleVideoConverter
             string currTime = GetCorrectedTime();
             labelTime.Text = currTime;
 
-            if (images.ContainsKey(currTime))
-            {
-                DrawImageWithRects(images[currTime]);
-                CheckButtons();
-                return;
-            }
-
             buttonRew.Enabled = false;
             buttonFF.Enabled = false;
             numericCropBottom.Enabled = false;
             numericCropLeft.Enabled = false;
             numericCropRight.Enabled = false;
             numericCropTop.Enabled = false;
+            buttonReset.Enabled = false;
 
             labelLoading.Visible = true;
 
@@ -270,6 +260,7 @@ namespace Alexantr.SimpleVideoConverter
             numericCropLeft.Enabled = true;
             numericCropRight.Enabled = true;
             numericCropTop.Enabled = true;
+            buttonReset.Enabled = true;
         }
 
         private void Exited(object sender, EventArgs eventArgs)
@@ -305,10 +296,6 @@ namespace Alexantr.SimpleVideoConverter
                 {
                     Image img = Helper.ImageFromFile(tempFile);
                     DrawImageWithRects(img);
-
-                    string dur = new TimeSpan((long)currentTime * 10000L).ToString("hh\\:mm\\:ss\\.fff");
-                    if (!images.ContainsKey(dur))
-                        images.Add(dur, img);
 
                     CheckButtons();
 

@@ -9,14 +9,6 @@ namespace Alexantr.SimpleVideoConverter
 {
     public partial class MainForm : Form
     {
-        // http://dev.beandog.org/x264_preset_reference.html
-        // http://www.videorip.info/x264/71-nekotorye-sovety-nastrojki-kodeka-x264-ot-polzovatelej
-        // https://forum.videohelp.com/threads/369463-x264-Tweaking-testing-and-comparing-settings
-        private const string FormatMP4 = "mp4";
-
-        // https://www.webmproject.org/docs/container/
-        private const string FormatWebM = "webm";
-
         private InputFile inputFile;
 
         private string fileInfo;
@@ -24,6 +16,8 @@ namespace Alexantr.SimpleVideoConverter
         private string formTitle;
 
         private TaskbarManager taskbarManager;
+
+        private bool doNotCheckKeepARAgain;
 
         public MainForm()
         {
@@ -43,58 +37,41 @@ namespace Alexantr.SimpleVideoConverter
 
             checkBoxKeepOutPath.Checked = Properties.Settings.Default.RememberOutPath;
 
-            checkBoxWebOptimized.Checked = true;
-
-            // init crop size
-            labelCropSize.Text = "";
-
             // Format
-            string savedFormat = Properties.Settings.Default.OutFormat;
-            FillFormat(savedFormat);
+            FillFormat(Properties.Settings.Default.OutFormat);
 
-            // Set selected format
-            FormatConfig.Format = ((ComboBoxItem)comboBoxFileType.SelectedItem).Value;
+            // Web optimized - only for mp4
+            checkBoxWebOptimized.Checked = true;
+            checkBoxWebOptimized.Visible = FormatConfig.CanWebOptimized;
 
-            // special for mp4
-            if (FormatConfig.Format == FormatMP4)
-            {
-                checkBoxWebOptimized.Visible = true;
-                checkBoxWebOptimized.Checked = true;
-            }
-            else
-            {
-                checkBoxWebOptimized.Visible = false;
-            }
+            // Init once on form load
+            
+            ManageCheckPanel(checkBoxResizePicture, panelResolution);
 
-            // Encode mode
-            radioButtonCRF.Checked = true;
-            radioButtonBitrate.Checked = false;
+            UpdateCropSizeInfo();
 
-            CheckVideoModeRadioButtons();
+            numericUpDownWidth.Maximum = PictureConfig.MaxWidth;
+            numericUpDownWidth.Value = PictureConfig.MinWidth;
+            numericUpDownWidth.Minimum = PictureConfig.MinWidth;
+            numericUpDownWidth.Increment = 2;
 
-            FillVideoCodec();
+            numericUpDownHeight.Maximum = PictureConfig.MaxHeight;
+            numericUpDownHeight.Value = PictureConfig.MinHeight;
+            numericUpDownHeight.Minimum = PictureConfig.MinHeight;
+            numericUpDownHeight.Increment = 2;
 
-            FillFrameRate();
+            checkBoxKeepAspectRatio.Checked = true; // height input will be disabled
 
-            // Bitrate
-            //numericUpDownBitrate.Maximum = MaxBitrate;
-            //numericUpDownBitrate.Value = DefaultBitrate;
-            //numericUpDownBitrate.Minimum = MinBitrate;
-            //numericUpDownBitrate.Increment = 10;
-
-            FillAudioCodec();
-            FillAudioBitrate();
-            FillAudioSampleRate();
-            FillAudioChannels();
-
-            FillPictureSize();
-            FillResizeMethod();
             FillInterpolation();
 
             FillFieldOrder();
-            comboBoxFieldOrder.Enabled = checkBoxDeinterlace.Checked;
+            ManageCheckPanel(checkBoxDeinterlace, panelDeinterlace);
 
             FillColorFilter();
+
+            FillFrameRate();
+
+            FillAudioChannels();
 
             CalcFileSize(); // just hide labels
 
@@ -108,7 +85,7 @@ namespace Alexantr.SimpleVideoConverter
             string[] commandLineArgs = Environment.GetCommandLineArgs();
             if (commandLineArgs.Length > 1)
             {
-                SetFile(commandLineArgs[1]);
+                SetInputFile(commandLineArgs[1]);
             }
         }
 
@@ -131,7 +108,7 @@ namespace Alexantr.SimpleVideoConverter
         private void MainForm_DragDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            SetFile(files[0]);
+            SetInputFile(files[0]);
         }
 
         #region In, Out, Format, Go
@@ -140,9 +117,10 @@ namespace Alexantr.SimpleVideoConverter
         {
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
-                if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.InPath) && Directory.Exists(Properties.Settings.Default.InPath))
+                string inPath = Properties.Settings.Default.InPath;
+                if (!string.IsNullOrWhiteSpace(inPath) && Directory.Exists(inPath))
                 {
-                    dialog.InitialDirectory = Properties.Settings.Default.InPath;
+                    dialog.InitialDirectory = inPath;
                 }
                 else
                 {
@@ -155,7 +133,7 @@ namespace Alexantr.SimpleVideoConverter
 
                 if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.FileName))
                 {
-                    SetFile(dialog.FileName);
+                    SetInputFile(dialog.FileName);
                 }
             }
         }
@@ -192,7 +170,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void buttonShowInfo_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(this, fileInfo, "Информация о файле", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(fileInfo, "Информация о файле", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void buttonOpenInputFile_Click(object sender, EventArgs e)
@@ -211,19 +189,20 @@ namespace Alexantr.SimpleVideoConverter
         {
             FormatConfig.Format = ((ComboBoxItem)comboBoxFileType.SelectedItem).Value;
             Properties.Settings.Default.OutFormat = FormatConfig.Format;
+
             ChangeOutExtension();
 
-            checkBoxWebOptimized.Visible = (FormatConfig.Format == FormatMP4);
+            checkBoxWebOptimized.Visible = FormatConfig.CanWebOptimized;
 
             FillVideoCodec();
-            FillCRFAndBitrate();
+            FillVideoCRFAndBitrate();
 
             FillAudioCodec();
             FillAudioBitrate();
             FillAudioSampleRate();
 
-            checkBoxConvertAudio.Checked = false;
             CheckAudioMustConvert();
+            UpdateAudioBitrateByChannels();
         }
 
         private void buttonGo_Click(object sender, EventArgs e)
@@ -248,50 +227,14 @@ namespace Alexantr.SimpleVideoConverter
         public void UpdateCrop(Crop newCrop)
         {
             PictureConfig.Crop = newCrop;
-            UpdateCroppedPictureSizeInfo();
+            UpdateCropSizeInfo();
+            UpdateAspectRatio();
             SetOutputInfo();
         }
 
         private void buttonCrop_Click(object sender, EventArgs e)
         {
             new CropForm(inputFile, PictureConfig.Crop).ShowDialog(this);
-        }
-
-        private void comboBoxPictureSize_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ParseSelectedPictureSize();
-            UpdateCroppedPictureSizeInfo();
-            SetOutputInfo();
-        }
-
-        private void comboBoxPictureSize_TextUpdate(object sender, EventArgs e)
-        {
-            ParseSelectedPictureSize();
-            UpdateCroppedPictureSizeInfo();
-            SetOutputInfo();
-        }
-
-        private void comboBoxPictureSize_Leave(object sender, EventArgs e)
-        {
-            // correct custom resolution
-            if (comboBoxPictureSize.SelectedIndex == -1 && PictureConfig.SelectedSize != null)
-            {
-                string input = comboBoxPictureSize.Text;
-                string chkPictureSize = PictureConfig.SelectedSize.ToString();
-                if (!input.Equals(chkPictureSize, StringComparison.OrdinalIgnoreCase))
-                {
-                    comboBoxPictureSize.Text = chkPictureSize;
-                }
-                pictureBoxSizeError.Image = null;
-            }
-        }
-
-        private void comboBoxResizeMethod_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            PictureConfig.ResizeMethod = ((ComboBoxItem)comboBoxResizeMethod.SelectedItem).Value;
-
-            UpdateCroppedPictureSizeInfo();
-            SetOutputInfo();
         }
 
         private void comboBoxInterpolation_SelectedIndexChanged(object sender, EventArgs e)
@@ -301,13 +244,17 @@ namespace Alexantr.SimpleVideoConverter
 
         private void checkBoxDeinterlace_CheckedChanged(object sender, EventArgs e)
         {
-            PictureConfig.Deinterlace = comboBoxFieldOrder.Enabled = checkBoxDeinterlace.Checked;
+            ManageCheckPanel(checkBoxDeinterlace, panelDeinterlace);
+
+            PictureConfig.Deinterlace = checkBoxDeinterlace.Checked;
+
             SetOutputInfo();
         }
 
         private void comboBoxFieldOrder_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PictureConfig.ResizeMethod = ((ComboBoxItem)comboBoxFieldOrder.SelectedItem).Value;
+            PictureConfig.FieldOrder = ((ComboBoxItem)comboBoxFieldOrder.SelectedItem).Value;
+
             SetOutputInfo();
         }
 
@@ -341,7 +288,7 @@ namespace Alexantr.SimpleVideoConverter
                 }
             }
 
-            FillCRFAndBitrate();
+            FillVideoCRFAndBitrate();
         }
 
         private void radioButtonCRF_CheckedChanged(object sender, EventArgs e)
@@ -388,6 +335,7 @@ namespace Alexantr.SimpleVideoConverter
         private void comboBoxAudioStreams_SelectedIndexChanged(object sender, EventArgs e)
         {
             CheckAudioMustConvert();
+            UpdateAudioBitrateByChannels();
             CalcFileSize();
             SetOutputInfo();
         }
@@ -424,7 +372,6 @@ namespace Alexantr.SimpleVideoConverter
             AudioConfig.SampleRate = ((ComboBoxIntItem)comboBoxAudioSampleRate.SelectedItem).Value;
 
             FillAudioBitrate();
-
             SetOutputInfo();
         }
 
@@ -432,6 +379,7 @@ namespace Alexantr.SimpleVideoConverter
         {
             AudioConfig.Channels = ((ComboBoxIntItem)comboBoxAudioChannels.SelectedItem).Value;
 
+            UpdateAudioBitrateByChannels();
             SetOutputInfo();
         }
 
@@ -468,7 +416,7 @@ namespace Alexantr.SimpleVideoConverter
         
         #region Functions
 
-        private void SetFile(string path)
+        private void SetInputFile(string path)
         {
             try
             {
@@ -480,8 +428,6 @@ namespace Alexantr.SimpleVideoConverter
             {
                 inputFile = null;
 
-                PictureConfig.Reset();
-
                 textBoxIn.Text = "Файл не выбран";
                 textBoxOut.Text = "";
 
@@ -489,14 +435,13 @@ namespace Alexantr.SimpleVideoConverter
                 buttonShowInfo.Enabled = false;
                 buttonOpenInputFile.Enabled = false;
 
-                labelCropSize.Text = "";
-
-                CalcFileSize();
-
                 ToggleTabs();
 
+                // reset
+                PictureConfig.Reset();
+                UpdateCropSizeInfo();
+                CalcFileSize();
                 SetOutputInfo();
-
                 ClearTags();
 
                 Text = formTitle;
@@ -522,9 +467,16 @@ namespace Alexantr.SimpleVideoConverter
             PictureConfig.InputOriginalSize = vStream.OriginalSize;
             PictureConfig.InputDisplaySize = vStream.PictureSize;
 
+            numericUpDownHeight.Value = PictureConfig.CropSize.Height;
+            numericUpDownWidth.Value = PictureConfig.CropSize.Width; // triggered UpdateHeight() if keeping ar
+
+            // set original aspect ratio
+            FillComboBoxAspectRatio(true);
+
             // if need deinterlace
             PictureConfig.Deinterlace = checkBoxDeinterlace.Checked = vStream.FieldOrder != "progressive";
             comboBoxFieldOrder.SelectedIndex = 0; // TODO: get from Picture
+            ManageCheckPanel(checkBoxDeinterlace, panelDeinterlace);
 
             comboBoxFrameRate.SelectedIndex = 0;
 
@@ -540,7 +492,7 @@ namespace Alexantr.SimpleVideoConverter
             buttonShowInfo.Enabled = true;
             buttonOpenInputFile.Enabled = true;
 
-            UpdateCroppedPictureSizeInfo();
+            UpdateCropSizeInfo();
             SetOutputInfo();
 
             SetTagsFromInputFile();
@@ -735,10 +687,10 @@ namespace Alexantr.SimpleVideoConverter
 
             // add borders
             // https://ffmpeg.org/ffmpeg-filters.html#toc-pad-1
-            if (PictureConfig.Padding.X > 0 || PictureConfig.Padding.Y > 0)
+            /*if (PictureConfig.Padding.X > 0 || PictureConfig.Padding.Y > 0)
             {
                 filters.Add($"pad={PictureConfig.SelectedSize.Width}:{PictureConfig.SelectedSize.Height}:{PictureConfig.Padding.X}:{PictureConfig.Padding.Y}");
-            }
+            }*/
 
             // force sar 1:1
             filters.Add($"setsar=1:1");
@@ -806,7 +758,7 @@ namespace Alexantr.SimpleVideoConverter
 
             // mp4
 
-            if (FormatConfig.Format == FormatMP4 && checkBoxWebOptimized.Checked)
+            if (FormatConfig.CanWebOptimized && checkBoxWebOptimized.Checked)
             {
                 specialArgsPass2.Add("-movflags +faststart");
                 specialCrfArgs.Add("-movflags +faststart");
@@ -851,7 +803,7 @@ namespace Alexantr.SimpleVideoConverter
             {
                 arguments = new string[1];
                 arguments[0] = string.Format(
-                    "{0} {1} {2} {3}",
+                    "{0} {1} {2} -f {3}",
                     string.Join(" ", videoArgs),
                     string.Join(" ", audioArgs),
                     string.Join(" ", specialCrfArgs),
@@ -863,5 +815,138 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         #endregion
+
+        private void numericUpDownWidth_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateHeigth();
+
+            if (inputFile == null)
+                return;
+
+            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+            SetOutputInfo();
+        }
+
+        private void numericUpDownWidth_Leave(object sender, EventArgs e)
+        {
+            if ((int)numericUpDownWidth.Value % 2 == 1)
+                numericUpDownWidth.Value = Math.Max(PictureConfig.MinWidth, (int)numericUpDownWidth.Value - 1);
+
+            UpdateHeigth();
+
+            if (inputFile == null)
+                return;
+
+            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+            SetOutputInfo();
+        }
+
+        private void numericUpDownHeight_ValueChanged(object sender, EventArgs e)
+        {
+            if (inputFile == null)
+                return;
+
+            if (numericUpDownHeight.Enabled)
+            {
+                PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+                PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+                SetOutputInfo();
+            }
+        }
+
+        private void numericUpDownHeight_Leave(object sender, EventArgs e)
+        {
+            if ((int)numericUpDownHeight.Value % 2 == 1)
+                numericUpDownHeight.Value = Math.Max(PictureConfig.MinHeight, (int)numericUpDownHeight.Value - 1);
+
+            if (inputFile == null)
+                return;
+
+            if (numericUpDownHeight.Enabled)
+            {
+                PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+                PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+                SetOutputInfo();
+            }
+        }
+
+        private void checkBoxKeepAspectRatio_CheckedChanged(object sender, EventArgs e)
+        {
+            doNotCheckKeepARAgain = !checkBoxKeepAspectRatio.Checked;
+            comboBoxAspectRatio.Enabled = checkBoxKeepAspectRatio.Checked;
+            numericUpDownHeight.Enabled = !checkBoxKeepAspectRatio.Checked;
+
+            UpdateHeigth();
+
+            if (inputFile == null)
+                return;
+
+            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+            SetOutputInfo();
+        }
+
+        private void comboBoxAspectRatio_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateHeigth();
+
+            if (inputFile == null)
+                return;
+
+            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+            SetOutputInfo();
+        }
+
+        private void comboBoxAspectRatio_TextUpdate(object sender, EventArgs e)
+        {
+            UpdateHeigth();
+
+            if (inputFile == null)
+                return;
+
+            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+            SetOutputInfo();
+        }
+
+        private void checkBoxResizePicture_CheckedChanged(object sender, EventArgs e)
+        {
+            ManageCheckPanel(checkBoxResizePicture, panelResolution);
+
+            UpdateHeigth();
+
+            if (inputFile == null)
+                return;
+
+            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+            SetOutputInfo();
+        }
+
+        private void buttonPreset1080p_Click(object sender, EventArgs e)
+        {
+            ResizeFromPreset(1920, 1080);
+        }
+
+        private void buttonPreset720p_Click(object sender, EventArgs e)
+        {
+            ResizeFromPreset(1280, 720);
+        }
+
+        private void buttonPresetOriginal_Click(object sender, EventArgs e)
+        {
+            ResizeFromPreset(PictureConfig.CropSize.Width, 0);
+        }
     }
 }

@@ -101,5 +101,10 @@ namespace Alexantr.SimpleVideoConverter
         {
             get { return formatList; }
         }
+
+        public static bool CanWebOptimized
+        {
+            get { return format == "mp4"; }
+        }
     }
 }

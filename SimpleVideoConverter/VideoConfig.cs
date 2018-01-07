@@ -56,8 +56,6 @@ namespace Alexantr.SimpleVideoConverter
                 bitrateMaxValue = 100000;
                 bitrate = 3000;
 
-                crfSupported = true;
-
                 additionalArguments = "";
 
                 noAudioInFirstPass = true;
@@ -111,15 +109,9 @@ namespace Alexantr.SimpleVideoConverter
             set { defaultAudioCodecs = value; }
         }
 
-        public static string Encoder
-        {
-            get { return encoder; }
-        }
+        public static string Encoder => encoder;
 
-        public static bool CRFSupported
-        {
-            get { return crfSupported; }
-        }
+        public static bool CRFSupported => crfSupported;
 
         public static bool UseCRF
         {
@@ -127,15 +119,9 @@ namespace Alexantr.SimpleVideoConverter
             set { crfOn = value; }
         }
 
-        public static int CRFMinValue
-        {
-            get { return crfMinValue; }
-        }
+        public static int CRFMinValue => crfMinValue;
 
-        public static int CRFMaxValue
-        {
-            get { return crfMaxValue; }
-        }
+        public static int CRFMaxValue => crfMaxValue;
 
         public static int CRF
         {
@@ -151,15 +137,9 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
-        public static int BitrateMinValue
-        {
-            get { return bitrateMinValue; }
-        }
+        public static int BitrateMinValue => bitrateMinValue;
 
-        public static int BitrateMaxValue
-        {
-            get { return bitrateMaxValue; }
-        }
+        public static int BitrateMaxValue => bitrateMaxValue;
 
         public static int Bitrate
         {
@@ -181,19 +161,10 @@ namespace Alexantr.SimpleVideoConverter
             set { frameRate = value; }
         }
 
-        public static Dictionary<string, string> FrameRateList
-        {
-            get { return frameRateList; }
-        }
+        public static Dictionary<string, string> FrameRateList => frameRateList;
 
-        public static string AdditionalArguments
-        {
-            get { return additionalArguments; }
-        }
+        public static string AdditionalArguments => additionalArguments;
 
-        public static bool NoAudioInFirstPass
-        {
-            get { return noAudioInFirstPass; }
-        }
+        public static bool NoAudioInFirstPass => noAudioInFirstPass;
     }
 }

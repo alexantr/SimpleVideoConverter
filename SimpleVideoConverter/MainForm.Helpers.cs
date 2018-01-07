@@ -4,12 +4,21 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Alexantr.SimpleVideoConverter
 {
     public partial class MainForm
     {
+        // http://dev.beandog.org/x264_preset_reference.html
+        // http://www.videorip.info/x264/71-nekotorye-sovety-nastrojki-kodeka-x264-ot-polzovatelej
+        // https://forum.videohelp.com/threads/369463-x264-Tweaking-testing-and-comparing-settings
+        private const string FormatMP4 = "mp4";
+
+        // https://www.webmproject.org/docs/container/
+        private const string FormatWebM = "webm";
+
         private char[] invalidChars = Path.GetInvalidPathChars();
 
         private List<string> tempFilesList = new List<string>();
@@ -132,7 +141,7 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxVideoCodec.SelectedIndex = selectedIndex;
         }
 
-        private void FillCRFAndBitrate()
+        private void FillVideoCRFAndBitrate()
         {
             if (VideoConfig.CRFSupported)
             {
@@ -162,6 +171,15 @@ namespace Alexantr.SimpleVideoConverter
             numericUpDownBitrate.Minimum = VideoConfig.BitrateMinValue;
             numericUpDownBitrate.Maximum = VideoConfig.BitrateMaxValue;
             numericUpDownBitrate.Value = VideoConfig.Bitrate;
+
+            // check if nothing checked
+            if (!radioButtonCRF.Checked && !radioButtonBitrate.Checked)
+            {
+                if (radioButtonCRF.Enabled)
+                    radioButtonCRF.Checked = true;
+                else
+                    radioButtonBitrate.Checked = true;
+            }
 
             CheckVideoModeRadioButtons();
         }
@@ -300,11 +318,12 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxAudioStreams.SelectedIndex = 1; // first stream
 
             CheckAudioMustConvert();
+            UpdateAudioBitrateByChannels();
         }
 
         private void CheckAudioMustConvert()
         {
-            if (comboBoxAudioStreams.SelectedIndex < 1)
+            if (inputFile == null || comboBoxAudioStreams.SelectedIndex < 1)
             {
                 checkBoxConvertAudio.Checked = false;
                 checkBoxConvertAudio.Enabled = false;
@@ -343,60 +362,158 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
+        private void UpdateAudioBitrateByChannels()
+        {
+            if (inputFile == null || comboBoxAudioStreams.SelectedIndex < 1)
+                return;
+
+            int streamIndex = ((ComboBoxIntItem)comboBoxAudioStreams.SelectedItem).Value;
+
+            foreach (AudioStream aStream in inputFile.AudioStreams)
+            {
+                if (aStream.Index == streamIndex)
+                {
+                    int selectedIndex = -1, index = 0;
+
+                    int defaultBitrate = aStream.Channels > 2 && AudioConfig.Channels == 0 ? AudioConfig.DefaultBitrateForMultiChannels : AudioConfig.DefaultBitrate;
+                    foreach (ComboBoxIntItem item in comboBoxAudioBitrate.Items)
+                    {
+                        if (defaultBitrate == item.Value)
+                            selectedIndex = index;
+                        index++;
+                    }
+
+                    if (selectedIndex >= 0)
+                        comboBoxAudioBitrate.SelectedIndex = selectedIndex;
+                }
+            }
+        }
+
         #endregion
 
         #region Picture
 
-        private void ParseSelectedPictureSize()
+        private void UpdateHeigth(bool forceUpdateHeight = false, int maxHeight = 0)
         {
-            if (inputFile == null || comboBoxPictureSize.SelectedIndex == 0)
-            {
-                PictureConfig.SelectedSize = null;
-                pictureBoxSizeError.Image = null;
+            pictureBoxRatioError.BackgroundImage = null;
+            if (!checkBoxKeepAspectRatio.Checked && !forceUpdateHeight)
                 return;
+            if (maxHeight == 0 || maxHeight > PictureConfig.MaxHeight)
+                maxHeight = PictureConfig.MaxHeight;
+            int width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            double aspectRatio = GetParsedAspectRatio();
+            if (aspectRatio > 0.0)
+            {
+                int newHeight = (int)Math.Round(width / aspectRatio, 0);
+                if (newHeight % 2 == 1)
+                    newHeight -= 1;
+                bool overHeight = false;
+                if (newHeight < PictureConfig.MinHeight)
+                {
+                    newHeight = PictureConfig.MinHeight;
+                    overHeight = true;
+                }
+                else if (newHeight > maxHeight)
+                {
+                    newHeight = maxHeight;
+                    overHeight = true;
+                }
+                numericUpDownHeight.Value = newHeight;
+                if (overHeight)
+                {
+                    int newWidth = (int)Math.Round(newHeight * aspectRatio, 0);
+                    if (newWidth % 2 == 1)
+                        newWidth -= 1;
+                    if (newWidth > PictureConfig.MaxWidth)
+                        newWidth = PictureConfig.MaxWidth;
+                    else if (newWidth < PictureConfig.MinWidth)
+                        newWidth = PictureConfig.MinWidth;
+                    numericUpDownWidth.Value = newWidth;
+                }
             }
-
-            string input = comboBoxPictureSize.SelectedIndex > 0 ? ((ComboBoxItem)comboBoxPictureSize.SelectedItem).Value : comboBoxPictureSize.Text;
-            if (!PictureConfig.ParseSelectedSize(input))
-                pictureBoxSizeError.Image = Properties.Resources.critical;
-            else
-                pictureBoxSizeError.Image = null;
+            else if (checkBoxResizePicture.Checked)
+            {
+                pictureBoxRatioError.BackgroundImage = Properties.Resources.critical;
+            }
         }
 
-        private void UpdateCroppedPictureSizeInfo()
+        private double GetParsedAspectRatio()
+        {
+            string input = comboBoxAspectRatio.SelectedIndex < 0 ? comboBoxAspectRatio.Text : ((ComboBoxItem)comboBoxAspectRatio.SelectedItem).Value;
+            Match match = new Regex("^([0-9]+(?:\\.[0-9]+)?)(?::([0-9]+(?:\\.[0-9]+)?))?$", RegexOptions.Singleline).Match(input);
+            double ar = 0.0;
+            if (match.Success)
+            {
+                try
+                {
+                    double arX = Convert.ToDouble(match.Groups[1].Value);
+                    double arY = 0.0;
+                    if (!string.IsNullOrWhiteSpace(match.Groups[2].Value))
+                        arY = Convert.ToDouble(match.Groups[2].Value);
+                    if (arY == 0.0)
+                        arY = 1.0;
+                    double arNew = 0.0;
+                    if (arY > 0.0)
+                        arNew = arX / arY;
+                    ar = arNew;
+                }
+                catch { }
+            }
+            return ar;
+        }
+
+        private void UpdateAspectRatio()
         {
             if (inputFile == null)
                 return;
+            if (!checkBoxResizePicture.Checked)
+            {
+                numericUpDownWidth.Value = PictureConfig.CropSize.Width;
+                numericUpDownHeight.Value = PictureConfig.CropSize.Height;
+            }
+            FillComboBoxAspectRatio();
+        }
+
+        private void ResizeFromPreset(int w, int h)
+        {
+            numericUpDownWidth.Value = w;
+            UpdateHeigth(true, h);
+        }
+
+        private void UpdateCropSizeInfo()
+        {
+            if (inputFile == null)
+            {
+                labelCropSize.Text = "";
+                return;
+            }
             if (PictureConfig.IsCropped())
                 labelCropSize.Text = $"{PictureConfig.InputDisplaySize.ToString()} → {PictureConfig.CropSize.ToString()}";
             else
                 labelCropSize.Text = "";
         }
 
-        private void FillPictureSize()
+        private void FillComboBoxAspectRatio(bool resetIndex = false)
         {
-            comboBoxPictureSize.Text = string.Empty;
-            comboBoxPictureSize.Items.Clear();
-            comboBoxPictureSize.Items.Add(new ComboBoxItem(string.Empty, "Не изменять"));
-            foreach (string ps in PictureConfig.SizeList)
-            {
-                comboBoxPictureSize.Items.Add(new ComboBoxItem(ps, ps));
-            }
-            comboBoxPictureSize.SelectedIndex = 0;
-        }
+            int prevIndex = comboBoxAspectRatio.SelectedIndex;
+            string prevText = comboBoxAspectRatio.Text;
 
-        private void FillResizeMethod()
-        {
-            int selectedIndex = 0, index = 0;
-            comboBoxResizeMethod.Items.Clear();
-            foreach (KeyValuePair<string, string> rm in PictureConfig.ResizeMethodList)
+            string sourceAR = $"{PictureConfig.CropSize.Width}:{PictureConfig.CropSize.Height}";
+
+            comboBoxAspectRatio.Text = string.Empty;
+            comboBoxAspectRatio.Items.Clear();
+            comboBoxAspectRatio.Items.Add(new ComboBoxItem(sourceAR, "Исходные"));
+            foreach (string aspectRatio in PictureConfig.AspectRatioList)
             {
-                comboBoxResizeMethod.Items.Add(new ComboBoxItem(rm.Key, rm.Value));
-                if (rm.Key == PictureConfig.DefaultResizeMethod)
-                    selectedIndex = index;
-                index++;
+                comboBoxAspectRatio.Items.Add(new ComboBoxItem(aspectRatio, aspectRatio));
             }
-            comboBoxResizeMethod.SelectedIndex = selectedIndex;
+
+            if (resetIndex)
+                comboBoxAspectRatio.SelectedIndex = 0;
+            else if (prevIndex < 0 && !string.IsNullOrWhiteSpace(prevText))
+                comboBoxAspectRatio.Text = prevText;
+            else
+                comboBoxAspectRatio.SelectedIndex = prevIndex > 0 ? prevIndex : 0;
         }
 
         private void FillInterpolation()
@@ -518,7 +635,7 @@ namespace Alexantr.SimpleVideoConverter
             else
                 info.Append($"{VideoConfig.Codec}");
 
-            if (PictureConfig.Padding.X > 0 || PictureConfig.Padding.Y > 0)
+            /*if (PictureConfig.Padding.X > 0 || PictureConfig.Padding.Y > 0)
             {
                 PictureSize fullSize = new PictureSize();
                 fullSize.Width = PictureConfig.OutputSize.Width + PictureConfig.Padding.X + PictureConfig.Padding.X;
@@ -526,17 +643,17 @@ namespace Alexantr.SimpleVideoConverter
                 info.Append($", {fullSize.ToString()} ({PictureConfig.OutputSize.ToString()})");
             }
             else
-            {
-                info.Append($", {PictureConfig.OutputSize.ToString()}");
-            }
+            {*/
+            info.Append($", {PictureConfig.OutputSize.ToString()}");
+            //}
 
-            if (PictureConfig.IsResized())
+            /*if (PictureConfig.IsResized())
             {
                 if (PictureConfig.ResizeMethodList.ContainsKey(PictureConfig.ResizeMethod))
                     info.Append($", {PictureConfig.ResizeMethodList[PictureConfig.ResizeMethod].ToLower()}");
                 else
                     info.Append($", {PictureConfig.ResizeMethod}");
-            }
+            }*/
 
             if (PictureConfig.Deinterlace)
                 info.Append(", деинт.");

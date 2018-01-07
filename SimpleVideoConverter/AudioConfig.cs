@@ -4,6 +4,9 @@ namespace Alexantr.SimpleVideoConverter
 {
     public static class AudioConfig
     {
+        public const int DefaultBitrate = 128;
+        public const int DefaultBitrateForMultiChannels = 384;
+
         //public static int StreamIndex = -1;
         //public static bool MustEncode = false;
 
@@ -51,47 +54,33 @@ namespace Alexantr.SimpleVideoConverter
                 vbrOn = false;
                 additionalArguments = "";
 
+                bitrate = DefaultBitrate;
+                sampleRate = 0;
+                sampleRateList = new int[] { 8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000 };
+
                 switch (codec)
                 {
                     case "aac":
-                        bitrate = 128;
-                        sampleRate = 0;
-                        sampleRateList = new int[] {
-                            8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
-                        };
                         encoder = "aac";
-                        vbrSupported = false;
-                        vbrOn = false;
                         additionalArguments = "-strict -2";
                         break;
                     case "mp3":
-                        bitrate = 128;
-                        sampleRate = 0;
-                        sampleRateList = new int[] {
-                            8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000
-                        };
+                        sampleRateList = new int[] { 8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000 };
                         encoder = "libmp3lame";
                         break;
                     case "opus":
-                        bitrate = 128;
-                        sampleRate = 0;
-                        sampleRateList = new int[] {
-                            8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
-                        };
                         encoder = "libopus";
                         break;
                     case "vorbis":
-                        bitrate = 128;
-                        sampleRate = 0;
-                        sampleRateList = new int[] {
-                            8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000
-                        };
                         encoder = "libvorbis";
                         vbrSupported = true;
                         quality = 4; // 3-6 is a good range to try
                         // 10 is highest quality
                         vbrMinValue = 0;
                         vbrMaxValue = 10;
+                        break;
+                    default:
+                        encoder = "copy";
                         break;
                 }
             }
@@ -103,10 +92,7 @@ namespace Alexantr.SimpleVideoConverter
             set { codecList = value; }
         }
 
-        public static string Encoder
-        {
-            get { return encoder; }
-        }
+        public static string Encoder => encoder;
 
         public static int Bitrate
         {
@@ -128,29 +114,21 @@ namespace Alexantr.SimpleVideoConverter
                         if (sampleRate == 8000 || sampleRate == 11025 || sampleRate == 12000)
                         {
                             // MPEG-2.5 Layer III bitrates
-                            bitrateList = new int[] {
-                                8, 16, 24, 32, 40, 48, 56, 64
-                            };
+                            bitrateList = new int[] { 8, 16, 24, 32, 40, 48, 56, 64 };
                         }
                         else if (sampleRate == 16000 || sampleRate == 22050 || sampleRate == 24000)
                         {
                             // MPEG-2 Layer III bitrates
-                            bitrateList = new int[] {
-                                8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160
-                            };
+                            bitrateList = new int[] { 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160 };
                         }
                         else
                         {
                             // MPEG-1 Layer III bitrates
-                            bitrateList = new int[] {
-                                32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 192, 224, 256, 320
-                            };
+                            bitrateList = new int[] { 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 192, 224, 256, 320 };
                         }
                         break;
                     default:
-                        bitrateList = new int[] {
-                            8, 16, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320
-                        };
+                        bitrateList = new int[] { 8, 16, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 640 };
                         break;
                 }
 
@@ -158,10 +136,7 @@ namespace Alexantr.SimpleVideoConverter
             }
         }
 
-        public static bool VBRSupported
-        {
-            get { return vbrSupported; }
-        }
+        public static bool VBRSupported => vbrSupported;
 
         public static bool UseVBR
         {
@@ -169,15 +144,9 @@ namespace Alexantr.SimpleVideoConverter
             set { vbrOn = value; }
         }
 
-        private static int VBRMinValue
-        {
-            get { return vbrMinValue; }
-        }
+        private static int VBRMinValue => vbrMinValue;
 
-        private static int VBRMaxValue
-        {
-            get { return vbrMaxValue; }
-        }
+        private static int VBRMaxValue => vbrMaxValue;
 
         public static int Quality
         {
@@ -191,10 +160,7 @@ namespace Alexantr.SimpleVideoConverter
             set { channels = value; }
         }
 
-        public static Dictionary<int, string> ChannelsList
-        {
-            get { return channelsList; }
-        }
+        public static Dictionary<int, string> ChannelsList => channelsList;
 
         public static int SampleRate
         {
@@ -202,14 +168,8 @@ namespace Alexantr.SimpleVideoConverter
             set { sampleRate = value; }
         }
 
-        public static int[] SampleRateList
-        {
-            get { return sampleRateList; }
-        }
+        public static int[] SampleRateList => sampleRateList;
 
-        public static string AdditionalArguments
-        {
-            get { return additionalArguments; }
-        }
+        public static string AdditionalArguments => additionalArguments;
     }
 }

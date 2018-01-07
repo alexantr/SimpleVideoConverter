@@ -14,11 +14,11 @@
 
         public string FieldOrder { get; set; }
 
-        public PictureSize OriginalSize = new PictureSize();
+        public PictureSize OriginalSize { get; set; }
 
-        public PictureSize PictureSize = new PictureSize();
+        public PictureSize PictureSize { get; set; }
 
-        public bool UsingDAR { get; set; }
+        public bool UsingDAR { get; set; } = false;
 
         public string Language { get; set; }
     }
