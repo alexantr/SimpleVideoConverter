@@ -1,9 +1,6 @@
 ﻿using Microsoft.WindowsAPICodePack.Taskbar;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace Alexantr.SimpleVideoConverter
@@ -29,7 +26,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private TaskbarManager taskbarManager;
 
-        private bool resizing = false;
+        private Image image;
 
         public CropForm(InputFile inpFile, Crop picCrop)
         {
@@ -88,6 +85,12 @@ namespace Alexantr.SimpleVideoConverter
             ffmpegProcess.Dispose();
         }
 
+        private void CropForm_SizeChanged(object sender, EventArgs e)
+        {
+            size = GetWidthHeight();
+            LoadPicture();
+        }
+
         private void buttonSave_Click(object sender, EventArgs e)
         {
             ((MainForm)Owner).UpdateCrop(crop);
@@ -107,13 +110,24 @@ namespace Alexantr.SimpleVideoConverter
 
         private void buttonRew_Click(object sender, EventArgs e)
         {
+            image = null;
             currentTime -= stepTime;
             LoadPicture();
         }
 
         private void buttonFF_Click(object sender, EventArgs e)
         {
+            image = null;
             currentTime += stepTime;
+            LoadPicture();
+        }
+
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            numericCropTop.Value = 0;
+            numericCropBottom.Value = 0;
+            numericCropLeft.Value = 0;
+            numericCropRight.Value = 0;
             LoadPicture();
         }
 
@@ -173,10 +187,37 @@ namespace Alexantr.SimpleVideoConverter
             LoadPicture();
         }
 
+        private void numericCropTop_Enter(object sender, EventArgs e)
+        {
+            numericCropTop.Select(0, numericCropTop.Text.Length);
+        }
+
+        private void numericCropBottom_Enter(object sender, EventArgs e)
+        {
+            numericCropBottom.Select(0, numericCropBottom.Text.Length);
+        }
+
+        private void numericCropLeft_Enter(object sender, EventArgs e)
+        {
+            numericCropLeft.Select(0, numericCropLeft.Text.Length);
+        }
+
+        private void numericCropRight_Enter(object sender, EventArgs e)
+        {
+            numericCropRight.Select(0, numericCropRight.Text.Length);
+        }
+
         private void LoadPicture()
         {
             string currTime = GetCorrectedTime();
             labelTime.Text = currTime;
+
+            if (image != null)
+            {
+                DrawImageWithRects(image);
+                CheckButtons();
+                return;
+            }
 
             buttonRew.Enabled = false;
             buttonFF.Enabled = false;
@@ -218,51 +259,6 @@ namespace Alexantr.SimpleVideoConverter
             ffmpegProcess.Start();
         }
 
-        private string GetCorrectedTime()
-        {
-            double correctedTime = currentTime;
-            if (correctedTime > totalTime - 1000.0)
-                correctedTime -= 1000.0;
-            return new TimeSpan((long)correctedTime * 10000L).ToString("hh\\:mm\\:ss\\.fff");
-        }
-
-        private void CropForm_SizeChanged(object sender, EventArgs e)
-        {
-            size = GetWidthHeight();
-            LoadPicture();
-        }
-
-        private void numericCropTop_Enter(object sender, EventArgs e)
-        {
-            numericCropTop.Select(0, numericCropTop.Text.Length);
-        }
-
-        private void numericCropBottom_Enter(object sender, EventArgs e)
-        {
-            numericCropBottom.Select(0, numericCropBottom.Text.Length);
-        }
-
-        private void numericCropLeft_Enter(object sender, EventArgs e)
-        {
-            numericCropLeft.Select(0, numericCropLeft.Text.Length);
-        }
-
-        private void numericCropRight_Enter(object sender, EventArgs e)
-        {
-            numericCropRight.Select(0, numericCropRight.Text.Length);
-        }
-
-        private void CheckButtons()
-        {
-            buttonRew.Enabled = (currentTime - stepTime >= 0.0);
-            buttonFF.Enabled = (currentTime + stepTime <= totalTime);
-            numericCropBottom.Enabled = true;
-            numericCropLeft.Enabled = true;
-            numericCropRight.Enabled = true;
-            numericCropTop.Enabled = true;
-            buttonReset.Enabled = true;
-        }
-
         private void Exited(object sender, EventArgs eventArgs)
         {
             timer.Stop();
@@ -294,8 +290,8 @@ namespace Alexantr.SimpleVideoConverter
             {
                 try
                 {
-                    Image img = Helper.ImageFromFile(tempFile);
-                    DrawImageWithRects(img);
+                    image = Helper.ImageFromFile(tempFile);
+                    DrawImageWithRects(image);
 
                     CheckButtons();
 
@@ -304,6 +300,8 @@ namespace Alexantr.SimpleVideoConverter
                 }
                 catch (Exception ex)
                 {
+                    image = null;
+
                     labelLoading.Visible = false;
                     taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
@@ -311,110 +309,6 @@ namespace Alexantr.SimpleVideoConverter
             }
 
             processEnded = true;
-        }
-
-        private void buttonReset_Click(object sender, EventArgs e)
-        {
-            numericCropTop.Value = 0;
-            numericCropBottom.Value = 0;
-            numericCropLeft.Value = 0;
-            numericCropRight.Value = 0;
-            LoadPicture();
-        }
-
-        private void DrawImageWithRects(Image image)
-        {
-            if (resizing)
-                return;
-            resizing = true;
-            int width = size[0];
-            int height = size[1];
-            Rectangle destRect = new Rectangle(0, 0, width, height);
-            Bitmap resized = new Bitmap(width, height);
-            resized.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-            using (Graphics g = Graphics.FromImage(resized))
-            {
-                g.CompositingMode = CompositingMode.SourceCopy;
-                g.CompositingQuality = CompositingQuality.HighSpeed;
-                g.InterpolationMode = InterpolationMode.Bicubic;
-                g.SmoothingMode = SmoothingMode.HighSpeed;
-                g.PixelOffsetMode = PixelOffsetMode.HighSpeed;
-                using (ImageAttributes imageAttr = new ImageAttributes())
-                {
-                    imageAttr.SetWrapMode(WrapMode.TileFlipXY);
-                    g.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, imageAttr);
-                }
-                Color customColor = Color.FromArgb(255, 0, 255);
-                SolidBrush brush = new SolidBrush(customColor);
-
-                int maxBoxWidth = Math.Min(pictureBoxPreview.Width, originalSize.Width);
-                int maxBoxHeight = Math.Min(pictureBoxPreview.Height, originalSize.Height);
-
-                double aspectRatio = Math.Min((double)maxBoxWidth / originalSize.Width, (double)maxBoxHeight / originalSize.Height);
-
-                int topH = (int)Math.Round(crop.Top * aspectRatio);
-                int bottomH = (int)Math.Round(crop.Bottom * aspectRatio);
-                int leftW = (int)Math.Round(crop.Left * aspectRatio);
-                int rightW = (int)Math.Round(crop.Right * aspectRatio);
-
-                int rectangles = 0;
-                if (topH > 0)
-                    rectangles++;
-                if (bottomH > 0)
-                    rectangles++;
-                if (leftW > 0)
-                    rectangles++;
-                if (rightW > 0)
-                    rectangles++;
-
-                if (rectangles > 0)
-                {
-                    RectangleF[] rects = new RectangleF[rectangles];
-                    int indexCount = 0;
-                    if (topH > 0)
-                    {
-                        rects[indexCount] = new Rectangle(0, 0, width, topH); // top
-                        indexCount++;
-                    }
-                    if (bottomH > 0)
-                    {
-                        rects[indexCount] = new Rectangle(0, height - bottomH, width, bottomH); // bottom
-                        indexCount++;
-                    }
-                    if (leftW > 0)
-                    {
-                        rects[indexCount] = new Rectangle(0, 0, leftW, height); // left
-                        indexCount++;
-                    }
-                    if (rightW > 0)
-                    {
-                        rects[indexCount] = new Rectangle(width - rightW, 0, rightW, height); // right
-                    }
-                    g.FillRectangles(brush, rects);
-                }
-
-                g.Dispose(); 
-            }
-            pictureBoxPreview.Image = resized;
-            resizing = false;
-        }
-
-        private int[] GetWidthHeight()
-        {
-            int maxBoxWidth = Math.Min(pictureBoxPreview.Width, originalSize.Width);
-            int maxBoxHeight = Math.Min(pictureBoxPreview.Height, originalSize.Height);
-
-            double aspectRatio = Math.Min((double)maxBoxWidth / originalSize.Width, (double)maxBoxHeight / originalSize.Height);
-
-            int newWidth = (int)Math.Round(originalSize.Width * aspectRatio, 0);
-            int newHeight = (int)Math.Round(originalSize.Height * aspectRatio, 0);
-
-            if (newHeight % 2 == 1)
-                newHeight -= 1;
-            if (newHeight < 96)
-                newHeight = 96;
-
-            return new int[2] { newWidth, newHeight };
         }
     }
 }

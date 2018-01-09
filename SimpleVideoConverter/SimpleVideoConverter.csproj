@@ -139,6 +139,9 @@
     <Compile Include="CropForm.Designer.cs">
       <DependentUpon>CropForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CropForm.Helpers.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="FFmpegProcess.cs">
       <SubType>Component</SubType>
