@@ -63,6 +63,16 @@ namespace Alexantr.SimpleVideoConverter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap colorbars {
+            get {
+                object obj = ResourceManager.GetObject("colorbars", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap complete {
             get {
                 object obj = ResourceManager.GetObject("complete", resourceCulture);

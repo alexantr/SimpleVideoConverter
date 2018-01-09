@@ -237,6 +237,7 @@
     <None Include="Resources\critical.png" />
     <None Include="Resources\gear.png" />
     <None Include="Resources\information.png" />
+    <None Include="Resources\colorbars.png" />
     <Content Include="SimpleVideoConverter.ico" />
   </ItemGroup>
   <ItemGroup>

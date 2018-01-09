@@ -263,7 +263,8 @@ namespace Alexantr.SimpleVideoConverter
         {
             timer.Stop();
 
-            if (processPanic) return;
+            if (processPanic)
+                return;
 
             var process = ffmpegProcess;
 
@@ -282,6 +283,10 @@ namespace Alexantr.SimpleVideoConverter
 
             if (process.ExitCode != 0)
             {
+                image = GetPlaceholder();
+                DrawImageWithRects(image);
+
+                CheckButtons();
                 labelLoading.Visible = false;
                 taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
                 MessageBox.Show($"ffmpeg.exe exited with exit code {process.ExitCode}.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
@@ -294,17 +299,18 @@ namespace Alexantr.SimpleVideoConverter
                     DrawImageWithRects(image);
 
                     CheckButtons();
-
                     labelLoading.Visible = false;
                     taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    image = null;
+                    image = GetPlaceholder();
+                    DrawImageWithRects(image);
 
+                    CheckButtons();
                     labelLoading.Visible = false;
                     taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
-                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    MessageBox.Show("Изображение не загружено", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 }
             }
 

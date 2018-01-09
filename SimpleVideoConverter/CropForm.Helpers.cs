@@ -122,5 +122,22 @@ namespace Alexantr.SimpleVideoConverter
 
             return new int[2] { newWidth, newHeight };
         }
+
+        private Bitmap GetPlaceholder()
+        {
+            //int width = size[0];
+            //int height = size[1];
+            //Rectangle destRect = new Rectangle(0, 0, width, height);
+            Bitmap bmp = new Bitmap(Properties.Resources.colorbars);
+            /*using (Graphics g = Graphics.FromImage(bmp))
+            {
+                Color customColor = Color.FromArgb(34, 34, 34);
+                SolidBrush brush = new SolidBrush(customColor);
+                g.FillRectangle(brush, 0, 0, width, height);
+
+                g.Dispose();
+            }*/
+            return bmp;
+        }
     }
 }

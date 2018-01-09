@@ -145,6 +145,7 @@ namespace Alexantr.SimpleVideoConverter
         {
             if (VideoConfig.CRFSupported)
             {
+                int crf = VideoConfig.CRF;
                 if (trackBarCRF.Value > VideoConfig.CRFMaxValue)
                     trackBarCRF.Value = VideoConfig.CRFMaxValue;
                 if (trackBarCRF.Value < VideoConfig.CRFMinValue)
@@ -152,7 +153,7 @@ namespace Alexantr.SimpleVideoConverter
 
                 trackBarCRF.Minimum = VideoConfig.CRFMinValue;
                 trackBarCRF.Maximum = VideoConfig.CRFMaxValue;
-                trackBarCRF.Value = VideoConfig.CRF;
+                trackBarCRF.Value = crf;
 
                 radioButtonCRF.Enabled = true;
             }
@@ -163,6 +164,7 @@ namespace Alexantr.SimpleVideoConverter
                 radioButtonBitrate.Checked = true;
             }
 
+            int bitrate = VideoConfig.Bitrate;
             if (numericUpDownBitrate.Value > VideoConfig.BitrateMaxValue)
                 numericUpDownBitrate.Value = VideoConfig.BitrateMaxValue;
             if (numericUpDownBitrate.Value < VideoConfig.BitrateMinValue)
@@ -170,7 +172,7 @@ namespace Alexantr.SimpleVideoConverter
 
             numericUpDownBitrate.Minimum = VideoConfig.BitrateMinValue;
             numericUpDownBitrate.Maximum = VideoConfig.BitrateMaxValue;
-            numericUpDownBitrate.Value = VideoConfig.Bitrate;
+            numericUpDownBitrate.Value = bitrate;
 
             // check if nothing checked
             if (!radioButtonCRF.Checked && !radioButtonBitrate.Checked)
