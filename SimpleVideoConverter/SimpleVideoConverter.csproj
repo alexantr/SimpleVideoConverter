@@ -260,4 +260,11 @@
     <Copy Condition=" '$(Platform)' == 'x86' " SourceFiles="@(FFmpegFiles32)" DestinationFolder="$(OutputPath)\ffmpeg" />
     <Copy Condition=" '$(Platform)' == 'x64' " SourceFiles="@(FFmpegFiles64)" DestinationFolder="$(OutputPath)\ffmpeg" />
   </Target>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>git rev-parse HEAD &gt; "$(TargetDir)commit.txt"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
