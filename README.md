@@ -4,12 +4,12 @@
 
 * Для работы необходим .NET Framework 4.5.2 или выше
 
-![Главное окно](https://i.imgur.com/b2GFBio.png)
-![Главное окно](https://i.imgur.com/ZntkXpV.png)
-![Главное окно](https://i.imgur.com/iLlqcp4.png)
-![Главное окно](https://i.imgur.com/RQMCwu5.png)
-![Главное окно](https://i.imgur.com/zyzIDyT.png)
+![Главное окно](https://i.imgur.com/1AqwvSa.png)
+![Главное окно](https://i.imgur.com/7FGHPc6.png)
+![Главное окно](https://i.imgur.com/gc6plD4.png)
+![Главное окно](https://i.imgur.com/tWxtc85.png)
+![Главное окно](https://i.imgur.com/Ab5KI6D.png)
 
-![Обрезка](https://i.imgur.com/R7nDy0U.png)
+![Обрезка](https://i.imgur.com/Er2C2fy.png)
 
 ![Конвертирование](https://i.imgur.com/YYIcxh2.png)
