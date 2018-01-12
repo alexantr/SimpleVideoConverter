@@ -291,6 +291,7 @@ namespace Alexantr.SimpleVideoConverter
                 return;
             }
 
+            comboBoxAudioCodec.Enabled = checkBoxConvertAudio.Checked;
             comboBoxAudioBitrate.Enabled = checkBoxConvertAudio.Checked;
             comboBoxAudioSampleRate.Enabled = checkBoxConvertAudio.Checked;
             comboBoxAudioChannels.Enabled = checkBoxConvertAudio.Checked;

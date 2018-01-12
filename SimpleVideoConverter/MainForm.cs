@@ -237,6 +237,147 @@ namespace Alexantr.SimpleVideoConverter
             new CropForm(inputFile, PictureConfig.Crop).ShowDialog(this);
         }
 
+        private void numericUpDownWidth_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateHeigth();
+
+            if (inputFile == null)
+                return;
+
+            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+            SetOutputInfo();
+        }
+
+        private void numericUpDownWidth_Leave(object sender, EventArgs e)
+        {
+            if ((int)numericUpDownWidth.Value % 2 == 1)
+                numericUpDownWidth.Value = Math.Max(PictureConfig.MinWidth, (int)numericUpDownWidth.Value - 1);
+
+            UpdateHeigth();
+
+            if (inputFile == null)
+                return;
+
+            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+            SetOutputInfo();
+        }
+
+        private void numericUpDownHeight_ValueChanged(object sender, EventArgs e)
+        {
+            if (inputFile == null)
+                return;
+
+            if (numericUpDownHeight.Enabled)
+            {
+                PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+                PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+                SetOutputInfo();
+            }
+        }
+
+        private void numericUpDownHeight_Leave(object sender, EventArgs e)
+        {
+            if ((int)numericUpDownHeight.Value % 2 == 1)
+                numericUpDownHeight.Value = Math.Max(PictureConfig.MinHeight, (int)numericUpDownHeight.Value - 1);
+
+            if (inputFile == null)
+                return;
+
+            if (numericUpDownHeight.Enabled)
+            {
+                PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+                PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+                SetOutputInfo();
+            }
+        }
+
+        private void checkBoxKeepAspectRatio_CheckedChanged(object sender, EventArgs e)
+        {
+            doNotCheckKeepARAgain = !checkBoxKeepAspectRatio.Checked;
+            comboBoxAspectRatio.Enabled = checkBoxKeepAspectRatio.Checked;
+            numericUpDownHeight.Enabled = !checkBoxKeepAspectRatio.Checked;
+
+            UpdateHeigth();
+
+            if (inputFile == null)
+                return;
+
+            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+            SetOutputInfo();
+        }
+
+        private void comboBoxAspectRatio_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateHeigth();
+
+            if (inputFile == null)
+                return;
+
+            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+            SetOutputInfo();
+        }
+
+        private void comboBoxAspectRatio_TextUpdate(object sender, EventArgs e)
+        {
+            UpdateHeigth();
+
+            if (inputFile == null)
+                return;
+
+            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+
+            SetOutputInfo();
+        }
+
+        private void checkBoxResizePicture_CheckedChanged(object sender, EventArgs e)
+        {
+            ManageCheckPanel(checkBoxResizePicture, panelResolution);
+
+            UpdateHeigth();
+
+            if (inputFile == null)
+                return;
+
+            if (checkBoxResizePicture.Checked)
+            {
+                PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+                PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+            }
+            else
+            {
+                PictureConfig.OutputSize.Width = PictureConfig.CropSize.Width;
+                PictureConfig.OutputSize.Height = PictureConfig.CropSize.Height;
+            }
+
+            SetOutputInfo();
+        }
+
+        private void buttonPreset1080p_Click(object sender, EventArgs e)
+        {
+            ResizeFromPreset(1920, 1080);
+        }
+
+        private void buttonPreset720p_Click(object sender, EventArgs e)
+        {
+            ResizeFromPreset(1280, 720);
+        }
+
+        private void buttonPresetOriginal_Click(object sender, EventArgs e)
+        {
+            ResizeFromPreset(PictureConfig.CropSize.Width, 0);
+        }
+
         private void comboBoxInterpolation_SelectedIndexChanged(object sender, EventArgs e)
         {
             PictureConfig.Interpolation = ((ComboBoxItem)comboBoxInterpolation.SelectedItem).Value;
@@ -693,7 +834,7 @@ namespace Alexantr.SimpleVideoConverter
             }*/
 
             // force sar 1:1
-            filters.Add($"setsar=1:1");
+            filters.Add($"setsar=sar=1/1");
 
             // color filter
             if (PictureConfig.ColorChannelMixerList.ContainsKey(PictureConfig.ColorFilter))
@@ -815,146 +956,5 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         #endregion
-
-        private void numericUpDownWidth_ValueChanged(object sender, EventArgs e)
-        {
-            UpdateHeigth();
-
-            if (inputFile == null)
-                return;
-
-            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
-            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
-
-            SetOutputInfo();
-        }
-
-        private void numericUpDownWidth_Leave(object sender, EventArgs e)
-        {
-            if ((int)numericUpDownWidth.Value % 2 == 1)
-                numericUpDownWidth.Value = Math.Max(PictureConfig.MinWidth, (int)numericUpDownWidth.Value - 1);
-
-            UpdateHeigth();
-
-            if (inputFile == null)
-                return;
-
-            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
-            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
-
-            SetOutputInfo();
-        }
-
-        private void numericUpDownHeight_ValueChanged(object sender, EventArgs e)
-        {
-            if (inputFile == null)
-                return;
-
-            if (numericUpDownHeight.Enabled)
-            {
-                PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
-                PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
-
-                SetOutputInfo();
-            }
-        }
-
-        private void numericUpDownHeight_Leave(object sender, EventArgs e)
-        {
-            if ((int)numericUpDownHeight.Value % 2 == 1)
-                numericUpDownHeight.Value = Math.Max(PictureConfig.MinHeight, (int)numericUpDownHeight.Value - 1);
-
-            if (inputFile == null)
-                return;
-
-            if (numericUpDownHeight.Enabled)
-            {
-                PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
-                PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
-
-                SetOutputInfo();
-            }
-        }
-
-        private void checkBoxKeepAspectRatio_CheckedChanged(object sender, EventArgs e)
-        {
-            doNotCheckKeepARAgain = !checkBoxKeepAspectRatio.Checked;
-            comboBoxAspectRatio.Enabled = checkBoxKeepAspectRatio.Checked;
-            numericUpDownHeight.Enabled = !checkBoxKeepAspectRatio.Checked;
-
-            UpdateHeigth();
-
-            if (inputFile == null)
-                return;
-
-            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
-            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
-
-            SetOutputInfo();
-        }
-
-        private void comboBoxAspectRatio_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdateHeigth();
-
-            if (inputFile == null)
-                return;
-
-            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
-            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
-
-            SetOutputInfo();
-        }
-
-        private void comboBoxAspectRatio_TextUpdate(object sender, EventArgs e)
-        {
-            UpdateHeigth();
-
-            if (inputFile == null)
-                return;
-
-            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
-            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
-
-            SetOutputInfo();
-        }
-
-        private void checkBoxResizePicture_CheckedChanged(object sender, EventArgs e)
-        {
-            ManageCheckPanel(checkBoxResizePicture, panelResolution);
-
-            UpdateHeigth();
-
-            if (inputFile == null)
-                return;
-
-            if (checkBoxResizePicture.Checked)
-            {
-                PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
-                PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
-            }
-            else
-            {
-                PictureConfig.OutputSize.Width = PictureConfig.CropSize.Width;
-                PictureConfig.OutputSize.Height = PictureConfig.CropSize.Height;
-            }
-
-            SetOutputInfo();
-        }
-
-        private void buttonPreset1080p_Click(object sender, EventArgs e)
-        {
-            ResizeFromPreset(1920, 1080);
-        }
-
-        private void buttonPreset720p_Click(object sender, EventArgs e)
-        {
-            ResizeFromPreset(1280, 720);
-        }
-
-        private void buttonPresetOriginal_Click(object sender, EventArgs e)
-        {
-            ResizeFromPreset(PictureConfig.CropSize.Width, 0);
-        }
     }
 }
