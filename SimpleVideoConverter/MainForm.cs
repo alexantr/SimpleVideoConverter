@@ -928,8 +928,16 @@ namespace Alexantr.SimpleVideoConverter
             if (inputFile == null)
                 return;
 
-            PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
-            PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+            if (checkBoxResizePicture.Checked)
+            {
+                PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
+                PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
+            }
+            else
+            {
+                PictureConfig.OutputSize.Width = PictureConfig.CropSize.Width;
+                PictureConfig.OutputSize.Height = PictureConfig.CropSize.Height;
+            }
 
             SetOutputInfo();
         }
