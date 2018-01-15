@@ -16,6 +16,7 @@ namespace Alexantr.SimpleVideoConverter
         public const string DefaultColorFilter = "none";
 
         public static bool Deinterlace = false;
+        public static bool Flip = false;
 
         private static PictureSize inputOriginalSize; // OAR
         private static PictureSize inputDisplaySize; // DAR
@@ -32,7 +33,16 @@ namespace Alexantr.SimpleVideoConverter
 
         private static string fieldOrder;
 
+        private static int rotate = 0;
+
         private static string colorFilter;
+
+        private static Dictionary<string, string> fieldOrderList = new Dictionary<string, string>
+        {
+            { "auto", "Авто" },
+            { "tff", "Top Field First" },
+            { "bff", "Bottom Field First" }
+        };
 
         private static string[] aspectRatioList = new string[]
         {
@@ -49,6 +59,14 @@ namespace Alexantr.SimpleVideoConverter
             { "gauss", "Gaussian" }
         };
 
+        private static Dictionary<int, string> rotateList = new Dictionary<int, string>
+        {
+            { 0, "Не вращать" },
+            { 180, "180°" },
+            { 90, "90° по ч.с." },
+            { 270, "90° против ч.с." }
+        };
+
         private static Dictionary<string, string> colorFilterList = new Dictionary<string, string>
         {
             { "none", "Нет" },
@@ -60,13 +78,6 @@ namespace Alexantr.SimpleVideoConverter
         {
             { "gray", ".3:.4:.3:0:.3:.4:.3:0:.3:.4:.3" },
             { "sepia", ".393:.769:.189:0:.349:.686:.168:0:.272:.534:.131" }
-        };
-
-        private static Dictionary<string, string> fieldOrderList = new Dictionary<string, string>
-        {
-            { "auto", "Авто" },
-            { "tff", "Top Field First" },
-            { "bff", "Bottom Field First" }
         };
 
         public static PictureSize InputOriginalSize
@@ -149,6 +160,14 @@ namespace Alexantr.SimpleVideoConverter
 
         public static Dictionary<string, string> FieldOrderList => fieldOrderList;
 
+        public static int Rotate
+        {
+            get { return rotate; }
+            set { rotate = rotateList.ContainsKey(value) ? value : 0; }
+        }
+
+        public static Dictionary<int, string> RotateList => rotateList;
+
         /// <summary>
         /// Reset values for new file
         /// </summary>
@@ -165,6 +184,9 @@ namespace Alexantr.SimpleVideoConverter
 
             Deinterlace = false;
             fieldOrder = DefaultFieldOrder;
+
+            rotate = 0;
+            Flip = false;
         }
 
         /// <summary>

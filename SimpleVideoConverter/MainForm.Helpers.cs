@@ -547,6 +547,22 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxFieldOrder.SelectedIndex = selectedIndex;
         }
 
+        private void FillRotate()
+        {
+            comboBoxRotate.Items.Clear();
+            foreach (KeyValuePair<int, string> rm in PictureConfig.RotateList)
+            {
+                comboBoxRotate.Items.Add(new ComboBoxIntItem(rm.Key, rm.Value));
+            }
+            comboBoxRotate.SelectedIndex = 0;
+        }
+
+        private void ResetRotateAndFlip()
+        {
+            comboBoxRotate.SelectedIndex = 0;
+            checkBoxFlip.Checked = false;
+        }
+
         private void FillColorFilter()
         {
             int selectedIndex = 0, index = 0;
@@ -660,6 +676,17 @@ namespace Alexantr.SimpleVideoConverter
 
             if (PictureConfig.Deinterlace)
                 info.Append(", деинт.");
+
+            if (PictureConfig.Rotate > 0)
+            {
+                if (PictureConfig.RotateList.ContainsKey(PictureConfig.Rotate))
+                    info.Append($", {PictureConfig.RotateList[PictureConfig.Rotate]}");
+                else
+                    info.Append($", {PictureConfig.Rotate}°");
+            }
+
+            if (PictureConfig.Flip)
+                info.Append($", отразить");
 
             if (PictureConfig.ColorFilter != "none")
                 info.Append($", {PictureConfig.ColorFilterList[PictureConfig.ColorFilter].ToLower()}");
