@@ -434,7 +434,7 @@ namespace Alexantr.SimpleVideoConverter
                     numericUpDownWidth.Value = newWidth;
                 }
             }
-            else if (checkBoxResizePicture.Checked)
+            else
             {
                 pictureBoxRatioError.BackgroundImage = Properties.Resources.critical;
             }
@@ -469,10 +469,11 @@ namespace Alexantr.SimpleVideoConverter
         {
             if (inputFile == null)
                 return;
-            if (!checkBoxResizePicture.Checked)
+            if (!sizeChanged)
             {
-                numericUpDownWidth.Value = PictureConfig.CropSize.Width;
                 numericUpDownHeight.Value = PictureConfig.CropSize.Height;
+                numericUpDownWidth.Value = PictureConfig.CropSize.Width; // calls UpdateHeight() if checked "keep ar"
+                sizeChanged = false; // force to false
             }
             FillComboBoxAspectRatio();
         }

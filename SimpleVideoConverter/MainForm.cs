@@ -17,7 +17,8 @@ namespace Alexantr.SimpleVideoConverter
 
         private TaskbarManager taskbarManager;
 
-        private bool doNotCheckKeepARAgain;
+        //private bool doNotCheckKeepARAgain = false;
+        private bool sizeChanged = false;
 
         public MainForm()
         {
@@ -46,7 +47,7 @@ namespace Alexantr.SimpleVideoConverter
 
             // Init once on form load
             
-            ManageCheckPanel(checkBoxResizePicture, panelResolution);
+            //ManageCheckPanel(checkBoxResizePicture, panelResolution);
 
             UpdateCropSizeInfo();
 
@@ -241,10 +242,12 @@ namespace Alexantr.SimpleVideoConverter
 
         private void numericUpDownWidth_ValueChanged(object sender, EventArgs e)
         {
-            UpdateHeigth();
-
             if (inputFile == null)
                 return;
+
+            UpdateHeigth();
+
+            sizeChanged = true;
 
             PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
             PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
@@ -257,10 +260,12 @@ namespace Alexantr.SimpleVideoConverter
             if ((int)numericUpDownWidth.Value % 2 == 1)
                 numericUpDownWidth.Value = Math.Max(PictureConfig.MinWidth, (int)numericUpDownWidth.Value - 1);
 
-            UpdateHeigth();
-
             if (inputFile == null)
                 return;
+
+            UpdateHeigth();
+
+            sizeChanged = true;
 
             PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
             PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
@@ -275,6 +280,8 @@ namespace Alexantr.SimpleVideoConverter
 
             if (numericUpDownHeight.Enabled)
             {
+                sizeChanged = true;
+
                 PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
                 PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
 
@@ -292,6 +299,8 @@ namespace Alexantr.SimpleVideoConverter
 
             if (numericUpDownHeight.Enabled)
             {
+                sizeChanged = true;
+
                 PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
                 PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
 
@@ -301,7 +310,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void checkBoxKeepAspectRatio_CheckedChanged(object sender, EventArgs e)
         {
-            doNotCheckKeepARAgain = !checkBoxKeepAspectRatio.Checked;
+            //doNotCheckKeepARAgain = !checkBoxKeepAspectRatio.Checked;
             comboBoxAspectRatio.Enabled = checkBoxKeepAspectRatio.Checked;
             numericUpDownHeight.Enabled = !checkBoxKeepAspectRatio.Checked;
 
@@ -338,29 +347,6 @@ namespace Alexantr.SimpleVideoConverter
 
             PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
             PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
-
-            SetOutputInfo();
-        }
-
-        private void checkBoxResizePicture_CheckedChanged(object sender, EventArgs e)
-        {
-            ManageCheckPanel(checkBoxResizePicture, panelResolution);
-
-            UpdateHeigth();
-
-            if (inputFile == null)
-                return;
-
-            if (checkBoxResizePicture.Checked)
-            {
-                PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
-                PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
-            }
-            else
-            {
-                PictureConfig.OutputSize.Width = PictureConfig.CropSize.Width;
-                PictureConfig.OutputSize.Height = PictureConfig.CropSize.Height;
-            }
 
             SetOutputInfo();
         }
@@ -601,6 +587,8 @@ namespace Alexantr.SimpleVideoConverter
                 SetOutputInfo();
                 ClearTags();
 
+                sizeChanged = false;
+
                 Text = formTitle;
 
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
@@ -629,6 +617,8 @@ namespace Alexantr.SimpleVideoConverter
 
             // set original aspect ratio
             FillComboBoxAspectRatio(true);
+
+            sizeChanged = false; // reset after wet WxH in numericUpDown
 
             // if need deinterlace
             PictureConfig.Deinterlace = checkBoxDeinterlace.Checked = vStream.FieldOrder != "progressive";
