@@ -82,7 +82,7 @@
             this.labelStatus.AutoSize = true;
             this.labelStatus.Location = new System.Drawing.Point(6, 49);
             this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(19, 13);
+            this.labelStatus.Size = new System.Drawing.Size(16, 15);
             this.labelStatus.TabIndex = 5;
             this.labelStatus.Text = "...";
             // 
@@ -98,8 +98,8 @@
             // 
             // ConverterForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(624, 361);
             this.Controls.Add(this.buttonToggleLog);
             this.Controls.Add(this.labelStatus);
@@ -107,7 +107,7 @@
             this.Controls.Add(this.buttonPlay);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.progressBarEncoding);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;

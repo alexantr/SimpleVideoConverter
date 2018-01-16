@@ -17,7 +17,8 @@ namespace Alexantr.SimpleVideoConverter
 
         private TaskbarManager taskbarManager;
 
-        private bool doNotCheckKeepARAgain;
+        //private bool doNotCheckKeepARAgain = false;
+        private bool sizeChanged = false;
 
         public MainForm()
         {
@@ -46,7 +47,7 @@ namespace Alexantr.SimpleVideoConverter
 
             // Init once on form load
             
-            ManageCheckPanel(checkBoxResizePicture, panelResolution);
+            //ManageCheckPanel(checkBoxResizePicture, panelResolution);
 
             UpdateCropSizeInfo();
 
@@ -66,6 +67,8 @@ namespace Alexantr.SimpleVideoConverter
 
             FillFieldOrder();
             ManageCheckPanel(checkBoxDeinterlace, panelDeinterlace);
+
+            FillRotate();
 
             FillColorFilter();
 
@@ -239,10 +242,12 @@ namespace Alexantr.SimpleVideoConverter
 
         private void numericUpDownWidth_ValueChanged(object sender, EventArgs e)
         {
-            UpdateHeigth();
-
             if (inputFile == null)
                 return;
+
+            UpdateHeigth();
+
+            sizeChanged = true;
 
             PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
             PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
@@ -255,10 +260,12 @@ namespace Alexantr.SimpleVideoConverter
             if ((int)numericUpDownWidth.Value % 2 == 1)
                 numericUpDownWidth.Value = Math.Max(PictureConfig.MinWidth, (int)numericUpDownWidth.Value - 1);
 
-            UpdateHeigth();
-
             if (inputFile == null)
                 return;
+
+            UpdateHeigth();
+
+            sizeChanged = true;
 
             PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
             PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
@@ -273,6 +280,8 @@ namespace Alexantr.SimpleVideoConverter
 
             if (numericUpDownHeight.Enabled)
             {
+                sizeChanged = true;
+
                 PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
                 PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
 
@@ -290,6 +299,8 @@ namespace Alexantr.SimpleVideoConverter
 
             if (numericUpDownHeight.Enabled)
             {
+                sizeChanged = true;
+
                 PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
                 PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
 
@@ -299,7 +310,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void checkBoxKeepAspectRatio_CheckedChanged(object sender, EventArgs e)
         {
-            doNotCheckKeepARAgain = !checkBoxKeepAspectRatio.Checked;
+            //doNotCheckKeepARAgain = !checkBoxKeepAspectRatio.Checked;
             comboBoxAspectRatio.Enabled = checkBoxKeepAspectRatio.Checked;
             numericUpDownHeight.Enabled = !checkBoxKeepAspectRatio.Checked;
 
@@ -340,29 +351,6 @@ namespace Alexantr.SimpleVideoConverter
             SetOutputInfo();
         }
 
-        private void checkBoxResizePicture_CheckedChanged(object sender, EventArgs e)
-        {
-            ManageCheckPanel(checkBoxResizePicture, panelResolution);
-
-            UpdateHeigth();
-
-            if (inputFile == null)
-                return;
-
-            if (checkBoxResizePicture.Checked)
-            {
-                PictureConfig.OutputSize.Width = (int)Math.Round(numericUpDownWidth.Value, 0);
-                PictureConfig.OutputSize.Height = (int)Math.Round(numericUpDownHeight.Value, 0);
-            }
-            else
-            {
-                PictureConfig.OutputSize.Width = PictureConfig.CropSize.Width;
-                PictureConfig.OutputSize.Height = PictureConfig.CropSize.Height;
-            }
-
-            SetOutputInfo();
-        }
-
         private void buttonPreset1080p_Click(object sender, EventArgs e)
         {
             ResizeFromPreset(1920, 1080);
@@ -371,6 +359,11 @@ namespace Alexantr.SimpleVideoConverter
         private void buttonPreset720p_Click(object sender, EventArgs e)
         {
             ResizeFromPreset(1280, 720);
+        }
+
+        private void buttonPreset480p_Click(object sender, EventArgs e)
+        {
+            ResizeFromPreset(640, 480);
         }
 
         private void buttonPresetOriginal_Click(object sender, EventArgs e)
@@ -395,6 +388,20 @@ namespace Alexantr.SimpleVideoConverter
         private void comboBoxFieldOrder_SelectedIndexChanged(object sender, EventArgs e)
         {
             PictureConfig.FieldOrder = ((ComboBoxItem)comboBoxFieldOrder.SelectedItem).Value;
+
+            SetOutputInfo();
+        }
+
+        private void comboBoxRotate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PictureConfig.Rotate = ((ComboBoxIntItem)comboBoxRotate.SelectedItem).Value;
+
+            SetOutputInfo();
+        }
+
+        private void checkBoxFlip_CheckedChanged(object sender, EventArgs e)
+        {
+            PictureConfig.Flip = checkBoxFlip.Checked;
 
             SetOutputInfo();
         }
@@ -585,6 +592,8 @@ namespace Alexantr.SimpleVideoConverter
                 SetOutputInfo();
                 ClearTags();
 
+                sizeChanged = false;
+
                 Text = formTitle;
 
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
@@ -614,10 +623,14 @@ namespace Alexantr.SimpleVideoConverter
             // set original aspect ratio
             FillComboBoxAspectRatio(true);
 
+            sizeChanged = false; // reset after wet WxH in numericUpDown
+
             // if need deinterlace
             PictureConfig.Deinterlace = checkBoxDeinterlace.Checked = vStream.FieldOrder != "progressive";
             comboBoxFieldOrder.SelectedIndex = 0; // TODO: get from Picture
             ManageCheckPanel(checkBoxDeinterlace, panelDeinterlace);
+
+            ResetRotateAndFlip();
 
             comboBoxFrameRate.SelectedIndex = 0;
 
@@ -799,22 +812,20 @@ namespace Alexantr.SimpleVideoConverter
 
             List<string> filters = new List<string>();
 
+            // https://ffmpeg.org/ffmpeg-filters.html#yadif-1
             if (PictureConfig.Deinterlace)
-            {
-                string deinterlaceFilter = "yadif";
-                if (PictureConfig.FieldOrder != "auto")
-                    deinterlaceFilter += $"=parity={PictureConfig.FieldOrder}";
-                filters.Add(deinterlaceFilter);
-            }
+                filters.Add($"yadif=parity={PictureConfig.FieldOrder}");
 
-            // crop - using oar
+            // https://ffmpeg.org/ffmpeg-filters.html#crop
             if (PictureConfig.IsCropped())
             {
+                // using oar
                 int cropW = vStream.OriginalSize.Width - PictureConfig.Crop.Left - PictureConfig.Crop.Right;
                 int cropH = vStream.OriginalSize.Height - PictureConfig.Crop.Top - PictureConfig.Crop.Bottom;
                 filters.Add($"crop={cropW}:{cropH}:{PictureConfig.Crop.Left}:{PictureConfig.Crop.Top}");
             }
 
+            // https://ffmpeg.org/ffmpeg-filters.html#scale-1
             if (PictureConfig.OutputSize.Width != PictureConfig.CropSize.Width || PictureConfig.OutputSize.Height != PictureConfig.CropSize.Height)
             {
                 // https://www.ffmpeg.org/ffmpeg-scaler.html#sws_005fflags
@@ -826,17 +837,30 @@ namespace Alexantr.SimpleVideoConverter
                 filters.Add($"scale={PictureConfig.CropSize.Width}x{PictureConfig.CropSize.Height}:flags={PictureConfig.Interpolation}");
             }
 
-            // add borders
-            // https://ffmpeg.org/ffmpeg-filters.html#toc-pad-1
+            // https://ffmpeg.org/ffmpeg-filters.html#pad-1
             /*if (PictureConfig.Padding.X > 0 || PictureConfig.Padding.Y > 0)
             {
                 filters.Add($"pad={PictureConfig.SelectedSize.Width}:{PictureConfig.SelectedSize.Height}:{PictureConfig.Padding.X}:{PictureConfig.Padding.Y}");
             }*/
 
+            // https://ffmpeg.org/ffmpeg-filters.html#transpose
+            if (PictureConfig.Rotate == 180)
+                filters.Add($"transpose=2,transpose=2");
+            else if (PictureConfig.Rotate == 90)
+                filters.Add($"transpose=1");
+            else if (PictureConfig.Rotate == 270)
+                filters.Add($"transpose=2");
+
+            // https://ffmpeg.org/ffmpeg-filters.html#hflip
+            if (PictureConfig.Flip)
+                filters.Add($"hflip");
+
             // force sar 1:1
+            // https://ffmpeg.org/ffmpeg-filters.html#setdar_002c-setsar
             filters.Add($"setsar=sar=1/1");
 
             // color filter
+            // https://ffmpeg.org/ffmpeg-filters.html#colorchannelmixer
             if (PictureConfig.ColorChannelMixerList.ContainsKey(PictureConfig.ColorFilter))
                 filters.Add($"colorchannelmixer={PictureConfig.ColorChannelMixerList[PictureConfig.ColorFilter]}");
 

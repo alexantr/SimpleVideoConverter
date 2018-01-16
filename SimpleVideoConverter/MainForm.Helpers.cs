@@ -52,6 +52,7 @@ namespace Alexantr.SimpleVideoConverter
             if (inputFile == null)
             {
                 tabPagePicture.Parent = null;
+                tabPageFilters.Parent = null;
                 tabPageVideo.Parent = null;
                 tabPageAudio.Parent = null;
                 tabPageTags.Parent = null;
@@ -59,6 +60,7 @@ namespace Alexantr.SimpleVideoConverter
             else
             {
                 tabPagePicture.Parent = tabControlMain;
+                tabPageFilters.Parent = tabControlMain;
                 tabPageVideo.Parent = tabControlMain;
                 tabPageAudio.Parent = tabControlMain;
                 tabPageTags.Parent = tabControlMain;
@@ -434,7 +436,7 @@ namespace Alexantr.SimpleVideoConverter
                     numericUpDownWidth.Value = newWidth;
                 }
             }
-            else if (checkBoxResizePicture.Checked)
+            else
             {
                 pictureBoxRatioError.BackgroundImage = Properties.Resources.critical;
             }
@@ -469,10 +471,11 @@ namespace Alexantr.SimpleVideoConverter
         {
             if (inputFile == null)
                 return;
-            if (!checkBoxResizePicture.Checked)
+            if (!sizeChanged)
             {
-                numericUpDownWidth.Value = PictureConfig.CropSize.Width;
                 numericUpDownHeight.Value = PictureConfig.CropSize.Height;
+                numericUpDownWidth.Value = PictureConfig.CropSize.Width; // calls UpdateHeight() if checked "keep ar"
+                sizeChanged = false; // force to false
             }
             FillComboBoxAspectRatio();
         }
@@ -545,6 +548,22 @@ namespace Alexantr.SimpleVideoConverter
                 index++;
             }
             comboBoxFieldOrder.SelectedIndex = selectedIndex;
+        }
+
+        private void FillRotate()
+        {
+            comboBoxRotate.Items.Clear();
+            foreach (KeyValuePair<int, string> rm in PictureConfig.RotateList)
+            {
+                comboBoxRotate.Items.Add(new ComboBoxIntItem(rm.Key, rm.Value));
+            }
+            comboBoxRotate.SelectedIndex = 0;
+        }
+
+        private void ResetRotateAndFlip()
+        {
+            comboBoxRotate.SelectedIndex = 0;
+            checkBoxFlip.Checked = false;
         }
 
         private void FillColorFilter()
@@ -646,20 +665,37 @@ namespace Alexantr.SimpleVideoConverter
                 info.Append($", {fullSize.ToString()} ({PictureConfig.OutputSize.ToString()})");
             }
             else
-            {*/
-            info.Append($", {PictureConfig.OutputSize.ToString()}");
-            //}
-
-            /*if (PictureConfig.IsResized())
             {
-                if (PictureConfig.ResizeMethodList.ContainsKey(PictureConfig.ResizeMethod))
-                    info.Append($", {PictureConfig.ResizeMethodList[PictureConfig.ResizeMethod].ToLower()}");
-                else
-                    info.Append($", {PictureConfig.ResizeMethod}");
+                info.Append($", {PictureConfig.OutputSize.ToString()}");
             }*/
+
+            if (PictureConfig.Rotate == 90 || PictureConfig.Rotate == 270)
+            {
+                PictureSize size = new PictureSize
+                {
+                    Width = PictureConfig.OutputSize.Height,
+                    Height = PictureConfig.OutputSize.Width
+                };
+                info.Append($", {size.ToString()}");
+            }
+            else
+            {
+                info.Append($", {PictureConfig.OutputSize.ToString()}");
+            }
 
             if (PictureConfig.Deinterlace)
                 info.Append(", деинт.");
+
+            if (PictureConfig.Rotate > 0)
+            {
+                if (PictureConfig.RotateList.ContainsKey(PictureConfig.Rotate))
+                    info.Append($", {PictureConfig.RotateList[PictureConfig.Rotate]}");
+                else
+                    info.Append($", {PictureConfig.Rotate}°");
+            }
+
+            if (PictureConfig.Flip)
+                info.Append($", отразить");
 
             if (PictureConfig.ColorFilter != "none")
                 info.Append($", {PictureConfig.ColorFilterList[PictureConfig.ColorFilter].ToLower()}");
