@@ -52,6 +52,7 @@ namespace Alexantr.SimpleVideoConverter
             if (inputFile == null)
             {
                 tabPagePicture.Parent = null;
+                tabPageFilters.Parent = null;
                 tabPageVideo.Parent = null;
                 tabPageAudio.Parent = null;
                 tabPageTags.Parent = null;
@@ -59,6 +60,7 @@ namespace Alexantr.SimpleVideoConverter
             else
             {
                 tabPagePicture.Parent = tabControlMain;
+                tabPageFilters.Parent = tabControlMain;
                 tabPageVideo.Parent = tabControlMain;
                 tabPageAudio.Parent = tabControlMain;
                 tabPageTags.Parent = tabControlMain;
@@ -663,17 +665,23 @@ namespace Alexantr.SimpleVideoConverter
                 info.Append($", {fullSize.ToString()} ({PictureConfig.OutputSize.ToString()})");
             }
             else
-            {*/
-            info.Append($", {PictureConfig.OutputSize.ToString()}");
-            //}
-
-            /*if (PictureConfig.IsResized())
             {
-                if (PictureConfig.ResizeMethodList.ContainsKey(PictureConfig.ResizeMethod))
-                    info.Append($", {PictureConfig.ResizeMethodList[PictureConfig.ResizeMethod].ToLower()}");
-                else
-                    info.Append($", {PictureConfig.ResizeMethod}");
+                info.Append($", {PictureConfig.OutputSize.ToString()}");
             }*/
+
+            if (PictureConfig.Rotate == 90 || PictureConfig.Rotate == 270)
+            {
+                PictureSize size = new PictureSize
+                {
+                    Width = PictureConfig.OutputSize.Height,
+                    Height = PictureConfig.OutputSize.Width
+                };
+                info.Append($", {size.ToString()}");
+            }
+            else
+            {
+                info.Append($", {PictureConfig.OutputSize.ToString()}");
+            }
 
             if (PictureConfig.Deinterlace)
                 info.Append(", деинт.");

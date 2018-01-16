@@ -361,6 +361,11 @@ namespace Alexantr.SimpleVideoConverter
             ResizeFromPreset(1280, 720);
         }
 
+        private void buttonPreset480p_Click(object sender, EventArgs e)
+        {
+            ResizeFromPreset(640, 480);
+        }
+
         private void buttonPresetOriginal_Click(object sender, EventArgs e)
         {
             ResizeFromPreset(PictureConfig.CropSize.Width, 0);
