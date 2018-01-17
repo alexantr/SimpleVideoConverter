@@ -301,7 +301,7 @@
             this.MinimumSize = new System.Drawing.Size(710, 435);
             this.Name = "CropForm";
             this.Padding = new System.Windows.Forms.Padding(3);
-            this.Text = "Обрезать края";
+            this.Text = "Кадрирование";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CropForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CropForm_FormClosed);
             this.Load += new System.EventHandler(this.CropForm_Load);

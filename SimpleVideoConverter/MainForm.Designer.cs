@@ -734,9 +734,9 @@
             this.labelCrop.AutoSize = true;
             this.labelCrop.Location = new System.Drawing.Point(3, 8);
             this.labelCrop.Name = "labelCrop";
-            this.labelCrop.Size = new System.Drawing.Size(53, 15);
+            this.labelCrop.Size = new System.Drawing.Size(86, 15);
             this.labelCrop.TabIndex = 2;
-            this.labelCrop.Text = "Обрезка";
+            this.labelCrop.Text = "Кадрирование";
             // 
             // checkBoxFlip
             // 
