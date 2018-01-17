@@ -190,6 +190,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="fonts.conf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -257,9 +258,11 @@
     <ItemGroup>
       <FFmpegFiles32 Include="ffmpeg\win32\*.*" />
       <FFmpegFiles64 Include="ffmpeg\win64\*.*" />
+      <FontConfigFile Include="fonts.conf" />
     </ItemGroup>
     <Copy Condition=" '$(Platform)' == 'x86' " SourceFiles="@(FFmpegFiles32)" DestinationFolder="$(OutputPath)\ffmpeg" />
     <Copy Condition=" '$(Platform)' == 'x64' " SourceFiles="@(FFmpegFiles64)" DestinationFolder="$(OutputPath)\ffmpeg" />
+    <Copy SourceFiles="@(FontConfigFile)" DestinationFolder="$(OutputPath)\ffmpeg" />
   </Target>
   <PropertyGroup>
     <PreBuildEvent>

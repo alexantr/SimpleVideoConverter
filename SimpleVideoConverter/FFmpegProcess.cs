@@ -15,6 +15,10 @@ namespace Alexantr.SimpleVideoConverter
                 throw new FileNotFoundException("Cannot find ffmpeg.exe");
             }
 
+            StartInfo.EnvironmentVariables["FC_CONFIG_DIR"] = directoryPath;
+            StartInfo.EnvironmentVariables["FONTCONFIG_FILE"] = "fonts.conf";
+            StartInfo.EnvironmentVariables["FONTCONFIG_PATH"] = directoryPath;
+
             StartInfo.FileName = exePath;
             StartInfo.Arguments = "-hide_banner -y " + arguments;
             StartInfo.CreateNoWindow = true;

@@ -368,6 +368,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void buttonPresetOriginal_Click(object sender, EventArgs e)
         {
+            sizeChanged = false;
             ResizeFromPreset(PictureConfig.CropSize.Width, 0);
         }
 
@@ -594,6 +595,8 @@ namespace Alexantr.SimpleVideoConverter
 
                 sizeChanged = false;
 
+                textBoxSubtitlesPath.Text = "";
+
                 Text = formTitle;
 
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
@@ -650,6 +653,8 @@ namespace Alexantr.SimpleVideoConverter
             SetOutputInfo();
 
             SetTagsFromInputFile();
+
+            textBoxSubtitlesPath.Text = "";
 
             try
             {
@@ -728,6 +733,12 @@ namespace Alexantr.SimpleVideoConverter
                 {
                     return;
                 }
+            }
+
+            string subtitlesPath = textBoxSubtitlesPath.Text;
+            if (!string.IsNullOrWhiteSpace(subtitlesPath) && !File.Exists(subtitlesPath))
+            {
+                throw new Exception("Файл субтитров не найден!");
             }
 
             int audioStreamIndex = ((ComboBoxIntItem)comboBoxAudioStreams.SelectedItem).Value;
@@ -845,19 +856,27 @@ namespace Alexantr.SimpleVideoConverter
 
             // https://ffmpeg.org/ffmpeg-filters.html#transpose
             if (PictureConfig.Rotate == 180)
-                filters.Add($"transpose=2,transpose=2");
+                filters.Add("transpose=2,transpose=2");
             else if (PictureConfig.Rotate == 90)
-                filters.Add($"transpose=1");
+                filters.Add("transpose=1");
             else if (PictureConfig.Rotate == 270)
-                filters.Add($"transpose=2");
+                filters.Add("transpose=2");
 
             // https://ffmpeg.org/ffmpeg-filters.html#hflip
             if (PictureConfig.Flip)
-                filters.Add($"hflip");
+                filters.Add("hflip");
+
+            // Set subtitles
+            // https://trac.ffmpeg.org/wiki/HowToBurnSubtitlesIntoVideo
+            if (!string.IsNullOrWhiteSpace(subtitlesPath))
+            {
+                // https://ffmpeg.org/ffmpeg-filters.html#Notes-on-filtergraph-escaping
+                filters.Add($"subtitles={subtitlesPath.Replace("\\", "\\\\\\\\").Replace("'", "\\\\\\'").Replace(":", "\\\\:").Replace(",", "\\,")}");
+            }
 
             // force sar 1:1
             // https://ffmpeg.org/ffmpeg-filters.html#setdar_002c-setsar
-            filters.Add($"setsar=sar=1/1");
+            filters.Add("setsar=sar=1/1");
 
             // color filter
             // https://ffmpeg.org/ffmpeg-filters.html#colorchannelmixer
@@ -980,5 +999,32 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         #endregion
+
+        private void buttonBrowseSubtitles_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.Filter = $"Файлы субтитров (SRT, ASS, SSA)|*.srt;*.ass;*.ssa";
+
+                string inPath = Properties.Settings.Default.InPath;
+                if (!string.IsNullOrWhiteSpace(inPath) && Directory.Exists(inPath))
+                {
+                    dialog.InitialDirectory = inPath;
+                }
+                else
+                {
+                    dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
+                }
+
+                dialog.CheckFileExists = true;
+                dialog.CheckPathExists = true;
+                dialog.ValidateNames = true;
+
+                if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.FileName))
+                {
+                    textBoxSubtitlesPath.Text = dialog.FileName;
+                }
+            }
+        }
     }
 }
