@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Alexantr.SimpleVideoConverter</RootNamespace>
     <AssemblyName>SimpleVideoConverter</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -31,6 +31,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>SimpleVideoConverter.ico</ApplicationIcon>
@@ -59,31 +60,9 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <PropertyGroup />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-    <AllowedReferenceRelatedFileExtensions>
-      .allowedextension
-    </AllowedReferenceRelatedFileExtensions>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -91,17 +70,14 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
-    <AllowedReferenceRelatedFileExtensions>
-      .allowedextension
-    </AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -208,32 +184,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ffmpeg\win64\avcodec-57.dll" />
-    <Content Include="ffmpeg\win64\avdevice-57.dll" />
-    <Content Include="ffmpeg\win64\avfilter-6.dll" />
-    <Content Include="ffmpeg\win64\avformat-57.dll" />
-    <Content Include="ffmpeg\win64\avutil-55.dll" />
-    <Content Include="ffmpeg\win64\ffmpeg.exe" />
-    <Content Include="ffmpeg\win64\ffplay.exe" />
-    <Content Include="ffmpeg\win64\ffprobe.exe" />
-    <Content Include="ffmpeg\win64\LICENSE.txt" />
-    <Content Include="ffmpeg\win64\postproc-54.dll" />
-    <Content Include="ffmpeg\win64\README.txt" />
-    <Content Include="ffmpeg\win64\swresample-2.dll" />
-    <Content Include="ffmpeg\win64\swscale-4.dll" />
-    <Content Include="ffmpeg\win32\avcodec-57.dll" />
-    <Content Include="ffmpeg\win32\avdevice-57.dll" />
-    <Content Include="ffmpeg\win32\avfilter-6.dll" />
-    <Content Include="ffmpeg\win32\avformat-57.dll" />
-    <Content Include="ffmpeg\win32\avutil-55.dll" />
-    <Content Include="ffmpeg\win32\ffmpeg.exe" />
-    <Content Include="ffmpeg\win32\ffplay.exe" />
-    <Content Include="ffmpeg\win32\ffprobe.exe" />
-    <Content Include="ffmpeg\win32\LICENSE.txt" />
-    <Content Include="ffmpeg\win32\postproc-54.dll" />
-    <Content Include="ffmpeg\win32\README.txt" />
-    <Content Include="ffmpeg\win32\swresample-2.dll" />
-    <Content Include="ffmpeg\win32\swscale-4.dll" />
+    <Content Include="ffmpeg\avcodec-57.dll" />
+    <Content Include="ffmpeg\avdevice-57.dll" />
+    <Content Include="ffmpeg\avfilter-6.dll" />
+    <Content Include="ffmpeg\avformat-57.dll" />
+    <Content Include="ffmpeg\avutil-55.dll" />
+    <Content Include="ffmpeg\ffmpeg.exe" />
+    <Content Include="ffmpeg\ffplay.exe" />
+    <Content Include="ffmpeg\ffprobe.exe" />
+    <Content Include="ffmpeg\LICENSE.txt" />
+    <Content Include="ffmpeg\postproc-54.dll" />
+    <Content Include="ffmpeg\README.txt" />
+    <Content Include="ffmpeg\swresample-2.dll" />
+    <Content Include="ffmpeg\swscale-4.dll" />
     <None Include="Resources\complete.png" />
     <None Include="Resources\critical.png" />
     <None Include="Resources\gear.png" />
@@ -256,12 +219,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <ItemGroup>
-      <FFmpegFiles32 Include="ffmpeg\win32\*.*" />
-      <FFmpegFiles64 Include="ffmpeg\win64\*.*" />
+      <FFmpegFiles Include="ffmpeg\*.*" />
       <FontConfigFile Include="fonts.conf" />
     </ItemGroup>
-    <Copy Condition=" '$(Platform)' == 'x86' " SourceFiles="@(FFmpegFiles32)" DestinationFolder="$(OutputPath)\ffmpeg" />
-    <Copy Condition=" '$(Platform)' == 'x64' " SourceFiles="@(FFmpegFiles64)" DestinationFolder="$(OutputPath)\ffmpeg" />
+    <Copy SourceFiles="@(FFmpegFiles)" DestinationFolder="$(OutputPath)\ffmpeg" />
     <Copy SourceFiles="@(FontConfigFile)" DestinationFolder="$(OutputPath)\ffmpeg" />
   </Target>
   <PropertyGroup>
