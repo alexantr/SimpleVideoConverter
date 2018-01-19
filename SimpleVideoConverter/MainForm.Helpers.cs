@@ -42,9 +42,7 @@ namespace Alexantr.SimpleVideoConverter
                 niceVersion += "." + version.Revision.ToString();
             }
 
-            string whatBits = Environment.Is64BitProcess ? "64" : "32";
-
-            return $"{title} v{niceVersion} ({whatBits} bit)";
+            return $"{title} v{niceVersion}";
         }
 
         private void ToggleTabs()
