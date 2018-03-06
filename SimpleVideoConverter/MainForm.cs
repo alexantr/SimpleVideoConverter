@@ -759,13 +759,13 @@ namespace Alexantr.SimpleVideoConverter
             if (VideoConfig.UseCRF)
                 videoArgs.Add($"-c:v {VideoConfig.Encoder} -crf {VideoConfig.CRF} {VideoConfig.AdditionalArguments}");
             else
-                videoArgs.Add($"-c:v {VideoConfig.Encoder} -b:v {VideoConfig.Bitrate}k {AudioConfig.AdditionalArguments}");
+                videoArgs.Add($"-c:v {VideoConfig.Encoder} -b:v {VideoConfig.Bitrate}k {VideoConfig.AdditionalArguments}");
 
             // https://trac.ffmpeg.org/wiki/Encode/H.264
             if (VideoConfig.Encoder == "libx264")
             {
                 // must be configurable
-                string videoPreset = "veryslow";
+                string videoPreset = "slower";
                 string videoProfile = "high";
                 string videoLevel = "";
 
