@@ -987,10 +987,11 @@ namespace Alexantr.SimpleVideoConverter
             {
                 arguments = new string[1];
                 arguments[0] = string.Format(
-                    "{0} {1} {2} -f {3}",
+                    "{0} {1} {2} {3} -f {4}",
                     string.Join(" ", videoArgs),
                     string.Join(" ", audioArgs),
                     string.Join(" ", specialCrfArgs),
+                    string.Join(" ", metadataArgs),
                     FormatConfig.Format
                 );
             }
