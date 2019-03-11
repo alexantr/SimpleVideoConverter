@@ -114,6 +114,10 @@
             this.textBoxIn = new System.Windows.Forms.TextBox();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageFilters = new System.Windows.Forms.TabPage();
+            this.panelSubtitles = new System.Windows.Forms.Panel();
+            this.labelSubtitles = new System.Windows.Forms.Label();
+            this.buttonBrowseSubtitles = new System.Windows.Forms.Button();
+            this.textBoxSubtitlesPath = new System.Windows.Forms.TextBox();
             this.panelColorFilter = new System.Windows.Forms.Panel();
             this.labelColorFilter = new System.Windows.Forms.Label();
             this.comboBoxColorFilter = new System.Windows.Forms.ComboBox();
@@ -123,10 +127,7 @@
             this.comboBoxFieldOrder = new System.Windows.Forms.ComboBox();
             this.labelOutputInfo = new System.Windows.Forms.Label();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
-            this.panelSubtitles = new System.Windows.Forms.Panel();
-            this.textBoxSubtitlesPath = new System.Windows.Forms.TextBox();
-            this.buttonBrowseSubtitles = new System.Windows.Forms.Button();
-            this.labelSubtitles = new System.Windows.Forms.Label();
+            this.buttonDateHelp = new System.Windows.Forms.Button();
             this.tabPageTags.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
@@ -145,9 +146,9 @@
             this.panelFile.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.tabPageFilters.SuspendLayout();
+            this.panelSubtitles.SuspendLayout();
             this.panelColorFilter.SuspendLayout();
             this.panelDeinterlace.SuspendLayout();
-            this.panelSubtitles.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonGo
@@ -201,9 +202,6 @@
             this.textBoxTagCreationTime.Name = "textBoxTagCreationTime";
             this.textBoxTagCreationTime.Size = new System.Drawing.Size(180, 23);
             this.textBoxTagCreationTime.TabIndex = 9;
-            this.toolTipHint.SetToolTip(this.textBoxTagCreationTime, "Дата и время в формате ISO 8601 или \"yyyy-MM-dd HH:mm:ss\"\r\nПримеры:\r\n2005-08-09 1" +
-        "8:31:42\r\n2005-08-09T18:31:42\r\n2005-08-09T18:31:42+03:00\r\n2005-08-09T15:31:42.000" +
-        "000Z\r\n2005-08-09T18:31:42.000000+03:00");
             this.textBoxTagCreationTime.TextChanged += new System.EventHandler(this.textBoxTagCreationTime_TextChanged);
             // 
             // buttonPreset1080p
@@ -256,6 +254,7 @@
             // 
             // tabPageTags
             // 
+            this.tabPageTags.Controls.Add(this.buttonDateHelp);
             this.tabPageTags.Controls.Add(this.labelTagCopyright);
             this.tabPageTags.Controls.Add(this.textBoxTagCopyright);
             this.tabPageTags.Controls.Add(this.labelTagAuthor);
@@ -1021,6 +1020,42 @@
             this.tabPageFilters.Text = "Фильтры";
             this.tabPageFilters.UseVisualStyleBackColor = true;
             // 
+            // panelSubtitles
+            // 
+            this.panelSubtitles.Controls.Add(this.labelSubtitles);
+            this.panelSubtitles.Controls.Add(this.buttonBrowseSubtitles);
+            this.panelSubtitles.Controls.Add(this.textBoxSubtitlesPath);
+            this.panelSubtitles.Location = new System.Drawing.Point(6, 119);
+            this.panelSubtitles.Name = "panelSubtitles";
+            this.panelSubtitles.Size = new System.Drawing.Size(592, 58);
+            this.panelSubtitles.TabIndex = 4;
+            // 
+            // labelSubtitles
+            // 
+            this.labelSubtitles.AutoSize = true;
+            this.labelSubtitles.Location = new System.Drawing.Point(3, 8);
+            this.labelSubtitles.Name = "labelSubtitles";
+            this.labelSubtitles.Size = new System.Drawing.Size(61, 15);
+            this.labelSubtitles.TabIndex = 2;
+            this.labelSubtitles.Text = "Субтитры";
+            // 
+            // buttonBrowseSubtitles
+            // 
+            this.buttonBrowseSubtitles.Location = new System.Drawing.Point(514, 3);
+            this.buttonBrowseSubtitles.Name = "buttonBrowseSubtitles";
+            this.buttonBrowseSubtitles.Size = new System.Drawing.Size(75, 25);
+            this.buttonBrowseSubtitles.TabIndex = 1;
+            this.buttonBrowseSubtitles.Text = "Обзор";
+            this.buttonBrowseSubtitles.UseVisualStyleBackColor = true;
+            this.buttonBrowseSubtitles.Click += new System.EventHandler(this.buttonBrowseSubtitles_Click);
+            // 
+            // textBoxSubtitlesPath
+            // 
+            this.textBoxSubtitlesPath.Location = new System.Drawing.Point(113, 4);
+            this.textBoxSubtitlesPath.Name = "textBoxSubtitlesPath";
+            this.textBoxSubtitlesPath.Size = new System.Drawing.Size(395, 23);
+            this.textBoxSubtitlesPath.TabIndex = 0;
+            // 
             // panelColorFilter
             // 
             this.panelColorFilter.Controls.Add(this.labelColorFilter);
@@ -1108,41 +1143,15 @@
             this.labelOutputInfoTitle.TabIndex = 1;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
             // 
-            // panelSubtitles
+            // buttonDateHelp
             // 
-            this.panelSubtitles.Controls.Add(this.labelSubtitles);
-            this.panelSubtitles.Controls.Add(this.buttonBrowseSubtitles);
-            this.panelSubtitles.Controls.Add(this.textBoxSubtitlesPath);
-            this.panelSubtitles.Location = new System.Drawing.Point(6, 119);
-            this.panelSubtitles.Name = "panelSubtitles";
-            this.panelSubtitles.Size = new System.Drawing.Size(592, 58);
-            this.panelSubtitles.TabIndex = 4;
-            // 
-            // textBoxSubtitlesPath
-            // 
-            this.textBoxSubtitlesPath.Location = new System.Drawing.Point(113, 4);
-            this.textBoxSubtitlesPath.Name = "textBoxSubtitlesPath";
-            this.textBoxSubtitlesPath.Size = new System.Drawing.Size(395, 23);
-            this.textBoxSubtitlesPath.TabIndex = 0;
-            // 
-            // buttonBrowseSubtitles
-            // 
-            this.buttonBrowseSubtitles.Location = new System.Drawing.Point(514, 3);
-            this.buttonBrowseSubtitles.Name = "buttonBrowseSubtitles";
-            this.buttonBrowseSubtitles.Size = new System.Drawing.Size(75, 25);
-            this.buttonBrowseSubtitles.TabIndex = 1;
-            this.buttonBrowseSubtitles.Text = "Обзор";
-            this.buttonBrowseSubtitles.UseVisualStyleBackColor = true;
-            this.buttonBrowseSubtitles.Click += new System.EventHandler(this.buttonBrowseSubtitles_Click);
-            // 
-            // labelSubtitles
-            // 
-            this.labelSubtitles.AutoSize = true;
-            this.labelSubtitles.Location = new System.Drawing.Point(3, 8);
-            this.labelSubtitles.Name = "labelSubtitles";
-            this.labelSubtitles.Size = new System.Drawing.Size(61, 15);
-            this.labelSubtitles.TabIndex = 2;
-            this.labelSubtitles.Text = "Субтитры";
+            this.buttonDateHelp.Location = new System.Drawing.Point(323, 116);
+            this.buttonDateHelp.Name = "buttonDateHelp";
+            this.buttonDateHelp.Size = new System.Drawing.Size(25, 25);
+            this.buttonDateHelp.TabIndex = 10;
+            this.buttonDateHelp.Text = "?";
+            this.buttonDateHelp.UseVisualStyleBackColor = true;
+            this.buttonDateHelp.Click += new System.EventHandler(this.buttonDateHelp_Click);
             // 
             // MainForm
             // 
@@ -1191,12 +1200,12 @@
             this.panelFile.PerformLayout();
             this.tabControlMain.ResumeLayout(false);
             this.tabPageFilters.ResumeLayout(false);
+            this.panelSubtitles.ResumeLayout(false);
+            this.panelSubtitles.PerformLayout();
             this.panelColorFilter.ResumeLayout(false);
             this.panelColorFilter.PerformLayout();
             this.panelDeinterlace.ResumeLayout(false);
             this.panelDeinterlace.PerformLayout();
-            this.panelSubtitles.ResumeLayout(false);
-            this.panelSubtitles.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1300,6 +1309,7 @@
         private System.Windows.Forms.Label labelSubtitles;
         private System.Windows.Forms.Button buttonBrowseSubtitles;
         private System.Windows.Forms.TextBox textBoxSubtitlesPath;
+        private System.Windows.Forms.Button buttonDateHelp;
     }
 }
 

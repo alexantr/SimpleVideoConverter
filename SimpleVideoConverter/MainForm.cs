@@ -1026,5 +1026,20 @@ namespace Alexantr.SimpleVideoConverter
                 }
             }
         }
+
+        private void buttonDateHelp_Click(object sender, EventArgs e)
+        {
+            string dateHelp = @"Укажите дату и время в формате ISO 8601
+или вида ""yyyy-MM-dd HH:mm:ss""
+
+Примеры:
+2005-08-09 18:31:42
+2005-08-09T18:31:42
+2005-08-09T18:31:42+03:00
+2005-08-09T15:31:42.000000Z
+2005-08-09T18:31:42.000000+03:00";
+
+            MessageBox.Show(dateHelp, "Поддерживаемые форматы даты", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }
