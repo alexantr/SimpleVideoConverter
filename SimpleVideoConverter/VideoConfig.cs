@@ -4,30 +4,102 @@ namespace Alexantr.SimpleVideoConverter
 {
     public static class VideoConfig
     {
-        private static bool crfSupported = true;
-        private static bool crfOn = true;
-        private static int crfMinValue;
-        private static int crfMaxValue;
+        private static int crf = 20;
 
-        private static int crf;
+        private static int bitrate = 3000;
+        private static string codec = "h264";
 
-        private static int bitrate;
-        private static int bitrateMinValue;
-        private static int bitrateMaxValue;
+        public static string Codec
+        {
+            get { return codec; }
+            set
+            {
+                codec = value;
 
-        private static string codec;
-        private static Dictionary<string, string> codecList;
+                BitrateMinValue = 100;
+                BitrateMaxValue = 100000;
+                bitrate = 3000;
 
-        private static Dictionary<string, string> defaultAudioCodecs;
+                AdditionalArguments = "";
 
-        private static string encoder;
+                NoAudioInFirstPass = true;
 
-        private static string additionalArguments;
+                switch (codec)
+                {
+                    case "h264":
+                        Encoder = "libx264";
+                        CRFMinValue = 1;
+                        CRFMaxValue = 51;
+                        crf = 20;
+                        AdditionalArguments = "-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p"; // todo: do
+                        break;
+                    case "h265":
+                        Encoder = "libx265";
+                        CRFMinValue = 1;
+                        CRFMaxValue = 51;
+                        crf = 23;
+                        NoAudioInFirstPass = false;
+                        break;
+                    default:
+                        Encoder = "none";
+                        CRFSupported = false;
+                        UseCRF = false;
+                        break;
+                }
+            }
+        }
 
-        private static bool noAudioInFirstPass = true;
+        public static Dictionary<string, string> CodecList { get; } = new Dictionary<string, string>
+        {
+            { "h264", "H.264" },
+            { "h265", "H.265" }
+        };
 
-        private static string frameRate;
-        private static Dictionary<string, string> frameRateList = new Dictionary<string, string>
+        public static string Encoder { get; private set; }
+
+        public static bool CRFSupported { get; private set; } = true;
+
+        public static bool UseCRF { get; set; } = true;
+
+        public static int CRFMinValue { get; private set; }
+
+        public static int CRFMaxValue { get; private set; }
+
+        public static int CRF
+        {
+            get { return crf; }
+            set
+            {
+                if (value < CRFMinValue)
+                    crf = CRFMinValue;
+                else if (value > CRFMaxValue)
+                    crf = CRFMaxValue;
+                else
+                    crf = value;
+            }
+        }
+
+        public static int BitrateMinValue { get; private set; }
+
+        public static int BitrateMaxValue { get; private set; }
+
+        public static int Bitrate
+        {
+            get { return bitrate; }
+            set
+            {
+                if (value < BitrateMinValue)
+                    bitrate = BitrateMinValue;
+                else if (value > BitrateMaxValue)
+                    bitrate = BitrateMaxValue;
+                else
+                    bitrate = value;
+            }
+        }
+
+        public static string FrameRate { get; set; }
+
+        public static Dictionary<string, string> FrameRateList { get; } = new Dictionary<string, string>
         {
             { "10", "10" },
             { "12", "12" },
@@ -45,126 +117,8 @@ namespace Alexantr.SimpleVideoConverter
             { "60", "60" }
         };
 
-        public static string Codec
-        {
-            get { return codec; }
-            set
-            {
-                codec = value;
+        public static string AdditionalArguments { get; private set; }
 
-                bitrateMinValue = 100;
-                bitrateMaxValue = 100000;
-                bitrate = 3000;
-
-                additionalArguments = "";
-
-                noAudioInFirstPass = true;
-
-                switch (codec)
-                {
-                    case "h264":
-                        encoder = "libx264";
-                        crfMinValue = 1;
-                        crfMaxValue = 51;
-                        crf = 20;
-                        additionalArguments = "-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p"; // todo: do
-                        break;
-                    case "h265":
-                        encoder = "libx265";
-                        crfMinValue = 1;
-                        crfMaxValue = 51;
-                        crf = 25;
-                        noAudioInFirstPass = false;
-                        break;
-                    case "vp9":
-                        encoder = "libvpx-vp9";
-                        crfMinValue = 1;
-                        crfMaxValue = 63;
-                        crf = 30;
-                        noAudioInFirstPass = false;
-                        break;
-                    case "vp8":
-                        encoder = "libvpx";
-                        crfSupported = false;
-                        crfOn = false;
-                        break;
-                    default:
-                        encoder = "none";
-                        crfSupported = false;
-                        crfOn = false;
-                        break;
-                }
-            }
-        }
-
-        public static Dictionary<string, string> CodecList
-        {
-            get { return codecList; }
-            set { codecList = value; }
-        }
-
-        public static Dictionary<string, string> DefaultAudioCodecs
-        {
-            get { return defaultAudioCodecs; }
-            set { defaultAudioCodecs = value; }
-        }
-
-        public static string Encoder => encoder;
-
-        public static bool CRFSupported => crfSupported;
-
-        public static bool UseCRF
-        {
-            get { return crfOn; }
-            set { crfOn = value; }
-        }
-
-        public static int CRFMinValue => crfMinValue;
-
-        public static int CRFMaxValue => crfMaxValue;
-
-        public static int CRF
-        {
-            get { return crf; }
-            set
-            {
-                if (value < crfMinValue)
-                    crf = crfMinValue;
-                else if (value > crfMaxValue)
-                    crf = crfMaxValue;
-                else
-                    crf = value;
-            }
-        }
-
-        public static int BitrateMinValue => bitrateMinValue;
-
-        public static int BitrateMaxValue => bitrateMaxValue;
-
-        public static int Bitrate
-        {
-            get { return bitrate; }
-            set
-            {
-                if (value < bitrateMinValue)
-                    bitrate = bitrateMinValue;
-                else if (value > bitrateMaxValue)
-                    bitrate = bitrateMaxValue;
-                else
-                    bitrate = value;
-            }
-        }
-
-        public static string FrameRate
-        {
-            get { return frameRate; }
-            set { frameRate = value; }
-        }
-
-        public static Dictionary<string, string> FrameRateList => frameRateList;
-
-        public static string AdditionalArguments => additionalArguments;
-
-        public static bool NoAudioInFirstPass => noAudioInFirstPass;
+        public static bool NoAudioInFirstPass { get; private set; } = true;
     }
 }

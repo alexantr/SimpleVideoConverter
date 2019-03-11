@@ -16,9 +16,6 @@ namespace Alexantr.SimpleVideoConverter
         // https://forum.videohelp.com/threads/369463-x264-Tweaking-testing-and-comparing-settings
         private const string FormatMP4 = "mp4";
 
-        // https://www.webmproject.org/docs/container/
-        private const string FormatWebM = "webm";
-
         private char[] invalidChars = Path.GetInvalidPathChars();
 
         private List<string> tempFilesList = new List<string>();
@@ -67,33 +64,7 @@ namespace Alexantr.SimpleVideoConverter
 
         #endregion
 
-        #region Format
-
-        private void FillFormat(string savedFormat)
-        {
-            int selectedIndex = 0, index = 0;
-            comboBoxFileType.Items.Clear();
-            foreach (KeyValuePair<string, string> f in FormatConfig.FormatList)
-            {
-                comboBoxFileType.Items.Add(new ComboBoxItem(f.Key, f.Value));
-                if (f.Key == savedFormat)
-                    selectedIndex = index;
-                index++;
-            }
-            comboBoxFileType.SelectedIndex = selectedIndex;
-        }
-
-        private void ChangeOutExtension()
-        {
-            if (!string.IsNullOrWhiteSpace(textBoxOut.Text))
-            {
-                try
-                {
-                    textBoxOut.Text = Path.Combine(Path.GetDirectoryName(textBoxOut.Text), Path.GetFileNameWithoutExtension(textBoxOut.Text) + "." + FormatConfig.Format);
-                }
-                catch (Exception) { }
-            }
-        }
+        #region File
 
         private void ValidateInputFile(string input)
         {
@@ -334,17 +305,7 @@ namespace Alexantr.SimpleVideoConverter
                 {
                     if (aStream.Index == index)
                     {
-                        if (FormatConfig.Format == FormatWebM && aStream.CodecName.Equals("opus", StringComparison.OrdinalIgnoreCase))
-                        {
-                            checkBoxConvertAudio.Enabled = true;
-                            found = true;
-                        }
-                        else if (FormatConfig.Format == FormatWebM && aStream.CodecName.Equals("vorbis", StringComparison.OrdinalIgnoreCase))
-                        {
-                            checkBoxConvertAudio.Enabled = true;
-                            found = true;
-                        }
-                        else if (FormatConfig.Format == FormatMP4 && aStream.CodecName.Equals("aac", StringComparison.OrdinalIgnoreCase))
+                        if (aStream.CodecName.Equals("aac", StringComparison.OrdinalIgnoreCase))
                         {
                             checkBoxConvertAudio.Enabled = true;
                             found = true;

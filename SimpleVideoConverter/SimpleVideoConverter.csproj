@@ -132,7 +132,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FileTags.cs" />
-    <Compile Include="FormatConfig.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

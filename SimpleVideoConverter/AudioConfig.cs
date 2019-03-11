@@ -4,39 +4,10 @@ namespace Alexantr.SimpleVideoConverter
 {
     public static class AudioConfig
     {
-        public const int DefaultBitrate = 192;
+        public const int DefaultBitrate = 160;
         public const int DefaultBitrateForMultiChannels = 448;
 
-        //public static int StreamIndex = -1;
-        //public static bool MustEncode = false;
-
-        private static int bitrate;
-        private static int[] bitrateList;
-
-        private static int channels = 0;
-        private static Dictionary<int, string> channelsList = new Dictionary<int, string>
-        {
-            { 0, "Авто" },
-            { 1, "1 (моно)" },
-            { 2, "2 (стерео)" }
-        };
-
-        private static int sampleRate;
-        private static int[] sampleRateList;
-
-        private static bool vbrSupported;
-        private static bool vbrOn;
-        private static int vbrMinValue;
-        private static int vbrMaxValue;
-
-        private static int quality;
-
-        private static string codec;
-        private static Dictionary<string, string> codecList;
-
-        private static string encoder;
-
-        private static string additionalArguments;
+        private static string codec = "aac";
 
         /// <summary>
         /// Stores audio codec value and determines available encoders for
@@ -50,126 +21,59 @@ namespace Alexantr.SimpleVideoConverter
             {
                 codec = value;
 
-                vbrSupported = false;
-                vbrOn = false;
-                additionalArguments = "";
+                VBRSupported = false;
+                UseVBR = false;
+                AdditionalArguments = "";
 
-                bitrate = DefaultBitrate;
-                sampleRate = 0;
-                sampleRateList = new int[] { 8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000 };
+                Bitrate = DefaultBitrate;
 
                 switch (codec)
                 {
                     case "aac":
-                        encoder = "aac";
-                        additionalArguments = "-strict -2";
-                        break;
-                    case "mp3":
-                        sampleRateList = new int[] { 8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000 };
-                        encoder = "libmp3lame";
-                        break;
-                    case "opus":
-                        encoder = "libopus";
-                        break;
-                    case "vorbis":
-                        encoder = "libvorbis";
-                        vbrSupported = true;
-                        quality = 4; // 3-6 is a good range to try
-                        // 10 is highest quality
-                        vbrMinValue = 0;
-                        vbrMaxValue = 10;
+                        Encoder = "aac";
+                        //AdditionalArguments = "";
                         break;
                     default:
-                        encoder = "copy";
+                        Encoder = "copy";
                         break;
                 }
             }
         }
 
-        public static Dictionary<string, string> CodecList
+        public static Dictionary<string, string> CodecList { get; } = new Dictionary<string, string>
         {
-            get { return codecList; }
-            set { codecList = value; }
-        }
+            { "aac", "AAC" }
+        };
 
-        public static string Encoder => encoder;
+        public static string Encoder { get; private set; }
 
-        public static int Bitrate
+        public static int Bitrate { get; set; }
+
+        public static int[] BitrateList { get; } = new int[] { 8, 16, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 640 };
+
+        public static bool VBRSupported { get; private set; }
+
+        public static bool UseVBR { get; set; }
+
+        private static int VBRMinValue { get; set; }
+
+        private static int VBRMaxValue { get; set; }
+
+        public static int Quality { get; set; }
+
+        public static int Channels { get; set; } = 0;
+
+        public static Dictionary<int, string> ChannelsList { get; } = new Dictionary<int, string>
         {
-            get { return bitrate; }
-            set { bitrate = value; }
-        }
+            { 0, "Авто" },
+            { 1, "1 (моно)" },
+            { 2, "2 (стерео)" }
+        };
 
-        /// <summary>
-        /// Determines and returns supported bitrates that is based on
-        /// the audio codec and sample rates.
-        /// </summary>
-        public static int[] BitrateList
-        {
-            get
-            {
-                switch (codec)
-                {
-                    case "mp3":
-                        if (sampleRate == 8000 || sampleRate == 11025 || sampleRate == 12000)
-                        {
-                            // MPEG-2.5 Layer III bitrates
-                            bitrateList = new int[] { 8, 16, 24, 32, 40, 48, 56, 64 };
-                        }
-                        else if (sampleRate == 16000 || sampleRate == 22050 || sampleRate == 24000)
-                        {
-                            // MPEG-2 Layer III bitrates
-                            bitrateList = new int[] { 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160 };
-                        }
-                        else
-                        {
-                            // MPEG-1 Layer III bitrates
-                            bitrateList = new int[] { 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 192, 224, 256, 320 };
-                        }
-                        break;
-                    default:
-                        bitrateList = new int[] { 8, 16, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 640 };
-                        break;
-                }
+        public static int SampleRate { get; set; } = 0;
 
-                return bitrateList;
-            }
-        }
+        public static int[] SampleRateList { get; } = new int[] { 8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000 };
 
-        public static bool VBRSupported => vbrSupported;
-
-        public static bool UseVBR
-        {
-            get { return vbrOn; }
-            set { vbrOn = value; }
-        }
-
-        private static int VBRMinValue => vbrMinValue;
-
-        private static int VBRMaxValue => vbrMaxValue;
-
-        public static int Quality
-        {
-            get { return quality; }
-            set { quality = value; }
-        }
-
-        public static int Channels
-        {
-            get { return channels; }
-            set { channels = value; }
-        }
-
-        public static Dictionary<int, string> ChannelsList => channelsList;
-
-        public static int SampleRate
-        {
-            get { return sampleRate; }
-            set { sampleRate = value; }
-        }
-
-        public static int[] SampleRateList => sampleRateList;
-
-        public static string AdditionalArguments => additionalArguments;
+        public static string AdditionalArguments { get; private set; }
     }
 }

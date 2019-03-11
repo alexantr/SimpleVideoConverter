@@ -38,12 +38,7 @@ namespace Alexantr.SimpleVideoConverter
 
             checkBoxKeepOutPath.Checked = Properties.Settings.Default.RememberOutPath;
 
-            // Format
-            FillFormat(Properties.Settings.Default.OutFormat);
-
-            // Web optimized - only for mp4
-            checkBoxWebOptimized.Checked = true;
-            checkBoxWebOptimized.Visible = FormatConfig.CanWebOptimized;
+            checkBoxWebOptimized.Checked = Properties.Settings.Default.WebOptimized;
 
             // Init once on form load
             
@@ -74,7 +69,16 @@ namespace Alexantr.SimpleVideoConverter
 
             FillFrameRate();
 
+            FillVideoCodec();
+            FillVideoCRFAndBitrate();
+
+            FillAudioCodec();
+            FillAudioBitrate();
+            FillAudioSampleRate();
             FillAudioChannels();
+
+            CheckAudioMustConvert();
+            UpdateAudioBitrateByChannels();
 
             CalcFileSize(); // just hide labels
 
@@ -95,7 +99,7 @@ namespace Alexantr.SimpleVideoConverter
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.RememberOutPath = checkBoxKeepOutPath.Checked;
-
+            Properties.Settings.Default.WebOptimized = checkBoxWebOptimized.Checked;
             Properties.Settings.Default.Save();
 
             DeleteTempFiles();
@@ -147,7 +151,7 @@ namespace Alexantr.SimpleVideoConverter
             {
                 dialog.OverwritePrompt = false; // ask later
                 dialog.ValidateNames = true;
-                dialog.Filter = $"{FormatConfig.FormatList[FormatConfig.Format]} файлы|*.{FormatConfig.Format}";
+                dialog.Filter = FormatMP4.ToUpper() + " файлы|*." + FormatMP4;
 
                 if (!string.IsNullOrWhiteSpace(textBoxOut.Text))
                 {
@@ -186,26 +190,6 @@ namespace Alexantr.SimpleVideoConverter
             {
                 Process.Start(inputFile.FullPath);
             }
-        }
-
-        private void comboBoxFileType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            FormatConfig.Format = ((ComboBoxItem)comboBoxFileType.SelectedItem).Value;
-            Properties.Settings.Default.OutFormat = FormatConfig.Format;
-
-            ChangeOutExtension();
-
-            checkBoxWebOptimized.Visible = FormatConfig.CanWebOptimized;
-
-            FillVideoCodec();
-            FillVideoCRFAndBitrate();
-
-            FillAudioCodec();
-            FillAudioBitrate();
-            FillAudioSampleRate();
-
-            CheckAudioMustConvert();
-            UpdateAudioBitrateByChannels();
         }
 
         private void buttonGo_Click(object sender, EventArgs e)
@@ -421,21 +405,6 @@ namespace Alexantr.SimpleVideoConverter
         private void comboBoxVideoCodec_SelectedIndexChanged(object sender, EventArgs e)
         {
             VideoConfig.Codec = ((ComboBoxItem)comboBoxVideoCodec.SelectedItem).Value;
-
-            // change audio codec to default for selected video codec
-            if (VideoConfig.DefaultAudioCodecs != null && VideoConfig.DefaultAudioCodecs.ContainsKey(VideoConfig.Codec))
-            {
-                int index = 0;
-                foreach (ComboBoxItem item in comboBoxAudioCodec.Items)
-                {
-                    if (item.Value == VideoConfig.DefaultAudioCodecs[VideoConfig.Codec])
-                    {
-                        comboBoxAudioCodec.SelectedIndex = index;
-                        break;
-                    }
-                    index++;
-                }
-            }
 
             FillVideoCRFAndBitrate();
         }
@@ -680,11 +649,11 @@ namespace Alexantr.SimpleVideoConverter
 
                 Properties.Settings.Default.OutPath = outDir;
 
-                string outPath = Path.Combine(outDir, withoutExtension + "." + FormatConfig.Format);
+                string outPath = Path.Combine(outDir, withoutExtension + "." + FormatMP4);
                 int num = 2;
                 while (File.Exists(outPath))
                 {
-                    outPath = Path.Combine(outDir, withoutExtension + " (" + num.ToString() + ")." + FormatConfig.Format);
+                    outPath = Path.Combine(outDir, withoutExtension + " (" + num.ToString() + ")." + FormatMP4);
                     num++;
                     // if so many duplicates set name manually
                     if (num > 100)
@@ -798,28 +767,6 @@ namespace Alexantr.SimpleVideoConverter
                 //string videoPreset = "veryslow";
 
                 //videoArgs.Add($"-preset:v {videoPreset}");
-            }
-
-            // https://trac.ffmpeg.org/wiki/Encode/VP9
-            if (VideoConfig.Encoder == "libvpx-vp9")
-            {
-                if (VideoConfig.UseCRF)
-                    videoArgs.Add("-b:v 0");
-
-                int threads = Environment.ProcessorCount;
-                videoArgs.Add($"-threads {threads}");
-
-                specialArgsPass1.Add("-cpu-used 4");
-                specialArgsPass2.Add("-cpu-used 1");
-
-                specialCrfArgs.Add("-cpu-used 1");
-            }
-
-            // https://trac.ffmpeg.org/wiki/Encode/VP8
-            if (VideoConfig.Encoder == "libvpx")
-            {
-                int threads = Environment.ProcessorCount;
-                videoArgs.Add($"-threads {threads}");
             }
 
             // Video filters
@@ -945,7 +892,7 @@ namespace Alexantr.SimpleVideoConverter
 
             // mp4
 
-            if (FormatConfig.CanWebOptimized && checkBoxWebOptimized.Checked)
+            if (checkBoxWebOptimized.Checked)
             {
                 specialArgsPass2.Add("-movflags +faststart");
                 specialCrfArgs.Add("-movflags +faststart");
@@ -971,7 +918,7 @@ namespace Alexantr.SimpleVideoConverter
                     (VideoConfig.NoAudioInFirstPass ? "-an" : string.Join(" ", audioArgs)),
                     string.Join(" ", specialArgsPass1),
                     "",
-                    FormatConfig.Format,
+                    FormatMP4,
                     1,
                     passLogFile
                 );
@@ -981,7 +928,7 @@ namespace Alexantr.SimpleVideoConverter
                     string.Join(" ", audioArgs),
                     string.Join(" ", specialArgsPass2),
                     string.Join(" ", metadataArgs),
-                    FormatConfig.Format,
+                    FormatMP4,
                     2,
                     passLogFile
                 );
@@ -995,7 +942,7 @@ namespace Alexantr.SimpleVideoConverter
                     string.Join(" ", audioArgs),
                     string.Join(" ", specialCrfArgs),
                     string.Join(" ", metadataArgs),
-                    FormatConfig.Format
+                    FormatMP4
                 );
             }
 

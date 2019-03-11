@@ -35,12 +35,13 @@
             this.buttonShowInfo = new System.Windows.Forms.Button();
             this.buttonOpenInputFile = new System.Windows.Forms.Button();
             this.checkBoxWebOptimized = new System.Windows.Forms.CheckBox();
-            this.textBoxTagCreationTime = new System.Windows.Forms.TextBox();
             this.buttonPreset1080p = new System.Windows.Forms.Button();
             this.buttonPreset720p = new System.Windows.Forms.Button();
             this.buttonPresetOriginal = new System.Windows.Forms.Button();
             this.buttonPreset480p = new System.Windows.Forms.Button();
+            this.textBoxTagCreationTime = new System.Windows.Forms.TextBox();
             this.tabPageTags = new System.Windows.Forms.TabPage();
+            this.buttonDateHelp = new System.Windows.Forms.Button();
             this.labelTagCopyright = new System.Windows.Forms.Label();
             this.textBoxTagCopyright = new System.Windows.Forms.TextBox();
             this.labelTagAuthor = new System.Windows.Forms.Label();
@@ -103,8 +104,6 @@
             this.labelX = new System.Windows.Forms.Label();
             this.tabPageFile = new System.Windows.Forms.TabPage();
             this.panelFile = new System.Windows.Forms.Panel();
-            this.comboBoxFileType = new System.Windows.Forms.ComboBox();
-            this.labelFileType = new System.Windows.Forms.Label();
             this.labelOut = new System.Windows.Forms.Label();
             this.labelInputFile = new System.Windows.Forms.Label();
             this.textBoxOut = new System.Windows.Forms.TextBox();
@@ -127,7 +126,6 @@
             this.comboBoxFieldOrder = new System.Windows.Forms.ComboBox();
             this.labelOutputInfo = new System.Windows.Forms.Label();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
-            this.buttonDateHelp = new System.Windows.Forms.Button();
             this.tabPageTags.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
@@ -187,22 +185,14 @@
             // checkBoxWebOptimized
             // 
             this.checkBoxWebOptimized.AutoSize = true;
-            this.checkBoxWebOptimized.Location = new System.Drawing.Point(176, 147);
+            this.checkBoxWebOptimized.Location = new System.Drawing.Point(95, 147);
             this.checkBoxWebOptimized.Name = "checkBoxWebOptimized";
             this.checkBoxWebOptimized.Size = new System.Drawing.Size(142, 19);
-            this.checkBoxWebOptimized.TabIndex = 11;
+            this.checkBoxWebOptimized.TabIndex = 9;
             this.checkBoxWebOptimized.Text = "Web-оптимизирован";
             this.toolTipHint.SetToolTip(this.checkBoxWebOptimized, "Служебная информация будет перенесена в начало файла для быстрого старта воспроиз" +
         "ведения в браузерах");
             this.checkBoxWebOptimized.UseVisualStyleBackColor = true;
-            // 
-            // textBoxTagCreationTime
-            // 
-            this.textBoxTagCreationTime.Location = new System.Drawing.Point(137, 117);
-            this.textBoxTagCreationTime.Name = "textBoxTagCreationTime";
-            this.textBoxTagCreationTime.Size = new System.Drawing.Size(180, 23);
-            this.textBoxTagCreationTime.TabIndex = 9;
-            this.textBoxTagCreationTime.TextChanged += new System.EventHandler(this.textBoxTagCreationTime_TextChanged);
             // 
             // buttonPreset1080p
             // 
@@ -252,6 +242,14 @@
             this.buttonPreset480p.UseVisualStyleBackColor = true;
             this.buttonPreset480p.Click += new System.EventHandler(this.buttonPreset480p_Click);
             // 
+            // textBoxTagCreationTime
+            // 
+            this.textBoxTagCreationTime.Location = new System.Drawing.Point(137, 117);
+            this.textBoxTagCreationTime.Name = "textBoxTagCreationTime";
+            this.textBoxTagCreationTime.Size = new System.Drawing.Size(180, 23);
+            this.textBoxTagCreationTime.TabIndex = 9;
+            this.textBoxTagCreationTime.TextChanged += new System.EventHandler(this.textBoxTagCreationTime_TextChanged);
+            // 
             // tabPageTags
             // 
             this.tabPageTags.Controls.Add(this.buttonDateHelp);
@@ -272,6 +270,16 @@
             this.tabPageTags.TabIndex = 4;
             this.tabPageTags.Text = "Теги";
             this.tabPageTags.UseVisualStyleBackColor = true;
+            // 
+            // buttonDateHelp
+            // 
+            this.buttonDateHelp.Location = new System.Drawing.Point(323, 116);
+            this.buttonDateHelp.Name = "buttonDateHelp";
+            this.buttonDateHelp.Size = new System.Drawing.Size(25, 25);
+            this.buttonDateHelp.TabIndex = 10;
+            this.buttonDateHelp.Text = "?";
+            this.buttonDateHelp.UseVisualStyleBackColor = true;
+            this.buttonDateHelp.Click += new System.EventHandler(this.buttonDateHelp_Click);
             // 
             // labelTagCopyright
             // 
@@ -895,8 +903,6 @@
             // panelFile
             // 
             this.panelFile.Controls.Add(this.checkBoxWebOptimized);
-            this.panelFile.Controls.Add(this.comboBoxFileType);
-            this.panelFile.Controls.Add(this.labelFileType);
             this.panelFile.Controls.Add(this.buttonOpenInputFile);
             this.panelFile.Controls.Add(this.labelOut);
             this.panelFile.Controls.Add(this.labelInputFile);
@@ -910,25 +916,6 @@
             this.panelFile.Name = "panelFile";
             this.panelFile.Size = new System.Drawing.Size(592, 171);
             this.panelFile.TabIndex = 0;
-            // 
-            // comboBoxFileType
-            // 
-            this.comboBoxFileType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxFileType.FormattingEnabled = true;
-            this.comboBoxFileType.Location = new System.Drawing.Point(95, 145);
-            this.comboBoxFileType.Name = "comboBoxFileType";
-            this.comboBoxFileType.Size = new System.Drawing.Size(75, 23);
-            this.comboBoxFileType.TabIndex = 10;
-            this.comboBoxFileType.SelectedIndexChanged += new System.EventHandler(this.comboBoxFileType_SelectedIndexChanged);
-            // 
-            // labelFileType
-            // 
-            this.labelFileType.AutoSize = true;
-            this.labelFileType.Location = new System.Drawing.Point(3, 148);
-            this.labelFileType.Name = "labelFileType";
-            this.labelFileType.Size = new System.Drawing.Size(66, 15);
-            this.labelFileType.TabIndex = 9;
-            this.labelFileType.Text = "Тип файла";
             // 
             // labelOut
             // 
@@ -1143,16 +1130,6 @@
             this.labelOutputInfoTitle.TabIndex = 1;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
             // 
-            // buttonDateHelp
-            // 
-            this.buttonDateHelp.Location = new System.Drawing.Point(323, 116);
-            this.buttonDateHelp.Name = "buttonDateHelp";
-            this.buttonDateHelp.Size = new System.Drawing.Size(25, 25);
-            this.buttonDateHelp.TabIndex = 10;
-            this.buttonDateHelp.Text = "?";
-            this.buttonDateHelp.UseVisualStyleBackColor = true;
-            this.buttonDateHelp.Click += new System.EventHandler(this.buttonDateHelp_Click);
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -1237,7 +1214,6 @@
         private System.Windows.Forms.Label labelCropSize;
         private System.Windows.Forms.TabPage tabPageFile;
         private System.Windows.Forms.Panel panelFile;
-        private System.Windows.Forms.Label labelFileType;
         private System.Windows.Forms.Button buttonOpenInputFile;
         private System.Windows.Forms.Label labelOut;
         private System.Windows.Forms.Label labelInputFile;
@@ -1276,7 +1252,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDownBitrate;
         private System.Windows.Forms.ComboBox comboBoxFrameRate;
         private System.Windows.Forms.ComboBox comboBoxInterpolation;
-        private System.Windows.Forms.ComboBox comboBoxFileType;
         private System.Windows.Forms.CheckBox checkBoxConvertAudio;
         private System.Windows.Forms.ComboBox comboBoxVideoCodec;
         private System.Windows.Forms.ComboBox comboBoxAudioStreams;
