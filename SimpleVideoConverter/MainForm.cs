@@ -661,7 +661,7 @@ namespace Alexantr.SimpleVideoConverter
                 string outDir = "";
                 string withoutExtension = Path.GetFileNameWithoutExtension(path);
 
-                if (Properties.Settings.Default.RememberOutPath)
+                if (checkBoxKeepOutPath.Checked)
                 {
                     if (!string.IsNullOrWhiteSpace(textBoxOut.Text))
                     {
@@ -686,6 +686,9 @@ namespace Alexantr.SimpleVideoConverter
                 {
                     outPath = Path.Combine(outDir, withoutExtension + " (" + num.ToString() + ")." + FormatConfig.Format);
                     num++;
+                    // if so many duplicates set name manually
+                    if (num > 100)
+                        break;
                 }
                 textBoxOut.Text = outPath;
             }
