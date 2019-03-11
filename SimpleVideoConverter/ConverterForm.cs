@@ -192,6 +192,7 @@ namespace Alexantr.SimpleVideoConverter
                 richTextBoxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}Video converted succesfully.");
                 progressBarEncoding.Value = 1000;
                 Text = $"{formTitle} - 100%";
+                taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
                 labelStatus.Text = "Конвертирование выполнено";
                 buttonPlay.Enabled = true;
             }
