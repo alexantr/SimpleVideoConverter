@@ -4,8 +4,8 @@ namespace Alexantr.SimpleVideoConverter
 {
     public static class AudioConfig
     {
-        public const int DefaultBitrate = 128;
-        public const int DefaultBitrateForMultiChannels = 384;
+        public const int DefaultBitrate = 192;
+        public const int DefaultBitrateForMultiChannels = 448;
 
         //public static int StreamIndex = -1;
         //public static bool MustEncode = false;

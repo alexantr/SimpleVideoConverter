@@ -291,11 +291,6 @@ namespace Alexantr.SimpleVideoConverter
                 return;
             }
 
-            comboBoxAudioCodec.Enabled = checkBoxConvertAudio.Checked;
-            comboBoxAudioBitrate.Enabled = checkBoxConvertAudio.Checked;
-            comboBoxAudioSampleRate.Enabled = checkBoxConvertAudio.Checked;
-            comboBoxAudioChannels.Enabled = checkBoxConvertAudio.Checked;
-
             int idx = 1;
             foreach (AudioStream stream in inputFile.AudioStreams)
             {
@@ -363,6 +358,11 @@ namespace Alexantr.SimpleVideoConverter
                     checkBoxConvertAudio.Enabled = false;
                 }
             }
+
+            comboBoxAudioCodec.Enabled = checkBoxConvertAudio.Checked;
+            comboBoxAudioBitrate.Enabled = checkBoxConvertAudio.Checked;
+            comboBoxAudioSampleRate.Enabled = checkBoxConvertAudio.Checked;
+            comboBoxAudioChannels.Enabled = checkBoxConvertAudio.Checked;
         }
 
         private void UpdateAudioBitrateByChannels()
@@ -388,6 +388,8 @@ namespace Alexantr.SimpleVideoConverter
 
                     if (selectedIndex >= 0)
                         comboBoxAudioBitrate.SelectedIndex = selectedIndex;
+                    else if (index > 0)
+                        comboBoxAudioBitrate.SelectedIndex = index - 1; // set max bitrate for LQ codecs
                 }
             }
         }
