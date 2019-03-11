@@ -4,14 +4,14 @@
 
 * Для работы необходим .NET Framework 4.6.2 или выше
 
-![Главное окно, вкладка Файл](https://i.imgur.com/XZLav5R.png)
-![Главное окно, вкладка Картинка](https://i.imgur.com/2F1WD4g.png)
-![Главное окно, вкладка Фильтры](https://i.imgur.com/luJpzMd.png)
-![Главное окно, вкладка Видео](https://i.imgur.com/g0Arvbo.png)
-![Главное окно, вкладка Аудио](https://i.imgur.com/oQ0x7OC.png)
-![Главное окно, вкладка Теги](https://i.imgur.com/NSjqna2.png)
+![Главное окно, вкладка Файл](screenshots/tab1.png)
+![Главное окно, вкладка Картинка](screenshots/tab2.png)
+![Главное окно, вкладка Фильтры](screenshots/tab3.png)
+![Главное окно, вкладка Видео](screenshots/tab4.png)
+![Главное окно, вкладка Аудио](screenshots/tab5.png)
+![Главное окно, вкладка Теги](screenshots/tab6.png)
 
-![Обрезка](https://i.imgur.com/0lylpT0.png)
+![Обрезка](screenshots/crop.png)
 
-![Конвертирование](https://i.imgur.com/1HOz7mY.png)
-![Конвертирование, лог](https://i.imgur.com/XYLtya3.png)
+![Конвертирование](screenshots/convert1.png)
+![Конвертирование, лог](screenshots/convert2.png)
