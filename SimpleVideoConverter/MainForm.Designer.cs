@@ -126,6 +126,8 @@
             this.comboBoxFieldOrder = new System.Windows.Forms.ComboBox();
             this.labelOutputInfo = new System.Windows.Forms.Label();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
+            this.labelPreset = new System.Windows.Forms.Label();
+            this.comboBoxPreset = new System.Windows.Forms.ComboBox();
             this.tabPageTags.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
@@ -601,9 +603,9 @@
             this.labelCRF.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelCRF.Location = new System.Drawing.Point(110, 6);
             this.labelCRF.Name = "labelCRF";
-            this.labelCRF.Size = new System.Drawing.Size(21, 15);
+            this.labelCRF.Size = new System.Drawing.Size(31, 15);
             this.labelCRF.TabIndex = 1;
-            this.labelCRF.Text = "20";
+            this.labelCRF.Text = "20.0";
             // 
             // radioButtonBitrate
             // 
@@ -632,13 +634,13 @@
             // trackBarCRF
             // 
             this.trackBarCRF.BackColor = System.Drawing.SystemColors.Window;
+            this.trackBarCRF.LargeChange = 10;
             this.trackBarCRF.Location = new System.Drawing.Point(3, 30);
-            this.trackBarCRF.Maximum = 51;
-            this.trackBarCRF.Minimum = 1;
+            this.trackBarCRF.Maximum = 510;
             this.trackBarCRF.Name = "trackBarCRF";
             this.trackBarCRF.Size = new System.Drawing.Size(301, 45);
             this.trackBarCRF.TabIndex = 2;
-            this.trackBarCRF.Value = 20;
+            this.trackBarCRF.Value = 200;
             this.trackBarCRF.ValueChanged += new System.EventHandler(this.trackBarCRF_ValueChanged);
             // 
             // numericUpDownBitrate
@@ -651,6 +653,8 @@
             // 
             // panelVideoParams
             // 
+            this.panelVideoParams.Controls.Add(this.comboBoxPreset);
+            this.panelVideoParams.Controls.Add(this.labelPreset);
             this.panelVideoParams.Controls.Add(this.labelVideoCodec);
             this.panelVideoParams.Controls.Add(this.comboBoxVideoCodec);
             this.panelVideoParams.Controls.Add(this.labelFrameRate);
@@ -1130,6 +1134,25 @@
             this.labelOutputInfoTitle.TabIndex = 1;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
             // 
+            // labelPreset
+            // 
+            this.labelPreset.AutoSize = true;
+            this.labelPreset.Location = new System.Drawing.Point(6, 112);
+            this.labelPreset.Name = "labelPreset";
+            this.labelPreset.Size = new System.Drawing.Size(46, 15);
+            this.labelPreset.TabIndex = 4;
+            this.labelPreset.Text = "Пресет";
+            // 
+            // comboBoxPreset
+            // 
+            this.comboBoxPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxPreset.FormattingEnabled = true;
+            this.comboBoxPreset.Location = new System.Drawing.Point(98, 106);
+            this.comboBoxPreset.Name = "comboBoxPreset";
+            this.comboBoxPreset.Size = new System.Drawing.Size(80, 23);
+            this.comboBoxPreset.TabIndex = 5;
+            this.comboBoxPreset.SelectedIndexChanged += new System.EventHandler(this.comboBoxPreset_SelectedIndexChanged);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -1285,6 +1308,8 @@
         private System.Windows.Forms.Button buttonBrowseSubtitles;
         private System.Windows.Forms.TextBox textBoxSubtitlesPath;
         private System.Windows.Forms.Button buttonDateHelp;
+        private System.Windows.Forms.ComboBox comboBoxPreset;
+        private System.Windows.Forms.Label labelPreset;
     }
 }
 

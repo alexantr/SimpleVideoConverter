@@ -4,10 +4,21 @@ namespace Alexantr.SimpleVideoConverter
 {
     public static class VideoConfig
     {
-        private static int crf = 20;
+        public const string CodecH264 = "h264";
+        public const string CodecH265 = "h265";
 
+        public const float MinCRF = 0f;
+        public const float MaxCRF = 51.0f;
+
+        public const int MinBitrate = 100;
+        public const int MaxBitrate = 100000;
+
+        public const string DefaultPreset = "slower";
+
+        private static float crf = 20.0f;
         private static int bitrate = 3000;
-        private static string codec = "h264";
+
+        private static string codec;
 
         public static string Codec
         {
@@ -16,34 +27,23 @@ namespace Alexantr.SimpleVideoConverter
             {
                 codec = value;
 
-                BitrateMinValue = 100;
-                BitrateMaxValue = 100000;
-                bitrate = 3000;
-
-                AdditionalArguments = "";
-
-                NoAudioInFirstPass = true;
-
                 switch (codec)
                 {
-                    case "h264":
+                    case CodecH264:
                         Encoder = "libx264";
-                        CRFMinValue = 1;
-                        CRFMaxValue = 51;
-                        crf = 20;
+                        //CRF = 20.0f;
                         AdditionalArguments = "-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p"; // todo: do
                         break;
-                    case "h265":
+                    case CodecH265:
                         Encoder = "libx265";
-                        CRFMinValue = 1;
-                        CRFMaxValue = 51;
-                        crf = 23;
-                        NoAudioInFirstPass = false;
+                        //CRF = 23.0f;
+                        AdditionalArguments = "";
                         break;
                     default:
-                        Encoder = "none";
+                        Encoder = "copy";
                         CRFSupported = false;
                         UseCRF = false;
+                        AdditionalArguments = "";
                         break;
                 }
             }
@@ -61,27 +61,23 @@ namespace Alexantr.SimpleVideoConverter
 
         public static bool UseCRF { get; set; } = true;
 
-        public static int CRFMinValue { get; private set; }
-
-        public static int CRFMaxValue { get; private set; }
-
-        public static int CRF
+        public static float CRF
         {
             get { return crf; }
             set
             {
-                if (value < CRFMinValue)
-                    crf = CRFMinValue;
-                else if (value > CRFMaxValue)
-                    crf = CRFMaxValue;
+                if (value < MinCRF)
+                    crf = MinCRF;
+                else if (value > MaxCRF)
+                    crf = MaxCRF;
                 else
                     crf = value;
             }
         }
 
-        public static int BitrateMinValue { get; private set; }
+        public static int BitrateMinValue { get; private set; } = MinBitrate;
 
-        public static int BitrateMaxValue { get; private set; }
+        public static int BitrateMaxValue { get; private set; } = MaxBitrate;
 
         public static int Bitrate
         {
@@ -119,6 +115,19 @@ namespace Alexantr.SimpleVideoConverter
 
         public static string AdditionalArguments { get; private set; }
 
-        public static bool NoAudioInFirstPass { get; private set; } = true;
+        public static string Preset { get; set; } = DefaultPreset;
+
+        public static string[] PresetList { get; } = new string[] {
+            "ultrafast",
+            "superfast",
+            "veryfast",
+            "faster",
+            "fast",
+            "medium",
+            "slow",
+            "slower",
+            "veryslow",
+            "placebo"
+        };
     }
 }

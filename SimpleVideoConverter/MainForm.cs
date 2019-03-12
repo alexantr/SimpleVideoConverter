@@ -58,6 +58,10 @@ namespace Alexantr.SimpleVideoConverter
 
             checkBoxKeepAspectRatio.Checked = true; // height input will be disabled
 
+            // init configs
+            VideoConfig.Codec = VideoConfig.CodecH264;
+            AudioConfig.Codec = AudioConfig.CodecAAC;
+
             FillInterpolation();
 
             FillFieldOrder();
@@ -71,6 +75,7 @@ namespace Alexantr.SimpleVideoConverter
 
             FillVideoCodec();
             FillVideoCRFAndBitrate();
+            FillPreset();
 
             FillAudioCodec();
             FillAudioBitrate();
@@ -425,9 +430,9 @@ namespace Alexantr.SimpleVideoConverter
 
         private void trackBarCRF_ValueChanged(object sender, EventArgs e)
         {
-            VideoConfig.CRF = trackBarCRF.Value;
+            VideoConfig.CRF = trackBarCRF.Value / 10.0f;
 
-            labelCRF.Text = $"{trackBarCRF.Value}";
+            labelCRF.Text = string.Format("{0:0.0}", VideoConfig.CRF);
             SetOutputInfo();
         }
 
@@ -444,6 +449,11 @@ namespace Alexantr.SimpleVideoConverter
             VideoConfig.FrameRate = ((ComboBoxItem)comboBoxFrameRate.SelectedItem).Value;
 
             SetOutputInfo();
+        }
+
+        private void comboBoxPreset_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            VideoConfig.Preset = ((ComboBoxItem)comboBoxPreset.SelectedItem).Value;
         }
 
         #endregion
@@ -737,7 +747,6 @@ namespace Alexantr.SimpleVideoConverter
             if (VideoConfig.Encoder == "libx264")
             {
                 // must be configurable
-                string videoPreset = "slower";
                 string videoProfile = "high";
                 string videoLevel = "";
 
@@ -757,7 +766,7 @@ namespace Alexantr.SimpleVideoConverter
                         videoLevel = " -level 4.1";
                 }
 
-                videoArgs.Add($"-preset:v {videoPreset} -profile:v {videoProfile}{videoLevel} {videoParams}");
+                videoArgs.Add($"-preset:v {VideoConfig.Preset} -profile:v {videoProfile}{videoLevel} {videoParams}");
             }
 
             // https://trac.ffmpeg.org/wiki/Encode/H.265
@@ -915,7 +924,7 @@ namespace Alexantr.SimpleVideoConverter
                 arguments[0] = string.Format(
                     twoPassTpl,
                     string.Join(" ", videoArgs),
-                    (VideoConfig.NoAudioInFirstPass ? "-an" : string.Join(" ", audioArgs)),
+                    "-an",
                     string.Join(" ", specialArgsPass1),
                     "",
                     FormatMP4,

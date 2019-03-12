@@ -116,14 +116,18 @@ namespace Alexantr.SimpleVideoConverter
         {
             if (VideoConfig.CRFSupported)
             {
-                int crf = VideoConfig.CRF;
-                if (trackBarCRF.Value > VideoConfig.CRFMaxValue)
-                    trackBarCRF.Value = VideoConfig.CRFMaxValue;
-                if (trackBarCRF.Value < VideoConfig.CRFMinValue)
-                    trackBarCRF.Value = VideoConfig.CRFMinValue;
+                int crf = (int)Math.Round(VideoConfig.CRF * 10.0f);
+                int minCRF = (int)Math.Round(VideoConfig.MinCRF * 10.0f);
+                int maxCRF = (int)Math.Round(VideoConfig.MaxCRF * 10.0f);
 
-                trackBarCRF.Minimum = VideoConfig.CRFMinValue;
-                trackBarCRF.Maximum = VideoConfig.CRFMaxValue;
+                // set correct value first
+                if (trackBarCRF.Value > maxCRF)
+                    trackBarCRF.Value = maxCRF;
+                if (trackBarCRF.Value < minCRF)
+                    trackBarCRF.Value = minCRF;
+
+                trackBarCRF.Minimum = minCRF;
+                trackBarCRF.Maximum = maxCRF;
                 trackBarCRF.Value = crf;
 
                 radioButtonCRF.Enabled = true;
@@ -189,6 +193,20 @@ namespace Alexantr.SimpleVideoConverter
                     return Math.Round(frameRate, 3);
             }
             return 0;
+        }
+
+        private void FillPreset()
+        {
+            int selectedIndex = 0, index = 0;
+            comboBoxPreset.Items.Clear();
+            foreach (string pr in VideoConfig.PresetList)
+            {
+                comboBoxPreset.Items.Add(new ComboBoxItem(pr, pr));
+                if (pr == VideoConfig.Preset)
+                    selectedIndex = index;
+                index++;
+            }
+            comboBoxPreset.SelectedIndex = selectedIndex;
         }
 
         #endregion
@@ -662,7 +680,7 @@ namespace Alexantr.SimpleVideoConverter
                 info.Append($", {PictureConfig.ColorFilterList[PictureConfig.ColorFilter].ToLower()}");
 
             if (radioButtonCRF.Checked)
-                info.Append($", CRF {trackBarCRF.Value}");
+                info.Append($", CRF {labelCRF.Text}");
             else
                 info.Append($", {numericUpDownBitrate.Value} кбит/с");
 

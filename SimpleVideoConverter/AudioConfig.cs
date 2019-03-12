@@ -4,16 +4,13 @@ namespace Alexantr.SimpleVideoConverter
 {
     public static class AudioConfig
     {
-        public const int DefaultBitrate = 160;
-        public const int DefaultBitrateForMultiChannels = 448;
+        public const string CodecAAC = "aac";
 
-        private static string codec = "aac";
+        public const int DefaultBitrate = 128;
+        public const int DefaultBitrateForMultiChannels = 384;
 
-        /// <summary>
-        /// Stores audio codec value and determines available encoders for
-        /// FFmpeg to use. Also new settings such as bitrate and samplerate
-        /// will be set if codec value is changed.
-        /// </summary>
+        private static string codec;
+
         public static string Codec
         {
             get { return codec; }
@@ -21,17 +18,16 @@ namespace Alexantr.SimpleVideoConverter
             {
                 codec = value;
 
-                VBRSupported = false;
-                UseVBR = false;
+                //VBRSupported = false;
+                //UseVBR = false;
                 AdditionalArguments = "";
 
                 Bitrate = DefaultBitrate;
 
                 switch (codec)
                 {
-                    case "aac":
+                    case CodecAAC:
                         Encoder = "aac";
-                        //AdditionalArguments = "";
                         break;
                     default:
                         Encoder = "copy";
@@ -51,17 +47,17 @@ namespace Alexantr.SimpleVideoConverter
 
         public static int[] BitrateList { get; } = new int[] { 8, 16, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 640 };
 
-        public static bool VBRSupported { get; private set; }
+        //public static bool VBRSupported { get; private set; }
 
-        public static bool UseVBR { get; set; }
+        //public static bool UseVBR { get; set; }
 
-        private static int VBRMinValue { get; set; }
+        //private static int VBRMinValue { get; set; }
 
-        private static int VBRMaxValue { get; set; }
+        //private static int VBRMaxValue { get; set; }
 
-        public static int Quality { get; set; }
+        //public static int Quality { get; set; }
 
-        public static int Channels { get; set; } = 0;
+        public static int Channels { get; set; } = 0; // 0 is auto
 
         public static Dictionary<int, string> ChannelsList { get; } = new Dictionary<int, string>
         {
@@ -70,7 +66,7 @@ namespace Alexantr.SimpleVideoConverter
             { 2, "2 (стерео)" }
         };
 
-        public static int SampleRate { get; set; } = 0;
+        public static int SampleRate { get; set; } = 0; // 0 is auto
 
         public static int[] SampleRateList { get; } = new int[] { 8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000 };
 
