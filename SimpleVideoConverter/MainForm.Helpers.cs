@@ -46,17 +46,17 @@ namespace Alexantr.SimpleVideoConverter
         {
             if (inputFile == null)
             {
+                tabPageVideo.Parent = null;
                 tabPagePicture.Parent = null;
                 tabPageFilters.Parent = null;
-                tabPageVideo.Parent = null;
                 tabPageAudio.Parent = null;
                 tabPageTags.Parent = null;
             }
             else
             {
+                tabPageVideo.Parent = tabControlMain;
                 tabPagePicture.Parent = tabControlMain;
                 tabPageFilters.Parent = tabControlMain;
-                tabPageVideo.Parent = tabControlMain;
                 tabPageAudio.Parent = tabControlMain;
                 tabPageTags.Parent = tabControlMain;
             }
@@ -209,6 +209,35 @@ namespace Alexantr.SimpleVideoConverter
             comboBoxPreset.SelectedIndex = selectedIndex;
         }
 
+        private void CheckVideoMustConvert()
+        {
+            if (inputFile == null)
+            {
+                checkBoxConvertVideo.Checked = false;
+                checkBoxConvertVideo.Enabled = false;
+            }
+            else
+            {
+                VideoStream vStream = inputFile.VideoStreams[0];
+
+                string cname = vStream.CodecName;
+                if (cname.Equals(VideoConfig.CodecH264, StringComparison.OrdinalIgnoreCase) || cname.Equals(VideoConfig.CodecHEVC, StringComparison.OrdinalIgnoreCase))
+                    checkBoxConvertVideo.Enabled = true;
+                else
+                    checkBoxConvertVideo.Enabled = false;
+
+                checkBoxConvertVideo.Checked = true;
+            }
+
+            panelVideo.Enabled = checkBoxConvertVideo.Checked;
+            panelResize.Enabled = checkBoxConvertVideo.Checked;
+            panelDeinterlace.Enabled = checkBoxConvertVideo.Checked;
+            panelColorFilter.Enabled = checkBoxConvertVideo.Checked;
+            panelSubtitles.Enabled = checkBoxConvertVideo.Checked;
+
+            checkBoxDeinterlace.Enabled = checkBoxConvertVideo.Checked;
+        }
+
         #endregion
 
         #region Audio
@@ -323,7 +352,7 @@ namespace Alexantr.SimpleVideoConverter
                 {
                     if (aStream.Index == index)
                     {
-                        if (aStream.CodecName.Equals("aac", StringComparison.OrdinalIgnoreCase))
+                        if (aStream.CodecName.Equals(AudioConfig.CodecAAC, StringComparison.OrdinalIgnoreCase))
                         {
                             checkBoxConvertAudio.Enabled = true;
                             found = true;
@@ -631,62 +660,75 @@ namespace Alexantr.SimpleVideoConverter
 
             // Video
 
-            if (VideoConfig.CodecList.ContainsKey(VideoConfig.Codec))
-                info.Append($"{VideoConfig.CodecList[VideoConfig.Codec]}");
-            else
-                info.Append($"{VideoConfig.Codec}");
-
-            /*if (PictureConfig.Padding.X > 0 || PictureConfig.Padding.Y > 0)
+            if (checkBoxConvertVideo.Checked)
             {
-                PictureSize fullSize = new PictureSize();
-                fullSize.Width = PictureConfig.OutputSize.Width + PictureConfig.Padding.X + PictureConfig.Padding.X;
-                fullSize.Height = PictureConfig.OutputSize.Height + PictureConfig.Padding.Y + PictureConfig.Padding.Y;
-                info.Append($", {fullSize.ToString()} ({PictureConfig.OutputSize.ToString()})");
-            }
-            else
-            {
-                info.Append($", {PictureConfig.OutputSize.ToString()}");
-            }*/
-
-            if (PictureConfig.Rotate == 90 || PictureConfig.Rotate == 270)
-            {
-                PictureSize size = new PictureSize
-                {
-                    Width = PictureConfig.OutputSize.Height,
-                    Height = PictureConfig.OutputSize.Width
-                };
-                info.Append($", {size.ToString()}");
-            }
-            else
-            {
-                info.Append($", {PictureConfig.OutputSize.ToString()}");
-            }
-
-            if (PictureConfig.Deinterlace)
-                info.Append(", деинт.");
-
-            if (PictureConfig.Rotate > 0)
-            {
-                if (PictureConfig.RotateList.ContainsKey(PictureConfig.Rotate))
-                    info.Append($", {PictureConfig.RotateList[PictureConfig.Rotate]}");
+                if (VideoConfig.CodecList.ContainsKey(VideoConfig.Codec))
+                    info.Append($"{VideoConfig.CodecList[VideoConfig.Codec]}");
                 else
-                    info.Append($", {PictureConfig.Rotate}°");
+                    info.Append($"{VideoConfig.Codec}");
+
+                /*if (PictureConfig.Padding.X > 0 || PictureConfig.Padding.Y > 0)
+                {
+                    PictureSize fullSize = new PictureSize();
+                    fullSize.Width = PictureConfig.OutputSize.Width + PictureConfig.Padding.X + PictureConfig.Padding.X;
+                    fullSize.Height = PictureConfig.OutputSize.Height + PictureConfig.Padding.Y + PictureConfig.Padding.Y;
+                    info.Append($", {fullSize.ToString()} ({PictureConfig.OutputSize.ToString()})");
+                }
+                else
+                {
+                    info.Append($", {PictureConfig.OutputSize.ToString()}");
+                }*/
+
+                if (PictureConfig.Rotate == 90 || PictureConfig.Rotate == 270)
+                {
+                    PictureSize size = new PictureSize
+                    {
+                        Width = PictureConfig.OutputSize.Height,
+                        Height = PictureConfig.OutputSize.Width
+                    };
+                    info.Append($", {size.ToString()}");
+                }
+                else
+                {
+                    info.Append($", {PictureConfig.OutputSize.ToString()}");
+                }
+
+                if (PictureConfig.Deinterlace)
+                    info.Append(", деинт.");
+
+                if (PictureConfig.Rotate > 0)
+                {
+                    if (PictureConfig.RotateList.ContainsKey(PictureConfig.Rotate))
+                        info.Append($", {PictureConfig.RotateList[PictureConfig.Rotate]}");
+                    else
+                        info.Append($", {PictureConfig.Rotate}°");
+                }
+
+                if (PictureConfig.Flip)
+                    info.Append($", отразить");
+
+                if (PictureConfig.ColorFilter != "none")
+                    info.Append($", {PictureConfig.ColorFilterList[PictureConfig.ColorFilter].ToLower()}");
+
+                if (radioButtonCRF.Checked)
+                    info.Append($", CRF {labelCRF.Text}");
+                else
+                    info.Append($", {numericUpDownBitrate.Value} кбит/с");
+
+                double finalFrameRate = CalcFinalFrameRate();
+                if (finalFrameRate > 0)
+                    info.Append($", {finalFrameRate} fps");
             }
-
-            if (PictureConfig.Flip)
-                info.Append($", отразить");
-
-            if (PictureConfig.ColorFilter != "none")
-                info.Append($", {PictureConfig.ColorFilterList[PictureConfig.ColorFilter].ToLower()}");
-
-            if (radioButtonCRF.Checked)
-                info.Append($", CRF {labelCRF.Text}");
             else
-                info.Append($", {numericUpDownBitrate.Value} кбит/с");
+            {
+                VideoStream vStream = inputFile.VideoStreams[0];
+                if (VideoConfig.CodecList.ContainsKey(vStream.CodecName))
+                    info.Append($"{VideoConfig.CodecList[vStream.CodecName]}");
+                else
+                    info.Append($"{vStream.CodecName}");
 
-            double finalFrameRate = CalcFinalFrameRate();
-            if (finalFrameRate > 0)
-                info.Append($", {finalFrameRate} fps");
+                info.Append($", без изменения");
+            }
 
             // Audio
 

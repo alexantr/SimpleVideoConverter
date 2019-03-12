@@ -5,7 +5,7 @@ namespace Alexantr.SimpleVideoConverter
     public static class VideoConfig
     {
         public const string CodecH264 = "h264";
-        public const string CodecH265 = "h265";
+        public const string CodecHEVC = "hevc";
 
         public const float MinCRF = 0f;
         public const float MaxCRF = 51.0f;
@@ -34,7 +34,7 @@ namespace Alexantr.SimpleVideoConverter
                         //CRF = 20.0f;
                         AdditionalArguments = "-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p"; // todo: do
                         break;
-                    case CodecH265:
+                    case CodecHEVC:
                         Encoder = "libx265";
                         //CRF = 23.0f;
                         AdditionalArguments = "";
@@ -51,8 +51,8 @@ namespace Alexantr.SimpleVideoConverter
 
         public static Dictionary<string, string> CodecList { get; } = new Dictionary<string, string>
         {
-            { "h264", "H.264" },
-            { "h265", "H.265" }
+            { CodecH264, "H.264" },
+            { CodecHEVC, "HEVC" }
         };
 
         public static string Encoder { get; private set; }

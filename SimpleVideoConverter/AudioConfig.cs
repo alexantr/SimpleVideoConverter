@@ -38,7 +38,7 @@ namespace Alexantr.SimpleVideoConverter
 
         public static Dictionary<string, string> CodecList { get; } = new Dictionary<string, string>
         {
-            { "aac", "AAC" }
+            { CodecAAC, "AAC" }
         };
 
         public static string Encoder { get; private set; }

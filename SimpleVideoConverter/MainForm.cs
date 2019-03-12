@@ -82,8 +82,8 @@ namespace Alexantr.SimpleVideoConverter
             FillAudioSampleRate();
             FillAudioChannels();
 
-            CheckAudioMustConvert();
-            UpdateAudioBitrateByChannels();
+            //CheckAudioMustConvert();
+            //UpdateAudioBitrateByChannels();
 
             CalcFileSize(); // just hide labels
 
@@ -407,6 +407,19 @@ namespace Alexantr.SimpleVideoConverter
 
         #region Video
 
+        private void checkBoxConvertVideo_CheckedChanged(object sender, EventArgs e)
+        {
+            panelVideo.Enabled = checkBoxConvertVideo.Checked;
+            panelResize.Enabled = checkBoxConvertVideo.Checked;
+            panelDeinterlace.Enabled = checkBoxConvertVideo.Checked;
+            panelColorFilter.Enabled = checkBoxConvertVideo.Checked;
+            panelSubtitles.Enabled = checkBoxConvertVideo.Checked;
+
+            checkBoxDeinterlace.Enabled = checkBoxConvertVideo.Checked;
+
+            SetOutputInfo();
+        }
+
         private void comboBoxVideoCodec_SelectedIndexChanged(object sender, EventArgs e)
         {
             VideoConfig.Codec = ((ComboBoxItem)comboBoxVideoCodec.SelectedItem).Value;
@@ -616,6 +629,8 @@ namespace Alexantr.SimpleVideoConverter
 
             comboBoxFrameRate.SelectedIndex = 0;
 
+            CheckVideoMustConvert();
+
             // fill audio streams
             FillAudioStreams();
 
@@ -738,117 +753,123 @@ namespace Alexantr.SimpleVideoConverter
 
             videoArgs.Add($"-map 0:{inputFile.VideoStreams[0].Index}");
 
-            if (VideoConfig.UseCRF)
-                videoArgs.Add($"-c:v {VideoConfig.Encoder} -crf {VideoConfig.CRF} {VideoConfig.AdditionalArguments}");
-            else
-                videoArgs.Add($"-c:v {VideoConfig.Encoder} -b:v {VideoConfig.Bitrate}k {VideoConfig.AdditionalArguments}");
-
-            // https://trac.ffmpeg.org/wiki/Encode/H.264
-            if (VideoConfig.Encoder == "libx264")
+            if (checkBoxConvertVideo.Checked)
             {
-                // must be configurable
-                string videoProfile = "high";
-                string videoLevel = "";
+                if (VideoConfig.UseCRF)
+                    videoArgs.Add($"-c:v {VideoConfig.Encoder} -crf {VideoConfig.CRF} {VideoConfig.AdditionalArguments}");
+                else
+                    videoArgs.Add($"-c:v {VideoConfig.Encoder} -b:v {VideoConfig.Bitrate}k {VideoConfig.AdditionalArguments}");
 
-                string x264Params = "sar=1/1";
-                if (twoPass)
-                    x264Params += ":no-dct-decimate=1";
-
-                string videoParams = $"-x264-params \"{x264Params}\"";
-
-                double finalFrameRate = CalcFinalFrameRate();
-                if (finalFrameRate == 0)
-                    finalFrameRate = vStream.FrameRate;
-                // force level 4.1, max bitrate for high 4.1 - 62500, use max avg bitrate 50000
-                if (VideoConfig.UseCRF || VideoConfig.Bitrate <= 50000)
+                // https://trac.ffmpeg.org/wiki/Encode/H.264
+                if (VideoConfig.Encoder == "libx264")
                 {
-                    if (PictureConfig.OutputSize.Width <= 1920 && PictureConfig.OutputSize.Height <= 1080 && finalFrameRate <= 30.0)
-                        videoLevel = " -level 4.1";
+                    // must be configurable
+                    string videoProfile = "high";
+                    string videoLevel = "";
+
+                    string x264Params = "sar=1/1";
+                    if (twoPass)
+                        x264Params += ":no-dct-decimate=1";
+
+                    string videoParams = $"-x264-params \"{x264Params}\"";
+
+                    double finalFrameRate = CalcFinalFrameRate();
+                    if (finalFrameRate == 0)
+                        finalFrameRate = vStream.FrameRate;
+                    // force level 4.1, max bitrate for high 4.1 - 62500, use max avg bitrate 50000
+                    if (VideoConfig.UseCRF || VideoConfig.Bitrate <= 50000)
+                    {
+                        if (PictureConfig.OutputSize.Width <= 1920 && PictureConfig.OutputSize.Height <= 1080 && finalFrameRate <= 30.0)
+                            videoLevel = " -level 4.1";
+                    }
+
+                    videoArgs.Add($"-preset:v {VideoConfig.Preset} -profile:v {videoProfile}{videoLevel} {videoParams}");
                 }
 
-                videoArgs.Add($"-preset:v {VideoConfig.Preset} -profile:v {videoProfile}{videoLevel} {videoParams}");
+                // https://trac.ffmpeg.org/wiki/Encode/H.265
+                if (VideoConfig.Encoder == "libx265")
+                {
+                    videoArgs.Add($"-preset:v {VideoConfig.Preset}");
+                }
+
+                // Video filters
+
+                List<string> filters = new List<string>();
+
+                // https://ffmpeg.org/ffmpeg-filters.html#yadif-1
+                if (PictureConfig.Deinterlace)
+                    filters.Add($"yadif=parity={PictureConfig.FieldOrder}");
+
+                // https://ffmpeg.org/ffmpeg-filters.html#crop
+                if (PictureConfig.IsCropped())
+                {
+                    // using oar
+                    int cropW = vStream.OriginalSize.Width - PictureConfig.Crop.Left - PictureConfig.Crop.Right;
+                    int cropH = vStream.OriginalSize.Height - PictureConfig.Crop.Top - PictureConfig.Crop.Bottom;
+                    filters.Add($"crop={cropW}:{cropH}:{PictureConfig.Crop.Left}:{PictureConfig.Crop.Top}");
+                }
+
+                // https://ffmpeg.org/ffmpeg-filters.html#scale-1
+                if (PictureConfig.OutputSize.Width != PictureConfig.CropSize.Width || PictureConfig.OutputSize.Height != PictureConfig.CropSize.Height)
+                {
+                    // https://www.ffmpeg.org/ffmpeg-scaler.html#sws_005fflags
+                    filters.Add($"scale={PictureConfig.OutputSize.Width}x{PictureConfig.OutputSize.Height}:flags={PictureConfig.Interpolation}");
+                }
+                else if (PictureConfig.IsUsingDAR())
+                {
+                    // force scale for not square pixels
+                    filters.Add($"scale={PictureConfig.CropSize.Width}x{PictureConfig.CropSize.Height}:flags={PictureConfig.Interpolation}");
+                }
+
+                // https://ffmpeg.org/ffmpeg-filters.html#pad-1
+                /*if (PictureConfig.Padding.X > 0 || PictureConfig.Padding.Y > 0)
+                {
+                    filters.Add($"pad={PictureConfig.SelectedSize.Width}:{PictureConfig.SelectedSize.Height}:{PictureConfig.Padding.X}:{PictureConfig.Padding.Y}");
+                }*/
+
+                // https://ffmpeg.org/ffmpeg-filters.html#transpose
+                if (PictureConfig.Rotate == 180)
+                    filters.Add("transpose=2,transpose=2");
+                else if (PictureConfig.Rotate == 90)
+                    filters.Add("transpose=1");
+                else if (PictureConfig.Rotate == 270)
+                    filters.Add("transpose=2");
+
+                // https://ffmpeg.org/ffmpeg-filters.html#hflip
+                if (PictureConfig.Flip)
+                    filters.Add("hflip");
+
+                // Set subtitles
+                // https://trac.ffmpeg.org/wiki/HowToBurnSubtitlesIntoVideo
+                if (!string.IsNullOrWhiteSpace(subtitlesPath))
+                {
+                    // https://ffmpeg.org/ffmpeg-filters.html#Notes-on-filtergraph-escaping
+                    filters.Add($"subtitles={subtitlesPath.Replace("\\", "\\\\\\\\").Replace("'", "\\\\\\'").Replace(":", "\\\\:").Replace(",", "\\,")}");
+                }
+
+                // force sar 1:1
+                // https://ffmpeg.org/ffmpeg-filters.html#setdar_002c-setsar
+                filters.Add("setsar=sar=1/1");
+
+                // color filter
+                // https://ffmpeg.org/ffmpeg-filters.html#colorchannelmixer
+                if (PictureConfig.ColorChannelMixerList.ContainsKey(PictureConfig.ColorFilter))
+                    filters.Add($"colorchannelmixer={PictureConfig.ColorChannelMixerList[PictureConfig.ColorFilter]}");
+
+                // Frame rate
+                if (!string.IsNullOrWhiteSpace(VideoConfig.FrameRate))
+                    videoArgs.Add($"-r {VideoConfig.FrameRate}");
+
+                // Add filters to video args
+                if (filters.Count > 0)
+                    videoArgs.Add("-vf \"" + string.Join(",", filters) + "\"");
             }
-
-            // https://trac.ffmpeg.org/wiki/Encode/H.265
-            if (VideoConfig.Encoder == "libx265")
+            else
             {
-                // must be configurable
-                //string videoPreset = "veryslow";
+                twoPass = false; // !!!
 
-                //videoArgs.Add($"-preset:v {videoPreset}");
+                videoArgs.Add($"-c:v copy");
             }
-
-            // Video filters
-
-            List<string> filters = new List<string>();
-
-            // https://ffmpeg.org/ffmpeg-filters.html#yadif-1
-            if (PictureConfig.Deinterlace)
-                filters.Add($"yadif=parity={PictureConfig.FieldOrder}");
-
-            // https://ffmpeg.org/ffmpeg-filters.html#crop
-            if (PictureConfig.IsCropped())
-            {
-                // using oar
-                int cropW = vStream.OriginalSize.Width - PictureConfig.Crop.Left - PictureConfig.Crop.Right;
-                int cropH = vStream.OriginalSize.Height - PictureConfig.Crop.Top - PictureConfig.Crop.Bottom;
-                filters.Add($"crop={cropW}:{cropH}:{PictureConfig.Crop.Left}:{PictureConfig.Crop.Top}");
-            }
-
-            // https://ffmpeg.org/ffmpeg-filters.html#scale-1
-            if (PictureConfig.OutputSize.Width != PictureConfig.CropSize.Width || PictureConfig.OutputSize.Height != PictureConfig.CropSize.Height)
-            {
-                // https://www.ffmpeg.org/ffmpeg-scaler.html#sws_005fflags
-                filters.Add($"scale={PictureConfig.OutputSize.Width}x{PictureConfig.OutputSize.Height}:flags={PictureConfig.Interpolation}");
-            }
-            else if (PictureConfig.IsUsingDAR())
-            {
-                // force scale for not square pixels
-                filters.Add($"scale={PictureConfig.CropSize.Width}x{PictureConfig.CropSize.Height}:flags={PictureConfig.Interpolation}");
-            }
-
-            // https://ffmpeg.org/ffmpeg-filters.html#pad-1
-            /*if (PictureConfig.Padding.X > 0 || PictureConfig.Padding.Y > 0)
-            {
-                filters.Add($"pad={PictureConfig.SelectedSize.Width}:{PictureConfig.SelectedSize.Height}:{PictureConfig.Padding.X}:{PictureConfig.Padding.Y}");
-            }*/
-
-            // https://ffmpeg.org/ffmpeg-filters.html#transpose
-            if (PictureConfig.Rotate == 180)
-                filters.Add("transpose=2,transpose=2");
-            else if (PictureConfig.Rotate == 90)
-                filters.Add("transpose=1");
-            else if (PictureConfig.Rotate == 270)
-                filters.Add("transpose=2");
-
-            // https://ffmpeg.org/ffmpeg-filters.html#hflip
-            if (PictureConfig.Flip)
-                filters.Add("hflip");
-
-            // Set subtitles
-            // https://trac.ffmpeg.org/wiki/HowToBurnSubtitlesIntoVideo
-            if (!string.IsNullOrWhiteSpace(subtitlesPath))
-            {
-                // https://ffmpeg.org/ffmpeg-filters.html#Notes-on-filtergraph-escaping
-                filters.Add($"subtitles={subtitlesPath.Replace("\\", "\\\\\\\\").Replace("'", "\\\\\\'").Replace(":", "\\\\:").Replace(",", "\\,")}");
-            }
-
-            // force sar 1:1
-            // https://ffmpeg.org/ffmpeg-filters.html#setdar_002c-setsar
-            filters.Add("setsar=sar=1/1");
-
-            // color filter
-            // https://ffmpeg.org/ffmpeg-filters.html#colorchannelmixer
-            if (PictureConfig.ColorChannelMixerList.ContainsKey(PictureConfig.ColorFilter))
-                filters.Add($"colorchannelmixer={PictureConfig.ColorChannelMixerList[PictureConfig.ColorFilter]}");
-
-            // Frame rate
-            if (!string.IsNullOrWhiteSpace(VideoConfig.FrameRate))
-                videoArgs.Add($"-r {VideoConfig.FrameRate}");
-
-            // Add filters to video args
-            if (filters.Count > 0)
-                videoArgs.Add("-vf \"" + string.Join(",", filters) + "\"");
 
             // Audio args
 
