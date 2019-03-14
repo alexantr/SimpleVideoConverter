@@ -979,7 +979,7 @@ namespace Alexantr.SimpleVideoConverter
 
             // Video args
 
-            //videoArgs.Add($"-map 0:{inputFile.VideoStreams[0].Index}");
+            videoArgs.Add($"-vst {inputFile.VideoStreams[0].Index}");
 
             if (checkBoxConvertVideo.Checked)
             {
@@ -1007,19 +1007,19 @@ namespace Alexantr.SimpleVideoConverter
             }
             else
             {
-                //audioArgs.Add($"-map 0:{audioStreamIndex}");
+                audioArgs.Add($"-ast {audioStreamIndex}");
             }
 
             string input = Path.GetFullPath(inputFile.FullPath);
 
-            string arguments = string.Format("{0} {1}", string.Join(" ", videoArgs), string.Join(" ", audioArgs));
+            string arguments = string.Format("{0} {1} -sn", string.Join(" ", videoArgs), string.Join(" ", audioArgs));
 
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = exePath,
                 CreateNoWindow = true,
                 UseShellExecute = false,
-                Arguments = string.Format("-i \"{0}\" {1}", input, arguments)
+                Arguments = string.Format("-i \"{0}\" {1} -autoexit -framedrop", input, arguments)
             };
 
             startInfo.EnvironmentVariables["FC_CONFIG_DIR"] = directoryPath;
