@@ -115,10 +115,10 @@ namespace Alexantr.SimpleVideoConverter
             int newWidth = (int)Math.Round(originalSize.Width * aspectRatio, 0);
             int newHeight = (int)Math.Round(originalSize.Height * aspectRatio, 0);
 
-            if (newHeight % 2 == 1)
-                newHeight -= 1;
-            if (newHeight < 96)
-                newHeight = 96;
+            //if (newHeight % 2 == 1)
+            //    newHeight -= 1;
+            //if (newHeight < 96)
+            //    newHeight = 96;
 
             return new int[2] { newWidth, newHeight };
         }

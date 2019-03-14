@@ -68,21 +68,24 @@
             this.comboBoxAudioStreams = new System.Windows.Forms.ComboBox();
             this.labelSelectAudioStream = new System.Windows.Forms.Label();
             this.tabPageVideo = new System.Windows.Forms.TabPage();
+            this.checkBoxConvertVideo = new System.Windows.Forms.CheckBox();
             this.panelVideo = new System.Windows.Forms.Panel();
+            this.comboBoxPreset = new System.Windows.Forms.ComboBox();
             this.labelCalcSize = new System.Windows.Forms.Label();
+            this.labelPreset = new System.Windows.Forms.Label();
             this.labelCalcSizeText = new System.Windows.Forms.Label();
+            this.labelVideoCodec = new System.Windows.Forms.Label();
+            this.comboBoxVideoCodec = new System.Windows.Forms.ComboBox();
             this.labelVideoKbps = new System.Windows.Forms.Label();
+            this.labelFrameRate = new System.Windows.Forms.Label();
             this.labelMinQ = new System.Windows.Forms.Label();
+            this.comboBoxFrameRate = new System.Windows.Forms.ComboBox();
             this.labelMaxQ = new System.Windows.Forms.Label();
             this.labelCRF = new System.Windows.Forms.Label();
             this.radioButtonBitrate = new System.Windows.Forms.RadioButton();
             this.radioButtonCRF = new System.Windows.Forms.RadioButton();
             this.trackBarCRF = new System.Windows.Forms.TrackBar();
             this.numericUpDownBitrate = new System.Windows.Forms.NumericUpDown();
-            this.labelVideoCodec = new System.Windows.Forms.Label();
-            this.comboBoxVideoCodec = new System.Windows.Forms.ComboBox();
-            this.labelFrameRate = new System.Windows.Forms.Label();
-            this.comboBoxFrameRate = new System.Windows.Forms.ComboBox();
             this.tabPagePicture = new System.Windows.Forms.TabPage();
             this.panelResize = new System.Windows.Forms.Panel();
             this.labelCrop = new System.Windows.Forms.Label();
@@ -125,9 +128,7 @@
             this.comboBoxFieldOrder = new System.Windows.Forms.ComboBox();
             this.labelOutputInfo = new System.Windows.Forms.Label();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
-            this.labelPreset = new System.Windows.Forms.Label();
-            this.comboBoxPreset = new System.Windows.Forms.ComboBox();
-            this.checkBoxConvertVideo = new System.Windows.Forms.CheckBox();
+            this.buttonPreview = new System.Windows.Forms.Button();
             this.tabPageTags.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
@@ -534,6 +535,17 @@
             this.tabPageVideo.Text = "Видео";
             this.tabPageVideo.UseVisualStyleBackColor = true;
             // 
+            // checkBoxConvertVideo
+            // 
+            this.checkBoxConvertVideo.AutoSize = true;
+            this.checkBoxConvertVideo.Location = new System.Drawing.Point(6, 6);
+            this.checkBoxConvertVideo.Name = "checkBoxConvertVideo";
+            this.checkBoxConvertVideo.Size = new System.Drawing.Size(142, 19);
+            this.checkBoxConvertVideo.TabIndex = 10;
+            this.checkBoxConvertVideo.Text = "Переконвертировать";
+            this.checkBoxConvertVideo.UseVisualStyleBackColor = true;
+            this.checkBoxConvertVideo.CheckedChanged += new System.EventHandler(this.checkBoxConvertVideo_CheckedChanged);
+            // 
             // panelVideo
             // 
             this.panelVideo.Controls.Add(this.comboBoxPreset);
@@ -557,6 +569,16 @@
             this.panelVideo.Size = new System.Drawing.Size(592, 148);
             this.panelVideo.TabIndex = 0;
             // 
+            // comboBoxPreset
+            // 
+            this.comboBoxPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxPreset.FormattingEnabled = true;
+            this.comboBoxPreset.Location = new System.Drawing.Point(488, 39);
+            this.comboBoxPreset.Name = "comboBoxPreset";
+            this.comboBoxPreset.Size = new System.Drawing.Size(80, 23);
+            this.comboBoxPreset.TabIndex = 5;
+            this.comboBoxPreset.SelectedIndexChanged += new System.EventHandler(this.comboBoxPreset_SelectedIndexChanged);
+            // 
             // labelCalcSize
             // 
             this.labelCalcSize.AutoSize = true;
@@ -565,6 +587,15 @@
             this.labelCalcSize.Size = new System.Drawing.Size(12, 15);
             this.labelCalcSize.TabIndex = 9;
             this.labelCalcSize.Text = "-";
+            // 
+            // labelPreset
+            // 
+            this.labelPreset.AutoSize = true;
+            this.labelPreset.Location = new System.Drawing.Point(393, 42);
+            this.labelPreset.Name = "labelPreset";
+            this.labelPreset.Size = new System.Drawing.Size(46, 15);
+            this.labelPreset.TabIndex = 4;
+            this.labelPreset.Text = "Пресет";
             // 
             // labelCalcSizeText
             // 
@@ -575,6 +606,25 @@
             this.labelCalcSizeText.TabIndex = 8;
             this.labelCalcSizeText.Text = "Размер файла:";
             // 
+            // labelVideoCodec
+            // 
+            this.labelVideoCodec.AutoSize = true;
+            this.labelVideoCodec.Location = new System.Drawing.Point(393, 13);
+            this.labelVideoCodec.Name = "labelVideoCodec";
+            this.labelVideoCodec.Size = new System.Drawing.Size(39, 15);
+            this.labelVideoCodec.TabIndex = 3;
+            this.labelVideoCodec.Text = "Кодек";
+            // 
+            // comboBoxVideoCodec
+            // 
+            this.comboBoxVideoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxVideoCodec.FormattingEnabled = true;
+            this.comboBoxVideoCodec.Location = new System.Drawing.Point(488, 10);
+            this.comboBoxVideoCodec.Name = "comboBoxVideoCodec";
+            this.comboBoxVideoCodec.Size = new System.Drawing.Size(80, 23);
+            this.comboBoxVideoCodec.TabIndex = 2;
+            this.comboBoxVideoCodec.SelectedIndexChanged += new System.EventHandler(this.comboBoxVideoCodec_SelectedIndexChanged);
+            // 
             // labelVideoKbps
             // 
             this.labelVideoKbps.AutoSize = true;
@@ -584,6 +634,15 @@
             this.labelVideoKbps.TabIndex = 7;
             this.labelVideoKbps.Text = "кбит/с";
             // 
+            // labelFrameRate
+            // 
+            this.labelFrameRate.AutoSize = true;
+            this.labelFrameRate.Location = new System.Drawing.Point(393, 98);
+            this.labelFrameRate.Name = "labelFrameRate";
+            this.labelFrameRate.Size = new System.Drawing.Size(91, 15);
+            this.labelFrameRate.TabIndex = 0;
+            this.labelFrameRate.Text = "Частота кадров";
+            // 
             // labelMinQ
             // 
             this.labelMinQ.AutoSize = true;
@@ -592,6 +651,16 @@
             this.labelMinQ.Size = new System.Drawing.Size(87, 15);
             this.labelMinQ.TabIndex = 4;
             this.labelMinQ.Text = "Мин. качество";
+            // 
+            // comboBoxFrameRate
+            // 
+            this.comboBoxFrameRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFrameRate.FormattingEnabled = true;
+            this.comboBoxFrameRate.Location = new System.Drawing.Point(488, 95);
+            this.comboBoxFrameRate.Name = "comboBoxFrameRate";
+            this.comboBoxFrameRate.Size = new System.Drawing.Size(80, 23);
+            this.comboBoxFrameRate.TabIndex = 1;
+            this.comboBoxFrameRate.SelectedIndexChanged += new System.EventHandler(this.comboBoxFrameRate_SelectedIndexChanged);
             // 
             // labelMaxQ
             // 
@@ -655,44 +724,6 @@
             this.numericUpDownBitrate.Size = new System.Drawing.Size(80, 23);
             this.numericUpDownBitrate.TabIndex = 6;
             this.numericUpDownBitrate.ValueChanged += new System.EventHandler(this.numericUpDownBitrate_ValueChanged);
-            // 
-            // labelVideoCodec
-            // 
-            this.labelVideoCodec.AutoSize = true;
-            this.labelVideoCodec.Location = new System.Drawing.Point(393, 13);
-            this.labelVideoCodec.Name = "labelVideoCodec";
-            this.labelVideoCodec.Size = new System.Drawing.Size(39, 15);
-            this.labelVideoCodec.TabIndex = 3;
-            this.labelVideoCodec.Text = "Кодек";
-            // 
-            // comboBoxVideoCodec
-            // 
-            this.comboBoxVideoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxVideoCodec.FormattingEnabled = true;
-            this.comboBoxVideoCodec.Location = new System.Drawing.Point(488, 10);
-            this.comboBoxVideoCodec.Name = "comboBoxVideoCodec";
-            this.comboBoxVideoCodec.Size = new System.Drawing.Size(80, 23);
-            this.comboBoxVideoCodec.TabIndex = 2;
-            this.comboBoxVideoCodec.SelectedIndexChanged += new System.EventHandler(this.comboBoxVideoCodec_SelectedIndexChanged);
-            // 
-            // labelFrameRate
-            // 
-            this.labelFrameRate.AutoSize = true;
-            this.labelFrameRate.Location = new System.Drawing.Point(393, 98);
-            this.labelFrameRate.Name = "labelFrameRate";
-            this.labelFrameRate.Size = new System.Drawing.Size(91, 15);
-            this.labelFrameRate.TabIndex = 0;
-            this.labelFrameRate.Text = "Частота кадров";
-            // 
-            // comboBoxFrameRate
-            // 
-            this.comboBoxFrameRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxFrameRate.FormattingEnabled = true;
-            this.comboBoxFrameRate.Location = new System.Drawing.Point(488, 95);
-            this.comboBoxFrameRate.Name = "comboBoxFrameRate";
-            this.comboBoxFrameRate.Size = new System.Drawing.Size(80, 23);
-            this.comboBoxFrameRate.TabIndex = 1;
-            this.comboBoxFrameRate.SelectedIndexChanged += new System.EventHandler(this.comboBoxFrameRate_SelectedIndexChanged);
             // 
             // tabPagePicture
             // 
@@ -992,6 +1023,7 @@
             // 
             // tabPageFilters
             // 
+            this.tabPageFilters.Controls.Add(this.buttonPreview);
             this.tabPageFilters.Controls.Add(this.panelSubtitles);
             this.tabPageFilters.Controls.Add(this.panelColorFilter);
             this.tabPageFilters.Controls.Add(this.panelDeinterlace);
@@ -1126,35 +1158,15 @@
             this.labelOutputInfoTitle.TabIndex = 1;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
             // 
-            // labelPreset
+            // buttonPreview
             // 
-            this.labelPreset.AutoSize = true;
-            this.labelPreset.Location = new System.Drawing.Point(393, 42);
-            this.labelPreset.Name = "labelPreset";
-            this.labelPreset.Size = new System.Drawing.Size(46, 15);
-            this.labelPreset.TabIndex = 4;
-            this.labelPreset.Text = "Пресет";
-            // 
-            // comboBoxPreset
-            // 
-            this.comboBoxPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxPreset.FormattingEnabled = true;
-            this.comboBoxPreset.Location = new System.Drawing.Point(488, 39);
-            this.comboBoxPreset.Name = "comboBoxPreset";
-            this.comboBoxPreset.Size = new System.Drawing.Size(80, 23);
-            this.comboBoxPreset.TabIndex = 5;
-            this.comboBoxPreset.SelectedIndexChanged += new System.EventHandler(this.comboBoxPreset_SelectedIndexChanged);
-            // 
-            // checkBoxConvertVideo
-            // 
-            this.checkBoxConvertVideo.AutoSize = true;
-            this.checkBoxConvertVideo.Location = new System.Drawing.Point(6, 6);
-            this.checkBoxConvertVideo.Name = "checkBoxConvertVideo";
-            this.checkBoxConvertVideo.Size = new System.Drawing.Size(142, 19);
-            this.checkBoxConvertVideo.TabIndex = 10;
-            this.checkBoxConvertVideo.Text = "Переконвертировать";
-            this.checkBoxConvertVideo.UseVisualStyleBackColor = true;
-            this.checkBoxConvertVideo.CheckedChanged += new System.EventHandler(this.checkBoxConvertVideo_CheckedChanged);
+            this.buttonPreview.Location = new System.Drawing.Point(490, 7);
+            this.buttonPreview.Name = "buttonPreview";
+            this.buttonPreview.Size = new System.Drawing.Size(104, 23);
+            this.buttonPreview.TabIndex = 5;
+            this.buttonPreview.Text = "Preview (test)";
+            this.buttonPreview.UseVisualStyleBackColor = true;
+            this.buttonPreview.Click += new System.EventHandler(this.buttonPreview_Click);
             // 
             // MainForm
             // 
@@ -1312,6 +1324,7 @@
         private System.Windows.Forms.ComboBox comboBoxPreset;
         private System.Windows.Forms.Label labelPreset;
         private System.Windows.Forms.CheckBox checkBoxConvertVideo;
+        private System.Windows.Forms.Button buttonPreview;
     }
 }
 

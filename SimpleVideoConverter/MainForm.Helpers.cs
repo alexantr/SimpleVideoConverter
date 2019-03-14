@@ -481,8 +481,8 @@ namespace Alexantr.SimpleVideoConverter
                 return;
             if (!sizeChanged)
             {
-                numericUpDownHeight.Value = PictureConfig.CropSize.Height;
-                numericUpDownWidth.Value = PictureConfig.CropSize.Width; // calls UpdateHeight() if checked "keep ar"
+                numericUpDownHeight.Value = Math.Max(PictureConfig.CropSize.Height, PictureConfig.MinHeight);
+                numericUpDownWidth.Value = Math.Max(PictureConfig.CropSize.Width, PictureConfig.MinWidth); // calls UpdateHeight() if checked "keep ar"
                 sizeChanged = false; // force to false
             }
             FillComboBoxAspectRatio();

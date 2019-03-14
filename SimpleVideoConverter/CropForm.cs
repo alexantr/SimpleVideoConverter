@@ -134,11 +134,11 @@ namespace Alexantr.SimpleVideoConverter
         private void numericCropLeft_ValueChanged(object sender, EventArgs e)
         {
             int value = (int)numericCropLeft.Value;
-            if (value % 2 == 1)
-                value = Math.Max(0, value - 1);
-            if (originalSize.Width - crop.Right - value < PictureConfig.MinWidth)
+            //if (value % 2 == 1)
+            //    value = Math.Max(0, value - 1);
+            if (originalSize.Width - crop.Right - value < 16)
             {
-                value = originalSize.Width - crop.Right - PictureConfig.MinWidth;
+                value = Math.Max(0, originalSize.Width - crop.Right - 16);
                 numericCropLeft.Value = value;
             }
             crop.Left = value;
@@ -148,11 +148,11 @@ namespace Alexantr.SimpleVideoConverter
         private void numericCropRight_ValueChanged(object sender, EventArgs e)
         {
             int value = (int)numericCropRight.Value;
-            if (value % 2 == 1)
-                value = Math.Max(0, value - 1);
-            if (originalSize.Width - crop.Left - value < PictureConfig.MinWidth)
+            //if (value % 2 == 1)
+            //    value = Math.Max(0, value - 1);
+            if (originalSize.Width - crop.Left - value < 16)
             {
-                value = originalSize.Width - crop.Left - PictureConfig.MinWidth;
+                value = Math.Max(0, originalSize.Width - crop.Left - 16);
                 numericCropRight.Value = value;
             }
             crop.Right = value;
@@ -162,11 +162,11 @@ namespace Alexantr.SimpleVideoConverter
         private void numericCropTop_ValueChanged(object sender, EventArgs e)
         {
             int value = (int)numericCropTop.Value;
-            if (value % 2 == 1)
-                value = Math.Max(0, value - 1);
-            if (originalSize.Height - crop.Bottom - value < PictureConfig.MinHeight)
+            //if (value % 2 == 1)
+            //    value = Math.Max(0, value - 1);
+            if (originalSize.Height - crop.Bottom - value < 16)
             {
-                value = originalSize.Height - crop.Bottom - PictureConfig.MinHeight;
+                value = Math.Max(0, originalSize.Height - crop.Bottom - 16);
                 numericCropTop.Value = value;
             }
             crop.Top = value;
@@ -176,11 +176,11 @@ namespace Alexantr.SimpleVideoConverter
         private void numericCropBottom_ValueChanged(object sender, EventArgs e)
         {
             int value = (int)numericCropBottom.Value;
-            if (value % 2 == 1)
-                value = Math.Max(0, value - 1);
-            if (originalSize.Height - crop.Top - value < PictureConfig.MinHeight)
+            //if (value % 2 == 1)
+            //    value = Math.Max(0, value - 1);
+            if (originalSize.Height - crop.Top - value < 16)
             {
-                value = originalSize.Height - crop.Top - PictureConfig.MinHeight;
+                value = Math.Max(0, originalSize.Height - crop.Top - 16);
                 numericCropBottom.Value = value;
             }
             crop.Bottom = value;

@@ -612,8 +612,8 @@ namespace Alexantr.SimpleVideoConverter
             PictureConfig.InputOriginalSize = vStream.OriginalSize;
             PictureConfig.InputDisplaySize = vStream.PictureSize;
 
-            numericUpDownHeight.Value = PictureConfig.CropSize.Height;
-            numericUpDownWidth.Value = PictureConfig.CropSize.Width; // triggered UpdateHeight() if keeping ar
+            numericUpDownHeight.Value = Math.Max(PictureConfig.CropSize.Height, PictureConfig.MinHeight);
+            numericUpDownWidth.Value = Math.Max(PictureConfig.CropSize.Width, PictureConfig.MinWidth); // triggered UpdateHeight() if keeping ar
 
             // set original aspect ratio
             FillComboBoxAspectRatio(true);
@@ -792,77 +792,16 @@ namespace Alexantr.SimpleVideoConverter
                     videoArgs.Add($"-preset:v {VideoConfig.Preset}");
                 }
 
-                // Video filters
-
-                List<string> filters = new List<string>();
-
-                // https://ffmpeg.org/ffmpeg-filters.html#yadif-1
-                if (PictureConfig.Deinterlace)
-                    filters.Add($"yadif=parity={PictureConfig.FieldOrder}");
-
-                // https://ffmpeg.org/ffmpeg-filters.html#crop
-                if (PictureConfig.IsCropped())
-                {
-                    // using oar
-                    int cropW = vStream.OriginalSize.Width - PictureConfig.Crop.Left - PictureConfig.Crop.Right;
-                    int cropH = vStream.OriginalSize.Height - PictureConfig.Crop.Top - PictureConfig.Crop.Bottom;
-                    filters.Add($"crop={cropW}:{cropH}:{PictureConfig.Crop.Left}:{PictureConfig.Crop.Top}");
-                }
-
-                // https://ffmpeg.org/ffmpeg-filters.html#scale-1
-                if (PictureConfig.OutputSize.Width != PictureConfig.CropSize.Width || PictureConfig.OutputSize.Height != PictureConfig.CropSize.Height)
-                {
-                    // https://www.ffmpeg.org/ffmpeg-scaler.html#sws_005fflags
-                    filters.Add($"scale={PictureConfig.OutputSize.Width}x{PictureConfig.OutputSize.Height}:flags={PictureConfig.Interpolation}");
-                }
-                else if (PictureConfig.IsUsingDAR())
-                {
-                    // force scale for not square pixels
-                    filters.Add($"scale={PictureConfig.CropSize.Width}x{PictureConfig.CropSize.Height}:flags={PictureConfig.Interpolation}");
-                }
-
-                // https://ffmpeg.org/ffmpeg-filters.html#pad-1
-                /*if (PictureConfig.Padding.X > 0 || PictureConfig.Padding.Y > 0)
-                {
-                    filters.Add($"pad={PictureConfig.SelectedSize.Width}:{PictureConfig.SelectedSize.Height}:{PictureConfig.Padding.X}:{PictureConfig.Padding.Y}");
-                }*/
-
-                // https://ffmpeg.org/ffmpeg-filters.html#transpose
-                if (PictureConfig.Rotate == 180)
-                    filters.Add("transpose=2,transpose=2");
-                else if (PictureConfig.Rotate == 90)
-                    filters.Add("transpose=1");
-                else if (PictureConfig.Rotate == 270)
-                    filters.Add("transpose=2");
-
-                // https://ffmpeg.org/ffmpeg-filters.html#hflip
-                if (PictureConfig.Flip)
-                    filters.Add("hflip");
-
-                // Set subtitles
-                // https://trac.ffmpeg.org/wiki/HowToBurnSubtitlesIntoVideo
-                if (!string.IsNullOrWhiteSpace(subtitlesPath))
-                {
-                    // https://ffmpeg.org/ffmpeg-filters.html#Notes-on-filtergraph-escaping
-                    filters.Add($"subtitles={subtitlesPath.Replace("\\", "\\\\\\\\").Replace("'", "\\\\\\'").Replace(":", "\\\\:").Replace(",", "\\,")}");
-                }
-
-                // force sar 1:1
-                // https://ffmpeg.org/ffmpeg-filters.html#setdar_002c-setsar
-                filters.Add("setsar=sar=1/1");
-
-                // color filter
-                // https://ffmpeg.org/ffmpeg-filters.html#colorchannelmixer
-                if (PictureConfig.ColorChannelMixerList.ContainsKey(PictureConfig.ColorFilter))
-                    filters.Add($"colorchannelmixer={PictureConfig.ColorChannelMixerList[PictureConfig.ColorFilter]}");
-
                 // Frame rate
                 if (!string.IsNullOrWhiteSpace(VideoConfig.FrameRate))
                     videoArgs.Add($"-r {VideoConfig.FrameRate}");
 
+                // Video filters
+                string vFilters = GetVideoFilters(subtitlesPath);
+
                 // Add filters to video args
-                if (filters.Count > 0)
-                    videoArgs.Add("-vf \"" + string.Join(",", filters) + "\"");
+                if (vFilters.Length > 0)
+                    videoArgs.Add("-vf \"" + vFilters + "\"");
             }
             else
             {
@@ -1021,6 +960,145 @@ namespace Alexantr.SimpleVideoConverter
 2005-08-09T18:31:42.000000+03:00";
 
             MessageBox.Show(dateHelp, "Поддерживаемые форматы даты", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void buttonPreview_Click(object sender, EventArgs e)
+        {
+            string directoryPath = Path.Combine(Environment.CurrentDirectory, "ffmpeg");
+            string exePath = Path.Combine(directoryPath, "ffplay.exe");
+            if (!File.Exists(exePath))
+            {
+                MessageBox.Show("Cannot find ffplay.exe", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // ffplay -i 00021.MTS -vf "yadif=parity=auto,crop=1440:1080:240:0,scale=640x480:flags=bicubic,hflip,setsar=sar=1/1"
+
+            List<string> videoArgs = new List<string>();
+            List<string> audioArgs = new List<string>();
+
+            // Video args
+
+            //videoArgs.Add($"-map 0:{inputFile.VideoStreams[0].Index}");
+
+            if (checkBoxConvertVideo.Checked)
+            {
+                string subtitlesPath = textBoxSubtitlesPath.Text;
+
+                // Frame rate
+                if (!string.IsNullOrWhiteSpace(VideoConfig.FrameRate))
+                    videoArgs.Add($"-r {VideoConfig.FrameRate}");
+
+                // Video filters
+                string vFilters = GetVideoFilters(subtitlesPath);
+
+                // Add filters to video args
+                if (vFilters.Length > 0)
+                    videoArgs.Add("-vf \"" + vFilters + "\"");
+            }
+
+            // Audio args
+
+            int audioStreamIndex = ((ComboBoxIntItem)comboBoxAudioStreams.SelectedItem).Value;
+
+            if (audioStreamIndex == -1)
+            {
+                audioArgs.Add("-an");
+            }
+            else
+            {
+                //audioArgs.Add($"-map 0:{audioStreamIndex}");
+            }
+
+            string input = Path.GetFullPath(inputFile.FullPath);
+
+            string arguments = string.Format("{0} {1}", string.Join(" ", videoArgs), string.Join(" ", audioArgs));
+
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = exePath,
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                Arguments = string.Format("-i \"{0}\" {1}", input, arguments)
+            };
+
+            startInfo.EnvironmentVariables["FC_CONFIG_DIR"] = directoryPath;
+            startInfo.EnvironmentVariables["FONTCONFIG_FILE"] = "fonts.conf";
+            startInfo.EnvironmentVariables["FONTCONFIG_PATH"] = directoryPath;
+
+            Process.Start(startInfo);
+        }
+
+        /// <summary>
+        /// Create content for "vf" argument
+        /// </summary>
+        /// <param name="subtitlesPath"></param>
+        /// <returns></returns>
+        private string GetVideoFilters(string subtitlesPath)
+        {
+            List<string> filters = new List<string>();
+
+            // https://ffmpeg.org/ffmpeg-filters.html#yadif-1
+            if (PictureConfig.Deinterlace)
+                filters.Add($"yadif=parity={PictureConfig.FieldOrder}");
+
+            // https://ffmpeg.org/ffmpeg-filters.html#crop
+            if (PictureConfig.IsCropped())
+            {
+                // using oar
+                int cropW = PictureConfig.InputOriginalSize.Width - PictureConfig.Crop.Left - PictureConfig.Crop.Right;
+                int cropH = PictureConfig.InputOriginalSize.Height - PictureConfig.Crop.Top - PictureConfig.Crop.Bottom;
+                filters.Add($"crop={cropW}:{cropH}:{PictureConfig.Crop.Left}:{PictureConfig.Crop.Top}");
+            }
+
+            // https://ffmpeg.org/ffmpeg-filters.html#scale-1
+            if (PictureConfig.OutputSize.Width != PictureConfig.CropSize.Width || PictureConfig.OutputSize.Height != PictureConfig.CropSize.Height)
+            {
+                // https://www.ffmpeg.org/ffmpeg-scaler.html#sws_005fflags
+                filters.Add($"scale={PictureConfig.OutputSize.Width}x{PictureConfig.OutputSize.Height}:flags={PictureConfig.Interpolation}");
+            }
+            else if (PictureConfig.IsUsingDAR())
+            {
+                // force scale for not square pixels
+                filters.Add($"scale={PictureConfig.CropSize.Width}x{PictureConfig.CropSize.Height}:flags={PictureConfig.Interpolation}");
+            }
+
+            // https://ffmpeg.org/ffmpeg-filters.html#pad-1
+            /*if (PictureConfig.Padding.X > 0 || PictureConfig.Padding.Y > 0)
+            {
+                filters.Add($"pad={PictureConfig.SelectedSize.Width}:{PictureConfig.SelectedSize.Height}:{PictureConfig.Padding.X}:{PictureConfig.Padding.Y}");
+            }*/
+
+            // https://ffmpeg.org/ffmpeg-filters.html#transpose
+            if (PictureConfig.Rotate == 180)
+                filters.Add("transpose=2,transpose=2");
+            else if (PictureConfig.Rotate == 90)
+                filters.Add("transpose=1");
+            else if (PictureConfig.Rotate == 270)
+                filters.Add("transpose=2");
+
+            // https://ffmpeg.org/ffmpeg-filters.html#hflip
+            if (PictureConfig.Flip)
+                filters.Add("hflip");
+
+            // Set subtitles
+            // https://trac.ffmpeg.org/wiki/HowToBurnSubtitlesIntoVideo
+            if (!string.IsNullOrWhiteSpace(subtitlesPath) && File.Exists(subtitlesPath))
+            {
+                // https://ffmpeg.org/ffmpeg-filters.html#Notes-on-filtergraph-escaping
+                filters.Add($"subtitles={subtitlesPath.Replace("\\", "\\\\\\\\").Replace("'", "\\\\\\'").Replace(":", "\\\\:").Replace(",", "\\,")}");
+            }
+
+            // force sar 1:1
+            // https://ffmpeg.org/ffmpeg-filters.html#setdar_002c-setsar
+            filters.Add("setsar=sar=1/1");
+
+            // color filter
+            // https://ffmpeg.org/ffmpeg-filters.html#colorchannelmixer
+            if (PictureConfig.ColorChannelMixerList.ContainsKey(PictureConfig.ColorFilter))
+                filters.Add($"colorchannelmixer={PictureConfig.ColorChannelMixerList[PictureConfig.ColorFilter]}");
+
+            return string.Join(",", filters);
         }
     }
 }
