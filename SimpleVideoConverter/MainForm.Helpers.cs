@@ -16,6 +16,12 @@ namespace Alexantr.SimpleVideoConverter
         // https://forum.videohelp.com/threads/369463-x264-Tweaking-testing-and-comparing-settings
         private const string FormatMP4 = "mp4";
 
+        private const string FormatMKV = "mkv";
+
+        private const string FormatTS = "ts";
+
+        private const string FormatMOV = "mov";
+
         private char[] invalidChars = Path.GetInvalidPathChars();
 
         private List<string> tempFilesList = new List<string>();
@@ -92,6 +98,11 @@ namespace Alexantr.SimpleVideoConverter
             {
                 throw new Exception("Путь к итоговому файлу содержит невалидные символы!");
             }
+        }
+
+        private void CheckMp4MoveFlags()
+        {
+            checkBoxWebOptimized.Visible = fileType == FormatMP4 || fileType == FormatMOV;
         }
 
         #endregion

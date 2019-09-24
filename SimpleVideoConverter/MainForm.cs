@@ -15,6 +15,8 @@ namespace Alexantr.SimpleVideoConverter
 
         private string formTitle;
 
+        private string fileType;
+
         private TaskbarManager taskbarManager;
 
         //private bool doNotCheckKeepARAgain = false;
@@ -57,6 +59,8 @@ namespace Alexantr.SimpleVideoConverter
             numericUpDownHeight.Increment = 2;
 
             checkBoxKeepAspectRatio.Checked = true; // height input will be disabled
+
+            fileType = FormatMP4; // default is mp4
 
             // init configs
             VideoConfig.Codec = VideoConfig.CodecH264;
@@ -156,7 +160,13 @@ namespace Alexantr.SimpleVideoConverter
             {
                 dialog.OverwritePrompt = false; // ask later
                 dialog.ValidateNames = true;
-                dialog.Filter = FormatMP4.ToUpper() + " файлы|*." + FormatMP4;
+                dialog.Filter = "MP4 файлы|*.mp4|MKV файлы|*.mkv|MPEG-TS файлы|*.ts|MOV файлы|*.mov";
+                if (fileType == FormatMKV)
+                    dialog.FilterIndex = 2;
+                else if (fileType == FormatTS)
+                    dialog.FilterIndex = 3;
+                else if (fileType == FormatMOV)
+                    dialog.FilterIndex = 4;
 
                 if (!string.IsNullOrWhiteSpace(textBoxOut.Text))
                 {
@@ -174,8 +184,20 @@ namespace Alexantr.SimpleVideoConverter
 
                 if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.FileName))
                 {
+                    string ext = Path.GetExtension(dialog.FileName).ToLower();
+                    if (ext == ".mov")
+                        fileType = FormatMOV;
+                    else if (ext == ".ts" || ext == ".m2ts")
+                        fileType = FormatTS;
+                    else if (ext == ".mkv")
+                        fileType = FormatMKV;
+                    else
+                        fileType = FormatMP4;
+
                     textBoxOut.Text = dialog.FileName;
                     Properties.Settings.Default.OutPath = Path.GetDirectoryName(dialog.FileName);
+
+                    CheckMp4MoveFlags();
                 }
             }
         }
@@ -675,11 +697,11 @@ namespace Alexantr.SimpleVideoConverter
 
                 Properties.Settings.Default.OutPath = outDir;
 
-                string outPath = Path.Combine(outDir, withoutExtension + "." + FormatMP4);
+                string outPath = Path.Combine(outDir, withoutExtension + "." + fileType);
                 int num = 2;
                 while (File.Exists(outPath))
                 {
-                    outPath = Path.Combine(outDir, withoutExtension + " (" + num.ToString() + ")." + FormatMP4);
+                    outPath = Path.Combine(outDir, withoutExtension + " (" + num.ToString() + ")." + fileType);
                     num++;
                     // if so many duplicates set name manually
                     if (num > 100)
@@ -861,7 +883,7 @@ namespace Alexantr.SimpleVideoConverter
 
             List<string> metadataArgs = new List<string>();
 
-            metadataArgs.Add("-map_metadata -1");
+            metadataArgs.Add("-map_chapters -1 -map_metadata -1");
             if (!string.IsNullOrWhiteSpace(TagsConfig.Title))
                 metadataArgs.Add($"-metadata title=\"{TagsConfig.Title.Replace("\"", "\\\"")}\"");
             if (!string.IsNullOrWhiteSpace(TagsConfig.Author))
@@ -877,7 +899,7 @@ namespace Alexantr.SimpleVideoConverter
 
             // mp4
 
-            if (checkBoxWebOptimized.Checked)
+            if (checkBoxWebOptimized.Checked && (fileType == FormatMP4 || fileType == FormatMOV))
             {
                 specialArgsPass2.Add("-movflags +faststart");
                 specialCrfArgs.Add("-movflags +faststart");
@@ -891,6 +913,16 @@ namespace Alexantr.SimpleVideoConverter
             //string videoParams = $"-x264-params \"{x265Params}\"";
 
             //slow-firstpass
+
+            string ffmpegFormat;
+            if (fileType == FormatMOV)
+                ffmpegFormat = "mov";
+            else if (fileType == FormatTS)
+                ffmpegFormat = "mpegts";
+            else if (fileType == FormatMKV)
+                ffmpegFormat = "matroska";
+            else
+                ffmpegFormat = "mp4";
 
             if (twoPass)
             {
@@ -919,7 +951,7 @@ namespace Alexantr.SimpleVideoConverter
                     "-an",
                     string.Join(" ", specialArgsPass1),
                     "",
-                    FormatMP4,
+                    ffmpegFormat,
                     1,
                     passLogFile,
                     x26xParams1
@@ -930,7 +962,7 @@ namespace Alexantr.SimpleVideoConverter
                     string.Join(" ", audioArgs),
                     string.Join(" ", specialArgsPass2),
                     string.Join(" ", metadataArgs),
-                    FormatMP4,
+                    ffmpegFormat,
                     2,
                     passLogFile,
                     x26xParams2
@@ -959,7 +991,7 @@ namespace Alexantr.SimpleVideoConverter
                     string.Join(" ", audioArgs),
                     string.Join(" ", specialCrfArgs),
                     string.Join(" ", metadataArgs),
-                    FormatMP4,
+                    ffmpegFormat,
                     x26xParams
                 );
             }
