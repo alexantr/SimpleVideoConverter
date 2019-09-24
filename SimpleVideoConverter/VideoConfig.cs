@@ -32,7 +32,7 @@ namespace Alexantr.SimpleVideoConverter
                     case CodecH264:
                         Encoder = "libx264";
                         //CRF = 20.0f;
-                        AdditionalArguments = "-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p"; // todo: do
+                        AdditionalArguments = "";
                         break;
                     case CodecHEVC:
                         Encoder = "libx265";

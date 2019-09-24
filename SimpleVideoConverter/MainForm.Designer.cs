@@ -115,6 +115,7 @@
             this.textBoxIn = new System.Windows.Forms.TextBox();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageFilters = new System.Windows.Forms.TabPage();
+            this.buttonPreview = new System.Windows.Forms.Button();
             this.panelSubtitles = new System.Windows.Forms.Panel();
             this.labelSubtitles = new System.Windows.Forms.Label();
             this.buttonBrowseSubtitles = new System.Windows.Forms.Button();
@@ -128,7 +129,7 @@
             this.comboBoxFieldOrder = new System.Windows.Forms.ComboBox();
             this.labelOutputInfo = new System.Windows.Forms.Label();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
-            this.buttonPreview = new System.Windows.Forms.Button();
+            this.checkBoxCustomX265 = new System.Windows.Forms.CheckBox();
             this.tabPageTags.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
@@ -548,6 +549,7 @@
             // 
             // panelVideo
             // 
+            this.panelVideo.Controls.Add(this.checkBoxCustomX265);
             this.panelVideo.Controls.Add(this.comboBoxPreset);
             this.panelVideo.Controls.Add(this.labelCalcSize);
             this.panelVideo.Controls.Add(this.labelPreset);
@@ -798,7 +800,7 @@
             this.labelCropSize.AutoSize = true;
             this.labelCropSize.Location = new System.Drawing.Point(237, 8);
             this.labelCropSize.Name = "labelCropSize";
-            this.labelCropSize.Size = new System.Drawing.Size(73, 15);
+            this.labelCropSize.Size = new System.Drawing.Size(75, 15);
             this.labelCropSize.TabIndex = 1;
             this.labelCropSize.Text = "WxH → WxH";
             this.labelCropSize.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -864,7 +866,7 @@
             this.checkBoxKeepAspectRatio.AutoSize = true;
             this.checkBoxKeepAspectRatio.Location = new System.Drawing.Point(246, 51);
             this.checkBoxKeepAspectRatio.Name = "checkBoxKeepAspectRatio";
-            this.checkBoxKeepAspectRatio.Size = new System.Drawing.Size(149, 19);
+            this.checkBoxKeepAspectRatio.Size = new System.Drawing.Size(150, 19);
             this.checkBoxKeepAspectRatio.TabIndex = 31;
             this.checkBoxKeepAspectRatio.Text = "Сохранять пропорции";
             this.checkBoxKeepAspectRatio.UseVisualStyleBackColor = true;
@@ -949,7 +951,7 @@
             this.labelOut.AutoSize = true;
             this.labelOut.Location = new System.Drawing.Point(3, 78);
             this.labelOut.Name = "labelOut";
-            this.labelOut.Size = new System.Drawing.Size(86, 15);
+            this.labelOut.Size = new System.Drawing.Size(87, 15);
             this.labelOut.TabIndex = 5;
             this.labelOut.Text = "Сохранить как";
             // 
@@ -1034,6 +1036,16 @@
             this.tabPageFilters.TabIndex = 5;
             this.tabPageFilters.Text = "Фильтры";
             this.tabPageFilters.UseVisualStyleBackColor = true;
+            // 
+            // buttonPreview
+            // 
+            this.buttonPreview.Location = new System.Drawing.Point(490, 7);
+            this.buttonPreview.Name = "buttonPreview";
+            this.buttonPreview.Size = new System.Drawing.Size(104, 23);
+            this.buttonPreview.TabIndex = 5;
+            this.buttonPreview.Text = "Preview (test)";
+            this.buttonPreview.UseVisualStyleBackColor = true;
+            this.buttonPreview.Click += new System.EventHandler(this.buttonPreview_Click);
             // 
             // panelSubtitles
             // 
@@ -1158,15 +1170,17 @@
             this.labelOutputInfoTitle.TabIndex = 1;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
             // 
-            // buttonPreview
+            // checkBoxCustomX265
             // 
-            this.buttonPreview.Location = new System.Drawing.Point(490, 7);
-            this.buttonPreview.Name = "buttonPreview";
-            this.buttonPreview.Size = new System.Drawing.Size(104, 23);
-            this.buttonPreview.TabIndex = 5;
-            this.buttonPreview.Text = "Preview (test)";
-            this.buttonPreview.UseVisualStyleBackColor = true;
-            this.buttonPreview.Click += new System.EventHandler(this.buttonPreview_Click);
+            this.checkBoxCustomX265.AutoSize = true;
+            this.checkBoxCustomX265.Checked = true;
+            this.checkBoxCustomX265.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxCustomX265.Location = new System.Drawing.Point(396, 68);
+            this.checkBoxCustomX265.Name = "checkBoxCustomX265";
+            this.checkBoxCustomX265.Size = new System.Drawing.Size(164, 19);
+            this.checkBoxCustomX265.TabIndex = 10;
+            this.checkBoxCustomX265.Text = "Особые настройки HEVC";
+            this.checkBoxCustomX265.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -1325,6 +1339,7 @@
         private System.Windows.Forms.Label labelPreset;
         private System.Windows.Forms.CheckBox checkBoxConvertVideo;
         private System.Windows.Forms.Button buttonPreview;
+        private System.Windows.Forms.CheckBox checkBoxCustomX265;
     }
 }
 

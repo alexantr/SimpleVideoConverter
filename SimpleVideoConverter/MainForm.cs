@@ -425,6 +425,7 @@ namespace Alexantr.SimpleVideoConverter
             VideoConfig.Codec = ((ComboBoxItem)comboBoxVideoCodec.SelectedItem).Value;
 
             FillVideoCRFAndBitrate();
+            SetOutputInfo();
         }
 
         private void radioButtonCRF_CheckedChanged(object sender, EventArgs e)
@@ -753,12 +754,15 @@ namespace Alexantr.SimpleVideoConverter
 
             videoArgs.Add($"-map 0:{inputFile.VideoStreams[0].Index}");
 
+            string x264Params = "sar=1/1";
+            string x265Params = "sar=1:range=limited";
+
             if (checkBoxConvertVideo.Checked)
             {
                 if (VideoConfig.UseCRF)
-                    videoArgs.Add($"-c:v {VideoConfig.Encoder} -crf {VideoConfig.CRF} {VideoConfig.AdditionalArguments}");
+                    videoArgs.Add($"-c:v {VideoConfig.Encoder} -crf {VideoConfig.CRF}");
                 else
-                    videoArgs.Add($"-c:v {VideoConfig.Encoder} -b:v {VideoConfig.Bitrate}k {VideoConfig.AdditionalArguments}");
+                    videoArgs.Add($"-c:v {VideoConfig.Encoder} -b:v {VideoConfig.Bitrate}k");
 
                 // https://trac.ffmpeg.org/wiki/Encode/H.264
                 if (VideoConfig.Encoder == "libx264")
@@ -767,11 +771,10 @@ namespace Alexantr.SimpleVideoConverter
                     string videoProfile = "high";
                     string videoLevel = "";
 
-                    string x264Params = "sar=1/1";
+                    videoArgs.Add("-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p");
+
                     if (twoPass)
                         x264Params += ":no-dct-decimate=1";
-
-                    string videoParams = $"-x264-params \"{x264Params}\"";
 
                     double finalFrameRate = CalcFinalFrameRate();
                     if (finalFrameRate == 0)
@@ -783,12 +786,25 @@ namespace Alexantr.SimpleVideoConverter
                             videoLevel = " -level 4.1";
                     }
 
-                    videoArgs.Add($"-preset:v {VideoConfig.Preset} -profile:v {videoProfile}{videoLevel} {videoParams}");
+                    videoArgs.Add($"-preset:v {VideoConfig.Preset} -profile:v {videoProfile}{videoLevel}");
                 }
 
                 // https://trac.ffmpeg.org/wiki/Encode/H.265
                 if (VideoConfig.Encoder == "libx265")
                 {
+                    videoArgs.Add("-pix_fmt yuv420p");
+
+                    // slow,slower,veryslow,placebo
+
+                    if (checkBoxCustomX265.Checked)
+                    {
+                        x265Params += ":rect=0:amp=0:limit-modes=0:rskip=1:tu-intra-depth=1:tu-inter-depth=1:limit-tu=0:strong-intra-smoothing=0:sao=0";
+                        //x265Params += ":colorprim=1:transfer=1:colormatrix";
+
+                        if (VideoConfig.Preset == "slower" || VideoConfig.Preset == "veryslow" || VideoConfig.Preset == "placebo")
+                            x265Params += ":max-merge=3:limit-refs=3";
+                    }
+
                     videoArgs.Add($"-preset:v {VideoConfig.Preset}");
                 }
 
@@ -871,13 +887,29 @@ namespace Alexantr.SimpleVideoConverter
 
             string[] arguments;
 
+            //string videoParams = $"-x264-params \"{x264Params}\"";
+            //string videoParams = $"-x264-params \"{x265Params}\"";
+
+            //slow-firstpass
+
             if (twoPass)
             {
                 string passLogFile = GetTempLogFile();
-                string twoPassTpl = "-pass {5} -passlogfile \"{6}\" {0} {1} {2} {3} -f {4}";
+                string twoPassTpl;
+                string x26xParams1;
+                string x26xParams2;
+
                 if (VideoConfig.Encoder == "libx265")
                 {
-                    twoPassTpl = "-x265-params pass={5} -passlogfile \"{6}\" {0} {1} {2} {3} -f {4}";
+                    twoPassTpl = "-passlogfile \"{6}\" {0} -x265-params \"pass={5}:{7}\" {1} {2} {3} -f {4}";
+                    x26xParams1 = x265Params + ":slow-firstpass=0";
+                    x26xParams2 = x265Params;
+                }
+                else
+                {
+                    twoPassTpl = "-pass {5} -passlogfile \"{6}\" {0} -x264-params \"{7}\" {1} {2} {3} -f {4}";
+                    x26xParams1 = x264Params;
+                    x26xParams2 = x264Params;
                 }
 
                 arguments = new string[2];
@@ -889,7 +921,8 @@ namespace Alexantr.SimpleVideoConverter
                     "",
                     FormatMP4,
                     1,
-                    passLogFile
+                    passLogFile,
+                    x26xParams1
                 );
                 arguments[1] = string.Format(
                     twoPassTpl,
@@ -899,19 +932,35 @@ namespace Alexantr.SimpleVideoConverter
                     string.Join(" ", metadataArgs),
                     FormatMP4,
                     2,
-                    passLogFile
+                    passLogFile,
+                    x26xParams2
                 );
             }
             else
             {
+                string onePassTpl;
+                string x26xParams;
+
+                if (VideoConfig.Encoder == "libx265")
+                {
+                    onePassTpl = "{0} -x265-params \"{5}\" {1} {2} {3} -f {4}";
+                    x26xParams = x265Params;
+                }
+                else
+                {
+                    onePassTpl = "{0} -x264-params \"{5}\" {1} {2} {3} -f {4}";
+                    x26xParams = x264Params;
+                }
+
                 arguments = new string[1];
                 arguments[0] = string.Format(
-                    "{0} {1} {2} {3} -f {4}",
+                    onePassTpl,
                     string.Join(" ", videoArgs),
                     string.Join(" ", audioArgs),
                     string.Join(" ", specialCrfArgs),
                     string.Join(" ", metadataArgs),
-                    FormatMP4
+                    FormatMP4,
+                    x26xParams
                 );
             }
 
