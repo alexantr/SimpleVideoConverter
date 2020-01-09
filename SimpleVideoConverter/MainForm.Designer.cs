@@ -70,6 +70,7 @@
             this.tabPageVideo = new System.Windows.Forms.TabPage();
             this.checkBoxConvertVideo = new System.Windows.Forms.CheckBox();
             this.panelVideo = new System.Windows.Forms.Panel();
+            this.checkBoxCustomX265 = new System.Windows.Forms.CheckBox();
             this.comboBoxPreset = new System.Windows.Forms.ComboBox();
             this.labelCalcSize = new System.Windows.Forms.Label();
             this.labelPreset = new System.Windows.Forms.Label();
@@ -88,9 +89,13 @@
             this.numericUpDownBitrate = new System.Windows.Forms.NumericUpDown();
             this.tabPagePicture = new System.Windows.Forms.TabPage();
             this.panelResize = new System.Windows.Forms.Panel();
+            this.numericCropRight = new System.Windows.Forms.NumericUpDown();
+            this.numericCropLeft = new System.Windows.Forms.NumericUpDown();
+            this.numericCropBottom = new System.Windows.Forms.NumericUpDown();
+            this.numericCropTop = new System.Windows.Forms.NumericUpDown();
             this.labelCrop = new System.Windows.Forms.Label();
             this.checkBoxFlip = new System.Windows.Forms.CheckBox();
-            this.buttonCrop = new System.Windows.Forms.Button();
+            this.buttonCropReset = new System.Windows.Forms.Button();
             this.labelCropSize = new System.Windows.Forms.Label();
             this.comboBoxRotate = new System.Windows.Forms.ComboBox();
             this.labelRotate = new System.Windows.Forms.Label();
@@ -115,7 +120,6 @@
             this.textBoxIn = new System.Windows.Forms.TextBox();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.tabPageFilters = new System.Windows.Forms.TabPage();
-            this.buttonPreview = new System.Windows.Forms.Button();
             this.panelSubtitles = new System.Windows.Forms.Panel();
             this.labelSubtitles = new System.Windows.Forms.Label();
             this.buttonBrowseSubtitles = new System.Windows.Forms.Button();
@@ -127,9 +131,9 @@
             this.labelFieldOrder = new System.Windows.Forms.Label();
             this.checkBoxDeinterlace = new System.Windows.Forms.CheckBox();
             this.comboBoxFieldOrder = new System.Windows.Forms.ComboBox();
+            this.buttonPreview = new System.Windows.Forms.Button();
             this.labelOutputInfo = new System.Windows.Forms.Label();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
-            this.checkBoxCustomX265 = new System.Windows.Forms.CheckBox();
             this.tabPageTags.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
@@ -140,6 +144,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBitrate)).BeginInit();
             this.tabPagePicture.SuspendLayout();
             this.panelResize.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericCropRight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericCropLeft)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericCropBottom)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericCropTop)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRatioError)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
@@ -200,10 +208,10 @@
             // buttonPreset1080p
             // 
             this.buttonPreset1080p.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonPreset1080p.Location = new System.Drawing.Point(111, 78);
+            this.buttonPreset1080p.Location = new System.Drawing.Point(142, 78);
             this.buttonPreset1080p.Name = "buttonPreset1080p";
             this.buttonPreset1080p.Size = new System.Drawing.Size(45, 21);
-            this.buttonPreset1080p.TabIndex = 33;
+            this.buttonPreset1080p.TabIndex = 14;
             this.buttonPreset1080p.Text = "1080p";
             this.toolTipHint.SetToolTip(this.buttonPreset1080p, "Вписать в 1920x1080");
             this.buttonPreset1080p.UseVisualStyleBackColor = true;
@@ -212,10 +220,10 @@
             // buttonPreset720p
             // 
             this.buttonPreset720p.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonPreset720p.Location = new System.Drawing.Point(162, 78);
+            this.buttonPreset720p.Location = new System.Drawing.Point(193, 78);
             this.buttonPreset720p.Name = "buttonPreset720p";
             this.buttonPreset720p.Size = new System.Drawing.Size(45, 21);
-            this.buttonPreset720p.TabIndex = 34;
+            this.buttonPreset720p.TabIndex = 15;
             this.buttonPreset720p.Text = "720p";
             this.toolTipHint.SetToolTip(this.buttonPreset720p, "Вписать в 1280x720");
             this.buttonPreset720p.UseVisualStyleBackColor = true;
@@ -224,10 +232,10 @@
             // buttonPresetOriginal
             // 
             this.buttonPresetOriginal.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonPresetOriginal.Location = new System.Drawing.Point(264, 78);
+            this.buttonPresetOriginal.Location = new System.Drawing.Point(295, 78);
             this.buttonPresetOriginal.Name = "buttonPresetOriginal";
             this.buttonPresetOriginal.Size = new System.Drawing.Size(60, 21);
-            this.buttonPresetOriginal.TabIndex = 35;
+            this.buttonPresetOriginal.TabIndex = 17;
             this.buttonPresetOriginal.Text = "Сбросить";
             this.toolTipHint.SetToolTip(this.buttonPresetOriginal, "Задать исходный размер");
             this.buttonPresetOriginal.UseVisualStyleBackColor = true;
@@ -236,10 +244,10 @@
             // buttonPreset480p
             // 
             this.buttonPreset480p.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonPreset480p.Location = new System.Drawing.Point(213, 78);
+            this.buttonPreset480p.Location = new System.Drawing.Point(244, 78);
             this.buttonPreset480p.Name = "buttonPreset480p";
             this.buttonPreset480p.Size = new System.Drawing.Size(45, 21);
-            this.buttonPreset480p.TabIndex = 38;
+            this.buttonPreset480p.TabIndex = 16;
             this.buttonPreset480p.Text = "480p";
             this.toolTipHint.SetToolTip(this.buttonPreset480p, "Вписать в 640x480");
             this.buttonPreset480p.UseVisualStyleBackColor = true;
@@ -571,6 +579,18 @@
             this.panelVideo.Size = new System.Drawing.Size(592, 148);
             this.panelVideo.TabIndex = 0;
             // 
+            // checkBoxCustomX265
+            // 
+            this.checkBoxCustomX265.AutoSize = true;
+            this.checkBoxCustomX265.Checked = true;
+            this.checkBoxCustomX265.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxCustomX265.Location = new System.Drawing.Point(396, 68);
+            this.checkBoxCustomX265.Name = "checkBoxCustomX265";
+            this.checkBoxCustomX265.Size = new System.Drawing.Size(164, 19);
+            this.checkBoxCustomX265.TabIndex = 10;
+            this.checkBoxCustomX265.Text = "Особые настройки HEVC";
+            this.checkBoxCustomX265.UseVisualStyleBackColor = true;
+            // 
             // comboBoxPreset
             // 
             this.comboBoxPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -740,9 +760,13 @@
             // 
             // panelResize
             // 
+            this.panelResize.Controls.Add(this.numericCropRight);
+            this.panelResize.Controls.Add(this.numericCropLeft);
+            this.panelResize.Controls.Add(this.numericCropBottom);
+            this.panelResize.Controls.Add(this.numericCropTop);
             this.panelResize.Controls.Add(this.labelCrop);
             this.panelResize.Controls.Add(this.checkBoxFlip);
-            this.panelResize.Controls.Add(this.buttonCrop);
+            this.panelResize.Controls.Add(this.buttonCropReset);
             this.panelResize.Controls.Add(this.labelCropSize);
             this.panelResize.Controls.Add(this.buttonPreset480p);
             this.panelResize.Controls.Add(this.comboBoxRotate);
@@ -763,16 +787,72 @@
             this.panelResize.Location = new System.Drawing.Point(6, 6);
             this.panelResize.Name = "panelResize";
             this.panelResize.Size = new System.Drawing.Size(592, 171);
-            this.panelResize.TabIndex = 3;
+            this.panelResize.TabIndex = 0;
+            // 
+            // numericCropRight
+            // 
+            this.numericCropRight.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericCropRight.Location = new System.Drawing.Point(325, 6);
+            this.numericCropRight.Name = "numericCropRight";
+            this.numericCropRight.Size = new System.Drawing.Size(55, 23);
+            this.numericCropRight.TabIndex = 4;
+            this.numericCropRight.ValueChanged += new System.EventHandler(this.numericCropRight_ValueChanged);
+            this.numericCropRight.Enter += new System.EventHandler(this.numericCropRight_Enter);
+            // 
+            // numericCropLeft
+            // 
+            this.numericCropLeft.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericCropLeft.Location = new System.Drawing.Point(264, 6);
+            this.numericCropLeft.Name = "numericCropLeft";
+            this.numericCropLeft.Size = new System.Drawing.Size(55, 23);
+            this.numericCropLeft.TabIndex = 3;
+            this.numericCropLeft.ValueChanged += new System.EventHandler(this.numericCropLeft_ValueChanged);
+            this.numericCropLeft.Enter += new System.EventHandler(this.numericCropLeft_Enter);
+            // 
+            // numericCropBottom
+            // 
+            this.numericCropBottom.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericCropBottom.Location = new System.Drawing.Point(203, 6);
+            this.numericCropBottom.Name = "numericCropBottom";
+            this.numericCropBottom.Size = new System.Drawing.Size(55, 23);
+            this.numericCropBottom.TabIndex = 2;
+            this.numericCropBottom.ValueChanged += new System.EventHandler(this.numericCropBottom_ValueChanged);
+            this.numericCropBottom.Enter += new System.EventHandler(this.numericCropBottom_Enter);
+            // 
+            // numericCropTop
+            // 
+            this.numericCropTop.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericCropTop.Location = new System.Drawing.Point(142, 6);
+            this.numericCropTop.Name = "numericCropTop";
+            this.numericCropTop.Size = new System.Drawing.Size(55, 23);
+            this.numericCropTop.TabIndex = 1;
+            this.numericCropTop.ValueChanged += new System.EventHandler(this.numericCropTop_ValueChanged);
+            this.numericCropTop.Enter += new System.EventHandler(this.numericCropTop_Enter);
             // 
             // labelCrop
             // 
             this.labelCrop.AutoSize = true;
             this.labelCrop.Location = new System.Drawing.Point(3, 8);
             this.labelCrop.Name = "labelCrop";
-            this.labelCrop.Size = new System.Drawing.Size(86, 15);
-            this.labelCrop.TabIndex = 2;
-            this.labelCrop.Text = "Кадрирование";
+            this.labelCrop.Size = new System.Drawing.Size(137, 30);
+            this.labelCrop.TabIndex = 0;
+            this.labelCrop.Text = "Кадрирование\r\n(верх низ слева справа)";
             // 
             // checkBoxFlip
             // 
@@ -780,28 +860,28 @@
             this.checkBoxFlip.Location = new System.Drawing.Point(6, 149);
             this.checkBoxFlip.Name = "checkBoxFlip";
             this.checkBoxFlip.Size = new System.Drawing.Size(166, 19);
-            this.checkBoxFlip.TabIndex = 2;
+            this.checkBoxFlip.TabIndex = 22;
             this.checkBoxFlip.Text = "Отразить по горизонтали";
             this.checkBoxFlip.UseVisualStyleBackColor = true;
             this.checkBoxFlip.CheckedChanged += new System.EventHandler(this.checkBoxFlip_CheckedChanged);
             // 
-            // buttonCrop
+            // buttonCropReset
             // 
-            this.buttonCrop.Location = new System.Drawing.Point(111, 3);
-            this.buttonCrop.Name = "buttonCrop";
-            this.buttonCrop.Size = new System.Drawing.Size(120, 25);
-            this.buttonCrop.TabIndex = 0;
-            this.buttonCrop.Text = "Изменить";
-            this.buttonCrop.UseVisualStyleBackColor = true;
-            this.buttonCrop.Click += new System.EventHandler(this.buttonCrop_Click);
+            this.buttonCropReset.Location = new System.Drawing.Point(386, 4);
+            this.buttonCropReset.Name = "buttonCropReset";
+            this.buttonCropReset.Size = new System.Drawing.Size(63, 25);
+            this.buttonCropReset.TabIndex = 5;
+            this.buttonCropReset.Text = "Сброс";
+            this.buttonCropReset.UseVisualStyleBackColor = true;
+            this.buttonCropReset.Click += new System.EventHandler(this.buttonCropReset_Click);
             // 
             // labelCropSize
             // 
             this.labelCropSize.AutoSize = true;
-            this.labelCropSize.Location = new System.Drawing.Point(237, 8);
+            this.labelCropSize.Location = new System.Drawing.Point(455, 9);
             this.labelCropSize.Name = "labelCropSize";
             this.labelCropSize.Size = new System.Drawing.Size(75, 15);
-            this.labelCropSize.TabIndex = 1;
+            this.labelCropSize.TabIndex = 6;
             this.labelCropSize.Text = "WxH → WxH";
             this.labelCropSize.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
@@ -809,10 +889,10 @@
             // 
             this.comboBoxRotate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRotate.FormattingEnabled = true;
-            this.comboBoxRotate.Location = new System.Drawing.Point(111, 120);
+            this.comboBoxRotate.Location = new System.Drawing.Point(142, 120);
             this.comboBoxRotate.Name = "comboBoxRotate";
             this.comboBoxRotate.Size = new System.Drawing.Size(120, 23);
-            this.comboBoxRotate.TabIndex = 1;
+            this.comboBoxRotate.TabIndex = 19;
             this.comboBoxRotate.SelectedIndexChanged += new System.EventHandler(this.comboBoxRotate_SelectedIndexChanged);
             // 
             // labelRotate
@@ -821,7 +901,7 @@
             this.labelRotate.Location = new System.Drawing.Point(3, 123);
             this.labelRotate.Name = "labelRotate";
             this.labelRotate.Size = new System.Drawing.Size(66, 15);
-            this.labelRotate.TabIndex = 0;
+            this.labelRotate.TabIndex = 18;
             this.labelRotate.Text = "Повернуть";
             // 
             // labelPictureSize
@@ -830,7 +910,7 @@
             this.labelPictureSize.Location = new System.Drawing.Point(3, 51);
             this.labelPictureSize.Name = "labelPictureSize";
             this.labelPictureSize.Size = new System.Drawing.Size(56, 15);
-            this.labelPictureSize.TabIndex = 37;
+            this.labelPictureSize.TabIndex = 7;
             this.labelPictureSize.Text = "Размеры";
             // 
             // labelSizePreset
@@ -839,51 +919,51 @@
             this.labelSizePreset.Location = new System.Drawing.Point(3, 80);
             this.labelSizePreset.Name = "labelSizePreset";
             this.labelSizePreset.Size = new System.Drawing.Size(102, 15);
-            this.labelSizePreset.TabIndex = 36;
+            this.labelSizePreset.TabIndex = 13;
             this.labelSizePreset.Text = "Пресет размеров";
             // 
             // labelInterpolation
             // 
             this.labelInterpolation.AutoSize = true;
-            this.labelInterpolation.Location = new System.Drawing.Point(306, 123);
+            this.labelInterpolation.Location = new System.Drawing.Point(337, 123);
             this.labelInterpolation.Name = "labelInterpolation";
             this.labelInterpolation.Size = new System.Drawing.Size(88, 15);
-            this.labelInterpolation.TabIndex = 6;
+            this.labelInterpolation.TabIndex = 20;
             this.labelInterpolation.Text = "Интерполяция";
             // 
             // comboBoxInterpolation
             // 
             this.comboBoxInterpolation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxInterpolation.FormattingEnabled = true;
-            this.comboBoxInterpolation.Location = new System.Drawing.Point(400, 120);
+            this.comboBoxInterpolation.Location = new System.Drawing.Point(431, 120);
             this.comboBoxInterpolation.Name = "comboBoxInterpolation";
             this.comboBoxInterpolation.Size = new System.Drawing.Size(120, 23);
-            this.comboBoxInterpolation.TabIndex = 7;
+            this.comboBoxInterpolation.TabIndex = 21;
             this.comboBoxInterpolation.SelectedIndexChanged += new System.EventHandler(this.comboBoxInterpolation_SelectedIndexChanged);
             // 
             // checkBoxKeepAspectRatio
             // 
             this.checkBoxKeepAspectRatio.AutoSize = true;
-            this.checkBoxKeepAspectRatio.Location = new System.Drawing.Point(246, 51);
+            this.checkBoxKeepAspectRatio.Location = new System.Drawing.Point(277, 51);
             this.checkBoxKeepAspectRatio.Name = "checkBoxKeepAspectRatio";
             this.checkBoxKeepAspectRatio.Size = new System.Drawing.Size(150, 19);
-            this.checkBoxKeepAspectRatio.TabIndex = 31;
+            this.checkBoxKeepAspectRatio.TabIndex = 11;
             this.checkBoxKeepAspectRatio.Text = "Сохранять пропорции";
             this.checkBoxKeepAspectRatio.UseVisualStyleBackColor = true;
             this.checkBoxKeepAspectRatio.CheckedChanged += new System.EventHandler(this.checkBoxKeepAspectRatio_CheckedChanged);
             // 
             // numericUpDownWidth
             // 
-            this.numericUpDownWidth.Location = new System.Drawing.Point(111, 49);
+            this.numericUpDownWidth.Location = new System.Drawing.Point(142, 49);
             this.numericUpDownWidth.Name = "numericUpDownWidth";
             this.numericUpDownWidth.Size = new System.Drawing.Size(50, 23);
-            this.numericUpDownWidth.TabIndex = 26;
+            this.numericUpDownWidth.TabIndex = 8;
             this.numericUpDownWidth.ValueChanged += new System.EventHandler(this.numericUpDownWidth_ValueChanged);
             this.numericUpDownWidth.Leave += new System.EventHandler(this.numericUpDownWidth_Leave);
             // 
             // pictureBoxRatioError
             // 
-            this.pictureBoxRatioError.Location = new System.Drawing.Point(526, 52);
+            this.pictureBoxRatioError.Location = new System.Drawing.Point(557, 52);
             this.pictureBoxRatioError.Name = "pictureBoxRatioError";
             this.pictureBoxRatioError.Size = new System.Drawing.Size(16, 16);
             this.pictureBoxRatioError.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -892,30 +972,30 @@
             // 
             // numericUpDownHeight
             // 
-            this.numericUpDownHeight.Location = new System.Drawing.Point(181, 49);
+            this.numericUpDownHeight.Location = new System.Drawing.Point(212, 49);
             this.numericUpDownHeight.Name = "numericUpDownHeight";
             this.numericUpDownHeight.Size = new System.Drawing.Size(50, 23);
-            this.numericUpDownHeight.TabIndex = 27;
+            this.numericUpDownHeight.TabIndex = 10;
             this.numericUpDownHeight.ValueChanged += new System.EventHandler(this.numericUpDownHeight_ValueChanged);
             this.numericUpDownHeight.Leave += new System.EventHandler(this.numericUpDownHeight_Leave);
             // 
             // comboBoxAspectRatio
             // 
             this.comboBoxAspectRatio.FormattingEnabled = true;
-            this.comboBoxAspectRatio.Location = new System.Drawing.Point(400, 49);
+            this.comboBoxAspectRatio.Location = new System.Drawing.Point(431, 49);
             this.comboBoxAspectRatio.Name = "comboBoxAspectRatio";
             this.comboBoxAspectRatio.Size = new System.Drawing.Size(120, 23);
-            this.comboBoxAspectRatio.TabIndex = 29;
+            this.comboBoxAspectRatio.TabIndex = 12;
             this.comboBoxAspectRatio.SelectedIndexChanged += new System.EventHandler(this.comboBoxAspectRatio_SelectedIndexChanged);
             this.comboBoxAspectRatio.TextUpdate += new System.EventHandler(this.comboBoxAspectRatio_TextUpdate);
             // 
             // labelX
             // 
             this.labelX.AutoSize = true;
-            this.labelX.Location = new System.Drawing.Point(164, 51);
+            this.labelX.Location = new System.Drawing.Point(195, 51);
             this.labelX.Name = "labelX";
             this.labelX.Size = new System.Drawing.Size(15, 15);
-            this.labelX.TabIndex = 28;
+            this.labelX.TabIndex = 9;
             this.labelX.Text = "×";
             // 
             // tabPageFile
@@ -1025,7 +1105,6 @@
             // 
             // tabPageFilters
             // 
-            this.tabPageFilters.Controls.Add(this.buttonPreview);
             this.tabPageFilters.Controls.Add(this.panelSubtitles);
             this.tabPageFilters.Controls.Add(this.panelColorFilter);
             this.tabPageFilters.Controls.Add(this.panelDeinterlace);
@@ -1036,16 +1115,6 @@
             this.tabPageFilters.TabIndex = 5;
             this.tabPageFilters.Text = "Фильтры";
             this.tabPageFilters.UseVisualStyleBackColor = true;
-            // 
-            // buttonPreview
-            // 
-            this.buttonPreview.Location = new System.Drawing.Point(490, 7);
-            this.buttonPreview.Name = "buttonPreview";
-            this.buttonPreview.Size = new System.Drawing.Size(104, 23);
-            this.buttonPreview.TabIndex = 5;
-            this.buttonPreview.Text = "Preview (test)";
-            this.buttonPreview.UseVisualStyleBackColor = true;
-            this.buttonPreview.Click += new System.EventHandler(this.buttonPreview_Click);
             // 
             // panelSubtitles
             // 
@@ -1151,6 +1220,16 @@
             this.comboBoxFieldOrder.TabIndex = 2;
             this.comboBoxFieldOrder.SelectedIndexChanged += new System.EventHandler(this.comboBoxFieldOrder_SelectedIndexChanged);
             // 
+            // buttonPreview
+            // 
+            this.buttonPreview.Location = new System.Drawing.Point(407, 223);
+            this.buttonPreview.Name = "buttonPreview";
+            this.buttonPreview.Size = new System.Drawing.Size(75, 32);
+            this.buttonPreview.TabIndex = 5;
+            this.buttonPreview.Text = "Превью";
+            this.buttonPreview.UseVisualStyleBackColor = true;
+            this.buttonPreview.Click += new System.EventHandler(this.buttonPreview_Click);
+            // 
             // labelOutputInfo
             // 
             this.labelOutputInfo.AutoSize = true;
@@ -1170,24 +1249,13 @@
             this.labelOutputInfoTitle.TabIndex = 1;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
             // 
-            // checkBoxCustomX265
-            // 
-            this.checkBoxCustomX265.AutoSize = true;
-            this.checkBoxCustomX265.Checked = true;
-            this.checkBoxCustomX265.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxCustomX265.Location = new System.Drawing.Point(396, 68);
-            this.checkBoxCustomX265.Name = "checkBoxCustomX265";
-            this.checkBoxCustomX265.Size = new System.Drawing.Size(164, 19);
-            this.checkBoxCustomX265.TabIndex = 10;
-            this.checkBoxCustomX265.Text = "Особые настройки HEVC";
-            this.checkBoxCustomX265.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(624, 261);
+            this.Controls.Add(this.buttonPreview);
             this.Controls.Add(this.labelOutputInfoTitle);
             this.Controls.Add(this.labelOutputInfo);
             this.Controls.Add(this.tabControlMain);
@@ -1220,6 +1288,10 @@
             this.tabPagePicture.ResumeLayout(false);
             this.panelResize.ResumeLayout(false);
             this.panelResize.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericCropRight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericCropLeft)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericCropBottom)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericCropTop)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRatioError)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).EndInit();
@@ -1260,7 +1332,7 @@
         private System.Windows.Forms.Label labelFrameRate;
         private System.Windows.Forms.TabPage tabPagePicture;
         private System.Windows.Forms.Label labelInterpolation;
-        private System.Windows.Forms.Button buttonCrop;
+        private System.Windows.Forms.Button buttonCropReset;
         private System.Windows.Forms.Label labelCropSize;
         private System.Windows.Forms.TabPage tabPageFile;
         private System.Windows.Forms.Panel panelFile;
@@ -1340,6 +1412,10 @@
         private System.Windows.Forms.CheckBox checkBoxConvertVideo;
         private System.Windows.Forms.Button buttonPreview;
         private System.Windows.Forms.CheckBox checkBoxCustomX265;
+        private System.Windows.Forms.NumericUpDown numericCropTop;
+        private System.Windows.Forms.NumericUpDown numericCropBottom;
+        private System.Windows.Forms.NumericUpDown numericCropLeft;
+        private System.Windows.Forms.NumericUpDown numericCropRight;
     }
 }
 

@@ -34,7 +34,7 @@
             this.buttonPlay = new System.Windows.Forms.Button();
             this.richTextBoxOutput = new System.Windows.Forms.RichTextBox();
             this.labelStatus = new System.Windows.Forms.Label();
-            this.buttonToggleLog = new System.Windows.Forms.Button();
+            this.textBoxCurrentOutput = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // progressBarEncoding
@@ -72,8 +72,8 @@
             this.richTextBoxOutput.Location = new System.Drawing.Point(6, 76);
             this.richTextBoxOutput.Name = "richTextBoxOutput";
             this.richTextBoxOutput.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.richTextBoxOutput.Size = new System.Drawing.Size(612, 279);
-            this.richTextBoxOutput.TabIndex = 3;
+            this.richTextBoxOutput.Size = new System.Drawing.Size(612, 250);
+            this.richTextBoxOutput.TabIndex = 2;
             this.richTextBoxOutput.Text = "";
             this.richTextBoxOutput.TextChanged += new System.EventHandler(this.richTextBoxOutput_TextChanged);
             // 
@@ -86,22 +86,20 @@
             this.labelStatus.TabIndex = 5;
             this.labelStatus.Text = "...";
             // 
-            // buttonToggleLog
+            // textBoxCurrentOutput
             // 
-            this.buttonToggleLog.Location = new System.Drawing.Point(331, 42);
-            this.buttonToggleLog.Name = "buttonToggleLog";
-            this.buttonToggleLog.Size = new System.Drawing.Size(55, 27);
-            this.buttonToggleLog.TabIndex = 2;
-            this.buttonToggleLog.Text = "Лог";
-            this.buttonToggleLog.UseVisualStyleBackColor = true;
-            this.buttonToggleLog.Click += new System.EventHandler(this.buttonToggleLog_Click);
+            this.textBoxCurrentOutput.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBoxCurrentOutput.Location = new System.Drawing.Point(6, 332);
+            this.textBoxCurrentOutput.Name = "textBoxCurrentOutput";
+            this.textBoxCurrentOutput.Size = new System.Drawing.Size(612, 20);
+            this.textBoxCurrentOutput.TabIndex = 3;
             // 
             // ConverterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(624, 361);
-            this.Controls.Add(this.buttonToggleLog);
+            this.Controls.Add(this.textBoxCurrentOutput);
             this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.richTextBoxOutput);
             this.Controls.Add(this.buttonPlay);
@@ -129,6 +127,6 @@
         private System.Windows.Forms.Button buttonPlay;
         private System.Windows.Forms.RichTextBox richTextBoxOutput;
         private System.Windows.Forms.Label labelStatus;
-        private System.Windows.Forms.Button buttonToggleLog;
+        private System.Windows.Forms.TextBox textBoxCurrentOutput;
     }
 }

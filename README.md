@@ -4,14 +4,12 @@
 
 * Для работы необходим .NET Framework 4.6.2 или выше
 
-![Главное окно, вкладка Файл](screenshots/tab1.png)
-![Главное окно, вкладка Видео](screenshots/tab2.png)
-![Главное окно, вкладка Картинка](screenshots/tab3.png)
-![Главное окно, вкладка Фильтры](screenshots/tab4.png)
-![Главное окно, вкладка Аудио](screenshots/tab5.png)
-![Главное окно, вкладка Теги](screenshots/tab6.png)
+![Главное окно, вкладка Файл](screenshots/SimpleVideoConverter_20200109_1.png)
+![Главное окно, вкладка Видео](screenshots/SimpleVideoConverter_20200109_2.png)
+![Главное окно, вкладка Картинка](screenshots/SimpleVideoConverter_20200109_3.png)
+![Главное окно, вкладка Фильтры](screenshots/SimpleVideoConverter_20200109_4.png)
+![Главное окно, вкладка Аудио](screenshots/SimpleVideoConverter_20200109_5.png)
+![Главное окно, вкладка Теги](screenshots/SimpleVideoConverter_20200109_6.png)
 
-![Обрезка](screenshots/crop.png)
-
-![Конвертирование](screenshots/convert1.png)
-![Конвертирование, лог](screenshots/convert2.png)
+![Конвертирование](screenshots/SimpleVideoConverter_20200109_7.png)
+![Конвертирование](screenshots/SimpleVideoConverter_20200109_8.png)

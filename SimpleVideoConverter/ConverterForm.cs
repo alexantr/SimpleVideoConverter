@@ -27,10 +27,6 @@ namespace Alexantr.SimpleVideoConverter
 
         private TaskbarManager taskbarManager;
 
-        private int fullWinHeight;
-        private int collapsedWinHeight = 114;
-        private bool enlarged = false;
-
         private string formTitle;
 
         /// <summary>
@@ -75,9 +71,8 @@ namespace Alexantr.SimpleVideoConverter
                 richTextBoxOutput.AppendText($"Arguments: {arguments[0]}{Environment.NewLine}");
             }
 
-            richTextBoxOutput.Visible = false;
-            fullWinHeight = Height;
-            Height = collapsedWinHeight;
+            richTextBoxOutput.ReadOnly = true;
+            textBoxCurrentOutput.ReadOnly = true;
 
             progressBarEncoding.Value = 0;
             buttonPlay.Enabled = false;
@@ -171,14 +166,16 @@ namespace Alexantr.SimpleVideoConverter
             {
                 if (cancelTwoPass)
                 {
-                    richTextBoxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}Converting cancelled.");
+                    //richTextBoxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}Converting cancelled.");
+                    textBoxCurrentOutput.Text = "Converting cancelled.";
 
                     taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
                     labelStatus.Text = "Конвертирование отменено";
                 }
                 else
                 {
-                    richTextBoxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}ffmpeg.exe exited with exit code {process.ExitCode}.");
+                    //richTextBoxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}ffmpeg.exe exited with exit code {process.ExitCode}.");
+                    textBoxCurrentOutput.Text = $"ffmpeg.exe exited with exit code {process.ExitCode}.";
 
                     taskbarManager.SetProgressValue(1000, 1000);
                     taskbarManager.SetProgressState(TaskbarProgressBarState.Error);
@@ -189,7 +186,8 @@ namespace Alexantr.SimpleVideoConverter
             }
             else
             {
-                richTextBoxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}Video converted succesfully.");
+                //richTextBoxOutput.AppendText($"{Environment.NewLine}{Environment.NewLine}Video converted succesfully.");
+                textBoxCurrentOutput.Text = "Video converted succesfully.";
                 progressBarEncoding.Value = 1000;
                 Text = $"{formTitle} - 100%";
                 taskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
@@ -198,6 +196,7 @@ namespace Alexantr.SimpleVideoConverter
             }
             buttonCancel.Text = "Закрыть";
             buttonCancel.Enabled = true;
+            buttonCancel.Focus();
             processEnded = true;
         }
 
@@ -205,7 +204,15 @@ namespace Alexantr.SimpleVideoConverter
         {
             if (args.Data != null)
             {
-                richTextBoxOutput.Invoke((Action)(() => richTextBoxOutput.AppendText(Environment.NewLine + args.Data.TrimEnd())));
+                if (args.Data.StartsWith("frame="))
+                {
+                    textBoxCurrentOutput.Invoke((Action)(() => textBoxCurrentOutput.Text = args.Data.TrimEnd()));
+                }
+                else
+                {
+                    richTextBoxOutput.Invoke((Action)(() => richTextBoxOutput.AppendText(Environment.NewLine + args.Data.TrimEnd())));
+                    textBoxCurrentOutput.Invoke((Action)(() => textBoxCurrentOutput.Text = ""));
+                }
                 ParseAndUpdateProgress(args.Data);
             }
         }
@@ -215,6 +222,7 @@ namespace Alexantr.SimpleVideoConverter
             if (args.Data != null)
             {
                 richTextBoxOutput.Invoke((Action)(() => richTextBoxOutput.AppendText(Environment.NewLine + args.Data.TrimEnd())));
+                textBoxCurrentOutput.Invoke((Action)(() => textBoxCurrentOutput.Text = ""));
             }
         }
 
@@ -276,20 +284,5 @@ namespace Alexantr.SimpleVideoConverter
 
         // manually scroll to bottom cause AppendText doesn't do it if it doesn't have focus
         private void richTextBoxOutput_TextChanged(object sender, EventArgs e) => NativeMethods.SendMessage(richTextBoxOutput.Handle, 0x115, 7, 0); // 0x115: WM_VSCROLL, 7: SB_BOTTOM
-
-        private void buttonToggleLog_Click(object sender, EventArgs e)
-        {
-            if (enlarged)
-            {
-                richTextBoxOutput.Visible = false;
-                Height = collapsedWinHeight;
-            }
-            else
-            {
-                Height = fullWinHeight;
-                richTextBoxOutput.Visible = true;
-            }
-            enlarged = !enlarged;
-        }
     }
 }

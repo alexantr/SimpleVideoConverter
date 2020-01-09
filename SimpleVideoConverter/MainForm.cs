@@ -35,6 +35,7 @@ namespace Alexantr.SimpleVideoConverter
             Text = formTitle;
 
             buttonGo.Enabled = false;
+            buttonPreview.Enabled = false;
             buttonShowInfo.Enabled = false;
             buttonOpenInputFile.Enabled = false;
 
@@ -235,20 +236,25 @@ namespace Alexantr.SimpleVideoConverter
 
         #region Picture
 
-        /// <summary>
-        /// Call after crop window closed
-        /// </summary>
-        public void UpdateCrop(Crop newCrop)
+        public void UpdateCrop()
         {
-            PictureConfig.Crop = newCrop;
             UpdateCropSizeInfo();
             UpdateAspectRatio();
             SetOutputInfo();
         }
 
-        private void buttonCrop_Click(object sender, EventArgs e)
+        public void ResetCrop()
         {
-            new CropForm(inputFile, PictureConfig.Crop).ShowDialog(this);
+            numericCropTop.Value = 0;
+            numericCropBottom.Value = 0;
+            numericCropLeft.Value = 0;
+            numericCropRight.Value = 0;
+        }
+
+        private void buttonCropReset_Click(object sender, EventArgs e)
+        {
+            ResetCrop();
+            UpdateCrop();
         }
 
         private void numericUpDownWidth_ValueChanged(object sender, EventArgs e)
@@ -425,6 +431,103 @@ namespace Alexantr.SimpleVideoConverter
             SetOutputInfo();
         }
 
+
+        private void numericCropLeft_ValueChanged(object sender, EventArgs e)
+        {
+            if (inputFile == null)
+                return;
+
+            int value = (int)numericCropLeft.Value;
+            //if (value % 2 == 1)
+            //    value = Math.Max(0, value - 1);
+            if (PictureConfig.InputOriginalSize.Width - PictureConfig.Crop.Right - value < 16)
+            {
+                value = Math.Max(0, PictureConfig.InputOriginalSize.Width - PictureConfig.Crop.Right - 16);
+                numericCropLeft.Value = value;
+            }
+            Crop crop = PictureConfig.Crop;
+            crop.Left = value;
+            PictureConfig.Crop = crop;
+            UpdateCrop();
+        }
+
+        private void numericCropRight_ValueChanged(object sender, EventArgs e)
+        {
+            if (inputFile == null)
+                return;
+
+            int value = (int)numericCropRight.Value;
+            //if (value % 2 == 1)
+            //    value = Math.Max(0, value - 1);
+            if (PictureConfig.InputOriginalSize.Width - PictureConfig.Crop.Left - value < 16)
+            {
+                value = Math.Max(0, PictureConfig.InputOriginalSize.Width - PictureConfig.Crop.Left - 16);
+                numericCropRight.Value = value;
+            }
+            Crop crop = PictureConfig.Crop;
+            crop.Right = value;
+            PictureConfig.Crop = crop;
+            UpdateCrop();
+        }
+
+        private void numericCropTop_ValueChanged(object sender, EventArgs e)
+        {
+            if (inputFile == null)
+                return;
+
+            int value = (int)numericCropTop.Value;
+            //if (value % 2 == 1)
+            //    value = Math.Max(0, value - 1);
+            if (PictureConfig.InputOriginalSize.Height - PictureConfig.Crop.Bottom - value < 16)
+            {
+                value = Math.Max(0, PictureConfig.InputOriginalSize.Height - PictureConfig.Crop.Bottom - 16);
+                numericCropTop.Value = value;
+            }
+            Crop crop = PictureConfig.Crop;
+            crop.Top = value;
+            PictureConfig.Crop = crop;
+            UpdateCrop();
+        }
+
+        private void numericCropBottom_ValueChanged(object sender, EventArgs e)
+        {
+            if (inputFile == null)
+                return;
+
+            int value = (int)numericCropBottom.Value;
+            //if (value % 2 == 1)
+            //    value = Math.Max(0, value - 1);
+            if (PictureConfig.InputOriginalSize.Height - PictureConfig.Crop.Top - value < 16)
+            {
+                value = Math.Max(0, PictureConfig.InputOriginalSize.Height - PictureConfig.Crop.Top - 16);
+                numericCropBottom.Value = value;
+            }
+            Crop crop = PictureConfig.Crop;
+            crop.Bottom = value;
+            PictureConfig.Crop = crop;
+            UpdateCrop();
+        }
+
+        private void numericCropTop_Enter(object sender, EventArgs e)
+        {
+            numericCropTop.Select(0, numericCropTop.Text.Length);
+        }
+
+        private void numericCropBottom_Enter(object sender, EventArgs e)
+        {
+            numericCropBottom.Select(0, numericCropBottom.Text.Length);
+        }
+
+        private void numericCropLeft_Enter(object sender, EventArgs e)
+        {
+            numericCropLeft.Select(0, numericCropLeft.Text.Length);
+        }
+
+        private void numericCropRight_Enter(object sender, EventArgs e)
+        {
+            numericCropRight.Select(0, numericCropRight.Text.Length);
+        }
+
         #endregion
 
         #region Video
@@ -596,6 +699,7 @@ namespace Alexantr.SimpleVideoConverter
                 textBoxOut.Text = "";
 
                 buttonGo.Enabled = false;
+                buttonPreview.Enabled = false;
                 buttonShowInfo.Enabled = false;
                 buttonOpenInputFile.Enabled = false;
 
@@ -607,6 +711,7 @@ namespace Alexantr.SimpleVideoConverter
                 CalcFileSize();
                 SetOutputInfo();
                 ClearTags();
+                ResetCrop();
 
                 sizeChanged = false;
 
@@ -638,6 +743,13 @@ namespace Alexantr.SimpleVideoConverter
             numericUpDownHeight.Value = Math.Max(PictureConfig.CropSize.Height, PictureConfig.MinHeight);
             numericUpDownWidth.Value = Math.Max(PictureConfig.CropSize.Width, PictureConfig.MinWidth); // triggered UpdateHeight() if keeping ar
 
+            numericCropTop.Maximum = PictureConfig.InputOriginalSize.Height;
+            numericCropBottom.Maximum = PictureConfig.InputOriginalSize.Height;
+            numericCropLeft.Maximum = PictureConfig.InputOriginalSize.Width;
+            numericCropRight.Maximum = PictureConfig.InputOriginalSize.Width;
+
+            ResetCrop();
+
             // set original aspect ratio
             FillComboBoxAspectRatio(true);
 
@@ -663,6 +775,7 @@ namespace Alexantr.SimpleVideoConverter
             CalcFileSize();
 
             buttonGo.Enabled = true;
+            buttonPreview.Enabled = true;
             buttonShowInfo.Enabled = true;
             buttonOpenInputFile.Enabled = true;
 
@@ -1067,8 +1180,8 @@ namespace Alexantr.SimpleVideoConverter
                 string subtitlesPath = textBoxSubtitlesPath.Text;
 
                 // Frame rate
-                if (!string.IsNullOrWhiteSpace(VideoConfig.FrameRate))
-                    videoArgs.Add($"-r {VideoConfig.FrameRate}");
+                //if (!string.IsNullOrWhiteSpace(VideoConfig.FrameRate))
+                //    videoArgs.Add($"-r {VideoConfig.FrameRate}");
 
                 // Video filters
                 string vFilters = GetVideoFilters(subtitlesPath);
@@ -1100,7 +1213,7 @@ namespace Alexantr.SimpleVideoConverter
                 FileName = exePath,
                 CreateNoWindow = true,
                 UseShellExecute = false,
-                Arguments = string.Format("-i \"{0}\" {1} -autoexit -framedrop", input, arguments)
+                Arguments = string.Format("-i \"{0}\" {1} -autoexit -framedrop -window_title Preview", input, arguments)
             };
 
             startInfo.EnvironmentVariables["FC_CONFIG_DIR"] = directoryPath;
