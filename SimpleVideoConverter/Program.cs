@@ -14,6 +14,9 @@ namespace Alexantr.SimpleVideoConverter
         [STAThread]
         static void Main()
         {
+            if (Environment.OSVersion.Version.Major >= 6)
+                SetProcessDPIAware();
+
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en");
 
             // keep user.config settings from prev version
@@ -28,6 +31,9 @@ namespace Alexantr.SimpleVideoConverter
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
         }
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool SetProcessDPIAware();
     }
 
     internal static class NativeMethods
