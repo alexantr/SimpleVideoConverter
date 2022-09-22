@@ -549,6 +549,8 @@ namespace Alexantr.SimpleVideoConverter
         {
             VideoConfig.Codec = ((ComboBoxItem)comboBoxVideoCodec.SelectedItem).Value;
 
+            checkBoxCustomX265.Visible = VideoConfig.Codec == "hevc";
+
             FillVideoCRFAndBitrate();
             SetOutputInfo();
         }
@@ -933,11 +935,7 @@ namespace Alexantr.SimpleVideoConverter
 
                     if (checkBoxCustomX265.Checked)
                     {
-                        x265Params += ":rect=0:amp=0:limit-modes=0:rskip=1:tu-intra-depth=1:tu-inter-depth=1:limit-tu=0:strong-intra-smoothing=0:sao=0";
-                        //x265Params += ":colorprim=1:transfer=1:colormatrix";
-
-                        if (VideoConfig.Preset == "slower" || VideoConfig.Preset == "veryslow" || VideoConfig.Preset == "placebo")
-                            x265Params += ":max-merge=3:limit-refs=3";
+                        x265Params += ":sao=0:cutree=0";
                     }
 
                     videoArgs.Add($"-preset:v {VideoConfig.Preset}");

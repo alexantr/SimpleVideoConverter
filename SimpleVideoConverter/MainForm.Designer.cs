@@ -162,9 +162,10 @@
             // 
             // buttonGo
             // 
-            this.buttonGo.Location = new System.Drawing.Point(488, 223);
+            this.buttonGo.Location = new System.Drawing.Point(732, 334);
+            this.buttonGo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonGo.Name = "buttonGo";
-            this.buttonGo.Size = new System.Drawing.Size(130, 32);
+            this.buttonGo.Size = new System.Drawing.Size(195, 48);
             this.buttonGo.TabIndex = 3;
             this.buttonGo.Text = "Конвертировать";
             this.buttonGo.UseVisualStyleBackColor = true;
@@ -173,9 +174,10 @@
             // buttonShowInfo
             // 
             this.buttonShowInfo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.buttonShowInfo.Location = new System.Drawing.Point(95, 33);
+            this.buttonShowInfo.Location = new System.Drawing.Point(142, 50);
+            this.buttonShowInfo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonShowInfo.Name = "buttonShowInfo";
-            this.buttonShowInfo.Size = new System.Drawing.Size(75, 25);
+            this.buttonShowInfo.Size = new System.Drawing.Size(112, 38);
             this.buttonShowInfo.TabIndex = 3;
             this.buttonShowInfo.Text = "Инфо";
             this.toolTipHint.SetToolTip(this.buttonShowInfo, "Показать информацию об исходном файле");
@@ -184,9 +186,10 @@
             // 
             // buttonOpenInputFile
             // 
-            this.buttonOpenInputFile.Location = new System.Drawing.Point(176, 33);
+            this.buttonOpenInputFile.Location = new System.Drawing.Point(264, 50);
+            this.buttonOpenInputFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonOpenInputFile.Name = "buttonOpenInputFile";
-            this.buttonOpenInputFile.Size = new System.Drawing.Size(75, 25);
+            this.buttonOpenInputFile.Size = new System.Drawing.Size(112, 38);
             this.buttonOpenInputFile.TabIndex = 4;
             this.buttonOpenInputFile.Text = "Открыть";
             this.toolTipHint.SetToolTip(this.buttonOpenInputFile, "Открыть исходный файл в проигрывателе по умолчанию");
@@ -196,9 +199,10 @@
             // checkBoxWebOptimized
             // 
             this.checkBoxWebOptimized.AutoSize = true;
-            this.checkBoxWebOptimized.Location = new System.Drawing.Point(95, 147);
+            this.checkBoxWebOptimized.Location = new System.Drawing.Point(142, 220);
+            this.checkBoxWebOptimized.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBoxWebOptimized.Name = "checkBoxWebOptimized";
-            this.checkBoxWebOptimized.Size = new System.Drawing.Size(142, 19);
+            this.checkBoxWebOptimized.Size = new System.Drawing.Size(211, 29);
             this.checkBoxWebOptimized.TabIndex = 9;
             this.checkBoxWebOptimized.Text = "Web-оптимизирован";
             this.toolTipHint.SetToolTip(this.checkBoxWebOptimized, "Служебная информация будет перенесена в начало файла для быстрого старта воспроиз" +
@@ -208,9 +212,10 @@
             // buttonPreset1080p
             // 
             this.buttonPreset1080p.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonPreset1080p.Location = new System.Drawing.Point(142, 78);
+            this.buttonPreset1080p.Location = new System.Drawing.Point(213, 117);
+            this.buttonPreset1080p.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonPreset1080p.Name = "buttonPreset1080p";
-            this.buttonPreset1080p.Size = new System.Drawing.Size(45, 21);
+            this.buttonPreset1080p.Size = new System.Drawing.Size(68, 32);
             this.buttonPreset1080p.TabIndex = 14;
             this.buttonPreset1080p.Text = "1080p";
             this.toolTipHint.SetToolTip(this.buttonPreset1080p, "Вписать в 1920x1080");
@@ -220,9 +225,10 @@
             // buttonPreset720p
             // 
             this.buttonPreset720p.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonPreset720p.Location = new System.Drawing.Point(193, 78);
+            this.buttonPreset720p.Location = new System.Drawing.Point(290, 117);
+            this.buttonPreset720p.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonPreset720p.Name = "buttonPreset720p";
-            this.buttonPreset720p.Size = new System.Drawing.Size(45, 21);
+            this.buttonPreset720p.Size = new System.Drawing.Size(68, 32);
             this.buttonPreset720p.TabIndex = 15;
             this.buttonPreset720p.Text = "720p";
             this.toolTipHint.SetToolTip(this.buttonPreset720p, "Вписать в 1280x720");
@@ -232,9 +238,10 @@
             // buttonPresetOriginal
             // 
             this.buttonPresetOriginal.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonPresetOriginal.Location = new System.Drawing.Point(295, 78);
+            this.buttonPresetOriginal.Location = new System.Drawing.Point(442, 117);
+            this.buttonPresetOriginal.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonPresetOriginal.Name = "buttonPresetOriginal";
-            this.buttonPresetOriginal.Size = new System.Drawing.Size(60, 21);
+            this.buttonPresetOriginal.Size = new System.Drawing.Size(90, 32);
             this.buttonPresetOriginal.TabIndex = 17;
             this.buttonPresetOriginal.Text = "Сбросить";
             this.toolTipHint.SetToolTip(this.buttonPresetOriginal, "Задать исходный размер");
@@ -244,9 +251,10 @@
             // buttonPreset480p
             // 
             this.buttonPreset480p.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonPreset480p.Location = new System.Drawing.Point(244, 78);
+            this.buttonPreset480p.Location = new System.Drawing.Point(366, 117);
+            this.buttonPreset480p.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonPreset480p.Name = "buttonPreset480p";
-            this.buttonPreset480p.Size = new System.Drawing.Size(45, 21);
+            this.buttonPreset480p.Size = new System.Drawing.Size(68, 32);
             this.buttonPreset480p.TabIndex = 16;
             this.buttonPreset480p.Text = "480p";
             this.toolTipHint.SetToolTip(this.buttonPreset480p, "Вписать в 640x480");
@@ -255,9 +263,10 @@
             // 
             // textBoxTagCreationTime
             // 
-            this.textBoxTagCreationTime.Location = new System.Drawing.Point(137, 117);
+            this.textBoxTagCreationTime.Location = new System.Drawing.Point(206, 176);
+            this.textBoxTagCreationTime.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxTagCreationTime.Name = "textBoxTagCreationTime";
-            this.textBoxTagCreationTime.Size = new System.Drawing.Size(180, 23);
+            this.textBoxTagCreationTime.Size = new System.Drawing.Size(268, 31);
             this.textBoxTagCreationTime.TabIndex = 9;
             this.textBoxTagCreationTime.TextChanged += new System.EventHandler(this.textBoxTagCreationTime_TextChanged);
             // 
@@ -274,19 +283,21 @@
             this.tabPageTags.Controls.Add(this.labelTagCreationTime);
             this.tabPageTags.Controls.Add(this.textBoxTagTitle);
             this.tabPageTags.Controls.Add(this.labelTagTitle);
-            this.tabPageTags.Location = new System.Drawing.Point(4, 24);
+            this.tabPageTags.Location = new System.Drawing.Point(4, 34);
+            this.tabPageTags.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabPageTags.Name = "tabPageTags";
-            this.tabPageTags.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTags.Size = new System.Drawing.Size(604, 183);
+            this.tabPageTags.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageTags.Size = new System.Drawing.Size(910, 278);
             this.tabPageTags.TabIndex = 4;
             this.tabPageTags.Text = "Теги";
             this.tabPageTags.UseVisualStyleBackColor = true;
             // 
             // buttonDateHelp
             // 
-            this.buttonDateHelp.Location = new System.Drawing.Point(323, 116);
+            this.buttonDateHelp.Location = new System.Drawing.Point(484, 174);
+            this.buttonDateHelp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonDateHelp.Name = "buttonDateHelp";
-            this.buttonDateHelp.Size = new System.Drawing.Size(25, 25);
+            this.buttonDateHelp.Size = new System.Drawing.Size(38, 38);
             this.buttonDateHelp.TabIndex = 10;
             this.buttonDateHelp.Text = "?";
             this.buttonDateHelp.UseVisualStyleBackColor = true;
@@ -295,77 +306,86 @@
             // labelTagCopyright
             // 
             this.labelTagCopyright.AutoSize = true;
-            this.labelTagCopyright.Location = new System.Drawing.Point(6, 66);
+            this.labelTagCopyright.Location = new System.Drawing.Point(9, 99);
+            this.labelTagCopyright.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelTagCopyright.Name = "labelTagCopyright";
-            this.labelTagCopyright.Size = new System.Drawing.Size(60, 15);
+            this.labelTagCopyright.Size = new System.Drawing.Size(90, 25);
             this.labelTagCopyright.TabIndex = 4;
             this.labelTagCopyright.Text = "Копирайт";
             // 
             // textBoxTagCopyright
             // 
-            this.textBoxTagCopyright.Location = new System.Drawing.Point(137, 63);
+            this.textBoxTagCopyright.Location = new System.Drawing.Point(206, 94);
+            this.textBoxTagCopyright.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxTagCopyright.Name = "textBoxTagCopyright";
-            this.textBoxTagCopyright.Size = new System.Drawing.Size(461, 23);
+            this.textBoxTagCopyright.Size = new System.Drawing.Size(690, 31);
             this.textBoxTagCopyright.TabIndex = 5;
             this.textBoxTagCopyright.TextChanged += new System.EventHandler(this.textBoxTagCopyright_TextChanged);
             // 
             // labelTagAuthor
             // 
             this.labelTagAuthor.AutoSize = true;
-            this.labelTagAuthor.Location = new System.Drawing.Point(6, 38);
+            this.labelTagAuthor.Location = new System.Drawing.Point(9, 57);
+            this.labelTagAuthor.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelTagAuthor.Name = "labelTagAuthor";
-            this.labelTagAuthor.Size = new System.Drawing.Size(125, 15);
+            this.labelTagAuthor.Size = new System.Drawing.Size(183, 25);
             this.labelTagAuthor.TabIndex = 2;
             this.labelTagAuthor.Text = "Автор (Исполнитель)";
             // 
             // textBoxTagAuthor
             // 
-            this.textBoxTagAuthor.Location = new System.Drawing.Point(137, 35);
+            this.textBoxTagAuthor.Location = new System.Drawing.Point(206, 52);
+            this.textBoxTagAuthor.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxTagAuthor.Name = "textBoxTagAuthor";
-            this.textBoxTagAuthor.Size = new System.Drawing.Size(461, 23);
+            this.textBoxTagAuthor.Size = new System.Drawing.Size(690, 31);
             this.textBoxTagAuthor.TabIndex = 3;
             this.textBoxTagAuthor.TextChanged += new System.EventHandler(this.textBoxTagAuthor_TextChanged);
             // 
             // labelTagComment
             // 
             this.labelTagComment.AutoSize = true;
-            this.labelTagComment.Location = new System.Drawing.Point(6, 93);
+            this.labelTagComment.Location = new System.Drawing.Point(9, 140);
+            this.labelTagComment.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelTagComment.Name = "labelTagComment";
-            this.labelTagComment.Size = new System.Drawing.Size(84, 15);
+            this.labelTagComment.Size = new System.Drawing.Size(125, 25);
             this.labelTagComment.TabIndex = 6;
             this.labelTagComment.Text = "Комментарий";
             // 
             // textBoxTagComment
             // 
-            this.textBoxTagComment.Location = new System.Drawing.Point(137, 90);
+            this.textBoxTagComment.Location = new System.Drawing.Point(206, 135);
+            this.textBoxTagComment.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxTagComment.Name = "textBoxTagComment";
-            this.textBoxTagComment.Size = new System.Drawing.Size(461, 23);
+            this.textBoxTagComment.Size = new System.Drawing.Size(690, 31);
             this.textBoxTagComment.TabIndex = 7;
             this.textBoxTagComment.TextChanged += new System.EventHandler(this.textBoxTagComment_TextChanged);
             // 
             // labelTagCreationTime
             // 
             this.labelTagCreationTime.AutoSize = true;
-            this.labelTagCreationTime.Location = new System.Drawing.Point(6, 120);
+            this.labelTagCreationTime.Location = new System.Drawing.Point(9, 180);
+            this.labelTagCreationTime.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelTagCreationTime.Name = "labelTagCreationTime";
-            this.labelTagCreationTime.Size = new System.Drawing.Size(85, 15);
+            this.labelTagCreationTime.Size = new System.Drawing.Size(129, 25);
             this.labelTagCreationTime.TabIndex = 8;
             this.labelTagCreationTime.Text = "Дата создания";
             // 
             // textBoxTagTitle
             // 
-            this.textBoxTagTitle.Location = new System.Drawing.Point(137, 7);
+            this.textBoxTagTitle.Location = new System.Drawing.Point(206, 10);
+            this.textBoxTagTitle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxTagTitle.Name = "textBoxTagTitle";
-            this.textBoxTagTitle.Size = new System.Drawing.Size(461, 23);
+            this.textBoxTagTitle.Size = new System.Drawing.Size(690, 31);
             this.textBoxTagTitle.TabIndex = 1;
             this.textBoxTagTitle.TextChanged += new System.EventHandler(this.textBoxTagTitle_TextChanged);
             // 
             // labelTagTitle
             // 
             this.labelTagTitle.AutoSize = true;
-            this.labelTagTitle.Location = new System.Drawing.Point(6, 10);
+            this.labelTagTitle.Location = new System.Drawing.Point(9, 15);
+            this.labelTagTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelTagTitle.Name = "labelTagTitle";
-            this.labelTagTitle.Size = new System.Drawing.Size(65, 15);
+            this.labelTagTitle.Size = new System.Drawing.Size(99, 25);
             this.labelTagTitle.TabIndex = 0;
             this.labelTagTitle.Text = "Заголовок";
             // 
@@ -373,10 +393,11 @@
             // 
             this.tabPageAudio.Controls.Add(this.panelAudioParams);
             this.tabPageAudio.Controls.Add(this.panelAudioStreams);
-            this.tabPageAudio.Location = new System.Drawing.Point(4, 24);
+            this.tabPageAudio.Location = new System.Drawing.Point(4, 34);
+            this.tabPageAudio.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabPageAudio.Name = "tabPageAudio";
-            this.tabPageAudio.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAudio.Size = new System.Drawing.Size(604, 183);
+            this.tabPageAudio.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageAudio.Size = new System.Drawing.Size(910, 278);
             this.tabPageAudio.TabIndex = 2;
             this.tabPageAudio.Text = "Аудио";
             this.tabPageAudio.UseVisualStyleBackColor = true;
@@ -394,17 +415,19 @@
             this.panelAudioParams.Controls.Add(this.comboBoxAudioSampleRate);
             this.panelAudioParams.Controls.Add(this.comboBoxAudioChannels);
             this.panelAudioParams.Controls.Add(this.labelAudioBitrate);
-            this.panelAudioParams.Location = new System.Drawing.Point(6, 51);
+            this.panelAudioParams.Location = new System.Drawing.Point(9, 76);
+            this.panelAudioParams.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelAudioParams.Name = "panelAudioParams";
-            this.panelAudioParams.Size = new System.Drawing.Size(592, 126);
+            this.panelAudioParams.Size = new System.Drawing.Size(888, 189);
             this.panelAudioParams.TabIndex = 1;
             // 
             // labelAudioCodec
             // 
             this.labelAudioCodec.AutoSize = true;
-            this.labelAudioCodec.Location = new System.Drawing.Point(3, 35);
+            this.labelAudioCodec.Location = new System.Drawing.Point(4, 52);
+            this.labelAudioCodec.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelAudioCodec.Name = "labelAudioCodec";
-            this.labelAudioCodec.Size = new System.Drawing.Size(39, 15);
+            this.labelAudioCodec.Size = new System.Drawing.Size(61, 25);
             this.labelAudioCodec.TabIndex = 10;
             this.labelAudioCodec.Text = "Кодек";
             // 
@@ -412,18 +435,20 @@
             // 
             this.comboBoxAudioCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAudioCodec.FormattingEnabled = true;
-            this.comboBoxAudioCodec.Location = new System.Drawing.Point(77, 32);
+            this.comboBoxAudioCodec.Location = new System.Drawing.Point(116, 48);
+            this.comboBoxAudioCodec.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxAudioCodec.Name = "comboBoxAudioCodec";
-            this.comboBoxAudioCodec.Size = new System.Drawing.Size(80, 23);
+            this.comboBoxAudioCodec.Size = new System.Drawing.Size(118, 33);
             this.comboBoxAudioCodec.TabIndex = 9;
             this.comboBoxAudioCodec.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioCodec_SelectedIndexChanged);
             // 
             // checkBoxConvertAudio
             // 
             this.checkBoxConvertAudio.AutoSize = true;
-            this.checkBoxConvertAudio.Location = new System.Drawing.Point(6, 3);
+            this.checkBoxConvertAudio.Location = new System.Drawing.Point(9, 4);
+            this.checkBoxConvertAudio.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBoxConvertAudio.Name = "checkBoxConvertAudio";
-            this.checkBoxConvertAudio.Size = new System.Drawing.Size(142, 19);
+            this.checkBoxConvertAudio.Size = new System.Drawing.Size(214, 29);
             this.checkBoxConvertAudio.TabIndex = 0;
             this.checkBoxConvertAudio.Text = "Переконвертировать";
             this.checkBoxConvertAudio.UseVisualStyleBackColor = true;
@@ -433,45 +458,50 @@
             // 
             this.comboBoxAudioBitrate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAudioBitrate.FormattingEnabled = true;
-            this.comboBoxAudioBitrate.Location = new System.Drawing.Point(284, 32);
+            this.comboBoxAudioBitrate.Location = new System.Drawing.Point(426, 48);
+            this.comboBoxAudioBitrate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxAudioBitrate.Name = "comboBoxAudioBitrate";
-            this.comboBoxAudioBitrate.Size = new System.Drawing.Size(80, 23);
+            this.comboBoxAudioBitrate.Size = new System.Drawing.Size(118, 33);
             this.comboBoxAudioBitrate.TabIndex = 2;
             this.comboBoxAudioBitrate.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioBitrate_SelectedIndexChanged);
             // 
             // labelAudioHz
             // 
             this.labelAudioHz.AutoSize = true;
-            this.labelAudioHz.Location = new System.Drawing.Point(163, 89);
+            this.labelAudioHz.Location = new System.Drawing.Point(244, 134);
+            this.labelAudioHz.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelAudioHz.Name = "labelAudioHz";
-            this.labelAudioHz.Size = new System.Drawing.Size(20, 15);
+            this.labelAudioHz.Size = new System.Drawing.Size(31, 25);
             this.labelAudioHz.TabIndex = 6;
             this.labelAudioHz.Text = "Гц";
             // 
             // labelChannels
             // 
             this.labelChannels.AutoSize = true;
-            this.labelChannels.Location = new System.Drawing.Point(210, 89);
+            this.labelChannels.Location = new System.Drawing.Point(315, 134);
+            this.labelChannels.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelChannels.Name = "labelChannels";
-            this.labelChannels.Size = new System.Drawing.Size(49, 15);
+            this.labelChannels.Size = new System.Drawing.Size(72, 25);
             this.labelChannels.TabIndex = 7;
             this.labelChannels.Text = "Каналы";
             // 
             // labelFrequency
             // 
             this.labelFrequency.AutoSize = true;
-            this.labelFrequency.Location = new System.Drawing.Point(3, 89);
+            this.labelFrequency.Location = new System.Drawing.Point(4, 134);
+            this.labelFrequency.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelFrequency.Name = "labelFrequency";
-            this.labelFrequency.Size = new System.Drawing.Size(50, 15);
+            this.labelFrequency.Size = new System.Drawing.Size(75, 25);
             this.labelFrequency.TabIndex = 4;
             this.labelFrequency.Text = "Частота";
             // 
             // labelAudioKbps
             // 
             this.labelAudioKbps.AutoSize = true;
-            this.labelAudioKbps.Location = new System.Drawing.Point(370, 35);
+            this.labelAudioKbps.Location = new System.Drawing.Point(555, 52);
+            this.labelAudioKbps.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelAudioKbps.Name = "labelAudioKbps";
-            this.labelAudioKbps.Size = new System.Drawing.Size(43, 15);
+            this.labelAudioKbps.Size = new System.Drawing.Size(63, 25);
             this.labelAudioKbps.TabIndex = 3;
             this.labelAudioKbps.Text = "кбит/с";
             // 
@@ -479,9 +509,10 @@
             // 
             this.comboBoxAudioSampleRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAudioSampleRate.FormattingEnabled = true;
-            this.comboBoxAudioSampleRate.Location = new System.Drawing.Point(77, 86);
+            this.comboBoxAudioSampleRate.Location = new System.Drawing.Point(116, 129);
+            this.comboBoxAudioSampleRate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxAudioSampleRate.Name = "comboBoxAudioSampleRate";
-            this.comboBoxAudioSampleRate.Size = new System.Drawing.Size(80, 23);
+            this.comboBoxAudioSampleRate.Size = new System.Drawing.Size(118, 33);
             this.comboBoxAudioSampleRate.TabIndex = 5;
             this.comboBoxAudioSampleRate.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioSampleRate_SelectedIndexChanged);
             // 
@@ -489,18 +520,20 @@
             // 
             this.comboBoxAudioChannels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAudioChannels.FormattingEnabled = true;
-            this.comboBoxAudioChannels.Location = new System.Drawing.Point(284, 86);
+            this.comboBoxAudioChannels.Location = new System.Drawing.Point(426, 129);
+            this.comboBoxAudioChannels.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxAudioChannels.Name = "comboBoxAudioChannels";
-            this.comboBoxAudioChannels.Size = new System.Drawing.Size(80, 23);
+            this.comboBoxAudioChannels.Size = new System.Drawing.Size(118, 33);
             this.comboBoxAudioChannels.TabIndex = 8;
             this.comboBoxAudioChannels.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioChannels_SelectedIndexChanged);
             // 
             // labelAudioBitrate
             // 
             this.labelAudioBitrate.AutoSize = true;
-            this.labelAudioBitrate.Location = new System.Drawing.Point(210, 35);
+            this.labelAudioBitrate.Location = new System.Drawing.Point(315, 52);
+            this.labelAudioBitrate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelAudioBitrate.Name = "labelAudioBitrate";
-            this.labelAudioBitrate.Size = new System.Drawing.Size(51, 15);
+            this.labelAudioBitrate.Size = new System.Drawing.Size(76, 25);
             this.labelAudioBitrate.TabIndex = 1;
             this.labelAudioBitrate.Text = "Битрейт";
             // 
@@ -508,27 +541,30 @@
             // 
             this.panelAudioStreams.Controls.Add(this.comboBoxAudioStreams);
             this.panelAudioStreams.Controls.Add(this.labelSelectAudioStream);
-            this.panelAudioStreams.Location = new System.Drawing.Point(6, 6);
+            this.panelAudioStreams.Location = new System.Drawing.Point(9, 9);
+            this.panelAudioStreams.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelAudioStreams.Name = "panelAudioStreams";
-            this.panelAudioStreams.Size = new System.Drawing.Size(364, 39);
+            this.panelAudioStreams.Size = new System.Drawing.Size(546, 58);
             this.panelAudioStreams.TabIndex = 0;
             // 
             // comboBoxAudioStreams
             // 
             this.comboBoxAudioStreams.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAudioStreams.FormattingEnabled = true;
-            this.comboBoxAudioStreams.Location = new System.Drawing.Point(77, 3);
+            this.comboBoxAudioStreams.Location = new System.Drawing.Point(116, 4);
+            this.comboBoxAudioStreams.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxAudioStreams.Name = "comboBoxAudioStreams";
-            this.comboBoxAudioStreams.Size = new System.Drawing.Size(220, 23);
+            this.comboBoxAudioStreams.Size = new System.Drawing.Size(328, 33);
             this.comboBoxAudioStreams.TabIndex = 1;
             this.comboBoxAudioStreams.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioStreams_SelectedIndexChanged);
             // 
             // labelSelectAudioStream
             // 
             this.labelSelectAudioStream.AutoSize = true;
-            this.labelSelectAudioStream.Location = new System.Drawing.Point(3, 6);
+            this.labelSelectAudioStream.Location = new System.Drawing.Point(4, 9);
+            this.labelSelectAudioStream.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelSelectAudioStream.Name = "labelSelectAudioStream";
-            this.labelSelectAudioStream.Size = new System.Drawing.Size(57, 15);
+            this.labelSelectAudioStream.Size = new System.Drawing.Size(88, 25);
             this.labelSelectAudioStream.TabIndex = 0;
             this.labelSelectAudioStream.Text = "Дорожка";
             // 
@@ -536,10 +572,11 @@
             // 
             this.tabPageVideo.Controls.Add(this.checkBoxConvertVideo);
             this.tabPageVideo.Controls.Add(this.panelVideo);
-            this.tabPageVideo.Location = new System.Drawing.Point(4, 24);
+            this.tabPageVideo.Location = new System.Drawing.Point(4, 34);
+            this.tabPageVideo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabPageVideo.Name = "tabPageVideo";
-            this.tabPageVideo.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageVideo.Size = new System.Drawing.Size(604, 183);
+            this.tabPageVideo.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageVideo.Size = new System.Drawing.Size(910, 278);
             this.tabPageVideo.TabIndex = 0;
             this.tabPageVideo.Text = "Видео";
             this.tabPageVideo.UseVisualStyleBackColor = true;
@@ -547,9 +584,10 @@
             // checkBoxConvertVideo
             // 
             this.checkBoxConvertVideo.AutoSize = true;
-            this.checkBoxConvertVideo.Location = new System.Drawing.Point(6, 6);
+            this.checkBoxConvertVideo.Location = new System.Drawing.Point(9, 9);
+            this.checkBoxConvertVideo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBoxConvertVideo.Name = "checkBoxConvertVideo";
-            this.checkBoxConvertVideo.Size = new System.Drawing.Size(142, 19);
+            this.checkBoxConvertVideo.Size = new System.Drawing.Size(214, 29);
             this.checkBoxConvertVideo.TabIndex = 10;
             this.checkBoxConvertVideo.Text = "Переконвертировать";
             this.checkBoxConvertVideo.UseVisualStyleBackColor = true;
@@ -574,9 +612,10 @@
             this.panelVideo.Controls.Add(this.radioButtonCRF);
             this.panelVideo.Controls.Add(this.trackBarCRF);
             this.panelVideo.Controls.Add(this.numericUpDownBitrate);
-            this.panelVideo.Location = new System.Drawing.Point(6, 31);
+            this.panelVideo.Location = new System.Drawing.Point(9, 46);
+            this.panelVideo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelVideo.Name = "panelVideo";
-            this.panelVideo.Size = new System.Drawing.Size(592, 148);
+            this.panelVideo.Size = new System.Drawing.Size(888, 222);
             this.panelVideo.TabIndex = 0;
             // 
             // checkBoxCustomX265
@@ -584,56 +623,62 @@
             this.checkBoxCustomX265.AutoSize = true;
             this.checkBoxCustomX265.Checked = true;
             this.checkBoxCustomX265.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxCustomX265.Location = new System.Drawing.Point(396, 68);
+            this.checkBoxCustomX265.Location = new System.Drawing.Point(594, 102);
+            this.checkBoxCustomX265.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBoxCustomX265.Name = "checkBoxCustomX265";
-            this.checkBoxCustomX265.Size = new System.Drawing.Size(164, 19);
+            this.checkBoxCustomX265.Size = new System.Drawing.Size(237, 29);
             this.checkBoxCustomX265.TabIndex = 10;
-            this.checkBoxCustomX265.Text = "Особые настройки HEVC";
+            this.checkBoxCustomX265.Text = "Отключить SAO и cutree";
             this.checkBoxCustomX265.UseVisualStyleBackColor = true;
             // 
             // comboBoxPreset
             // 
             this.comboBoxPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxPreset.FormattingEnabled = true;
-            this.comboBoxPreset.Location = new System.Drawing.Point(488, 39);
+            this.comboBoxPreset.Location = new System.Drawing.Point(732, 58);
+            this.comboBoxPreset.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxPreset.Name = "comboBoxPreset";
-            this.comboBoxPreset.Size = new System.Drawing.Size(80, 23);
+            this.comboBoxPreset.Size = new System.Drawing.Size(118, 33);
             this.comboBoxPreset.TabIndex = 5;
             this.comboBoxPreset.SelectedIndexChanged += new System.EventHandler(this.comboBoxPreset_SelectedIndexChanged);
             // 
             // labelCalcSize
             // 
             this.labelCalcSize.AutoSize = true;
-            this.labelCalcSize.Location = new System.Drawing.Point(97, 127);
+            this.labelCalcSize.Location = new System.Drawing.Point(146, 190);
+            this.labelCalcSize.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCalcSize.Name = "labelCalcSize";
-            this.labelCalcSize.Size = new System.Drawing.Size(12, 15);
+            this.labelCalcSize.Size = new System.Drawing.Size(19, 25);
             this.labelCalcSize.TabIndex = 9;
             this.labelCalcSize.Text = "-";
             // 
             // labelPreset
             // 
             this.labelPreset.AutoSize = true;
-            this.labelPreset.Location = new System.Drawing.Point(393, 42);
+            this.labelPreset.Location = new System.Drawing.Point(590, 63);
+            this.labelPreset.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelPreset.Name = "labelPreset";
-            this.labelPreset.Size = new System.Drawing.Size(46, 15);
+            this.labelPreset.Size = new System.Drawing.Size(69, 25);
             this.labelPreset.TabIndex = 4;
             this.labelPreset.Text = "Пресет";
             // 
             // labelCalcSizeText
             // 
             this.labelCalcSizeText.AutoSize = true;
-            this.labelCalcSizeText.Location = new System.Drawing.Point(3, 127);
+            this.labelCalcSizeText.Location = new System.Drawing.Point(4, 190);
+            this.labelCalcSizeText.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCalcSizeText.Name = "labelCalcSizeText";
-            this.labelCalcSizeText.Size = new System.Drawing.Size(88, 15);
+            this.labelCalcSizeText.Size = new System.Drawing.Size(130, 25);
             this.labelCalcSizeText.TabIndex = 8;
             this.labelCalcSizeText.Text = "Размер файла:";
             // 
             // labelVideoCodec
             // 
             this.labelVideoCodec.AutoSize = true;
-            this.labelVideoCodec.Location = new System.Drawing.Point(393, 13);
+            this.labelVideoCodec.Location = new System.Drawing.Point(590, 20);
+            this.labelVideoCodec.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelVideoCodec.Name = "labelVideoCodec";
-            this.labelVideoCodec.Size = new System.Drawing.Size(39, 15);
+            this.labelVideoCodec.Size = new System.Drawing.Size(61, 25);
             this.labelVideoCodec.TabIndex = 3;
             this.labelVideoCodec.Text = "Кодек";
             // 
@@ -641,36 +686,40 @@
             // 
             this.comboBoxVideoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxVideoCodec.FormattingEnabled = true;
-            this.comboBoxVideoCodec.Location = new System.Drawing.Point(488, 10);
+            this.comboBoxVideoCodec.Location = new System.Drawing.Point(732, 15);
+            this.comboBoxVideoCodec.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxVideoCodec.Name = "comboBoxVideoCodec";
-            this.comboBoxVideoCodec.Size = new System.Drawing.Size(80, 23);
+            this.comboBoxVideoCodec.Size = new System.Drawing.Size(118, 33);
             this.comboBoxVideoCodec.TabIndex = 2;
             this.comboBoxVideoCodec.SelectedIndexChanged += new System.EventHandler(this.comboBoxVideoCodec_SelectedIndexChanged);
             // 
             // labelVideoKbps
             // 
             this.labelVideoKbps.AutoSize = true;
-            this.labelVideoKbps.Location = new System.Drawing.Point(161, 95);
+            this.labelVideoKbps.Location = new System.Drawing.Point(242, 142);
+            this.labelVideoKbps.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelVideoKbps.Name = "labelVideoKbps";
-            this.labelVideoKbps.Size = new System.Drawing.Size(43, 15);
+            this.labelVideoKbps.Size = new System.Drawing.Size(63, 25);
             this.labelVideoKbps.TabIndex = 7;
             this.labelVideoKbps.Text = "кбит/с";
             // 
             // labelFrameRate
             // 
             this.labelFrameRate.AutoSize = true;
-            this.labelFrameRate.Location = new System.Drawing.Point(393, 98);
+            this.labelFrameRate.Location = new System.Drawing.Point(590, 147);
+            this.labelFrameRate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelFrameRate.Name = "labelFrameRate";
-            this.labelFrameRate.Size = new System.Drawing.Size(91, 15);
+            this.labelFrameRate.Size = new System.Drawing.Size(140, 25);
             this.labelFrameRate.TabIndex = 0;
             this.labelFrameRate.Text = "Частота кадров";
             // 
             // labelMinQ
             // 
             this.labelMinQ.AutoSize = true;
-            this.labelMinQ.Location = new System.Drawing.Point(216, 61);
+            this.labelMinQ.Location = new System.Drawing.Point(324, 92);
+            this.labelMinQ.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelMinQ.Name = "labelMinQ";
-            this.labelMinQ.Size = new System.Drawing.Size(87, 15);
+            this.labelMinQ.Size = new System.Drawing.Size(130, 25);
             this.labelMinQ.TabIndex = 4;
             this.labelMinQ.Text = "Мин. качество";
             // 
@@ -678,18 +727,20 @@
             // 
             this.comboBoxFrameRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFrameRate.FormattingEnabled = true;
-            this.comboBoxFrameRate.Location = new System.Drawing.Point(488, 95);
+            this.comboBoxFrameRate.Location = new System.Drawing.Point(732, 142);
+            this.comboBoxFrameRate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxFrameRate.Name = "comboBoxFrameRate";
-            this.comboBoxFrameRate.Size = new System.Drawing.Size(80, 23);
+            this.comboBoxFrameRate.Size = new System.Drawing.Size(118, 33);
             this.comboBoxFrameRate.TabIndex = 1;
             this.comboBoxFrameRate.SelectedIndexChanged += new System.EventHandler(this.comboBoxFrameRate_SelectedIndexChanged);
             // 
             // labelMaxQ
             // 
             this.labelMaxQ.AutoSize = true;
-            this.labelMaxQ.Location = new System.Drawing.Point(2, 61);
+            this.labelMaxQ.Location = new System.Drawing.Point(3, 92);
+            this.labelMaxQ.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelMaxQ.Name = "labelMaxQ";
-            this.labelMaxQ.Size = new System.Drawing.Size(91, 15);
+            this.labelMaxQ.Size = new System.Drawing.Size(136, 25);
             this.labelMaxQ.TabIndex = 3;
             this.labelMaxQ.Text = "Макс. качество";
             // 
@@ -697,18 +748,20 @@
             // 
             this.labelCRF.AutoSize = true;
             this.labelCRF.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelCRF.Location = new System.Drawing.Point(109, 5);
+            this.labelCRF.Location = new System.Drawing.Point(164, 8);
+            this.labelCRF.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCRF.Name = "labelCRF";
-            this.labelCRF.Size = new System.Drawing.Size(31, 15);
+            this.labelCRF.Size = new System.Drawing.Size(47, 25);
             this.labelCRF.TabIndex = 1;
             this.labelCRF.Text = "20.0";
             // 
             // radioButtonBitrate
             // 
             this.radioButtonBitrate.AutoSize = true;
-            this.radioButtonBitrate.Location = new System.Drawing.Point(2, 93);
+            this.radioButtonBitrate.Location = new System.Drawing.Point(3, 140);
+            this.radioButtonBitrate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButtonBitrate.Name = "radioButtonBitrate";
-            this.radioButtonBitrate.Size = new System.Drawing.Size(69, 19);
+            this.radioButtonBitrate.Size = new System.Drawing.Size(101, 29);
             this.radioButtonBitrate.TabIndex = 5;
             this.radioButtonBitrate.TabStop = true;
             this.radioButtonBitrate.Text = "Битрейт";
@@ -718,9 +771,10 @@
             // radioButtonCRF
             // 
             this.radioButtonCRF.AutoSize = true;
-            this.radioButtonCRF.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonCRF.Location = new System.Drawing.Point(4, 4);
+            this.radioButtonCRF.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioButtonCRF.Name = "radioButtonCRF";
-            this.radioButtonCRF.Size = new System.Drawing.Size(46, 19);
+            this.radioButtonCRF.Size = new System.Drawing.Size(68, 29);
             this.radioButtonCRF.TabIndex = 0;
             this.radioButtonCRF.TabStop = true;
             this.radioButtonCRF.Text = "CRF";
@@ -731,29 +785,32 @@
             // 
             this.trackBarCRF.BackColor = System.Drawing.SystemColors.Window;
             this.trackBarCRF.LargeChange = 10;
-            this.trackBarCRF.Location = new System.Drawing.Point(2, 29);
+            this.trackBarCRF.Location = new System.Drawing.Point(3, 44);
+            this.trackBarCRF.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.trackBarCRF.Maximum = 510;
             this.trackBarCRF.Name = "trackBarCRF";
-            this.trackBarCRF.Size = new System.Drawing.Size(301, 45);
+            this.trackBarCRF.Size = new System.Drawing.Size(452, 69);
             this.trackBarCRF.TabIndex = 2;
             this.trackBarCRF.Value = 200;
             this.trackBarCRF.ValueChanged += new System.EventHandler(this.trackBarCRF_ValueChanged);
             // 
             // numericUpDownBitrate
             // 
-            this.numericUpDownBitrate.Location = new System.Drawing.Point(75, 92);
+            this.numericUpDownBitrate.Location = new System.Drawing.Point(112, 138);
+            this.numericUpDownBitrate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDownBitrate.Name = "numericUpDownBitrate";
-            this.numericUpDownBitrate.Size = new System.Drawing.Size(80, 23);
+            this.numericUpDownBitrate.Size = new System.Drawing.Size(120, 31);
             this.numericUpDownBitrate.TabIndex = 6;
             this.numericUpDownBitrate.ValueChanged += new System.EventHandler(this.numericUpDownBitrate_ValueChanged);
             // 
             // tabPagePicture
             // 
             this.tabPagePicture.Controls.Add(this.panelResize);
-            this.tabPagePicture.Location = new System.Drawing.Point(4, 24);
+            this.tabPagePicture.Location = new System.Drawing.Point(4, 34);
+            this.tabPagePicture.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabPagePicture.Name = "tabPagePicture";
-            this.tabPagePicture.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePicture.Size = new System.Drawing.Size(604, 183);
+            this.tabPagePicture.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPagePicture.Size = new System.Drawing.Size(910, 278);
             this.tabPagePicture.TabIndex = 1;
             this.tabPagePicture.Text = "Картинка";
             this.tabPagePicture.UseVisualStyleBackColor = true;
@@ -784,9 +841,10 @@
             this.panelResize.Controls.Add(this.numericUpDownHeight);
             this.panelResize.Controls.Add(this.comboBoxAspectRatio);
             this.panelResize.Controls.Add(this.labelX);
-            this.panelResize.Location = new System.Drawing.Point(6, 6);
+            this.panelResize.Location = new System.Drawing.Point(9, 9);
+            this.panelResize.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelResize.Name = "panelResize";
-            this.panelResize.Size = new System.Drawing.Size(592, 171);
+            this.panelResize.Size = new System.Drawing.Size(888, 256);
             this.panelResize.TabIndex = 0;
             // 
             // numericCropRight
@@ -796,9 +854,10 @@
             0,
             0,
             0});
-            this.numericCropRight.Location = new System.Drawing.Point(325, 6);
+            this.numericCropRight.Location = new System.Drawing.Point(488, 9);
+            this.numericCropRight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericCropRight.Name = "numericCropRight";
-            this.numericCropRight.Size = new System.Drawing.Size(55, 23);
+            this.numericCropRight.Size = new System.Drawing.Size(82, 31);
             this.numericCropRight.TabIndex = 4;
             this.numericCropRight.ValueChanged += new System.EventHandler(this.numericCropRight_ValueChanged);
             this.numericCropRight.Enter += new System.EventHandler(this.numericCropRight_Enter);
@@ -810,9 +869,10 @@
             0,
             0,
             0});
-            this.numericCropLeft.Location = new System.Drawing.Point(264, 6);
+            this.numericCropLeft.Location = new System.Drawing.Point(396, 9);
+            this.numericCropLeft.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericCropLeft.Name = "numericCropLeft";
-            this.numericCropLeft.Size = new System.Drawing.Size(55, 23);
+            this.numericCropLeft.Size = new System.Drawing.Size(82, 31);
             this.numericCropLeft.TabIndex = 3;
             this.numericCropLeft.ValueChanged += new System.EventHandler(this.numericCropLeft_ValueChanged);
             this.numericCropLeft.Enter += new System.EventHandler(this.numericCropLeft_Enter);
@@ -824,9 +884,10 @@
             0,
             0,
             0});
-            this.numericCropBottom.Location = new System.Drawing.Point(203, 6);
+            this.numericCropBottom.Location = new System.Drawing.Point(304, 9);
+            this.numericCropBottom.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericCropBottom.Name = "numericCropBottom";
-            this.numericCropBottom.Size = new System.Drawing.Size(55, 23);
+            this.numericCropBottom.Size = new System.Drawing.Size(82, 31);
             this.numericCropBottom.TabIndex = 2;
             this.numericCropBottom.ValueChanged += new System.EventHandler(this.numericCropBottom_ValueChanged);
             this.numericCropBottom.Enter += new System.EventHandler(this.numericCropBottom_Enter);
@@ -838,9 +899,10 @@
             0,
             0,
             0});
-            this.numericCropTop.Location = new System.Drawing.Point(142, 6);
+            this.numericCropTop.Location = new System.Drawing.Point(213, 9);
+            this.numericCropTop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericCropTop.Name = "numericCropTop";
-            this.numericCropTop.Size = new System.Drawing.Size(55, 23);
+            this.numericCropTop.Size = new System.Drawing.Size(82, 31);
             this.numericCropTop.TabIndex = 1;
             this.numericCropTop.ValueChanged += new System.EventHandler(this.numericCropTop_ValueChanged);
             this.numericCropTop.Enter += new System.EventHandler(this.numericCropTop_Enter);
@@ -848,18 +910,20 @@
             // labelCrop
             // 
             this.labelCrop.AutoSize = true;
-            this.labelCrop.Location = new System.Drawing.Point(3, 8);
+            this.labelCrop.Location = new System.Drawing.Point(4, 12);
+            this.labelCrop.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCrop.Name = "labelCrop";
-            this.labelCrop.Size = new System.Drawing.Size(137, 30);
+            this.labelCrop.Size = new System.Drawing.Size(205, 50);
             this.labelCrop.TabIndex = 0;
             this.labelCrop.Text = "Кадрирование\r\n(верх низ слева справа)";
             // 
             // checkBoxFlip
             // 
             this.checkBoxFlip.AutoSize = true;
-            this.checkBoxFlip.Location = new System.Drawing.Point(6, 149);
+            this.checkBoxFlip.Location = new System.Drawing.Point(9, 224);
+            this.checkBoxFlip.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBoxFlip.Name = "checkBoxFlip";
-            this.checkBoxFlip.Size = new System.Drawing.Size(166, 19);
+            this.checkBoxFlip.Size = new System.Drawing.Size(247, 29);
             this.checkBoxFlip.TabIndex = 22;
             this.checkBoxFlip.Text = "Отразить по горизонтали";
             this.checkBoxFlip.UseVisualStyleBackColor = true;
@@ -867,9 +931,10 @@
             // 
             // buttonCropReset
             // 
-            this.buttonCropReset.Location = new System.Drawing.Point(386, 4);
+            this.buttonCropReset.Location = new System.Drawing.Point(579, 6);
+            this.buttonCropReset.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonCropReset.Name = "buttonCropReset";
-            this.buttonCropReset.Size = new System.Drawing.Size(63, 25);
+            this.buttonCropReset.Size = new System.Drawing.Size(94, 38);
             this.buttonCropReset.TabIndex = 5;
             this.buttonCropReset.Text = "Сброс";
             this.buttonCropReset.UseVisualStyleBackColor = true;
@@ -878,9 +943,10 @@
             // labelCropSize
             // 
             this.labelCropSize.AutoSize = true;
-            this.labelCropSize.Location = new System.Drawing.Point(455, 9);
+            this.labelCropSize.Location = new System.Drawing.Point(682, 14);
+            this.labelCropSize.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCropSize.Name = "labelCropSize";
-            this.labelCropSize.Size = new System.Drawing.Size(75, 15);
+            this.labelCropSize.Size = new System.Drawing.Size(114, 25);
             this.labelCropSize.TabIndex = 6;
             this.labelCropSize.Text = "WxH → WxH";
             this.labelCropSize.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -889,45 +955,50 @@
             // 
             this.comboBoxRotate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRotate.FormattingEnabled = true;
-            this.comboBoxRotate.Location = new System.Drawing.Point(142, 120);
+            this.comboBoxRotate.Location = new System.Drawing.Point(213, 180);
+            this.comboBoxRotate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxRotate.Name = "comboBoxRotate";
-            this.comboBoxRotate.Size = new System.Drawing.Size(120, 23);
+            this.comboBoxRotate.Size = new System.Drawing.Size(178, 33);
             this.comboBoxRotate.TabIndex = 19;
             this.comboBoxRotate.SelectedIndexChanged += new System.EventHandler(this.comboBoxRotate_SelectedIndexChanged);
             // 
             // labelRotate
             // 
             this.labelRotate.AutoSize = true;
-            this.labelRotate.Location = new System.Drawing.Point(3, 123);
+            this.labelRotate.Location = new System.Drawing.Point(4, 184);
+            this.labelRotate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelRotate.Name = "labelRotate";
-            this.labelRotate.Size = new System.Drawing.Size(66, 15);
+            this.labelRotate.Size = new System.Drawing.Size(101, 25);
             this.labelRotate.TabIndex = 18;
             this.labelRotate.Text = "Повернуть";
             // 
             // labelPictureSize
             // 
             this.labelPictureSize.AutoSize = true;
-            this.labelPictureSize.Location = new System.Drawing.Point(3, 51);
+            this.labelPictureSize.Location = new System.Drawing.Point(4, 76);
+            this.labelPictureSize.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelPictureSize.Name = "labelPictureSize";
-            this.labelPictureSize.Size = new System.Drawing.Size(56, 15);
+            this.labelPictureSize.Size = new System.Drawing.Size(85, 25);
             this.labelPictureSize.TabIndex = 7;
             this.labelPictureSize.Text = "Размеры";
             // 
             // labelSizePreset
             // 
             this.labelSizePreset.AutoSize = true;
-            this.labelSizePreset.Location = new System.Drawing.Point(3, 80);
+            this.labelSizePreset.Location = new System.Drawing.Point(4, 120);
+            this.labelSizePreset.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelSizePreset.Name = "labelSizePreset";
-            this.labelSizePreset.Size = new System.Drawing.Size(102, 15);
+            this.labelSizePreset.Size = new System.Drawing.Size(156, 25);
             this.labelSizePreset.TabIndex = 13;
             this.labelSizePreset.Text = "Пресет размеров";
             // 
             // labelInterpolation
             // 
             this.labelInterpolation.AutoSize = true;
-            this.labelInterpolation.Location = new System.Drawing.Point(337, 123);
+            this.labelInterpolation.Location = new System.Drawing.Point(506, 184);
+            this.labelInterpolation.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelInterpolation.Name = "labelInterpolation";
-            this.labelInterpolation.Size = new System.Drawing.Size(88, 15);
+            this.labelInterpolation.Size = new System.Drawing.Size(131, 25);
             this.labelInterpolation.TabIndex = 20;
             this.labelInterpolation.Text = "Интерполяция";
             // 
@@ -935,18 +1006,20 @@
             // 
             this.comboBoxInterpolation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxInterpolation.FormattingEnabled = true;
-            this.comboBoxInterpolation.Location = new System.Drawing.Point(431, 120);
+            this.comboBoxInterpolation.Location = new System.Drawing.Point(646, 180);
+            this.comboBoxInterpolation.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxInterpolation.Name = "comboBoxInterpolation";
-            this.comboBoxInterpolation.Size = new System.Drawing.Size(120, 23);
+            this.comboBoxInterpolation.Size = new System.Drawing.Size(178, 33);
             this.comboBoxInterpolation.TabIndex = 21;
             this.comboBoxInterpolation.SelectedIndexChanged += new System.EventHandler(this.comboBoxInterpolation_SelectedIndexChanged);
             // 
             // checkBoxKeepAspectRatio
             // 
             this.checkBoxKeepAspectRatio.AutoSize = true;
-            this.checkBoxKeepAspectRatio.Location = new System.Drawing.Point(277, 51);
+            this.checkBoxKeepAspectRatio.Location = new System.Drawing.Point(416, 76);
+            this.checkBoxKeepAspectRatio.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBoxKeepAspectRatio.Name = "checkBoxKeepAspectRatio";
-            this.checkBoxKeepAspectRatio.Size = new System.Drawing.Size(150, 19);
+            this.checkBoxKeepAspectRatio.Size = new System.Drawing.Size(223, 29);
             this.checkBoxKeepAspectRatio.TabIndex = 11;
             this.checkBoxKeepAspectRatio.Text = "Сохранять пропорции";
             this.checkBoxKeepAspectRatio.UseVisualStyleBackColor = true;
@@ -954,27 +1027,30 @@
             // 
             // numericUpDownWidth
             // 
-            this.numericUpDownWidth.Location = new System.Drawing.Point(142, 49);
+            this.numericUpDownWidth.Location = new System.Drawing.Point(213, 74);
+            this.numericUpDownWidth.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDownWidth.Name = "numericUpDownWidth";
-            this.numericUpDownWidth.Size = new System.Drawing.Size(50, 23);
+            this.numericUpDownWidth.Size = new System.Drawing.Size(75, 31);
             this.numericUpDownWidth.TabIndex = 8;
             this.numericUpDownWidth.ValueChanged += new System.EventHandler(this.numericUpDownWidth_ValueChanged);
             this.numericUpDownWidth.Leave += new System.EventHandler(this.numericUpDownWidth_Leave);
             // 
             // pictureBoxRatioError
             // 
-            this.pictureBoxRatioError.Location = new System.Drawing.Point(557, 52);
+            this.pictureBoxRatioError.Location = new System.Drawing.Point(836, 78);
+            this.pictureBoxRatioError.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBoxRatioError.Name = "pictureBoxRatioError";
-            this.pictureBoxRatioError.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxRatioError.Size = new System.Drawing.Size(24, 24);
             this.pictureBoxRatioError.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBoxRatioError.TabIndex = 30;
             this.pictureBoxRatioError.TabStop = false;
             // 
             // numericUpDownHeight
             // 
-            this.numericUpDownHeight.Location = new System.Drawing.Point(212, 49);
+            this.numericUpDownHeight.Location = new System.Drawing.Point(318, 74);
+            this.numericUpDownHeight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDownHeight.Name = "numericUpDownHeight";
-            this.numericUpDownHeight.Size = new System.Drawing.Size(50, 23);
+            this.numericUpDownHeight.Size = new System.Drawing.Size(75, 31);
             this.numericUpDownHeight.TabIndex = 10;
             this.numericUpDownHeight.ValueChanged += new System.EventHandler(this.numericUpDownHeight_ValueChanged);
             this.numericUpDownHeight.Leave += new System.EventHandler(this.numericUpDownHeight_Leave);
@@ -982,9 +1058,10 @@
             // comboBoxAspectRatio
             // 
             this.comboBoxAspectRatio.FormattingEnabled = true;
-            this.comboBoxAspectRatio.Location = new System.Drawing.Point(431, 49);
+            this.comboBoxAspectRatio.Location = new System.Drawing.Point(646, 74);
+            this.comboBoxAspectRatio.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxAspectRatio.Name = "comboBoxAspectRatio";
-            this.comboBoxAspectRatio.Size = new System.Drawing.Size(120, 23);
+            this.comboBoxAspectRatio.Size = new System.Drawing.Size(178, 33);
             this.comboBoxAspectRatio.TabIndex = 12;
             this.comboBoxAspectRatio.SelectedIndexChanged += new System.EventHandler(this.comboBoxAspectRatio_SelectedIndexChanged);
             this.comboBoxAspectRatio.TextUpdate += new System.EventHandler(this.comboBoxAspectRatio_TextUpdate);
@@ -992,19 +1069,21 @@
             // labelX
             // 
             this.labelX.AutoSize = true;
-            this.labelX.Location = new System.Drawing.Point(195, 51);
+            this.labelX.Location = new System.Drawing.Point(292, 76);
+            this.labelX.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelX.Name = "labelX";
-            this.labelX.Size = new System.Drawing.Size(15, 15);
+            this.labelX.Size = new System.Drawing.Size(24, 25);
             this.labelX.TabIndex = 9;
             this.labelX.Text = "×";
             // 
             // tabPageFile
             // 
             this.tabPageFile.Controls.Add(this.panelFile);
-            this.tabPageFile.Location = new System.Drawing.Point(4, 24);
+            this.tabPageFile.Location = new System.Drawing.Point(4, 34);
+            this.tabPageFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabPageFile.Name = "tabPageFile";
-            this.tabPageFile.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageFile.Size = new System.Drawing.Size(604, 183);
+            this.tabPageFile.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageFile.Size = new System.Drawing.Size(910, 278);
             this.tabPageFile.TabIndex = 3;
             this.tabPageFile.Text = "Файл";
             this.tabPageFile.UseVisualStyleBackColor = true;
@@ -1021,51 +1100,57 @@
             this.panelFile.Controls.Add(this.buttonBrowseIn);
             this.panelFile.Controls.Add(this.buttonBrowseOut);
             this.panelFile.Controls.Add(this.textBoxIn);
-            this.panelFile.Location = new System.Drawing.Point(6, 6);
+            this.panelFile.Location = new System.Drawing.Point(9, 9);
+            this.panelFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelFile.Name = "panelFile";
-            this.panelFile.Size = new System.Drawing.Size(592, 171);
+            this.panelFile.Size = new System.Drawing.Size(888, 256);
             this.panelFile.TabIndex = 0;
             // 
             // labelOut
             // 
             this.labelOut.AutoSize = true;
-            this.labelOut.Location = new System.Drawing.Point(3, 78);
+            this.labelOut.Location = new System.Drawing.Point(4, 117);
+            this.labelOut.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelOut.Name = "labelOut";
-            this.labelOut.Size = new System.Drawing.Size(87, 15);
+            this.labelOut.Size = new System.Drawing.Size(130, 25);
             this.labelOut.TabIndex = 5;
             this.labelOut.Text = "Сохранить как";
             // 
             // labelInputFile
             // 
             this.labelInputFile.AutoSize = true;
-            this.labelInputFile.Location = new System.Drawing.Point(3, 8);
+            this.labelInputFile.Location = new System.Drawing.Point(4, 12);
+            this.labelInputFile.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelInputFile.Name = "labelInputFile";
-            this.labelInputFile.Size = new System.Drawing.Size(86, 15);
+            this.labelInputFile.Size = new System.Drawing.Size(126, 25);
             this.labelInputFile.TabIndex = 0;
             this.labelInputFile.Text = "Выбрать файл";
             // 
             // textBoxOut
             // 
-            this.textBoxOut.Location = new System.Drawing.Point(95, 74);
+            this.textBoxOut.Location = new System.Drawing.Point(142, 111);
+            this.textBoxOut.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxOut.Name = "textBoxOut";
-            this.textBoxOut.Size = new System.Drawing.Size(413, 23);
+            this.textBoxOut.Size = new System.Drawing.Size(618, 31);
             this.textBoxOut.TabIndex = 6;
             // 
             // checkBoxKeepOutPath
             // 
             this.checkBoxKeepOutPath.AutoSize = true;
-            this.checkBoxKeepOutPath.Location = new System.Drawing.Point(95, 103);
+            this.checkBoxKeepOutPath.Location = new System.Drawing.Point(142, 154);
+            this.checkBoxKeepOutPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBoxKeepOutPath.Name = "checkBoxKeepOutPath";
-            this.checkBoxKeepOutPath.Size = new System.Drawing.Size(190, 19);
+            this.checkBoxKeepOutPath.Size = new System.Drawing.Size(281, 29);
             this.checkBoxKeepOutPath.TabIndex = 8;
             this.checkBoxKeepOutPath.Text = "Запомнить выбранную папку";
             this.checkBoxKeepOutPath.UseVisualStyleBackColor = true;
             // 
             // buttonBrowseIn
             // 
-            this.buttonBrowseIn.Location = new System.Drawing.Point(514, 3);
+            this.buttonBrowseIn.Location = new System.Drawing.Point(771, 4);
+            this.buttonBrowseIn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonBrowseIn.Name = "buttonBrowseIn";
-            this.buttonBrowseIn.Size = new System.Drawing.Size(75, 25);
+            this.buttonBrowseIn.Size = new System.Drawing.Size(112, 38);
             this.buttonBrowseIn.TabIndex = 2;
             this.buttonBrowseIn.Text = "Обзор";
             this.buttonBrowseIn.UseVisualStyleBackColor = true;
@@ -1073,9 +1158,10 @@
             // 
             // buttonBrowseOut
             // 
-            this.buttonBrowseOut.Location = new System.Drawing.Point(514, 73);
+            this.buttonBrowseOut.Location = new System.Drawing.Point(771, 110);
+            this.buttonBrowseOut.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonBrowseOut.Name = "buttonBrowseOut";
-            this.buttonBrowseOut.Size = new System.Drawing.Size(75, 25);
+            this.buttonBrowseOut.Size = new System.Drawing.Size(112, 38);
             this.buttonBrowseOut.TabIndex = 7;
             this.buttonBrowseOut.Text = "Обзор";
             this.buttonBrowseOut.UseVisualStyleBackColor = true;
@@ -1083,10 +1169,11 @@
             // 
             // textBoxIn
             // 
-            this.textBoxIn.Location = new System.Drawing.Point(95, 4);
+            this.textBoxIn.Location = new System.Drawing.Point(142, 6);
+            this.textBoxIn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxIn.Name = "textBoxIn";
             this.textBoxIn.ReadOnly = true;
-            this.textBoxIn.Size = new System.Drawing.Size(413, 23);
+            this.textBoxIn.Size = new System.Drawing.Size(618, 31);
             this.textBoxIn.TabIndex = 1;
             // 
             // tabControlMain
@@ -1097,10 +1184,11 @@
             this.tabControlMain.Controls.Add(this.tabPageFilters);
             this.tabControlMain.Controls.Add(this.tabPageAudio);
             this.tabControlMain.Controls.Add(this.tabPageTags);
-            this.tabControlMain.Location = new System.Drawing.Point(6, 6);
+            this.tabControlMain.Location = new System.Drawing.Point(9, 9);
+            this.tabControlMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(612, 211);
+            this.tabControlMain.Size = new System.Drawing.Size(918, 316);
             this.tabControlMain.TabIndex = 0;
             // 
             // tabPageFilters
@@ -1108,10 +1196,11 @@
             this.tabPageFilters.Controls.Add(this.panelSubtitles);
             this.tabPageFilters.Controls.Add(this.panelColorFilter);
             this.tabPageFilters.Controls.Add(this.panelDeinterlace);
-            this.tabPageFilters.Location = new System.Drawing.Point(4, 24);
+            this.tabPageFilters.Location = new System.Drawing.Point(4, 34);
+            this.tabPageFilters.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabPageFilters.Name = "tabPageFilters";
-            this.tabPageFilters.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageFilters.Size = new System.Drawing.Size(604, 183);
+            this.tabPageFilters.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageFilters.Size = new System.Drawing.Size(910, 278);
             this.tabPageFilters.TabIndex = 5;
             this.tabPageFilters.Text = "Фильтры";
             this.tabPageFilters.UseVisualStyleBackColor = true;
@@ -1121,25 +1210,28 @@
             this.panelSubtitles.Controls.Add(this.labelSubtitles);
             this.panelSubtitles.Controls.Add(this.buttonBrowseSubtitles);
             this.panelSubtitles.Controls.Add(this.textBoxSubtitlesPath);
-            this.panelSubtitles.Location = new System.Drawing.Point(6, 119);
+            this.panelSubtitles.Location = new System.Drawing.Point(9, 178);
+            this.panelSubtitles.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelSubtitles.Name = "panelSubtitles";
-            this.panelSubtitles.Size = new System.Drawing.Size(592, 58);
+            this.panelSubtitles.Size = new System.Drawing.Size(888, 87);
             this.panelSubtitles.TabIndex = 4;
             // 
             // labelSubtitles
             // 
             this.labelSubtitles.AutoSize = true;
-            this.labelSubtitles.Location = new System.Drawing.Point(3, 8);
+            this.labelSubtitles.Location = new System.Drawing.Point(4, 12);
+            this.labelSubtitles.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelSubtitles.Name = "labelSubtitles";
-            this.labelSubtitles.Size = new System.Drawing.Size(61, 15);
+            this.labelSubtitles.Size = new System.Drawing.Size(90, 25);
             this.labelSubtitles.TabIndex = 2;
             this.labelSubtitles.Text = "Субтитры";
             // 
             // buttonBrowseSubtitles
             // 
-            this.buttonBrowseSubtitles.Location = new System.Drawing.Point(514, 3);
+            this.buttonBrowseSubtitles.Location = new System.Drawing.Point(771, 4);
+            this.buttonBrowseSubtitles.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonBrowseSubtitles.Name = "buttonBrowseSubtitles";
-            this.buttonBrowseSubtitles.Size = new System.Drawing.Size(75, 25);
+            this.buttonBrowseSubtitles.Size = new System.Drawing.Size(112, 38);
             this.buttonBrowseSubtitles.TabIndex = 1;
             this.buttonBrowseSubtitles.Text = "Обзор";
             this.buttonBrowseSubtitles.UseVisualStyleBackColor = true;
@@ -1147,26 +1239,29 @@
             // 
             // textBoxSubtitlesPath
             // 
-            this.textBoxSubtitlesPath.Location = new System.Drawing.Point(113, 4);
+            this.textBoxSubtitlesPath.Location = new System.Drawing.Point(170, 6);
+            this.textBoxSubtitlesPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxSubtitlesPath.Name = "textBoxSubtitlesPath";
-            this.textBoxSubtitlesPath.Size = new System.Drawing.Size(395, 23);
+            this.textBoxSubtitlesPath.Size = new System.Drawing.Size(590, 31);
             this.textBoxSubtitlesPath.TabIndex = 0;
             // 
             // panelColorFilter
             // 
             this.panelColorFilter.Controls.Add(this.labelColorFilter);
             this.panelColorFilter.Controls.Add(this.comboBoxColorFilter);
-            this.panelColorFilter.Location = new System.Drawing.Point(6, 74);
+            this.panelColorFilter.Location = new System.Drawing.Point(9, 111);
+            this.panelColorFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelColorFilter.Name = "panelColorFilter";
-            this.panelColorFilter.Size = new System.Drawing.Size(293, 39);
+            this.panelColorFilter.Size = new System.Drawing.Size(440, 58);
             this.panelColorFilter.TabIndex = 3;
             // 
             // labelColorFilter
             // 
             this.labelColorFilter.AutoSize = true;
-            this.labelColorFilter.Location = new System.Drawing.Point(3, 6);
+            this.labelColorFilter.Location = new System.Drawing.Point(4, 9);
+            this.labelColorFilter.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelColorFilter.Name = "labelColorFilter";
-            this.labelColorFilter.Size = new System.Drawing.Size(104, 15);
+            this.labelColorFilter.Size = new System.Drawing.Size(156, 25);
             this.labelColorFilter.TabIndex = 0;
             this.labelColorFilter.Text = "Цветовой фильтр";
             // 
@@ -1174,9 +1269,10 @@
             // 
             this.comboBoxColorFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxColorFilter.FormattingEnabled = true;
-            this.comboBoxColorFilter.Location = new System.Drawing.Point(113, 3);
+            this.comboBoxColorFilter.Location = new System.Drawing.Point(170, 4);
+            this.comboBoxColorFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxColorFilter.Name = "comboBoxColorFilter";
-            this.comboBoxColorFilter.Size = new System.Drawing.Size(120, 23);
+            this.comboBoxColorFilter.Size = new System.Drawing.Size(178, 33);
             this.comboBoxColorFilter.TabIndex = 1;
             this.comboBoxColorFilter.SelectedIndexChanged += new System.EventHandler(this.comboBoxColorFilter_SelectedIndexChanged);
             // 
@@ -1185,26 +1281,29 @@
             this.panelDeinterlace.Controls.Add(this.labelFieldOrder);
             this.panelDeinterlace.Controls.Add(this.checkBoxDeinterlace);
             this.panelDeinterlace.Controls.Add(this.comboBoxFieldOrder);
-            this.panelDeinterlace.Location = new System.Drawing.Point(6, 6);
+            this.panelDeinterlace.Location = new System.Drawing.Point(9, 9);
+            this.panelDeinterlace.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelDeinterlace.Name = "panelDeinterlace";
-            this.panelDeinterlace.Size = new System.Drawing.Size(293, 62);
+            this.panelDeinterlace.Size = new System.Drawing.Size(440, 93);
             this.panelDeinterlace.TabIndex = 2;
             // 
             // labelFieldOrder
             // 
             this.labelFieldOrder.AutoSize = true;
-            this.labelFieldOrder.Location = new System.Drawing.Point(3, 29);
+            this.labelFieldOrder.Location = new System.Drawing.Point(4, 44);
+            this.labelFieldOrder.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelFieldOrder.Name = "labelFieldOrder";
-            this.labelFieldOrder.Size = new System.Drawing.Size(92, 15);
+            this.labelFieldOrder.Size = new System.Drawing.Size(140, 25);
             this.labelFieldOrder.TabIndex = 1;
             this.labelFieldOrder.Text = "Порядок полей";
             // 
             // checkBoxDeinterlace
             // 
             this.checkBoxDeinterlace.AutoSize = true;
-            this.checkBoxDeinterlace.Location = new System.Drawing.Point(6, 3);
+            this.checkBoxDeinterlace.Location = new System.Drawing.Point(9, 4);
+            this.checkBoxDeinterlace.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBoxDeinterlace.Name = "checkBoxDeinterlace";
-            this.checkBoxDeinterlace.Size = new System.Drawing.Size(117, 19);
+            this.checkBoxDeinterlace.Size = new System.Drawing.Size(169, 29);
             this.checkBoxDeinterlace.TabIndex = 0;
             this.checkBoxDeinterlace.Text = "Деинтерлейсинг";
             this.checkBoxDeinterlace.UseVisualStyleBackColor = true;
@@ -1214,17 +1313,19 @@
             // 
             this.comboBoxFieldOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFieldOrder.FormattingEnabled = true;
-            this.comboBoxFieldOrder.Location = new System.Drawing.Point(113, 26);
+            this.comboBoxFieldOrder.Location = new System.Drawing.Point(170, 39);
+            this.comboBoxFieldOrder.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxFieldOrder.Name = "comboBoxFieldOrder";
-            this.comboBoxFieldOrder.Size = new System.Drawing.Size(120, 23);
+            this.comboBoxFieldOrder.Size = new System.Drawing.Size(178, 33);
             this.comboBoxFieldOrder.TabIndex = 2;
             this.comboBoxFieldOrder.SelectedIndexChanged += new System.EventHandler(this.comboBoxFieldOrder_SelectedIndexChanged);
             // 
             // buttonPreview
             // 
-            this.buttonPreview.Location = new System.Drawing.Point(407, 223);
+            this.buttonPreview.Location = new System.Drawing.Point(610, 334);
+            this.buttonPreview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonPreview.Name = "buttonPreview";
-            this.buttonPreview.Size = new System.Drawing.Size(75, 32);
+            this.buttonPreview.Size = new System.Drawing.Size(112, 48);
             this.buttonPreview.TabIndex = 5;
             this.buttonPreview.Text = "Превью";
             this.buttonPreview.UseVisualStyleBackColor = true;
@@ -1233,9 +1334,10 @@
             // labelOutputInfo
             // 
             this.labelOutputInfo.AutoSize = true;
-            this.labelOutputInfo.Location = new System.Drawing.Point(60, 223);
+            this.labelOutputInfo.Location = new System.Drawing.Point(90, 334);
+            this.labelOutputInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelOutputInfo.Name = "labelOutputInfo";
-            this.labelOutputInfo.Size = new System.Drawing.Size(16, 15);
+            this.labelOutputInfo.Size = new System.Drawing.Size(24, 25);
             this.labelOutputInfo.TabIndex = 2;
             this.labelOutputInfo.Text = "...";
             // 
@@ -1243,18 +1345,19 @@
             // 
             this.labelOutputInfoTitle.AutoSize = true;
             this.labelOutputInfoTitle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelOutputInfoTitle.Location = new System.Drawing.Point(7, 223);
+            this.labelOutputInfoTitle.Location = new System.Drawing.Point(10, 334);
+            this.labelOutputInfoTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelOutputInfoTitle.Name = "labelOutputInfoTitle";
-            this.labelOutputInfoTitle.Size = new System.Drawing.Size(47, 30);
+            this.labelOutputInfoTitle.Size = new System.Drawing.Size(72, 50);
             this.labelOutputInfoTitle.TabIndex = 1;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
             // 
             // MainForm
             // 
             this.AllowDrop = true;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(624, 261);
+            this.ClientSize = new System.Drawing.Size(936, 392);
             this.Controls.Add(this.buttonPreview);
             this.Controls.Add(this.labelOutputInfoTitle);
             this.Controls.Add(this.labelOutputInfo);
@@ -1263,9 +1366,10 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Padding = new System.Windows.Forms.Padding(3);
+            this.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Text = "Simple Video Converter";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
