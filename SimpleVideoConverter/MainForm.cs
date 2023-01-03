@@ -13,8 +13,6 @@ namespace Alexantr.SimpleVideoConverter
 
         private string fileInfo;
 
-        private string formTitle;
-
         private string fileType;
 
         //private bool doNotCheckKeepARAgain = false;
@@ -27,8 +25,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            formTitle = AppendAppVersion(Text);
-            Text = formTitle;
+            Text = AppendAppVersion();
 
             buttonGo.Enabled = false;
             buttonPreview.Enabled = false;
@@ -560,24 +557,24 @@ namespace Alexantr.SimpleVideoConverter
         {
             VideoConfig.Codec = ((ComboBoxItem)comboBoxVideoCodec.SelectedItem).Value;
 
-            if (VideoConfig.Codec == VideoConfig.CodecHEVC && VideoConfig.Preset != "slow")
+            if (VideoConfig.Codec == VideoConfig.CodecHEVC && VideoConfig.Preset != VideoConfig.DefaultPreset)
             {
                 int selectedIndex = 0, index = 0;
                 foreach (string pr in VideoConfig.PresetList)
                 {
-                    if (pr == "slow")
+                    if (pr == VideoConfig.DefaultPreset)
                         selectedIndex = index;
                     index++;
                 }
                 comboBoxPreset.SelectedIndex = selectedIndex;
                 VideoConfig.Preset = ((ComboBoxItem)comboBoxPreset.SelectedItem).Value;
             }
-            if (VideoConfig.Codec == VideoConfig.CodecH264 && VideoConfig.Preset != "veryslow")
+            if (VideoConfig.Codec == VideoConfig.CodecH264 && VideoConfig.Preset != VideoConfig.DefaultPresetH264)
             {
                 int selectedIndex = 0, index = 0;
                 foreach (string pr in VideoConfig.PresetList)
                 {
-                    if (pr == "veryslow")
+                    if (pr == VideoConfig.DefaultPresetH264)
                         selectedIndex = index;
                     index++;
                 }
@@ -760,8 +757,6 @@ namespace Alexantr.SimpleVideoConverter
 
                 textBoxSubtitlesPath.Text = "";
 
-                Text = formTitle;
-
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 return;
             }
@@ -774,8 +769,6 @@ namespace Alexantr.SimpleVideoConverter
             Properties.Settings.Default.InPath = Path.GetDirectoryName(path);
 
             ToggleTabs();
-
-            Text = Path.GetFileName(path) + " - " + formTitle;
 
             VideoStream vStream = inputFile.VideoStreams[0];
 
@@ -942,7 +935,7 @@ namespace Alexantr.SimpleVideoConverter
                     videoArgs.Add($"-c:v {VideoConfig.Encoder} -b:v {VideoConfig.Bitrate}k");
 
                 // https://trac.ffmpeg.org/wiki/Encode/H.264
-                if (VideoConfig.Encoder == "libx264")
+                /*if (VideoConfig.Encoder == VideoConfig.EncoderX264)
                 {
                     // must be configurable
                     string videoProfile = "high";
@@ -959,10 +952,10 @@ namespace Alexantr.SimpleVideoConverter
                     }
 
                     videoArgs.Add($"-preset:v {VideoConfig.Preset} -profile:v {videoProfile}{videoLevel}");
-                }
+                }*/
 
                 // https://trac.ffmpeg.org/wiki/Encode/H.265
-                if (VideoConfig.Encoder == "libx265")
+                if (VideoConfig.Encoder == VideoConfig.EncoderX265)
                 {
                     // slow,slower,veryslow,placebo
 
@@ -1072,7 +1065,7 @@ namespace Alexantr.SimpleVideoConverter
                 string x26xParams1;
                 string x26xParams2;
 
-                if (VideoConfig.Encoder == "libx265")
+                if (VideoConfig.Encoder == VideoConfig.EncoderX265)
                 {
                     twoPassTpl = "{9} -passlogfile \"{6}\" {0} -x265-params \"pass={5}:{7}\" {1} {2} {3} {8} -f {4}";
                     x26xParams1 = x26xParams + ":slow-firstpass=0";
@@ -1117,7 +1110,7 @@ namespace Alexantr.SimpleVideoConverter
             {
                 string onePassTpl;
 
-                if (VideoConfig.Encoder == "libx265")
+                if (VideoConfig.Encoder == VideoConfig.EncoderX265)
                 {
                     onePassTpl = "{7} {0} -x265-params \"{5}\" {1} {2} {3} {6} -f {4}";
                 }
@@ -1207,7 +1200,7 @@ namespace Alexantr.SimpleVideoConverter
             string exePath = Path.Combine(directoryPath, "ffplay.exe");
             if (!File.Exists(exePath))
             {
-                MessageBox.Show("Cannot find ffplay.exe", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Не найден ffplay.exe", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SimpleVideoConverter")]
-[assembly: AssemblyCopyright("Copyright © 2016-2019 Alexander Yashkin")]
+[assembly: AssemblyCopyright("Copyright © 2016-2023 Alex Yashkin")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

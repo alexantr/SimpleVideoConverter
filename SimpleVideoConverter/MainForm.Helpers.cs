@@ -28,7 +28,7 @@ namespace Alexantr.SimpleVideoConverter
 
         #region Form
 
-        private string AppendAppVersion(string title)
+        private string AppendAppVersion()
         {
             Assembly ass = Assembly.GetExecutingAssembly();
 
@@ -45,7 +45,7 @@ namespace Alexantr.SimpleVideoConverter
                 niceVersion += "." + version.Revision.ToString();
             }
 
-            return $"{title} v{niceVersion}";
+            return $"{appName} {niceVersion}";
         }
 
         private void ToggleTabs()
@@ -182,17 +182,17 @@ namespace Alexantr.SimpleVideoConverter
                 textBoxEncoderParams.Enabled = false;
                 textBoxMoreArgs.Text = "";
             }
-            else if (VideoConfig.Encoder == "libx264")
+            else if (VideoConfig.Encoder == VideoConfig.EncoderX264)
             {
                 textBoxEncoderParams.Enabled = true;
                 textBoxEncoderParams.Text = "sar=1/1:no-dct-decimate=1";
                 textBoxMoreArgs.Text = "-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p";
             }
-            else if (VideoConfig.Encoder == "libx265")
+            else if (VideoConfig.Encoder == VideoConfig.EncoderX265)
             {
                 textBoxEncoderParams.Enabled = true;
                 textBoxEncoderParams.Text = "sar=1:sao=0:cutree=0";
-                textBoxMoreArgs.Text = "";
+                textBoxMoreArgs.Text = "-pix_fmt yuv420p10le";
             }
         }
 
@@ -444,7 +444,7 @@ namespace Alexantr.SimpleVideoConverter
 
         private void UpdateHeigth(bool forceUpdateHeight = false, int maxHeight = 0)
         {
-            pictureBoxRatioError.BackgroundImage = null;
+            labelRatioError.Text = "";
             if (!checkBoxKeepAspectRatio.Checked && !forceUpdateHeight)
                 return;
             if (maxHeight == 0 || maxHeight > PictureConfig.MaxHeight)
@@ -482,7 +482,7 @@ namespace Alexantr.SimpleVideoConverter
             }
             else
             {
-                pictureBoxRatioError.BackgroundImage = Properties.Resources.critical;
+                labelRatioError.Text = "!!!";
             }
         }
 
@@ -729,31 +729,27 @@ namespace Alexantr.SimpleVideoConverter
                     info.Append($", {PictureConfig.OutputSize.ToString()}");
                 }
 
-                if (PictureConfig.Deinterlace)
-                    info.Append(", деинт.");
+                //if (PictureConfig.Deinterlace)
+                //    info.Append(", деинт.");
 
-                if (PictureConfig.Rotate > 0)
+                /*if (PictureConfig.Rotate > 0)
                 {
                     if (PictureConfig.RotateList.ContainsKey(PictureConfig.Rotate))
                         info.Append($", {PictureConfig.RotateList[PictureConfig.Rotate]}");
                     else
                         info.Append($", {PictureConfig.Rotate}°");
-                }
+                }*/
 
-                if (PictureConfig.Flip)
-                    info.Append($", отразить");
+                //if (PictureConfig.Flip)
+                //    info.Append($", отразить");
 
-                if (PictureConfig.ColorFilter != "none")
-                    info.Append($", {PictureConfig.ColorFilterList[PictureConfig.ColorFilter].ToLower()}");
+                //if (PictureConfig.ColorFilter != "none")
+                //    info.Append($", {PictureConfig.ColorFilterList[PictureConfig.ColorFilter].ToLower()}");
 
                 if (radioButtonCRF.Checked)
                     info.Append($", CRF {labelCRF.Text}");
                 else
-                {
                     info.Append($", {numericUpDownBitrate.Value} кбит/с");
-                    if (checkBoxTwoPass.Checked)
-                        info.Append(", 2 прохода");
-                }
 
                 double finalFrameRate = CalcFinalFrameRate();
                 if (finalFrameRate > 0)
@@ -835,11 +831,11 @@ namespace Alexantr.SimpleVideoConverter
             info.AppendLine($"Формат: {inputFile.Format}");
             info.AppendLine($"Размер файла: {inputFile.FileSize.FormatFileSize()}");
             info.AppendLine($"Длительность: {dur}");
+            info.AppendLine($"Видеокодек: {stream.CodecName.ToUpper()}");
             info.AppendLine($"Битрейт: {inputFile.BitRate} kbps");
             info.AppendLine($"Разрешение: {stream.PictureSize.ToString()}{(stream.UsingDAR ? " (исх.: " + stream.OriginalSize.ToString() + ")" : "")}");
             info.AppendLine($"Частота кадров: {stream.FrameRate} fps");
             info.AppendLine($"Развертка: {(stream.FieldOrder == "progressive" ? "прогрессивная" : "чересстрочная")}");
-            info.AppendLine($"Видеокодек: {stream.CodecName.ToUpper()}");
             info.AppendLine($"Дорожки аудио: {(inputFile.AudioStreams.Count > 0 ? inputFile.AudioStreams.Count.ToString() : "нет")}");
 
             fileInfo = info.ToString().TrimEnd();

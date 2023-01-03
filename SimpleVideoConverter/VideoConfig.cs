@@ -7,6 +7,9 @@ namespace Alexantr.SimpleVideoConverter
         public const string CodecH264 = "h264";
         public const string CodecHEVC = "hevc";
 
+        public const string EncoderX264 = "libx264";
+        public const string EncoderX265 = "libx265";
+
         public const float MinCRF = 0f;
         public const float MaxCRF = 51.0f;
 
@@ -33,12 +36,12 @@ namespace Alexantr.SimpleVideoConverter
                 switch (codec)
                 {
                     case CodecH264:
-                        Encoder = "libx264";
+                        Encoder = EncoderX264;
                         //CRF = 20.0f;
                         AdditionalArguments = "";
                         break;
                     case CodecHEVC:
-                        Encoder = "libx265";
+                        Encoder = EncoderX265;
                         //CRF = 23.0f;
                         AdditionalArguments = "";
                         break;

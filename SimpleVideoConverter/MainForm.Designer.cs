@@ -70,6 +70,7 @@
             this.tabPageVideo = new System.Windows.Forms.TabPage();
             this.checkBoxConvertVideo = new System.Windows.Forms.CheckBox();
             this.panelVideo = new System.Windows.Forms.Panel();
+            this.checkBoxTwoPass = new System.Windows.Forms.CheckBox();
             this.comboBoxPreset = new System.Windows.Forms.ComboBox();
             this.labelCalcSize = new System.Windows.Forms.Label();
             this.labelPreset = new System.Windows.Forms.Label();
@@ -104,7 +105,6 @@
             this.comboBoxInterpolation = new System.Windows.Forms.ComboBox();
             this.checkBoxKeepAspectRatio = new System.Windows.Forms.CheckBox();
             this.numericUpDownWidth = new System.Windows.Forms.NumericUpDown();
-            this.pictureBoxRatioError = new System.Windows.Forms.PictureBox();
             this.numericUpDownHeight = new System.Windows.Forms.NumericUpDown();
             this.comboBoxAspectRatio = new System.Windows.Forms.ComboBox();
             this.labelX = new System.Windows.Forms.Label();
@@ -143,7 +143,7 @@
             this.buttonPreview = new System.Windows.Forms.Button();
             this.labelOutputInfo = new System.Windows.Forms.Label();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
-            this.checkBoxTwoPass = new System.Windows.Forms.CheckBox();
+            this.labelRatioError = new System.Windows.Forms.Label();
             this.tabPageTags.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
@@ -159,7 +159,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericCropBottom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCropTop)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRatioError)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             this.tabPageFile.SuspendLayout();
             this.panelFile.SuspendLayout();
@@ -629,6 +628,17 @@
             this.panelVideo.Size = new System.Drawing.Size(888, 222);
             this.panelVideo.TabIndex = 0;
             // 
+            // checkBoxTwoPass
+            // 
+            this.checkBoxTwoPass.AutoSize = true;
+            this.checkBoxTwoPass.Location = new System.Drawing.Point(343, 142);
+            this.checkBoxTwoPass.Name = "checkBoxTwoPass";
+            this.checkBoxTwoPass.Size = new System.Drawing.Size(144, 29);
+            this.checkBoxTwoPass.TabIndex = 10;
+            this.checkBoxTwoPass.Text = "Два прохода";
+            this.checkBoxTwoPass.UseVisualStyleBackColor = true;
+            this.checkBoxTwoPass.CheckedChanged += new System.EventHandler(this.checkBoxTwoPass_CheckedChanged);
+            // 
             // comboBoxPreset
             // 
             this.comboBoxPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -815,6 +825,7 @@
             // 
             // panelResize
             // 
+            this.panelResize.Controls.Add(this.labelRatioError);
             this.panelResize.Controls.Add(this.numericCropRight);
             this.panelResize.Controls.Add(this.numericCropLeft);
             this.panelResize.Controls.Add(this.numericCropBottom);
@@ -835,7 +846,6 @@
             this.panelResize.Controls.Add(this.comboBoxInterpolation);
             this.panelResize.Controls.Add(this.checkBoxKeepAspectRatio);
             this.panelResize.Controls.Add(this.numericUpDownWidth);
-            this.panelResize.Controls.Add(this.pictureBoxRatioError);
             this.panelResize.Controls.Add(this.numericUpDownHeight);
             this.panelResize.Controls.Add(this.comboBoxAspectRatio);
             this.panelResize.Controls.Add(this.labelX);
@@ -1032,16 +1042,6 @@
             this.numericUpDownWidth.TabIndex = 8;
             this.numericUpDownWidth.ValueChanged += new System.EventHandler(this.numericUpDownWidth_ValueChanged);
             this.numericUpDownWidth.Leave += new System.EventHandler(this.numericUpDownWidth_Leave);
-            // 
-            // pictureBoxRatioError
-            // 
-            this.pictureBoxRatioError.Location = new System.Drawing.Point(836, 78);
-            this.pictureBoxRatioError.Margin = new System.Windows.Forms.Padding(4);
-            this.pictureBoxRatioError.Name = "pictureBoxRatioError";
-            this.pictureBoxRatioError.Size = new System.Drawing.Size(24, 24);
-            this.pictureBoxRatioError.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.pictureBoxRatioError.TabIndex = 30;
-            this.pictureBoxRatioError.TabStop = false;
             // 
             // numericUpDownHeight
             // 
@@ -1446,16 +1446,14 @@
             this.labelOutputInfoTitle.TabIndex = 1;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
             // 
-            // checkBoxTwoPass
+            // labelRatioError
             // 
-            this.checkBoxTwoPass.AutoSize = true;
-            this.checkBoxTwoPass.Location = new System.Drawing.Point(343, 142);
-            this.checkBoxTwoPass.Name = "checkBoxTwoPass";
-            this.checkBoxTwoPass.Size = new System.Drawing.Size(144, 29);
-            this.checkBoxTwoPass.TabIndex = 10;
-            this.checkBoxTwoPass.Text = "Два прохода";
-            this.checkBoxTwoPass.UseVisualStyleBackColor = true;
-            this.checkBoxTwoPass.CheckedChanged += new System.EventHandler(this.checkBoxTwoPass_CheckedChanged);
+            this.labelRatioError.AutoSize = true;
+            this.labelRatioError.Location = new System.Drawing.Point(831, 77);
+            this.labelRatioError.Name = "labelRatioError";
+            this.labelRatioError.Size = new System.Drawing.Size(17, 25);
+            this.labelRatioError.TabIndex = 23;
+            this.labelRatioError.Text = " ";
             // 
             // MainForm
             // 
@@ -1502,7 +1500,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericCropBottom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCropTop)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRatioError)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).EndInit();
             this.tabPageFile.ResumeLayout(false);
             this.panelFile.ResumeLayout(false);
@@ -1592,7 +1589,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDownHeight;
         private System.Windows.Forms.NumericUpDown numericUpDownWidth;
         private System.Windows.Forms.ComboBox comboBoxAspectRatio;
-        private System.Windows.Forms.PictureBox pictureBoxRatioError;
         private System.Windows.Forms.CheckBox checkBoxKeepAspectRatio;
         private System.Windows.Forms.Panel panelResize;
         private System.Windows.Forms.Button buttonPresetOriginal;
@@ -1637,6 +1633,7 @@
         private System.Windows.Forms.Label labelEndTime;
         private System.Windows.Forms.Label labelStartTime;
         private System.Windows.Forms.CheckBox checkBoxTwoPass;
+        private System.Windows.Forms.Label labelRatioError;
     }
 }
 
