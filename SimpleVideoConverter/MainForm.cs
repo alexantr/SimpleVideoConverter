@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Alexantr.SimpleVideoConverter
@@ -76,6 +77,7 @@ namespace Alexantr.SimpleVideoConverter
 
             FillVideoCodec();
             FillVideoCRFAndBitrate();
+            FillParamsAndArguments();
             FillPreset();
 
             FillAudioCodec();
@@ -550,6 +552,7 @@ namespace Alexantr.SimpleVideoConverter
 
             checkBoxDeinterlace.Enabled = checkBoxConvertVideo.Checked;
 
+            FillParamsAndArguments();
             SetOutputInfo();
         }
 
@@ -557,9 +560,33 @@ namespace Alexantr.SimpleVideoConverter
         {
             VideoConfig.Codec = ((ComboBoxItem)comboBoxVideoCodec.SelectedItem).Value;
 
-            checkBoxCustomX265.Visible = VideoConfig.Codec == "hevc";
+            if (VideoConfig.Codec == VideoConfig.CodecHEVC && VideoConfig.Preset != "slow")
+            {
+                int selectedIndex = 0, index = 0;
+                foreach (string pr in VideoConfig.PresetList)
+                {
+                    if (pr == "slow")
+                        selectedIndex = index;
+                    index++;
+                }
+                comboBoxPreset.SelectedIndex = selectedIndex;
+                VideoConfig.Preset = ((ComboBoxItem)comboBoxPreset.SelectedItem).Value;
+            }
+            if (VideoConfig.Codec == VideoConfig.CodecH264 && VideoConfig.Preset != "veryslow")
+            {
+                int selectedIndex = 0, index = 0;
+                foreach (string pr in VideoConfig.PresetList)
+                {
+                    if (pr == "veryslow")
+                        selectedIndex = index;
+                    index++;
+                }
+                comboBoxPreset.SelectedIndex = selectedIndex;
+                VideoConfig.Preset = ((ComboBoxItem)comboBoxPreset.SelectedItem).Value;
+            }
 
             FillVideoCRFAndBitrate();
+            FillParamsAndArguments();
             SetOutputInfo();
         }
 
@@ -603,6 +630,11 @@ namespace Alexantr.SimpleVideoConverter
         private void comboBoxPreset_SelectedIndexChanged(object sender, EventArgs e)
         {
             VideoConfig.Preset = ((ComboBoxItem)comboBoxPreset.SelectedItem).Value;
+        }
+
+        private void checkBoxTwoPass_CheckedChanged(object sender, EventArgs e)
+        {
+            SetOutputInfo();
         }
 
         #endregion
@@ -888,21 +920,19 @@ namespace Alexantr.SimpleVideoConverter
 
             int audioStreamIndex = ((ComboBoxIntItem)comboBoxAudioStreams.SelectedItem).Value;
 
-            bool twoPass = !VideoConfig.UseCRF;
+            bool twoPass = checkBoxTwoPass.Checked;
 
             List<string> videoArgs = new List<string>();
             List<string> audioArgs = new List<string>();
 
             List<string> specialCrfArgs = new List<string>();
-            List<string> specialArgsPass1 = new List<string>();
             List<string> specialArgsPass2 = new List<string>();
 
             // Video args
 
             videoArgs.Add($"-map 0:{inputFile.VideoStreams[0].Index}");
 
-            string x264Params = "sar=1/1";
-            string x265Params = "sar=1:range=limited";
+            string x26xParams = textBoxEncoderParams.Text.Trim();
 
             if (checkBoxConvertVideo.Checked)
             {
@@ -917,11 +947,6 @@ namespace Alexantr.SimpleVideoConverter
                     // must be configurable
                     string videoProfile = "high";
                     string videoLevel = "";
-
-                    videoArgs.Add("-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p");
-
-                    if (twoPass)
-                        x264Params += ":no-dct-decimate=1";
 
                     double finalFrameRate = CalcFinalFrameRate();
                     if (finalFrameRate == 0)
@@ -939,14 +964,7 @@ namespace Alexantr.SimpleVideoConverter
                 // https://trac.ffmpeg.org/wiki/Encode/H.265
                 if (VideoConfig.Encoder == "libx265")
                 {
-                    videoArgs.Add("-pix_fmt yuv420p");
-
                     // slow,slower,veryslow,placebo
-
-                    if (checkBoxCustomX265.Checked)
-                    {
-                        x265Params += ":sao=0:cutree=0";
-                    }
 
                     videoArgs.Add($"-preset:v {VideoConfig.Preset}");
                 }
@@ -1026,14 +1044,16 @@ namespace Alexantr.SimpleVideoConverter
                 specialCrfArgs.Add("-movflags +faststart");
             }
 
+            // more args
+
+            string moreArgs = textBoxMoreArgs.Text.Trim();
+
+            // start and end
+            string timeArgs = GetTimeArgs();
+
             // Convert
 
             string[] arguments;
-
-            //string videoParams = $"-x264-params \"{x264Params}\"";
-            //string videoParams = $"-x264-params \"{x265Params}\"";
-
-            //slow-firstpass
 
             string ffmpegFormat;
             if (fileType == FormatMOV)
@@ -1054,15 +1074,15 @@ namespace Alexantr.SimpleVideoConverter
 
                 if (VideoConfig.Encoder == "libx265")
                 {
-                    twoPassTpl = "-passlogfile \"{6}\" {0} -x265-params \"pass={5}:{7}\" {1} {2} {3} -f {4}";
-                    x26xParams1 = x265Params + ":slow-firstpass=0";
-                    x26xParams2 = x265Params;
+                    twoPassTpl = "{9} -passlogfile \"{6}\" {0} -x265-params \"pass={5}:{7}\" {1} {2} {3} {8} -f {4}";
+                    x26xParams1 = x26xParams + ":slow-firstpass=0";
+                    x26xParams2 = x26xParams;
                 }
                 else
                 {
-                    twoPassTpl = "-pass {5} -passlogfile \"{6}\" {0} -x264-params \"{7}\" {1} {2} {3} -f {4}";
-                    x26xParams1 = x264Params;
-                    x26xParams2 = x264Params;
+                    twoPassTpl = "{9} -pass {5} -passlogfile \"{6}\" {0} -x264-params \"{7}\" {1} {2} {3} {8} -f {4}";
+                    x26xParams1 = x26xParams;
+                    x26xParams2 = x26xParams;
                 }
 
                 arguments = new string[2];
@@ -1070,12 +1090,14 @@ namespace Alexantr.SimpleVideoConverter
                     twoPassTpl,
                     string.Join(" ", videoArgs),
                     "-an",
-                    string.Join(" ", specialArgsPass1),
+                    "",
                     "",
                     ffmpegFormat,
                     1,
                     passLogFile,
-                    x26xParams1
+                    x26xParams1,
+                    moreArgs,
+                    timeArgs
                 );
                 arguments[1] = string.Format(
                     twoPassTpl,
@@ -1086,23 +1108,22 @@ namespace Alexantr.SimpleVideoConverter
                     ffmpegFormat,
                     2,
                     passLogFile,
-                    x26xParams2
+                    x26xParams2,
+                    moreArgs,
+                    timeArgs
                 );
             }
             else
             {
                 string onePassTpl;
-                string x26xParams;
 
                 if (VideoConfig.Encoder == "libx265")
                 {
-                    onePassTpl = "{0} -x265-params \"{5}\" {1} {2} {3} -f {4}";
-                    x26xParams = x265Params;
+                    onePassTpl = "{7} {0} -x265-params \"{5}\" {1} {2} {3} {6} -f {4}";
                 }
                 else
                 {
-                    onePassTpl = "{0} -x264-params \"{5}\" {1} {2} {3} -f {4}";
-                    x26xParams = x264Params;
+                    onePassTpl = "{7} {0} -x264-params \"{5}\" {1} {2} {3} {6} -f {4}";
                 }
 
                 arguments = new string[1];
@@ -1113,7 +1134,9 @@ namespace Alexantr.SimpleVideoConverter
                     string.Join(" ", specialCrfArgs),
                     string.Join(" ", metadataArgs),
                     ffmpegFormat,
-                    x26xParams
+                    x26xParams,
+                    moreArgs,
+                    timeArgs
                 );
             }
 
@@ -1226,9 +1249,13 @@ namespace Alexantr.SimpleVideoConverter
                 audioArgs.Add($"-ast {audioStreamIndex}");
             }
 
+            // Time args
+
+            string timeArgs = GetTimeArgs();
+
             string input = Path.GetFullPath(inputFile.FullPath);
 
-            string arguments = string.Format("{0} {1} -sn", string.Join(" ", videoArgs), string.Join(" ", audioArgs));
+            string arguments = string.Format("{2} {0} {1} -sn", string.Join(" ", videoArgs), string.Join(" ", audioArgs), timeArgs);
 
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
@@ -1246,10 +1273,45 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         /// <summary>
+        /// Parse time and add create args -ss and -to or -t
+        /// </summary>
+        /// <returns>Seeking args</returns>
+        private string GetTimeArgs()
+        {
+            Regex regexTime1 = new Regex(@"^\d{2}:\d{2}:\d{2}\.\d{3}$");
+            Regex regexTime2 = new Regex(@"^\d{2}:\d{2}:\d{2}$");
+            Regex regexTime3 = new Regex(@"^\d+$");
+
+            List<string> timeArgs = new List<string>();
+            string startTime = textBoxStartTime.Text.Trim();
+            string endTime = textBoxEndTime.Text.Trim();
+            if (startTime != "00:00:00.000" && !string.IsNullOrWhiteSpace(startTime))
+            {
+                if (regexTime1.IsMatch(startTime) || regexTime2.IsMatch(startTime))
+                {
+                    timeArgs.Add($"-ss {startTime}");
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(endTime))
+            {
+                if (regexTime1.IsMatch(endTime) || regexTime2.IsMatch(endTime))
+                {
+                    timeArgs.Add($"-to {endTime}");
+                }
+                else if (regexTime3.IsMatch(endTime))
+                {
+                    timeArgs.Add($"-t {endTime}");
+                }
+            }
+
+            return string.Join(" ", timeArgs);
+        }
+
+        /// <summary>
         /// Create content for "vf" argument
         /// </summary>
-        /// <param name="subtitlesPath"></param>
-        /// <returns></returns>
+        /// <param name="subtitlesPath">Path to subtitles file</param>
+        /// <returns>Video filters</returns>
         private string GetVideoFilters(string subtitlesPath)
         {
             List<string> filters = new List<string>();

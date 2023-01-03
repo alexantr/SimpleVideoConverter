@@ -70,7 +70,6 @@
             this.tabPageVideo = new System.Windows.Forms.TabPage();
             this.checkBoxConvertVideo = new System.Windows.Forms.CheckBox();
             this.panelVideo = new System.Windows.Forms.Panel();
-            this.checkBoxCustomX265 = new System.Windows.Forms.CheckBox();
             this.comboBoxPreset = new System.Windows.Forms.ComboBox();
             this.labelCalcSize = new System.Windows.Forms.Label();
             this.labelPreset = new System.Windows.Forms.Label();
@@ -131,10 +130,20 @@
             this.labelFieldOrder = new System.Windows.Forms.Label();
             this.checkBoxDeinterlace = new System.Windows.Forms.CheckBox();
             this.comboBoxFieldOrder = new System.Windows.Forms.ComboBox();
+            this.tabPageExtra = new System.Windows.Forms.TabPage();
+            this.textBoxEndTime = new System.Windows.Forms.TextBox();
+            this.textBoxStartTime = new System.Windows.Forms.TextBox();
+            this.labelEndTime = new System.Windows.Forms.Label();
+            this.labelStartTime = new System.Windows.Forms.Label();
+            this.textBoxEncoderParams = new System.Windows.Forms.TextBox();
+            this.labelEncoderParams = new System.Windows.Forms.Label();
+            this.labelMoreArgs = new System.Windows.Forms.Label();
+            this.buttonCopyToClipboard = new System.Windows.Forms.Button();
+            this.textBoxMoreArgs = new System.Windows.Forms.TextBox();
             this.buttonPreview = new System.Windows.Forms.Button();
             this.labelOutputInfo = new System.Windows.Forms.Label();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
-            this.buttonCopyToClipboard = new System.Windows.Forms.Button();
+            this.checkBoxTwoPass = new System.Windows.Forms.CheckBox();
             this.tabPageTags.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
@@ -159,14 +168,15 @@
             this.panelSubtitles.SuspendLayout();
             this.panelColorFilter.SuspendLayout();
             this.panelDeinterlace.SuspendLayout();
+            this.tabPageExtra.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonGo
             // 
-            this.buttonGo.Location = new System.Drawing.Point(732, 334);
+            this.buttonGo.Location = new System.Drawing.Point(746, 334);
             this.buttonGo.Margin = new System.Windows.Forms.Padding(4);
             this.buttonGo.Name = "buttonGo";
-            this.buttonGo.Size = new System.Drawing.Size(195, 48);
+            this.buttonGo.Size = new System.Drawing.Size(181, 48);
             this.buttonGo.TabIndex = 3;
             this.buttonGo.Text = "Конвертировать";
             this.buttonGo.UseVisualStyleBackColor = true;
@@ -596,7 +606,7 @@
             // 
             // panelVideo
             // 
-            this.panelVideo.Controls.Add(this.checkBoxCustomX265);
+            this.panelVideo.Controls.Add(this.checkBoxTwoPass);
             this.panelVideo.Controls.Add(this.comboBoxPreset);
             this.panelVideo.Controls.Add(this.labelCalcSize);
             this.panelVideo.Controls.Add(this.labelPreset);
@@ -618,19 +628,6 @@
             this.panelVideo.Name = "panelVideo";
             this.panelVideo.Size = new System.Drawing.Size(888, 222);
             this.panelVideo.TabIndex = 0;
-            // 
-            // checkBoxCustomX265
-            // 
-            this.checkBoxCustomX265.AutoSize = true;
-            this.checkBoxCustomX265.Checked = true;
-            this.checkBoxCustomX265.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxCustomX265.Location = new System.Drawing.Point(594, 102);
-            this.checkBoxCustomX265.Margin = new System.Windows.Forms.Padding(4);
-            this.checkBoxCustomX265.Name = "checkBoxCustomX265";
-            this.checkBoxCustomX265.Size = new System.Drawing.Size(237, 29);
-            this.checkBoxCustomX265.TabIndex = 10;
-            this.checkBoxCustomX265.Text = "Отключить SAO и cutree";
-            this.checkBoxCustomX265.UseVisualStyleBackColor = true;
             // 
             // comboBoxPreset
             // 
@@ -1091,7 +1088,6 @@
             // 
             // panelFile
             // 
-            this.panelFile.Controls.Add(this.buttonCopyToClipboard);
             this.panelFile.Controls.Add(this.checkBoxWebOptimized);
             this.panelFile.Controls.Add(this.buttonOpenInputFile);
             this.panelFile.Controls.Add(this.labelOut);
@@ -1186,6 +1182,7 @@
             this.tabControlMain.Controls.Add(this.tabPageFilters);
             this.tabControlMain.Controls.Add(this.tabPageAudio);
             this.tabControlMain.Controls.Add(this.tabPageTags);
+            this.tabControlMain.Controls.Add(this.tabPageExtra);
             this.tabControlMain.Location = new System.Drawing.Point(9, 9);
             this.tabControlMain.Margin = new System.Windows.Forms.Padding(4);
             this.tabControlMain.Name = "tabControlMain";
@@ -1322,12 +1319,107 @@
             this.comboBoxFieldOrder.TabIndex = 2;
             this.comboBoxFieldOrder.SelectedIndexChanged += new System.EventHandler(this.comboBoxFieldOrder_SelectedIndexChanged);
             // 
+            // tabPageExtra
+            // 
+            this.tabPageExtra.Controls.Add(this.textBoxEndTime);
+            this.tabPageExtra.Controls.Add(this.textBoxStartTime);
+            this.tabPageExtra.Controls.Add(this.labelEndTime);
+            this.tabPageExtra.Controls.Add(this.labelStartTime);
+            this.tabPageExtra.Controls.Add(this.textBoxEncoderParams);
+            this.tabPageExtra.Controls.Add(this.labelEncoderParams);
+            this.tabPageExtra.Controls.Add(this.labelMoreArgs);
+            this.tabPageExtra.Controls.Add(this.buttonCopyToClipboard);
+            this.tabPageExtra.Controls.Add(this.textBoxMoreArgs);
+            this.tabPageExtra.Location = new System.Drawing.Point(4, 34);
+            this.tabPageExtra.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPageExtra.Name = "tabPageExtra";
+            this.tabPageExtra.Padding = new System.Windows.Forms.Padding(4);
+            this.tabPageExtra.Size = new System.Drawing.Size(910, 278);
+            this.tabPageExtra.TabIndex = 6;
+            this.tabPageExtra.Text = "Расширенные";
+            this.tabPageExtra.UseVisualStyleBackColor = true;
+            // 
+            // textBoxEndTime
+            // 
+            this.textBoxEndTime.Location = new System.Drawing.Point(643, 156);
+            this.textBoxEndTime.Name = "textBoxEndTime";
+            this.textBoxEndTime.Size = new System.Drawing.Size(135, 31);
+            this.textBoxEndTime.TabIndex = 15;
+            // 
+            // textBoxStartTime
+            // 
+            this.textBoxStartTime.Location = new System.Drawing.Point(138, 156);
+            this.textBoxStartTime.Name = "textBoxStartTime";
+            this.textBoxStartTime.Size = new System.Drawing.Size(135, 31);
+            this.textBoxStartTime.TabIndex = 14;
+            this.textBoxStartTime.Text = "00:00:00.000";
+            // 
+            // labelEndTime
+            // 
+            this.labelEndTime.AutoSize = true;
+            this.labelEndTime.Location = new System.Drawing.Point(323, 159);
+            this.labelEndTime.Name = "labelEndTime";
+            this.labelEndTime.Size = new System.Drawing.Size(314, 25);
+            this.labelEndTime.TabIndex = 13;
+            this.labelEndTime.Text = "Время окончания или кол-во секунд";
+            // 
+            // labelStartTime
+            // 
+            this.labelStartTime.AutoSize = true;
+            this.labelStartTime.Location = new System.Drawing.Point(7, 159);
+            this.labelStartTime.Name = "labelStartTime";
+            this.labelStartTime.Size = new System.Drawing.Size(125, 25);
+            this.labelStartTime.TabIndex = 12;
+            this.labelStartTime.Text = "Время начала";
+            // 
+            // textBoxEncoderParams
+            // 
+            this.textBoxEncoderParams.Location = new System.Drawing.Point(8, 37);
+            this.textBoxEncoderParams.Name = "textBoxEncoderParams";
+            this.textBoxEncoderParams.Size = new System.Drawing.Size(895, 31);
+            this.textBoxEncoderParams.TabIndex = 11;
+            // 
+            // labelEncoderParams
+            // 
+            this.labelEncoderParams.AutoSize = true;
+            this.labelEncoderParams.Location = new System.Drawing.Point(3, 9);
+            this.labelEncoderParams.Name = "labelEncoderParams";
+            this.labelEncoderParams.Size = new System.Drawing.Size(227, 25);
+            this.labelEncoderParams.TabIndex = 10;
+            this.labelEncoderParams.Text = "Параметры кодировщика";
+            // 
+            // labelMoreArgs
+            // 
+            this.labelMoreArgs.AutoSize = true;
+            this.labelMoreArgs.Location = new System.Drawing.Point(3, 80);
+            this.labelMoreArgs.Name = "labelMoreArgs";
+            this.labelMoreArgs.Size = new System.Drawing.Size(244, 25);
+            this.labelMoreArgs.TabIndex = 9;
+            this.labelMoreArgs.Text = "Дополнительные аргументы";
+            // 
+            // buttonCopyToClipboard
+            // 
+            this.buttonCopyToClipboard.Location = new System.Drawing.Point(7, 233);
+            this.buttonCopyToClipboard.Name = "buttonCopyToClipboard";
+            this.buttonCopyToClipboard.Size = new System.Drawing.Size(223, 38);
+            this.buttonCopyToClipboard.TabIndex = 7;
+            this.buttonCopyToClipboard.Text = "Копировать аргументы";
+            this.buttonCopyToClipboard.UseVisualStyleBackColor = true;
+            this.buttonCopyToClipboard.Click += new System.EventHandler(this.buttonCopyToClipboard_Click);
+            // 
+            // textBoxMoreArgs
+            // 
+            this.textBoxMoreArgs.Location = new System.Drawing.Point(7, 108);
+            this.textBoxMoreArgs.Name = "textBoxMoreArgs";
+            this.textBoxMoreArgs.Size = new System.Drawing.Size(896, 31);
+            this.textBoxMoreArgs.TabIndex = 8;
+            // 
             // buttonPreview
             // 
-            this.buttonPreview.Location = new System.Drawing.Point(610, 334);
+            this.buttonPreview.Location = new System.Drawing.Point(636, 334);
             this.buttonPreview.Margin = new System.Windows.Forms.Padding(4);
             this.buttonPreview.Name = "buttonPreview";
-            this.buttonPreview.Size = new System.Drawing.Size(112, 48);
+            this.buttonPreview.Size = new System.Drawing.Size(102, 48);
             this.buttonPreview.TabIndex = 5;
             this.buttonPreview.Text = "Превью";
             this.buttonPreview.UseVisualStyleBackColor = true;
@@ -1354,15 +1446,16 @@
             this.labelOutputInfoTitle.TabIndex = 1;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
             // 
-            // buttonCopyToClipboard
+            // checkBoxTwoPass
             // 
-            this.buttonCopyToClipboard.Location = new System.Drawing.Point(652, 211);
-            this.buttonCopyToClipboard.Name = "buttonCopyToClipboard";
-            this.buttonCopyToClipboard.Size = new System.Drawing.Size(231, 38);
-            this.buttonCopyToClipboard.TabIndex = 6;
-            this.buttonCopyToClipboard.Text = "Копировать аргументы";
-            this.buttonCopyToClipboard.UseVisualStyleBackColor = true;
-            this.buttonCopyToClipboard.Click += new System.EventHandler(this.buttonCopyToClipboard_Click);
+            this.checkBoxTwoPass.AutoSize = true;
+            this.checkBoxTwoPass.Location = new System.Drawing.Point(343, 142);
+            this.checkBoxTwoPass.Name = "checkBoxTwoPass";
+            this.checkBoxTwoPass.Size = new System.Drawing.Size(144, 29);
+            this.checkBoxTwoPass.TabIndex = 10;
+            this.checkBoxTwoPass.Text = "Два прохода";
+            this.checkBoxTwoPass.UseVisualStyleBackColor = true;
+            this.checkBoxTwoPass.CheckedChanged += new System.EventHandler(this.checkBoxTwoPass_CheckedChanged);
             // 
             // MainForm
             // 
@@ -1422,6 +1515,8 @@
             this.panelColorFilter.PerformLayout();
             this.panelDeinterlace.ResumeLayout(false);
             this.panelDeinterlace.PerformLayout();
+            this.tabPageExtra.ResumeLayout(false);
+            this.tabPageExtra.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1527,12 +1622,21 @@
         private System.Windows.Forms.Label labelPreset;
         private System.Windows.Forms.CheckBox checkBoxConvertVideo;
         private System.Windows.Forms.Button buttonPreview;
-        private System.Windows.Forms.CheckBox checkBoxCustomX265;
         private System.Windows.Forms.NumericUpDown numericCropTop;
         private System.Windows.Forms.NumericUpDown numericCropBottom;
         private System.Windows.Forms.NumericUpDown numericCropLeft;
         private System.Windows.Forms.NumericUpDown numericCropRight;
+        private System.Windows.Forms.TabPage tabPageExtra;
         private System.Windows.Forms.Button buttonCopyToClipboard;
+        private System.Windows.Forms.Label labelMoreArgs;
+        private System.Windows.Forms.TextBox textBoxMoreArgs;
+        private System.Windows.Forms.TextBox textBoxEncoderParams;
+        private System.Windows.Forms.Label labelEncoderParams;
+        private System.Windows.Forms.TextBox textBoxEndTime;
+        private System.Windows.Forms.TextBox textBoxStartTime;
+        private System.Windows.Forms.Label labelEndTime;
+        private System.Windows.Forms.Label labelStartTime;
+        private System.Windows.Forms.CheckBox checkBoxTwoPass;
     }
 }
 

@@ -57,6 +57,7 @@ namespace Alexantr.SimpleVideoConverter
                 tabPageFilters.Parent = null;
                 tabPageAudio.Parent = null;
                 tabPageTags.Parent = null;
+                tabPageExtra.Parent = null;
             }
             else
             {
@@ -65,6 +66,7 @@ namespace Alexantr.SimpleVideoConverter
                 tabPageFilters.Parent = tabControlMain;
                 tabPageAudio.Parent = tabControlMain;
                 tabPageTags.Parent = tabControlMain;
+                tabPageExtra.Parent = tabControlMain;
             }
         }
 
@@ -172,6 +174,28 @@ namespace Alexantr.SimpleVideoConverter
             CheckVideoModeRadioButtons();
         }
 
+        private void FillParamsAndArguments()
+        {
+            if (!checkBoxConvertVideo.Checked)
+            {
+                textBoxEncoderParams.Text = "";
+                textBoxEncoderParams.Enabled = false;
+                textBoxMoreArgs.Text = "";
+            }
+            else if (VideoConfig.Encoder == "libx264")
+            {
+                textBoxEncoderParams.Enabled = true;
+                textBoxEncoderParams.Text = "sar=1/1:no-dct-decimate=1";
+                textBoxMoreArgs.Text = "-aq-mode autovariance-biased -fast-pskip 0 -mbtree 0 -pix_fmt yuv420p";
+            }
+            else if (VideoConfig.Encoder == "libx265")
+            {
+                textBoxEncoderParams.Enabled = true;
+                textBoxEncoderParams.Text = "sar=1:sao=0:cutree=0";
+                textBoxMoreArgs.Text = "";
+            }
+        }
+
         private void FillFrameRate()
         {
             comboBoxFrameRate.Items.Clear();
@@ -192,6 +216,7 @@ namespace Alexantr.SimpleVideoConverter
             labelMaxQ.Enabled = radioButtonCRF.Checked;
 
             numericUpDownBitrate.Enabled = radioButtonBitrate.Checked;
+            checkBoxTwoPass.Enabled = radioButtonBitrate.Checked;
         }
 
         private double CalcFinalFrameRate()
@@ -724,11 +749,15 @@ namespace Alexantr.SimpleVideoConverter
                 if (radioButtonCRF.Checked)
                     info.Append($", CRF {labelCRF.Text}");
                 else
+                {
                     info.Append($", {numericUpDownBitrate.Value} кбит/с");
+                    if (checkBoxTwoPass.Checked)
+                        info.Append(", 2 прохода");
+                }
 
                 double finalFrameRate = CalcFinalFrameRate();
                 if (finalFrameRate > 0)
-                    info.Append($", {finalFrameRate} fps");
+                    info.Append($", {finalFrameRate} к/с");
             }
             else
             {

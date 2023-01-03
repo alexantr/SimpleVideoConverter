@@ -13,12 +13,15 @@ namespace Alexantr.SimpleVideoConverter
         public const int MinBitrate = 100;
         public const int MaxBitrate = 100000;
 
-        public const string DefaultPreset = "slower";
+        public const string DefaultPresetH264 = "veryslow";
+        public const string DefaultPreset = "slow";
 
         private static float crf = 20.0f;
         private static int bitrate = 3000;
 
         private static string codec;
+
+        private static string preset = "";
 
         public static string Codec
         {
@@ -115,7 +118,21 @@ namespace Alexantr.SimpleVideoConverter
 
         public static string AdditionalArguments { get; private set; }
 
-        public static string Preset { get; set; } = DefaultPreset;
+        public static string Preset
+        {
+            get 
+            {
+                if (string.IsNullOrEmpty(preset))
+                {
+                    if (codec == CodecH264)
+                        preset = DefaultPresetH264;
+                    else
+                        preset = DefaultPreset;
+                }
+                return preset;
+            }
+            set { preset = value; }
+        }
 
         public static string[] PresetList { get; } = new string[] {
             "ultrafast",
