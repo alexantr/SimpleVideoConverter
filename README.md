@@ -4,13 +4,29 @@
 
 * Для работы необходим .NET Framework 4.6.2 или выше
 
-![Главное окно, вкладка Файл](screenshots/SimpleVideoConverter_20230103_1.png)
-![Главное окно, вкладка Видео](screenshots/SimpleVideoConverter_20230103_2.png)
-![Главное окно, вкладка Картинка](screenshots/SimpleVideoConverter_20230103_3.png)
-![Главное окно, вкладка Фильтры](screenshots/SimpleVideoConverter_20230103_4.png)
-![Главное окно, вкладка Аудио](screenshots/SimpleVideoConverter_20230103_5.png)
-![Главное окно, вкладка Теги](screenshots/SimpleVideoConverter_20230103_6.png)
-![Главное окно, вкладка Расширенные](screenshots/SimpleVideoConverter_20230103_7.png)
+<details>
+  <summary>Скриншоты</summary>
 
-![Конвертирование](screenshots/SimpleVideoConverter_20230103_8.png)
-![Конвертирование завершено](screenshots/SimpleVideoConverter_20230103_9.png)
+  ### Главное окно
+
+  <img alt="Главное окно, вкладка Файл" src="screenshots/SimpleVideoConverter_20230103_1.png" width="625" height="292" />
+
+  <img alt="Главное окно, вкладка Видео" src="screenshots/SimpleVideoConverter_20230103_2.png" width="625" height="292" />
+
+  <img alt="Главное окно, вкладка Картинка" src="screenshots/SimpleVideoConverter_20230103_3.png" width="625" height="292" />
+
+  <img alt="Главное окно, вкладка Фильтры" src="screenshots/SimpleVideoConverter_20230103_4.png" width="625" height="292" />
+
+  <img alt="Главное окно, вкладка Аудио" src="screenshots/SimpleVideoConverter_20230103_5.png" width="625" height="292" />
+
+  <img alt="Главное окно, вкладка Теги" src="screenshots/SimpleVideoConverter_20230103_6.png" width="625" height="292" />
+
+  <img alt="Главное окно, вкладка Расширенные" src="screenshots/SimpleVideoConverter_20230103_7.png" width="625" height="292" />
+
+  ### Конвертирование
+
+  <img alt="Конвертирование" src="screenshots/SimpleVideoConverter_20230103_8.png" width="625" height="392" />
+
+  <img alt="Конвертирование завершено" src="screenshots/SimpleVideoConverter_20230103_9.png" width="625" height="392" />
+
+</details>
