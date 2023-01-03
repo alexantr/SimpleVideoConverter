@@ -89,6 +89,7 @@
             this.numericUpDownBitrate = new System.Windows.Forms.NumericUpDown();
             this.tabPagePicture = new System.Windows.Forms.TabPage();
             this.panelResize = new System.Windows.Forms.Panel();
+            this.labelRatioError = new System.Windows.Forms.Label();
             this.numericCropRight = new System.Windows.Forms.NumericUpDown();
             this.numericCropLeft = new System.Windows.Forms.NumericUpDown();
             this.numericCropBottom = new System.Windows.Forms.NumericUpDown();
@@ -143,7 +144,6 @@
             this.buttonPreview = new System.Windows.Forms.Button();
             this.labelOutputInfo = new System.Windows.Forms.Label();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
-            this.labelRatioError = new System.Windows.Forms.Label();
             this.tabPageTags.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
@@ -438,7 +438,7 @@
             this.labelAudioCodec.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelAudioCodec.Name = "labelAudioCodec";
             this.labelAudioCodec.Size = new System.Drawing.Size(61, 25);
-            this.labelAudioCodec.TabIndex = 10;
+            this.labelAudioCodec.TabIndex = 1;
             this.labelAudioCodec.Text = "Кодек";
             // 
             // comboBoxAudioCodec
@@ -449,7 +449,7 @@
             this.comboBoxAudioCodec.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAudioCodec.Name = "comboBoxAudioCodec";
             this.comboBoxAudioCodec.Size = new System.Drawing.Size(118, 33);
-            this.comboBoxAudioCodec.TabIndex = 9;
+            this.comboBoxAudioCodec.TabIndex = 2;
             this.comboBoxAudioCodec.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioCodec_SelectedIndexChanged);
             // 
             // checkBoxConvertAudio
@@ -472,7 +472,7 @@
             this.comboBoxAudioBitrate.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAudioBitrate.Name = "comboBoxAudioBitrate";
             this.comboBoxAudioBitrate.Size = new System.Drawing.Size(118, 33);
-            this.comboBoxAudioBitrate.TabIndex = 2;
+            this.comboBoxAudioBitrate.TabIndex = 4;
             this.comboBoxAudioBitrate.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioBitrate_SelectedIndexChanged);
             // 
             // labelAudioHz
@@ -482,7 +482,7 @@
             this.labelAudioHz.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelAudioHz.Name = "labelAudioHz";
             this.labelAudioHz.Size = new System.Drawing.Size(31, 25);
-            this.labelAudioHz.TabIndex = 6;
+            this.labelAudioHz.TabIndex = 8;
             this.labelAudioHz.Text = "Гц";
             // 
             // labelChannels
@@ -492,7 +492,7 @@
             this.labelChannels.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelChannels.Name = "labelChannels";
             this.labelChannels.Size = new System.Drawing.Size(72, 25);
-            this.labelChannels.TabIndex = 7;
+            this.labelChannels.TabIndex = 9;
             this.labelChannels.Text = "Каналы";
             // 
             // labelFrequency
@@ -502,7 +502,7 @@
             this.labelFrequency.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelFrequency.Name = "labelFrequency";
             this.labelFrequency.Size = new System.Drawing.Size(75, 25);
-            this.labelFrequency.TabIndex = 4;
+            this.labelFrequency.TabIndex = 6;
             this.labelFrequency.Text = "Частота";
             // 
             // labelAudioKbps
@@ -512,7 +512,7 @@
             this.labelAudioKbps.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelAudioKbps.Name = "labelAudioKbps";
             this.labelAudioKbps.Size = new System.Drawing.Size(63, 25);
-            this.labelAudioKbps.TabIndex = 3;
+            this.labelAudioKbps.TabIndex = 5;
             this.labelAudioKbps.Text = "кбит/с";
             // 
             // comboBoxAudioSampleRate
@@ -523,7 +523,7 @@
             this.comboBoxAudioSampleRate.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAudioSampleRate.Name = "comboBoxAudioSampleRate";
             this.comboBoxAudioSampleRate.Size = new System.Drawing.Size(118, 33);
-            this.comboBoxAudioSampleRate.TabIndex = 5;
+            this.comboBoxAudioSampleRate.TabIndex = 7;
             this.comboBoxAudioSampleRate.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioSampleRate_SelectedIndexChanged);
             // 
             // comboBoxAudioChannels
@@ -534,7 +534,7 @@
             this.comboBoxAudioChannels.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAudioChannels.Name = "comboBoxAudioChannels";
             this.comboBoxAudioChannels.Size = new System.Drawing.Size(118, 33);
-            this.comboBoxAudioChannels.TabIndex = 8;
+            this.comboBoxAudioChannels.TabIndex = 10;
             this.comboBoxAudioChannels.SelectedIndexChanged += new System.EventHandler(this.comboBoxAudioChannels_SelectedIndexChanged);
             // 
             // labelAudioBitrate
@@ -544,7 +544,7 @@
             this.labelAudioBitrate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelAudioBitrate.Name = "labelAudioBitrate";
             this.labelAudioBitrate.Size = new System.Drawing.Size(76, 25);
-            this.labelAudioBitrate.TabIndex = 1;
+            this.labelAudioBitrate.TabIndex = 3;
             this.labelAudioBitrate.Text = "Битрейт";
             // 
             // panelAudioStreams
@@ -598,7 +598,7 @@
             this.checkBoxConvertVideo.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxConvertVideo.Name = "checkBoxConvertVideo";
             this.checkBoxConvertVideo.Size = new System.Drawing.Size(214, 29);
-            this.checkBoxConvertVideo.TabIndex = 10;
+            this.checkBoxConvertVideo.TabIndex = 0;
             this.checkBoxConvertVideo.Text = "Переконвертировать";
             this.checkBoxConvertVideo.UseVisualStyleBackColor = true;
             this.checkBoxConvertVideo.CheckedChanged += new System.EventHandler(this.checkBoxConvertVideo_CheckedChanged);
@@ -626,7 +626,7 @@
             this.panelVideo.Margin = new System.Windows.Forms.Padding(4);
             this.panelVideo.Name = "panelVideo";
             this.panelVideo.Size = new System.Drawing.Size(888, 222);
-            this.panelVideo.TabIndex = 0;
+            this.panelVideo.TabIndex = 1;
             // 
             // checkBoxTwoPass
             // 
@@ -634,7 +634,7 @@
             this.checkBoxTwoPass.Location = new System.Drawing.Point(343, 142);
             this.checkBoxTwoPass.Name = "checkBoxTwoPass";
             this.checkBoxTwoPass.Size = new System.Drawing.Size(144, 29);
-            this.checkBoxTwoPass.TabIndex = 10;
+            this.checkBoxTwoPass.TabIndex = 8;
             this.checkBoxTwoPass.Text = "Два прохода";
             this.checkBoxTwoPass.UseVisualStyleBackColor = true;
             this.checkBoxTwoPass.CheckedChanged += new System.EventHandler(this.checkBoxTwoPass_CheckedChanged);
@@ -647,7 +647,7 @@
             this.comboBoxPreset.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxPreset.Name = "comboBoxPreset";
             this.comboBoxPreset.Size = new System.Drawing.Size(118, 33);
-            this.comboBoxPreset.TabIndex = 5;
+            this.comboBoxPreset.TabIndex = 14;
             this.comboBoxPreset.SelectedIndexChanged += new System.EventHandler(this.comboBoxPreset_SelectedIndexChanged);
             // 
             // labelCalcSize
@@ -657,7 +657,7 @@
             this.labelCalcSize.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCalcSize.Name = "labelCalcSize";
             this.labelCalcSize.Size = new System.Drawing.Size(19, 25);
-            this.labelCalcSize.TabIndex = 9;
+            this.labelCalcSize.TabIndex = 10;
             this.labelCalcSize.Text = "-";
             // 
             // labelPreset
@@ -667,7 +667,7 @@
             this.labelPreset.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelPreset.Name = "labelPreset";
             this.labelPreset.Size = new System.Drawing.Size(69, 25);
-            this.labelPreset.TabIndex = 4;
+            this.labelPreset.TabIndex = 13;
             this.labelPreset.Text = "Пресет";
             // 
             // labelCalcSizeText
@@ -677,7 +677,7 @@
             this.labelCalcSizeText.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCalcSizeText.Name = "labelCalcSizeText";
             this.labelCalcSizeText.Size = new System.Drawing.Size(130, 25);
-            this.labelCalcSizeText.TabIndex = 8;
+            this.labelCalcSizeText.TabIndex = 9;
             this.labelCalcSizeText.Text = "Размер файла:";
             // 
             // labelVideoCodec
@@ -687,7 +687,7 @@
             this.labelVideoCodec.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelVideoCodec.Name = "labelVideoCodec";
             this.labelVideoCodec.Size = new System.Drawing.Size(61, 25);
-            this.labelVideoCodec.TabIndex = 3;
+            this.labelVideoCodec.TabIndex = 11;
             this.labelVideoCodec.Text = "Кодек";
             // 
             // comboBoxVideoCodec
@@ -698,7 +698,7 @@
             this.comboBoxVideoCodec.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxVideoCodec.Name = "comboBoxVideoCodec";
             this.comboBoxVideoCodec.Size = new System.Drawing.Size(118, 33);
-            this.comboBoxVideoCodec.TabIndex = 2;
+            this.comboBoxVideoCodec.TabIndex = 12;
             this.comboBoxVideoCodec.SelectedIndexChanged += new System.EventHandler(this.comboBoxVideoCodec_SelectedIndexChanged);
             // 
             // labelVideoKbps
@@ -718,7 +718,7 @@
             this.labelFrameRate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelFrameRate.Name = "labelFrameRate";
             this.labelFrameRate.Size = new System.Drawing.Size(140, 25);
-            this.labelFrameRate.TabIndex = 0;
+            this.labelFrameRate.TabIndex = 15;
             this.labelFrameRate.Text = "Частота кадров";
             // 
             // labelMinQ
@@ -739,7 +739,7 @@
             this.comboBoxFrameRate.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxFrameRate.Name = "comboBoxFrameRate";
             this.comboBoxFrameRate.Size = new System.Drawing.Size(118, 33);
-            this.comboBoxFrameRate.TabIndex = 1;
+            this.comboBoxFrameRate.TabIndex = 16;
             this.comboBoxFrameRate.SelectedIndexChanged += new System.EventHandler(this.comboBoxFrameRate_SelectedIndexChanged);
             // 
             // labelMaxQ
@@ -760,7 +760,7 @@
             this.labelCRF.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCRF.Name = "labelCRF";
             this.labelCRF.Size = new System.Drawing.Size(47, 25);
-            this.labelCRF.TabIndex = 1;
+            this.labelCRF.TabIndex = 2;
             this.labelCRF.Text = "20.0";
             // 
             // radioButtonBitrate
@@ -798,7 +798,7 @@
             this.trackBarCRF.Maximum = 510;
             this.trackBarCRF.Name = "trackBarCRF";
             this.trackBarCRF.Size = new System.Drawing.Size(452, 69);
-            this.trackBarCRF.TabIndex = 2;
+            this.trackBarCRF.TabIndex = 1;
             this.trackBarCRF.Value = 200;
             this.trackBarCRF.ValueChanged += new System.EventHandler(this.trackBarCRF_ValueChanged);
             // 
@@ -854,6 +854,15 @@
             this.panelResize.Name = "panelResize";
             this.panelResize.Size = new System.Drawing.Size(888, 256);
             this.panelResize.TabIndex = 0;
+            // 
+            // labelRatioError
+            // 
+            this.labelRatioError.AutoSize = true;
+            this.labelRatioError.Location = new System.Drawing.Point(831, 77);
+            this.labelRatioError.Name = "labelRatioError";
+            this.labelRatioError.Size = new System.Drawing.Size(17, 25);
+            this.labelRatioError.TabIndex = 23;
+            this.labelRatioError.Text = " ";
             // 
             // numericCropRight
             // 
@@ -1344,14 +1353,14 @@
             this.textBoxEndTime.Location = new System.Drawing.Point(643, 156);
             this.textBoxEndTime.Name = "textBoxEndTime";
             this.textBoxEndTime.Size = new System.Drawing.Size(135, 31);
-            this.textBoxEndTime.TabIndex = 15;
+            this.textBoxEndTime.TabIndex = 7;
             // 
             // textBoxStartTime
             // 
             this.textBoxStartTime.Location = new System.Drawing.Point(138, 156);
             this.textBoxStartTime.Name = "textBoxStartTime";
             this.textBoxStartTime.Size = new System.Drawing.Size(135, 31);
-            this.textBoxStartTime.TabIndex = 14;
+            this.textBoxStartTime.TabIndex = 5;
             this.textBoxStartTime.Text = "00:00:00.000";
             // 
             // labelEndTime
@@ -1360,7 +1369,7 @@
             this.labelEndTime.Location = new System.Drawing.Point(323, 159);
             this.labelEndTime.Name = "labelEndTime";
             this.labelEndTime.Size = new System.Drawing.Size(314, 25);
-            this.labelEndTime.TabIndex = 13;
+            this.labelEndTime.TabIndex = 6;
             this.labelEndTime.Text = "Время окончания или кол-во секунд";
             // 
             // labelStartTime
@@ -1369,7 +1378,7 @@
             this.labelStartTime.Location = new System.Drawing.Point(7, 159);
             this.labelStartTime.Name = "labelStartTime";
             this.labelStartTime.Size = new System.Drawing.Size(125, 25);
-            this.labelStartTime.TabIndex = 12;
+            this.labelStartTime.TabIndex = 4;
             this.labelStartTime.Text = "Время начала";
             // 
             // textBoxEncoderParams
@@ -1377,7 +1386,7 @@
             this.textBoxEncoderParams.Location = new System.Drawing.Point(8, 37);
             this.textBoxEncoderParams.Name = "textBoxEncoderParams";
             this.textBoxEncoderParams.Size = new System.Drawing.Size(895, 31);
-            this.textBoxEncoderParams.TabIndex = 11;
+            this.textBoxEncoderParams.TabIndex = 1;
             // 
             // labelEncoderParams
             // 
@@ -1385,7 +1394,7 @@
             this.labelEncoderParams.Location = new System.Drawing.Point(3, 9);
             this.labelEncoderParams.Name = "labelEncoderParams";
             this.labelEncoderParams.Size = new System.Drawing.Size(227, 25);
-            this.labelEncoderParams.TabIndex = 10;
+            this.labelEncoderParams.TabIndex = 0;
             this.labelEncoderParams.Text = "Параметры кодировщика";
             // 
             // labelMoreArgs
@@ -1394,7 +1403,7 @@
             this.labelMoreArgs.Location = new System.Drawing.Point(3, 80);
             this.labelMoreArgs.Name = "labelMoreArgs";
             this.labelMoreArgs.Size = new System.Drawing.Size(244, 25);
-            this.labelMoreArgs.TabIndex = 9;
+            this.labelMoreArgs.TabIndex = 2;
             this.labelMoreArgs.Text = "Дополнительные аргументы";
             // 
             // buttonCopyToClipboard
@@ -1402,7 +1411,7 @@
             this.buttonCopyToClipboard.Location = new System.Drawing.Point(7, 233);
             this.buttonCopyToClipboard.Name = "buttonCopyToClipboard";
             this.buttonCopyToClipboard.Size = new System.Drawing.Size(223, 38);
-            this.buttonCopyToClipboard.TabIndex = 7;
+            this.buttonCopyToClipboard.TabIndex = 8;
             this.buttonCopyToClipboard.Text = "Копировать аргументы";
             this.buttonCopyToClipboard.UseVisualStyleBackColor = true;
             this.buttonCopyToClipboard.Click += new System.EventHandler(this.buttonCopyToClipboard_Click);
@@ -1412,7 +1421,7 @@
             this.textBoxMoreArgs.Location = new System.Drawing.Point(7, 108);
             this.textBoxMoreArgs.Name = "textBoxMoreArgs";
             this.textBoxMoreArgs.Size = new System.Drawing.Size(896, 31);
-            this.textBoxMoreArgs.TabIndex = 8;
+            this.textBoxMoreArgs.TabIndex = 3;
             // 
             // buttonPreview
             // 
@@ -1445,15 +1454,6 @@
             this.labelOutputInfoTitle.Size = new System.Drawing.Size(72, 50);
             this.labelOutputInfoTitle.TabIndex = 1;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
-            // 
-            // labelRatioError
-            // 
-            this.labelRatioError.AutoSize = true;
-            this.labelRatioError.Location = new System.Drawing.Point(831, 77);
-            this.labelRatioError.Name = "labelRatioError";
-            this.labelRatioError.Size = new System.Drawing.Size(17, 25);
-            this.labelRatioError.TabIndex = 23;
-            this.labelRatioError.Text = " ";
             // 
             // MainForm
             // 
