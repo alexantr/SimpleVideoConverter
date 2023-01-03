@@ -1,5 +1,4 @@
-﻿using Microsoft.WindowsAPICodePack.Taskbar;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -17,16 +16,12 @@ namespace Alexantr.SimpleVideoConverter
 
         private string fileType;
 
-        private TaskbarManager taskbarManager;
-
         //private bool doNotCheckKeepARAgain = false;
         private bool sizeChanged = false;
 
         public MainForm()
         {
             InitializeComponent();
-
-            taskbarManager = TaskbarManager.Instance;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -38,6 +33,7 @@ namespace Alexantr.SimpleVideoConverter
             buttonPreview.Enabled = false;
             buttonShowInfo.Enabled = false;
             buttonOpenInputFile.Enabled = false;
+            buttonCopyToClipboard.Enabled = false;
 
             checkBoxKeepOutPath.Checked = Properties.Settings.Default.RememberOutPath;
 
@@ -224,7 +220,19 @@ namespace Alexantr.SimpleVideoConverter
         {
             try
             {
-                ConvertVideo();
+                ConvertVideo(false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonCopyToClipboard_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ConvertVideo(true);
             }
             catch (Exception ex)
             {
@@ -704,6 +712,7 @@ namespace Alexantr.SimpleVideoConverter
                 buttonPreview.Enabled = false;
                 buttonShowInfo.Enabled = false;
                 buttonOpenInputFile.Enabled = false;
+                buttonCopyToClipboard.Enabled = false;
 
                 ToggleTabs();
 
@@ -780,6 +789,7 @@ namespace Alexantr.SimpleVideoConverter
             buttonPreview.Enabled = true;
             buttonShowInfo.Enabled = true;
             buttonOpenInputFile.Enabled = true;
+            buttonCopyToClipboard.Enabled = true;
 
             UpdateCropSizeInfo();
             SetOutputInfo();
@@ -827,7 +837,7 @@ namespace Alexantr.SimpleVideoConverter
             catch (Exception) { }
         }
 
-        private void ConvertVideo()
+        private void ConvertVideo(bool copyToClipboard)
         {
             if (inputFile == null)
             {
@@ -1107,7 +1117,21 @@ namespace Alexantr.SimpleVideoConverter
                 );
             }
 
-            new ConverterForm(input, output, arguments, inputFile.Duration.TotalSeconds).ShowDialog(this);
+            if (copyToClipboard)
+            {
+                bool isTwoPass = !(arguments.Length == 1);
+
+                for (var i = 0; i < arguments.Length; i++)
+                {
+                    arguments[i] = string.Format("-i \"{0}\" {2} {1}", input, (isTwoPass && i == 0 ? "NUL" : $"\"{output}\""), arguments[i]);
+                }
+
+                Clipboard.SetText(string.Join(Environment.NewLine, arguments));
+            }
+            else
+            {
+                new ConverterForm(input, output, arguments, inputFile.Duration.TotalSeconds).ShowDialog(this);
+            }
         }
 
         #endregion

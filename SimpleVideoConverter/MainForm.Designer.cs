@@ -134,6 +134,7 @@
             this.buttonPreview = new System.Windows.Forms.Button();
             this.labelOutputInfo = new System.Windows.Forms.Label();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
+            this.buttonCopyToClipboard = new System.Windows.Forms.Button();
             this.tabPageTags.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
@@ -163,7 +164,7 @@
             // buttonGo
             // 
             this.buttonGo.Location = new System.Drawing.Point(732, 334);
-            this.buttonGo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonGo.Margin = new System.Windows.Forms.Padding(4);
             this.buttonGo.Name = "buttonGo";
             this.buttonGo.Size = new System.Drawing.Size(195, 48);
             this.buttonGo.TabIndex = 3;
@@ -175,7 +176,7 @@
             // 
             this.buttonShowInfo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.buttonShowInfo.Location = new System.Drawing.Point(142, 50);
-            this.buttonShowInfo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonShowInfo.Margin = new System.Windows.Forms.Padding(4);
             this.buttonShowInfo.Name = "buttonShowInfo";
             this.buttonShowInfo.Size = new System.Drawing.Size(112, 38);
             this.buttonShowInfo.TabIndex = 3;
@@ -187,7 +188,7 @@
             // buttonOpenInputFile
             // 
             this.buttonOpenInputFile.Location = new System.Drawing.Point(264, 50);
-            this.buttonOpenInputFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonOpenInputFile.Margin = new System.Windows.Forms.Padding(4);
             this.buttonOpenInputFile.Name = "buttonOpenInputFile";
             this.buttonOpenInputFile.Size = new System.Drawing.Size(112, 38);
             this.buttonOpenInputFile.TabIndex = 4;
@@ -200,7 +201,7 @@
             // 
             this.checkBoxWebOptimized.AutoSize = true;
             this.checkBoxWebOptimized.Location = new System.Drawing.Point(142, 220);
-            this.checkBoxWebOptimized.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxWebOptimized.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxWebOptimized.Name = "checkBoxWebOptimized";
             this.checkBoxWebOptimized.Size = new System.Drawing.Size(211, 29);
             this.checkBoxWebOptimized.TabIndex = 9;
@@ -213,7 +214,7 @@
             // 
             this.buttonPreset1080p.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonPreset1080p.Location = new System.Drawing.Point(213, 117);
-            this.buttonPreset1080p.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonPreset1080p.Margin = new System.Windows.Forms.Padding(4);
             this.buttonPreset1080p.Name = "buttonPreset1080p";
             this.buttonPreset1080p.Size = new System.Drawing.Size(68, 32);
             this.buttonPreset1080p.TabIndex = 14;
@@ -226,7 +227,7 @@
             // 
             this.buttonPreset720p.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonPreset720p.Location = new System.Drawing.Point(290, 117);
-            this.buttonPreset720p.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonPreset720p.Margin = new System.Windows.Forms.Padding(4);
             this.buttonPreset720p.Name = "buttonPreset720p";
             this.buttonPreset720p.Size = new System.Drawing.Size(68, 32);
             this.buttonPreset720p.TabIndex = 15;
@@ -239,7 +240,7 @@
             // 
             this.buttonPresetOriginal.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonPresetOriginal.Location = new System.Drawing.Point(442, 117);
-            this.buttonPresetOriginal.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonPresetOriginal.Margin = new System.Windows.Forms.Padding(4);
             this.buttonPresetOriginal.Name = "buttonPresetOriginal";
             this.buttonPresetOriginal.Size = new System.Drawing.Size(90, 32);
             this.buttonPresetOriginal.TabIndex = 17;
@@ -252,7 +253,7 @@
             // 
             this.buttonPreset480p.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonPreset480p.Location = new System.Drawing.Point(366, 117);
-            this.buttonPreset480p.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonPreset480p.Margin = new System.Windows.Forms.Padding(4);
             this.buttonPreset480p.Name = "buttonPreset480p";
             this.buttonPreset480p.Size = new System.Drawing.Size(68, 32);
             this.buttonPreset480p.TabIndex = 16;
@@ -264,7 +265,7 @@
             // textBoxTagCreationTime
             // 
             this.textBoxTagCreationTime.Location = new System.Drawing.Point(206, 176);
-            this.textBoxTagCreationTime.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxTagCreationTime.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxTagCreationTime.Name = "textBoxTagCreationTime";
             this.textBoxTagCreationTime.Size = new System.Drawing.Size(268, 31);
             this.textBoxTagCreationTime.TabIndex = 9;
@@ -284,9 +285,9 @@
             this.tabPageTags.Controls.Add(this.textBoxTagTitle);
             this.tabPageTags.Controls.Add(this.labelTagTitle);
             this.tabPageTags.Location = new System.Drawing.Point(4, 34);
-            this.tabPageTags.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageTags.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageTags.Name = "tabPageTags";
-            this.tabPageTags.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageTags.Padding = new System.Windows.Forms.Padding(4);
             this.tabPageTags.Size = new System.Drawing.Size(910, 278);
             this.tabPageTags.TabIndex = 4;
             this.tabPageTags.Text = "Теги";
@@ -295,7 +296,7 @@
             // buttonDateHelp
             // 
             this.buttonDateHelp.Location = new System.Drawing.Point(484, 174);
-            this.buttonDateHelp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonDateHelp.Margin = new System.Windows.Forms.Padding(4);
             this.buttonDateHelp.Name = "buttonDateHelp";
             this.buttonDateHelp.Size = new System.Drawing.Size(38, 38);
             this.buttonDateHelp.TabIndex = 10;
@@ -316,7 +317,7 @@
             // textBoxTagCopyright
             // 
             this.textBoxTagCopyright.Location = new System.Drawing.Point(206, 94);
-            this.textBoxTagCopyright.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxTagCopyright.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxTagCopyright.Name = "textBoxTagCopyright";
             this.textBoxTagCopyright.Size = new System.Drawing.Size(690, 31);
             this.textBoxTagCopyright.TabIndex = 5;
@@ -335,7 +336,7 @@
             // textBoxTagAuthor
             // 
             this.textBoxTagAuthor.Location = new System.Drawing.Point(206, 52);
-            this.textBoxTagAuthor.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxTagAuthor.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxTagAuthor.Name = "textBoxTagAuthor";
             this.textBoxTagAuthor.Size = new System.Drawing.Size(690, 31);
             this.textBoxTagAuthor.TabIndex = 3;
@@ -354,7 +355,7 @@
             // textBoxTagComment
             // 
             this.textBoxTagComment.Location = new System.Drawing.Point(206, 135);
-            this.textBoxTagComment.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxTagComment.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxTagComment.Name = "textBoxTagComment";
             this.textBoxTagComment.Size = new System.Drawing.Size(690, 31);
             this.textBoxTagComment.TabIndex = 7;
@@ -373,7 +374,7 @@
             // textBoxTagTitle
             // 
             this.textBoxTagTitle.Location = new System.Drawing.Point(206, 10);
-            this.textBoxTagTitle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxTagTitle.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxTagTitle.Name = "textBoxTagTitle";
             this.textBoxTagTitle.Size = new System.Drawing.Size(690, 31);
             this.textBoxTagTitle.TabIndex = 1;
@@ -394,9 +395,9 @@
             this.tabPageAudio.Controls.Add(this.panelAudioParams);
             this.tabPageAudio.Controls.Add(this.panelAudioStreams);
             this.tabPageAudio.Location = new System.Drawing.Point(4, 34);
-            this.tabPageAudio.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageAudio.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageAudio.Name = "tabPageAudio";
-            this.tabPageAudio.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageAudio.Padding = new System.Windows.Forms.Padding(4);
             this.tabPageAudio.Size = new System.Drawing.Size(910, 278);
             this.tabPageAudio.TabIndex = 2;
             this.tabPageAudio.Text = "Аудио";
@@ -416,7 +417,7 @@
             this.panelAudioParams.Controls.Add(this.comboBoxAudioChannels);
             this.panelAudioParams.Controls.Add(this.labelAudioBitrate);
             this.panelAudioParams.Location = new System.Drawing.Point(9, 76);
-            this.panelAudioParams.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelAudioParams.Margin = new System.Windows.Forms.Padding(4);
             this.panelAudioParams.Name = "panelAudioParams";
             this.panelAudioParams.Size = new System.Drawing.Size(888, 189);
             this.panelAudioParams.TabIndex = 1;
@@ -436,7 +437,7 @@
             this.comboBoxAudioCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAudioCodec.FormattingEnabled = true;
             this.comboBoxAudioCodec.Location = new System.Drawing.Point(116, 48);
-            this.comboBoxAudioCodec.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxAudioCodec.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAudioCodec.Name = "comboBoxAudioCodec";
             this.comboBoxAudioCodec.Size = new System.Drawing.Size(118, 33);
             this.comboBoxAudioCodec.TabIndex = 9;
@@ -446,7 +447,7 @@
             // 
             this.checkBoxConvertAudio.AutoSize = true;
             this.checkBoxConvertAudio.Location = new System.Drawing.Point(9, 4);
-            this.checkBoxConvertAudio.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxConvertAudio.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxConvertAudio.Name = "checkBoxConvertAudio";
             this.checkBoxConvertAudio.Size = new System.Drawing.Size(214, 29);
             this.checkBoxConvertAudio.TabIndex = 0;
@@ -459,7 +460,7 @@
             this.comboBoxAudioBitrate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAudioBitrate.FormattingEnabled = true;
             this.comboBoxAudioBitrate.Location = new System.Drawing.Point(426, 48);
-            this.comboBoxAudioBitrate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxAudioBitrate.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAudioBitrate.Name = "comboBoxAudioBitrate";
             this.comboBoxAudioBitrate.Size = new System.Drawing.Size(118, 33);
             this.comboBoxAudioBitrate.TabIndex = 2;
@@ -510,7 +511,7 @@
             this.comboBoxAudioSampleRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAudioSampleRate.FormattingEnabled = true;
             this.comboBoxAudioSampleRate.Location = new System.Drawing.Point(116, 129);
-            this.comboBoxAudioSampleRate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxAudioSampleRate.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAudioSampleRate.Name = "comboBoxAudioSampleRate";
             this.comboBoxAudioSampleRate.Size = new System.Drawing.Size(118, 33);
             this.comboBoxAudioSampleRate.TabIndex = 5;
@@ -521,7 +522,7 @@
             this.comboBoxAudioChannels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAudioChannels.FormattingEnabled = true;
             this.comboBoxAudioChannels.Location = new System.Drawing.Point(426, 129);
-            this.comboBoxAudioChannels.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxAudioChannels.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAudioChannels.Name = "comboBoxAudioChannels";
             this.comboBoxAudioChannels.Size = new System.Drawing.Size(118, 33);
             this.comboBoxAudioChannels.TabIndex = 8;
@@ -542,7 +543,7 @@
             this.panelAudioStreams.Controls.Add(this.comboBoxAudioStreams);
             this.panelAudioStreams.Controls.Add(this.labelSelectAudioStream);
             this.panelAudioStreams.Location = new System.Drawing.Point(9, 9);
-            this.panelAudioStreams.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelAudioStreams.Margin = new System.Windows.Forms.Padding(4);
             this.panelAudioStreams.Name = "panelAudioStreams";
             this.panelAudioStreams.Size = new System.Drawing.Size(546, 58);
             this.panelAudioStreams.TabIndex = 0;
@@ -552,7 +553,7 @@
             this.comboBoxAudioStreams.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAudioStreams.FormattingEnabled = true;
             this.comboBoxAudioStreams.Location = new System.Drawing.Point(116, 4);
-            this.comboBoxAudioStreams.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxAudioStreams.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAudioStreams.Name = "comboBoxAudioStreams";
             this.comboBoxAudioStreams.Size = new System.Drawing.Size(328, 33);
             this.comboBoxAudioStreams.TabIndex = 1;
@@ -573,9 +574,9 @@
             this.tabPageVideo.Controls.Add(this.checkBoxConvertVideo);
             this.tabPageVideo.Controls.Add(this.panelVideo);
             this.tabPageVideo.Location = new System.Drawing.Point(4, 34);
-            this.tabPageVideo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageVideo.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageVideo.Name = "tabPageVideo";
-            this.tabPageVideo.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageVideo.Padding = new System.Windows.Forms.Padding(4);
             this.tabPageVideo.Size = new System.Drawing.Size(910, 278);
             this.tabPageVideo.TabIndex = 0;
             this.tabPageVideo.Text = "Видео";
@@ -585,7 +586,7 @@
             // 
             this.checkBoxConvertVideo.AutoSize = true;
             this.checkBoxConvertVideo.Location = new System.Drawing.Point(9, 9);
-            this.checkBoxConvertVideo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxConvertVideo.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxConvertVideo.Name = "checkBoxConvertVideo";
             this.checkBoxConvertVideo.Size = new System.Drawing.Size(214, 29);
             this.checkBoxConvertVideo.TabIndex = 10;
@@ -613,7 +614,7 @@
             this.panelVideo.Controls.Add(this.trackBarCRF);
             this.panelVideo.Controls.Add(this.numericUpDownBitrate);
             this.panelVideo.Location = new System.Drawing.Point(9, 46);
-            this.panelVideo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelVideo.Margin = new System.Windows.Forms.Padding(4);
             this.panelVideo.Name = "panelVideo";
             this.panelVideo.Size = new System.Drawing.Size(888, 222);
             this.panelVideo.TabIndex = 0;
@@ -624,7 +625,7 @@
             this.checkBoxCustomX265.Checked = true;
             this.checkBoxCustomX265.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxCustomX265.Location = new System.Drawing.Point(594, 102);
-            this.checkBoxCustomX265.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxCustomX265.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxCustomX265.Name = "checkBoxCustomX265";
             this.checkBoxCustomX265.Size = new System.Drawing.Size(237, 29);
             this.checkBoxCustomX265.TabIndex = 10;
@@ -636,7 +637,7 @@
             this.comboBoxPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxPreset.FormattingEnabled = true;
             this.comboBoxPreset.Location = new System.Drawing.Point(732, 58);
-            this.comboBoxPreset.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxPreset.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxPreset.Name = "comboBoxPreset";
             this.comboBoxPreset.Size = new System.Drawing.Size(118, 33);
             this.comboBoxPreset.TabIndex = 5;
@@ -687,7 +688,7 @@
             this.comboBoxVideoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxVideoCodec.FormattingEnabled = true;
             this.comboBoxVideoCodec.Location = new System.Drawing.Point(732, 15);
-            this.comboBoxVideoCodec.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxVideoCodec.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxVideoCodec.Name = "comboBoxVideoCodec";
             this.comboBoxVideoCodec.Size = new System.Drawing.Size(118, 33);
             this.comboBoxVideoCodec.TabIndex = 2;
@@ -728,7 +729,7 @@
             this.comboBoxFrameRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFrameRate.FormattingEnabled = true;
             this.comboBoxFrameRate.Location = new System.Drawing.Point(732, 142);
-            this.comboBoxFrameRate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxFrameRate.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxFrameRate.Name = "comboBoxFrameRate";
             this.comboBoxFrameRate.Size = new System.Drawing.Size(118, 33);
             this.comboBoxFrameRate.TabIndex = 1;
@@ -759,7 +760,7 @@
             // 
             this.radioButtonBitrate.AutoSize = true;
             this.radioButtonBitrate.Location = new System.Drawing.Point(3, 140);
-            this.radioButtonBitrate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonBitrate.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonBitrate.Name = "radioButtonBitrate";
             this.radioButtonBitrate.Size = new System.Drawing.Size(101, 29);
             this.radioButtonBitrate.TabIndex = 5;
@@ -772,7 +773,7 @@
             // 
             this.radioButtonCRF.AutoSize = true;
             this.radioButtonCRF.Location = new System.Drawing.Point(4, 4);
-            this.radioButtonCRF.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.radioButtonCRF.Margin = new System.Windows.Forms.Padding(4);
             this.radioButtonCRF.Name = "radioButtonCRF";
             this.radioButtonCRF.Size = new System.Drawing.Size(68, 29);
             this.radioButtonCRF.TabIndex = 0;
@@ -786,7 +787,7 @@
             this.trackBarCRF.BackColor = System.Drawing.SystemColors.Window;
             this.trackBarCRF.LargeChange = 10;
             this.trackBarCRF.Location = new System.Drawing.Point(3, 44);
-            this.trackBarCRF.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.trackBarCRF.Margin = new System.Windows.Forms.Padding(4);
             this.trackBarCRF.Maximum = 510;
             this.trackBarCRF.Name = "trackBarCRF";
             this.trackBarCRF.Size = new System.Drawing.Size(452, 69);
@@ -797,7 +798,7 @@
             // numericUpDownBitrate
             // 
             this.numericUpDownBitrate.Location = new System.Drawing.Point(112, 138);
-            this.numericUpDownBitrate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownBitrate.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownBitrate.Name = "numericUpDownBitrate";
             this.numericUpDownBitrate.Size = new System.Drawing.Size(120, 31);
             this.numericUpDownBitrate.TabIndex = 6;
@@ -807,9 +808,9 @@
             // 
             this.tabPagePicture.Controls.Add(this.panelResize);
             this.tabPagePicture.Location = new System.Drawing.Point(4, 34);
-            this.tabPagePicture.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPagePicture.Margin = new System.Windows.Forms.Padding(4);
             this.tabPagePicture.Name = "tabPagePicture";
-            this.tabPagePicture.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPagePicture.Padding = new System.Windows.Forms.Padding(4);
             this.tabPagePicture.Size = new System.Drawing.Size(910, 278);
             this.tabPagePicture.TabIndex = 1;
             this.tabPagePicture.Text = "Картинка";
@@ -842,7 +843,7 @@
             this.panelResize.Controls.Add(this.comboBoxAspectRatio);
             this.panelResize.Controls.Add(this.labelX);
             this.panelResize.Location = new System.Drawing.Point(9, 9);
-            this.panelResize.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelResize.Margin = new System.Windows.Forms.Padding(4);
             this.panelResize.Name = "panelResize";
             this.panelResize.Size = new System.Drawing.Size(888, 256);
             this.panelResize.TabIndex = 0;
@@ -855,7 +856,7 @@
             0,
             0});
             this.numericCropRight.Location = new System.Drawing.Point(488, 9);
-            this.numericCropRight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericCropRight.Margin = new System.Windows.Forms.Padding(4);
             this.numericCropRight.Name = "numericCropRight";
             this.numericCropRight.Size = new System.Drawing.Size(82, 31);
             this.numericCropRight.TabIndex = 4;
@@ -870,7 +871,7 @@
             0,
             0});
             this.numericCropLeft.Location = new System.Drawing.Point(396, 9);
-            this.numericCropLeft.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericCropLeft.Margin = new System.Windows.Forms.Padding(4);
             this.numericCropLeft.Name = "numericCropLeft";
             this.numericCropLeft.Size = new System.Drawing.Size(82, 31);
             this.numericCropLeft.TabIndex = 3;
@@ -885,7 +886,7 @@
             0,
             0});
             this.numericCropBottom.Location = new System.Drawing.Point(304, 9);
-            this.numericCropBottom.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericCropBottom.Margin = new System.Windows.Forms.Padding(4);
             this.numericCropBottom.Name = "numericCropBottom";
             this.numericCropBottom.Size = new System.Drawing.Size(82, 31);
             this.numericCropBottom.TabIndex = 2;
@@ -900,7 +901,7 @@
             0,
             0});
             this.numericCropTop.Location = new System.Drawing.Point(213, 9);
-            this.numericCropTop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericCropTop.Margin = new System.Windows.Forms.Padding(4);
             this.numericCropTop.Name = "numericCropTop";
             this.numericCropTop.Size = new System.Drawing.Size(82, 31);
             this.numericCropTop.TabIndex = 1;
@@ -921,7 +922,7 @@
             // 
             this.checkBoxFlip.AutoSize = true;
             this.checkBoxFlip.Location = new System.Drawing.Point(9, 224);
-            this.checkBoxFlip.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxFlip.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxFlip.Name = "checkBoxFlip";
             this.checkBoxFlip.Size = new System.Drawing.Size(247, 29);
             this.checkBoxFlip.TabIndex = 22;
@@ -932,7 +933,7 @@
             // buttonCropReset
             // 
             this.buttonCropReset.Location = new System.Drawing.Point(579, 6);
-            this.buttonCropReset.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonCropReset.Margin = new System.Windows.Forms.Padding(4);
             this.buttonCropReset.Name = "buttonCropReset";
             this.buttonCropReset.Size = new System.Drawing.Size(94, 38);
             this.buttonCropReset.TabIndex = 5;
@@ -956,7 +957,7 @@
             this.comboBoxRotate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRotate.FormattingEnabled = true;
             this.comboBoxRotate.Location = new System.Drawing.Point(213, 180);
-            this.comboBoxRotate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxRotate.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxRotate.Name = "comboBoxRotate";
             this.comboBoxRotate.Size = new System.Drawing.Size(178, 33);
             this.comboBoxRotate.TabIndex = 19;
@@ -1007,7 +1008,7 @@
             this.comboBoxInterpolation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxInterpolation.FormattingEnabled = true;
             this.comboBoxInterpolation.Location = new System.Drawing.Point(646, 180);
-            this.comboBoxInterpolation.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxInterpolation.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxInterpolation.Name = "comboBoxInterpolation";
             this.comboBoxInterpolation.Size = new System.Drawing.Size(178, 33);
             this.comboBoxInterpolation.TabIndex = 21;
@@ -1017,7 +1018,7 @@
             // 
             this.checkBoxKeepAspectRatio.AutoSize = true;
             this.checkBoxKeepAspectRatio.Location = new System.Drawing.Point(416, 76);
-            this.checkBoxKeepAspectRatio.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxKeepAspectRatio.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxKeepAspectRatio.Name = "checkBoxKeepAspectRatio";
             this.checkBoxKeepAspectRatio.Size = new System.Drawing.Size(223, 29);
             this.checkBoxKeepAspectRatio.TabIndex = 11;
@@ -1028,7 +1029,7 @@
             // numericUpDownWidth
             // 
             this.numericUpDownWidth.Location = new System.Drawing.Point(213, 74);
-            this.numericUpDownWidth.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownWidth.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownWidth.Name = "numericUpDownWidth";
             this.numericUpDownWidth.Size = new System.Drawing.Size(75, 31);
             this.numericUpDownWidth.TabIndex = 8;
@@ -1038,7 +1039,7 @@
             // pictureBoxRatioError
             // 
             this.pictureBoxRatioError.Location = new System.Drawing.Point(836, 78);
-            this.pictureBoxRatioError.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBoxRatioError.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxRatioError.Name = "pictureBoxRatioError";
             this.pictureBoxRatioError.Size = new System.Drawing.Size(24, 24);
             this.pictureBoxRatioError.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -1048,7 +1049,7 @@
             // numericUpDownHeight
             // 
             this.numericUpDownHeight.Location = new System.Drawing.Point(318, 74);
-            this.numericUpDownHeight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownHeight.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownHeight.Name = "numericUpDownHeight";
             this.numericUpDownHeight.Size = new System.Drawing.Size(75, 31);
             this.numericUpDownHeight.TabIndex = 10;
@@ -1059,7 +1060,7 @@
             // 
             this.comboBoxAspectRatio.FormattingEnabled = true;
             this.comboBoxAspectRatio.Location = new System.Drawing.Point(646, 74);
-            this.comboBoxAspectRatio.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxAspectRatio.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxAspectRatio.Name = "comboBoxAspectRatio";
             this.comboBoxAspectRatio.Size = new System.Drawing.Size(178, 33);
             this.comboBoxAspectRatio.TabIndex = 12;
@@ -1080,9 +1081,9 @@
             // 
             this.tabPageFile.Controls.Add(this.panelFile);
             this.tabPageFile.Location = new System.Drawing.Point(4, 34);
-            this.tabPageFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageFile.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageFile.Name = "tabPageFile";
-            this.tabPageFile.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageFile.Padding = new System.Windows.Forms.Padding(4);
             this.tabPageFile.Size = new System.Drawing.Size(910, 278);
             this.tabPageFile.TabIndex = 3;
             this.tabPageFile.Text = "Файл";
@@ -1090,6 +1091,7 @@
             // 
             // panelFile
             // 
+            this.panelFile.Controls.Add(this.buttonCopyToClipboard);
             this.panelFile.Controls.Add(this.checkBoxWebOptimized);
             this.panelFile.Controls.Add(this.buttonOpenInputFile);
             this.panelFile.Controls.Add(this.labelOut);
@@ -1101,7 +1103,7 @@
             this.panelFile.Controls.Add(this.buttonBrowseOut);
             this.panelFile.Controls.Add(this.textBoxIn);
             this.panelFile.Location = new System.Drawing.Point(9, 9);
-            this.panelFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelFile.Margin = new System.Windows.Forms.Padding(4);
             this.panelFile.Name = "panelFile";
             this.panelFile.Size = new System.Drawing.Size(888, 256);
             this.panelFile.TabIndex = 0;
@@ -1129,7 +1131,7 @@
             // textBoxOut
             // 
             this.textBoxOut.Location = new System.Drawing.Point(142, 111);
-            this.textBoxOut.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxOut.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxOut.Name = "textBoxOut";
             this.textBoxOut.Size = new System.Drawing.Size(618, 31);
             this.textBoxOut.TabIndex = 6;
@@ -1138,7 +1140,7 @@
             // 
             this.checkBoxKeepOutPath.AutoSize = true;
             this.checkBoxKeepOutPath.Location = new System.Drawing.Point(142, 154);
-            this.checkBoxKeepOutPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxKeepOutPath.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxKeepOutPath.Name = "checkBoxKeepOutPath";
             this.checkBoxKeepOutPath.Size = new System.Drawing.Size(281, 29);
             this.checkBoxKeepOutPath.TabIndex = 8;
@@ -1148,7 +1150,7 @@
             // buttonBrowseIn
             // 
             this.buttonBrowseIn.Location = new System.Drawing.Point(771, 4);
-            this.buttonBrowseIn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonBrowseIn.Margin = new System.Windows.Forms.Padding(4);
             this.buttonBrowseIn.Name = "buttonBrowseIn";
             this.buttonBrowseIn.Size = new System.Drawing.Size(112, 38);
             this.buttonBrowseIn.TabIndex = 2;
@@ -1159,7 +1161,7 @@
             // buttonBrowseOut
             // 
             this.buttonBrowseOut.Location = new System.Drawing.Point(771, 110);
-            this.buttonBrowseOut.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonBrowseOut.Margin = new System.Windows.Forms.Padding(4);
             this.buttonBrowseOut.Name = "buttonBrowseOut";
             this.buttonBrowseOut.Size = new System.Drawing.Size(112, 38);
             this.buttonBrowseOut.TabIndex = 7;
@@ -1170,7 +1172,7 @@
             // textBoxIn
             // 
             this.textBoxIn.Location = new System.Drawing.Point(142, 6);
-            this.textBoxIn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxIn.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxIn.Name = "textBoxIn";
             this.textBoxIn.ReadOnly = true;
             this.textBoxIn.Size = new System.Drawing.Size(618, 31);
@@ -1185,7 +1187,7 @@
             this.tabControlMain.Controls.Add(this.tabPageAudio);
             this.tabControlMain.Controls.Add(this.tabPageTags);
             this.tabControlMain.Location = new System.Drawing.Point(9, 9);
-            this.tabControlMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControlMain.Margin = new System.Windows.Forms.Padding(4);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
             this.tabControlMain.Size = new System.Drawing.Size(918, 316);
@@ -1197,9 +1199,9 @@
             this.tabPageFilters.Controls.Add(this.panelColorFilter);
             this.tabPageFilters.Controls.Add(this.panelDeinterlace);
             this.tabPageFilters.Location = new System.Drawing.Point(4, 34);
-            this.tabPageFilters.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageFilters.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageFilters.Name = "tabPageFilters";
-            this.tabPageFilters.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageFilters.Padding = new System.Windows.Forms.Padding(4);
             this.tabPageFilters.Size = new System.Drawing.Size(910, 278);
             this.tabPageFilters.TabIndex = 5;
             this.tabPageFilters.Text = "Фильтры";
@@ -1211,7 +1213,7 @@
             this.panelSubtitles.Controls.Add(this.buttonBrowseSubtitles);
             this.panelSubtitles.Controls.Add(this.textBoxSubtitlesPath);
             this.panelSubtitles.Location = new System.Drawing.Point(9, 178);
-            this.panelSubtitles.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelSubtitles.Margin = new System.Windows.Forms.Padding(4);
             this.panelSubtitles.Name = "panelSubtitles";
             this.panelSubtitles.Size = new System.Drawing.Size(888, 87);
             this.panelSubtitles.TabIndex = 4;
@@ -1229,7 +1231,7 @@
             // buttonBrowseSubtitles
             // 
             this.buttonBrowseSubtitles.Location = new System.Drawing.Point(771, 4);
-            this.buttonBrowseSubtitles.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonBrowseSubtitles.Margin = new System.Windows.Forms.Padding(4);
             this.buttonBrowseSubtitles.Name = "buttonBrowseSubtitles";
             this.buttonBrowseSubtitles.Size = new System.Drawing.Size(112, 38);
             this.buttonBrowseSubtitles.TabIndex = 1;
@@ -1240,7 +1242,7 @@
             // textBoxSubtitlesPath
             // 
             this.textBoxSubtitlesPath.Location = new System.Drawing.Point(170, 6);
-            this.textBoxSubtitlesPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxSubtitlesPath.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxSubtitlesPath.Name = "textBoxSubtitlesPath";
             this.textBoxSubtitlesPath.Size = new System.Drawing.Size(590, 31);
             this.textBoxSubtitlesPath.TabIndex = 0;
@@ -1250,7 +1252,7 @@
             this.panelColorFilter.Controls.Add(this.labelColorFilter);
             this.panelColorFilter.Controls.Add(this.comboBoxColorFilter);
             this.panelColorFilter.Location = new System.Drawing.Point(9, 111);
-            this.panelColorFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelColorFilter.Margin = new System.Windows.Forms.Padding(4);
             this.panelColorFilter.Name = "panelColorFilter";
             this.panelColorFilter.Size = new System.Drawing.Size(440, 58);
             this.panelColorFilter.TabIndex = 3;
@@ -1270,7 +1272,7 @@
             this.comboBoxColorFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxColorFilter.FormattingEnabled = true;
             this.comboBoxColorFilter.Location = new System.Drawing.Point(170, 4);
-            this.comboBoxColorFilter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxColorFilter.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxColorFilter.Name = "comboBoxColorFilter";
             this.comboBoxColorFilter.Size = new System.Drawing.Size(178, 33);
             this.comboBoxColorFilter.TabIndex = 1;
@@ -1282,7 +1284,7 @@
             this.panelDeinterlace.Controls.Add(this.checkBoxDeinterlace);
             this.panelDeinterlace.Controls.Add(this.comboBoxFieldOrder);
             this.panelDeinterlace.Location = new System.Drawing.Point(9, 9);
-            this.panelDeinterlace.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelDeinterlace.Margin = new System.Windows.Forms.Padding(4);
             this.panelDeinterlace.Name = "panelDeinterlace";
             this.panelDeinterlace.Size = new System.Drawing.Size(440, 93);
             this.panelDeinterlace.TabIndex = 2;
@@ -1301,7 +1303,7 @@
             // 
             this.checkBoxDeinterlace.AutoSize = true;
             this.checkBoxDeinterlace.Location = new System.Drawing.Point(9, 4);
-            this.checkBoxDeinterlace.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxDeinterlace.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxDeinterlace.Name = "checkBoxDeinterlace";
             this.checkBoxDeinterlace.Size = new System.Drawing.Size(169, 29);
             this.checkBoxDeinterlace.TabIndex = 0;
@@ -1314,7 +1316,7 @@
             this.comboBoxFieldOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFieldOrder.FormattingEnabled = true;
             this.comboBoxFieldOrder.Location = new System.Drawing.Point(170, 39);
-            this.comboBoxFieldOrder.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxFieldOrder.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxFieldOrder.Name = "comboBoxFieldOrder";
             this.comboBoxFieldOrder.Size = new System.Drawing.Size(178, 33);
             this.comboBoxFieldOrder.TabIndex = 2;
@@ -1323,7 +1325,7 @@
             // buttonPreview
             // 
             this.buttonPreview.Location = new System.Drawing.Point(610, 334);
-            this.buttonPreview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonPreview.Margin = new System.Windows.Forms.Padding(4);
             this.buttonPreview.Name = "buttonPreview";
             this.buttonPreview.Size = new System.Drawing.Size(112, 48);
             this.buttonPreview.TabIndex = 5;
@@ -1352,6 +1354,16 @@
             this.labelOutputInfoTitle.TabIndex = 1;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
             // 
+            // buttonCopyToClipboard
+            // 
+            this.buttonCopyToClipboard.Location = new System.Drawing.Point(652, 211);
+            this.buttonCopyToClipboard.Name = "buttonCopyToClipboard";
+            this.buttonCopyToClipboard.Size = new System.Drawing.Size(231, 38);
+            this.buttonCopyToClipboard.TabIndex = 6;
+            this.buttonCopyToClipboard.Text = "Копировать аргументы";
+            this.buttonCopyToClipboard.UseVisualStyleBackColor = true;
+            this.buttonCopyToClipboard.Click += new System.EventHandler(this.buttonCopyToClipboard_Click);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -1366,10 +1378,10 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Padding = new System.Windows.Forms.Padding(4);
             this.Text = "Simple Video Converter";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -1520,6 +1532,7 @@
         private System.Windows.Forms.NumericUpDown numericCropBottom;
         private System.Windows.Forms.NumericUpDown numericCropLeft;
         private System.Windows.Forms.NumericUpDown numericCropRight;
+        private System.Windows.Forms.Button buttonCopyToClipboard;
     }
 }
 
