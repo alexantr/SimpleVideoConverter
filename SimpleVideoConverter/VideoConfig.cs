@@ -16,7 +16,7 @@ namespace Alexantr.SimpleVideoConverter
         public const int MinBitrate = 100;
         public const int MaxBitrate = 100000;
 
-        public const string DefaultPresetH264 = "veryslow";
+        public const string DefaultPresetH264 = "slow";
         public const string DefaultPreset = "slow";
 
         private static float crf = 20.0f;

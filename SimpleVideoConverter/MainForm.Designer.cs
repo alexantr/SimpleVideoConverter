@@ -41,6 +41,7 @@
             this.buttonPreset480p = new System.Windows.Forms.Button();
             this.textBoxTagCreationTime = new System.Windows.Forms.TextBox();
             this.tabPageTags = new System.Windows.Forms.TabPage();
+            this.buttonDateNow = new System.Windows.Forms.Button();
             this.buttonDateHelp = new System.Windows.Forms.Button();
             this.labelTagCopyright = new System.Windows.Forms.Label();
             this.textBoxTagCopyright = new System.Windows.Forms.TextBox();
@@ -144,6 +145,7 @@
             this.buttonPreview = new System.Windows.Forms.Button();
             this.labelOutputInfo = new System.Windows.Forms.Label();
             this.labelOutputInfoTitle = new System.Windows.Forms.Label();
+            this.buttonFindFFmpeg = new System.Windows.Forms.Button();
             this.tabPageTags.SuspendLayout();
             this.tabPageAudio.SuspendLayout();
             this.panelAudioParams.SuspendLayout();
@@ -282,6 +284,7 @@
             // 
             // tabPageTags
             // 
+            this.tabPageTags.Controls.Add(this.buttonDateNow);
             this.tabPageTags.Controls.Add(this.buttonDateHelp);
             this.tabPageTags.Controls.Add(this.labelTagCopyright);
             this.tabPageTags.Controls.Add(this.textBoxTagCopyright);
@@ -301,6 +304,16 @@
             this.tabPageTags.TabIndex = 4;
             this.tabPageTags.Text = "Теги";
             this.tabPageTags.UseVisualStyleBackColor = true;
+            // 
+            // buttonDateNow
+            // 
+            this.buttonDateNow.Location = new System.Drawing.Point(529, 174);
+            this.buttonDateNow.Name = "buttonDateNow";
+            this.buttonDateNow.Size = new System.Drawing.Size(60, 38);
+            this.buttonDateNow.TabIndex = 11;
+            this.buttonDateNow.Text = "Now";
+            this.buttonDateNow.UseVisualStyleBackColor = true;
+            this.buttonDateNow.Click += new System.EventHandler(this.buttonDateNow_Click);
             // 
             // buttonDateHelp
             // 
@@ -1330,6 +1343,7 @@
             // 
             // tabPageExtra
             // 
+            this.tabPageExtra.Controls.Add(this.buttonFindFFmpeg);
             this.tabPageExtra.Controls.Add(this.textBoxEndTime);
             this.tabPageExtra.Controls.Add(this.textBoxStartTime);
             this.tabPageExtra.Controls.Add(this.labelEndTime);
@@ -1454,6 +1468,16 @@
             this.labelOutputInfoTitle.Size = new System.Drawing.Size(72, 50);
             this.labelOutputInfoTitle.TabIndex = 1;
             this.labelOutputInfoTitle.Text = "Видео:\r\nАудио:";
+            // 
+            // buttonFindFFmpeg
+            // 
+            this.buttonFindFFmpeg.Location = new System.Drawing.Point(755, 233);
+            this.buttonFindFFmpeg.Name = "buttonFindFFmpeg";
+            this.buttonFindFFmpeg.Size = new System.Drawing.Size(148, 38);
+            this.buttonFindFFmpeg.TabIndex = 9;
+            this.buttonFindFFmpeg.Text = "Найти ffmpeg";
+            this.buttonFindFFmpeg.UseVisualStyleBackColor = true;
+            this.buttonFindFFmpeg.Click += new System.EventHandler(this.buttonFindFFmpeg_Click);
             // 
             // MainForm
             // 
@@ -1634,6 +1658,8 @@
         private System.Windows.Forms.Label labelStartTime;
         private System.Windows.Forms.CheckBox checkBoxTwoPass;
         private System.Windows.Forms.Label labelRatioError;
+        private System.Windows.Forms.Button buttonDateNow;
+        private System.Windows.Forms.Button buttonFindFFmpeg;
     }
 }
 

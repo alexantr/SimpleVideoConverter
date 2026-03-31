@@ -8,16 +8,15 @@ namespace Alexantr.SimpleVideoConverter
     {
         public FFmpegProcess(string arguments)
         {
-            string directoryPath = Path.Combine(Environment.CurrentDirectory, "ffmpeg");
-            string exePath = Path.Combine(directoryPath, "ffmpeg.exe");
-            if (!File.Exists(exePath))
+            string exePath = Helper.GetFFmpegFullPath("ffmpeg.exe");
+            if (string.IsNullOrEmpty(exePath))
             {
                 throw new FileNotFoundException("Cannot find ffmpeg.exe");
             }
 
-            StartInfo.EnvironmentVariables["FC_CONFIG_DIR"] = directoryPath;
+            StartInfo.EnvironmentVariables["FC_CONFIG_DIR"] = Environment.CurrentDirectory;
             StartInfo.EnvironmentVariables["FONTCONFIG_FILE"] = "fonts.conf";
-            StartInfo.EnvironmentVariables["FONTCONFIG_PATH"] = directoryPath;
+            StartInfo.EnvironmentVariables["FONTCONFIG_PATH"] = Environment.CurrentDirectory;
 
             StartInfo.FileName = exePath;
             StartInfo.Arguments = "-hide_banner -y " + arguments;

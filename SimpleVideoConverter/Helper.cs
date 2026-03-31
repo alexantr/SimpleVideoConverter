@@ -97,5 +97,32 @@ namespace Alexantr.SimpleVideoConverter
             }
             return valid;
         }
+
+        public static string GetFFmpegFullPath(string fileName)
+        {
+            string ffmpegDirPath = Path.Combine(Environment.CurrentDirectory, "ffmpeg");
+            string fullPath = Path.Combine(ffmpegDirPath, fileName);
+            if (File.Exists(fullPath))
+            {
+                return fullPath;
+            }
+
+            fullPath = Path.Combine(Environment.CurrentDirectory, fileName);
+            if (File.Exists(fullPath))
+            {
+                return fullPath;
+            }
+
+            string pathValues = Environment.GetEnvironmentVariable("PATH");
+            foreach (string path in pathValues.Split(Path.PathSeparator))
+            {
+                fullPath = Path.Combine(path, fileName);
+                if (File.Exists(fullPath))
+                {
+                    return fullPath;
+                }
+            }
+            return null;
+        }
     }
 }

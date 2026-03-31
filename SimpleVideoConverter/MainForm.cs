@@ -719,7 +719,7 @@ namespace Alexantr.SimpleVideoConverter
         }
 
         #endregion
-        
+
         #region Functions
 
         private void SetInputFile(string path)
@@ -884,24 +884,27 @@ namespace Alexantr.SimpleVideoConverter
             string outputDir = Path.GetDirectoryName(output);
 
             // try to create out folder
-            if (!string.IsNullOrWhiteSpace(outputDir) && !Directory.Exists(outputDir))
+            if (!copyToClipboard)
             {
-                try
+                if (!string.IsNullOrWhiteSpace(outputDir) && !Directory.Exists(outputDir))
                 {
-                    Directory.CreateDirectory(outputDir);
+                    try
+                    {
+                        Directory.CreateDirectory(outputDir);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Ошибка создания выходной папки!" + Environment.NewLine + ex.Message);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    throw new Exception("Ошибка создания выходной папки!" + Environment.NewLine + ex.Message);
-                }
-            }
 
-            if (File.Exists(output))
-            {
-                string question = Path.GetFileName(output) + " уже существует." + Environment.NewLine + "Хотите заменить его?";
-                if (MessageBox.Show(question, "Подтвердить перезапись", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                if (File.Exists(output))
                 {
-                    return;
+                    string question = Path.GetFileName(output) + " уже существует." + Environment.NewLine + "Хотите заменить его?";
+                    if (MessageBox.Show(question, "Подтвердить перезапись", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -935,30 +938,9 @@ namespace Alexantr.SimpleVideoConverter
                     videoArgs.Add($"-c:v {VideoConfig.Encoder} -b:v {VideoConfig.Bitrate}k");
 
                 // https://trac.ffmpeg.org/wiki/Encode/H.264
-                /*if (VideoConfig.Encoder == VideoConfig.EncoderX264)
-                {
-                    // must be configurable
-                    string videoProfile = "high";
-                    string videoLevel = "";
-
-                    double finalFrameRate = CalcFinalFrameRate();
-                    if (finalFrameRate == 0)
-                        finalFrameRate = vStream.FrameRate;
-                    // force level 4.1, max bitrate for high 4.1 - 62500, use max avg bitrate 50000
-                    if (VideoConfig.UseCRF || VideoConfig.Bitrate <= 50000)
-                    {
-                        if (PictureConfig.OutputSize.Width <= 1920 && PictureConfig.OutputSize.Height <= 1080 && finalFrameRate <= 30.0)
-                            videoLevel = " -level 4.1";
-                    }
-
-                    videoArgs.Add($"-preset:v {VideoConfig.Preset} -profile:v {videoProfile}{videoLevel}");
-                }*/
-
                 // https://trac.ffmpeg.org/wiki/Encode/H.265
-                if (VideoConfig.Encoder == VideoConfig.EncoderX265)
+                if (VideoConfig.Encoder == VideoConfig.EncoderX264 || VideoConfig.Encoder == VideoConfig.EncoderX265)
                 {
-                    // slow,slower,veryslow,placebo
-
                     videoArgs.Add($"-preset:v {VideoConfig.Preset}");
                 }
 
@@ -1026,8 +1008,8 @@ namespace Alexantr.SimpleVideoConverter
                 metadataArgs.Add($"-metadata comment=\"{TagsConfig.Comment.Replace("\"", "\\\"")}\"");
             if (!string.IsNullOrWhiteSpace(TagsConfig.CreationTime))
                 metadataArgs.Add($"-metadata creation_time=\"{TagsConfig.CreationTime.Replace("\"", "\\\"")}\"");
-            else
-                metadataArgs.Add($"-metadata creation_time=\"{DateTime.Now.ToString("o")}\"");
+            //else
+            //    metadataArgs.Add($"-metadata creation_time=\"{DateTime.Now.ToString("o")}\"");
 
             // mp4
 
@@ -1194,13 +1176,39 @@ namespace Alexantr.SimpleVideoConverter
             MessageBox.Show(dateHelp, "Поддерживаемые форматы даты", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void buttonDateNow_Click(object sender, EventArgs e)
+        {
+            textBoxTagCreationTime.Text = DateTime.Now.ToString("s").Replace("T", " ");
+        }
+
+        private void buttonFindFFmpeg_Click(object sender, EventArgs e)
+        {
+            string ffmpegPath = Helper.GetFFmpegFullPath("ffmpeg.exe");
+            string ffprobePath = Helper.GetFFmpegFullPath("ffprobe.exe");
+            string ffplayPath = Helper.GetFFmpegFullPath("ffplay.exe");
+            if (string.IsNullOrEmpty(ffmpegPath))
+            {
+                ffmpegPath = "ffmpeg.exe не найден!";
+            }
+            if (string.IsNullOrEmpty(ffprobePath))
+            {
+                ffprobePath = "ffprobe.exe не найден!";
+            }
+            if (string.IsNullOrEmpty(ffplayPath))
+            {
+                ffplayPath = "ffplay.exe не найден!";
+            }
+
+            string ffmpegInfo = $"{ffmpegPath}\n{ffprobePath}\n{ffplayPath}";
+            MessageBox.Show(ffmpegInfo, "Расположение файлов ffmpeg", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void buttonPreview_Click(object sender, EventArgs e)
         {
-            string directoryPath = Path.Combine(Environment.CurrentDirectory, "ffmpeg");
-            string exePath = Path.Combine(directoryPath, "ffplay.exe");
-            if (!File.Exists(exePath))
+            string exePath = Helper.GetFFmpegFullPath("ffplay.exe");
+            if (string.IsNullOrEmpty(exePath))
             {
-                MessageBox.Show("Не найден ffplay.exe", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("ffplay.exe не найден!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -1258,9 +1266,9 @@ namespace Alexantr.SimpleVideoConverter
                 Arguments = string.Format("-i \"{0}\" {1} -autoexit -framedrop -window_title Preview", input, arguments)
             };
 
-            startInfo.EnvironmentVariables["FC_CONFIG_DIR"] = directoryPath;
+            startInfo.EnvironmentVariables["FC_CONFIG_DIR"] = Environment.CurrentDirectory;
             startInfo.EnvironmentVariables["FONTCONFIG_FILE"] = "fonts.conf";
-            startInfo.EnvironmentVariables["FONTCONFIG_PATH"] = directoryPath;
+            startInfo.EnvironmentVariables["FONTCONFIG_PATH"] = Environment.CurrentDirectory;
 
             Process.Start(startInfo);
         }

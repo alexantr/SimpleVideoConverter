@@ -9,16 +9,15 @@ namespace Alexantr.SimpleVideoConverter
     {
         public FFprobeProcess(string arguments)
         {
-            string directoryPath = Path.Combine(Environment.CurrentDirectory, "ffmpeg");
-            string exePath = Path.Combine(directoryPath, "ffprobe.exe");
-            if (!File.Exists(exePath))
+            string exePath = Helper.GetFFmpegFullPath("ffprobe.exe");
+            if (string.IsNullOrEmpty(exePath))
             {
                 throw new FileNotFoundException("Cannot find ffprobe.exe");
             }
 
             StartInfo.FileName = exePath;
             StartInfo.Arguments = arguments;
-            StartInfo.WorkingDirectory = Path.GetDirectoryName(directoryPath);
+            StartInfo.WorkingDirectory = Environment.CurrentDirectory;
             StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             StartInfo.CreateNoWindow = true;
             StartInfo.UseShellExecute = false;

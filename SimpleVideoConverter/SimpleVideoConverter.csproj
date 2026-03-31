@@ -158,7 +158,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="fonts.conf" />
+    <None Include="fonts.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -176,18 +178,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ffmpeg\avcodec-59.dll" />
-    <Content Include="ffmpeg\avdevice-59.dll" />
-    <Content Include="ffmpeg\avfilter-8.dll" />
-    <Content Include="ffmpeg\avformat-59.dll" />
-    <Content Include="ffmpeg\avutil-57.dll" />
-    <Content Include="ffmpeg\ffmpeg.exe" />
-    <Content Include="ffmpeg\ffplay.exe" />
-    <Content Include="ffmpeg\ffprobe.exe" />
-    <Content Include="ffmpeg\LICENSE.txt" />
-    <Content Include="ffmpeg\postproc-56.dll" />
-    <Content Include="ffmpeg\swresample-4.dll" />
-    <Content Include="ffmpeg\swscale-6.dll" />
     <Content Include="SimpleVideoConverter.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -203,14 +193,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterBuild">
-    <ItemGroup>
-      <FFmpegFiles Include="ffmpeg\*.*" />
-      <FontConfigFile Include="fonts.conf" />
-    </ItemGroup>
-    <Copy SourceFiles="@(FFmpegFiles)" DestinationFolder="$(OutputPath)\ffmpeg" />
-    <Copy SourceFiles="@(FontConfigFile)" DestinationFolder="$(OutputPath)\ffmpeg" />
-  </Target>
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
